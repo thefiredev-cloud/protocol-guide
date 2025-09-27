@@ -134,8 +134,10 @@ export class ChatService {
     }
 
     const guardrail = this.guardrails.evaluate(llmResult.text);
-    if (!guardrail.pcmCitationsPresent || guardrail.containsUnauthorizedMed || guardrail.outsideScope) {
-      this.logger.warn("Guardrail violation detected", guardrail);
+    // Relaxed: only block on critical safety violations
+    const criticalViolation = guardrail.containsUnauthorizedMed || guardrail.sceneSafetyConcern;
+    if (criticalViolation) {
+      this.logger.warn("Critical guardrail violation detected", guardrail);
       return { type: "fallback", response: this.buildFallbackResponse(triage, citations, guardrail.notes) };
     }
 

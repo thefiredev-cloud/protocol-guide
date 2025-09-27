@@ -1,6 +1,8 @@
 /* eslint-disable unicorn/filename-case */
 import type { KBDoc } from "@/lib/retrieval";
 import { buildContext, searchKB } from "@/lib/retrieval";
+import { extractPediatricWeightMedQueries } from "@/lib/parsers/pediatric-weight-med";
+import { PediatricDoseCalculator } from "@/lib/clinical/pediatric-dose-calculator";
 import type { TriageResult } from "@/lib/triage";
 
 export type RetrievalQuery = {
@@ -28,8 +30,25 @@ export class RetrievalManager {
 
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {
     const limit = query.maxChunks ?? this.defaultLimit;
-    const context = await buildContext(query.rawText, limit);
+    let context = await buildContext(query.rawText, limit);
     const hits = await searchKB(query.rawText, limit);
+
+    // Inject pediatric dosing section when query contains weight + medication pattern(s)
+    const extracted = extractPediatricWeightMedQueries(query.rawText);
+    if (extracted.length) {
+      const lines: string[] = [];
+      lines.push("**PEDIATRIC WEIGHT-BASED DOSING (LA County MCG 1309):**");
+      for (const item of extracted) {
+        const result = PediatricDoseCalculator.calculate({ medicationKey: item.medicationKey, weightKg: item.weightKg });
+        if (!result) continue;
+        const citationText = result.citations.join(", ");
+        lines.push(`• ${result.summaryLine}`);
+        if (result.notes?.length) lines.push(`  Notes: ${result.notes.join("; ")}`);
+        lines.push(`  Citations: ${citationText}`);
+      }
+      lines.push("---\n");
+      context = lines.join("\n") + context;
+    }
     return { context, hits };
   }
 }
