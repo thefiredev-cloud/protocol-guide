@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/filename-case */
+import { PediatricDoseCalculator } from "@/lib/clinical/pediatric-dose-calculator";
+import { extractPediatricWeightMedQueries } from "@/lib/parsers/pediatric-weight-med";
 import type { KBDoc } from "@/lib/retrieval";
 import { buildContext, searchKB } from "@/lib/retrieval";
-import { extractPediatricWeightMedQueries } from "@/lib/parsers/pediatric-weight-med";
-import { PediatricDoseCalculator } from "@/lib/clinical/pediatric-dose-calculator";
 import type { TriageResult } from "@/lib/triage";
 
 export type RetrievalQuery = {
@@ -36,21 +36,27 @@ export class RetrievalManager {
     // Inject pediatric dosing section when query contains weight + medication pattern(s)
     const extracted = extractPediatricWeightMedQueries(query.rawText);
     if (extracted.length) {
-      const lines: string[] = [];
-      lines.push("**PEDIATRIC WEIGHT-BASED DOSING (LA County MCG 1309):**");
-      for (const item of extracted) {
-        const result = PediatricDoseCalculator.calculate({ medicationKey: item.medicationKey, weightKg: item.weightKg });
-        if (!result) continue;
-        const citationText = result.citations.join(", ");
-        lines.push(`• ${result.summaryLine}`);
-        if (result.notes?.length) lines.push(`  Notes: ${result.notes.join("; ")}`);
-        lines.push(`  Citations: ${citationText}`);
-      }
-      lines.push("---\n");
-      context = lines.join("\n") + context;
+      const pedLines = buildPediatricLines(extracted);
+      context = pedLines + context;
     }
     return { context, hits };
   }
+}
+
+function buildPediatricLines(
+  items: Array<{ medicationKey: string; weightKg: number }>,
+): string {
+  const lines: string[] = ["**PEDIATRIC WEIGHT-BASED DOSING (LA County MCG 1309):**"];
+  for (const item of items) {
+    const result = PediatricDoseCalculator.calculate({ medicationKey: item.medicationKey, weightKg: item.weightKg });
+    if (!result) continue;
+    const citationText = result.citations.join(", ");
+    lines.push(`• ${result.summaryLine}`);
+    if (result.notes?.length) lines.push(`  Notes: ${result.notes.join("; ")}`);
+    lines.push(`  Citations: ${citationText}`);
+  }
+  lines.push("---\n");
+  return lines.join("\n");
 }
 
 

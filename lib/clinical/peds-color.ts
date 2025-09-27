@@ -1,13 +1,18 @@
 export function colorForWeight(weightKg: number): string {
-  if (weightKg >= 3 && weightKg <= 5) return "Grey";
-  if (weightKg >= 6 && weightKg <= 7) return "Pink";
-  if (weightKg >= 8 && weightKg <= 9) return "Red";
-  if (weightKg >= 10 && weightKg <= 11) return "Purple";
-  if (weightKg >= 12 && weightKg <= 14) return "Yellow";
-  if (weightKg >= 15 && weightKg <= 18) return "White";
-  if (weightKg >= 19 && weightKg <= 22) return "Blue";
-  if (weightKg >= 24 && weightKg <= 28) return "Orange";
-  if (weightKg >= 30 && weightKg <= 36) return "Green";
+  const ranges: Array<{ min: number; max: number; color: string }> = [
+    { min: 3, max: 5, color: "Grey" },
+    { min: 6, max: 7, color: "Pink" },
+    { min: 8, max: 9, color: "Red" },
+    { min: 10, max: 11, color: "Purple" },
+    { min: 12, max: 14, color: "Yellow" },
+    { min: 15, max: 18, color: "White" },
+    { min: 19, max: 22, color: "Blue" },
+    { min: 24, max: 28, color: "Orange" },
+    { min: 30, max: 36, color: "Green" },
+  ];
+  for (const r of ranges) {
+    if (weightKg >= r.min && weightKg <= r.max) return r.color;
+  }
   return "Unknown";
 }
 

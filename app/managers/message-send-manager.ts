@@ -63,65 +63,51 @@ export class MessageSendManager {
     let citations: SendResponse["citations"] | undefined;
     let fallback = false;
 
-    const processEventBlock = (raw: string) => {
+    const flushBlock = (raw: string) => {
       if (!raw.trim()) return;
-      const lines = raw.split("\n");
-      let event = "message";
-      let dataRaw = "";
-      for (const line of lines) {
-        if (line.startsWith("event:")) event = line.slice(6).trim();
-        else if (line.startsWith("data:")) dataRaw += line.slice(5).trim();
-      }
+      const eventMatch = raw.match(/^event:\s*(.*)$/m);
+      const dataMatch = raw.match(/^data:\s*(.*)$/m);
+      const event = eventMatch?.[1]?.trim() || "message";
+      const dataRaw = dataMatch?.[1];
       if (!dataRaw) return;
       try {
         const data = JSON.parse(dataRaw) as Record<string, unknown>;
-        switch (event) {
-          case "citations": {
-            citations = data as SendResponse["citations"];
-            this.streamHandler.handleCitations(citations);
-            break;
+        if (event === "citations") {
+          citations = data as SendResponse["citations"];
+          this.streamHandler.handleCitations(citations);
+        } else if (event === "delta") {
+          const delta = typeof data?.text === "string" ? (data.text as string) : "";
+          accumulatedText += delta;
+        } else if (event === "final") {
+          const finalText = typeof data?.text === "string" ? (data.text as string) : undefined;
+          if (finalText !== undefined) accumulatedText = finalText;
+          if (data?.fallback) {
+            fallback = true;
+            this.streamHandler.setErrorBanner("Limited mode - using offline guidance only.");
           }
-          case "delta": {
-            const delta = typeof data?.text === "string" ? (data.text as string) : "";
-            accumulatedText += delta;
-            break;
-          }
-          case "final": {
-            const finalText = typeof data?.text === "string" ? (data.text as string) : undefined;
-            if (finalText !== undefined) accumulatedText = finalText;
-            if (data?.fallback) {
-              fallback = true;
-              this.streamHandler.setErrorBanner("Limited mode - using offline guidance only.");
-            }
-            break;
-          }
-          case "error": {
-            const message = typeof data?.message === "string" ? (data.message as string) : "Streaming error";
-            throw new Error(message);
-          }
-          default:
-            break;
+        } else if (event === "error") {
+          const message = typeof data?.message === "string" ? (data.message as string) : "Streaming error";
+          throw new Error(message);
         }
       } catch {
-        // ignore malformed event
+        // ignore
       }
     };
 
-    while (true) {
+    for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
-      let sepIndex = buffer.indexOf("\n\n");
-      while (sepIndex !== -1) {
-        const block = buffer.slice(0, sepIndex);
-        buffer = buffer.slice(sepIndex + 2);
-        processEventBlock(block);
-        sepIndex = buffer.indexOf("\n\n");
+      let idx = buffer.indexOf("\n\n");
+      while (idx !== -1) {
+        const block = buffer.slice(0, idx);
+        buffer = buffer.slice(idx + 2);
+        flushBlock(block);
+        idx = buffer.indexOf("\n\n");
       }
     }
 
-    const response: SendResponse = { text: accumulatedText, citations, fallback };
-    this.handleResponseBody(response);
+    this.handleResponseBody({ text: accumulatedText, citations, fallback });
   }
 }
 

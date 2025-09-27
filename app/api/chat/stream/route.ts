@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 import { createLogger } from "@/lib/log";
 import { ChatService } from "@/lib/managers/chat-service";
@@ -28,75 +27,13 @@ function chunkText(input: string, targetSize = 60): string[] {
   return chunks;
 }
 
-export async function POST(req: NextRequest) {
-  const start = Date.now();
-  const requestId = randomUUID();
-  const logger = createLogger("api.chat.stream.post");
+type StreamContext = {
+  start: number;
+  requestId: string;
+  logger: ReturnType<typeof createLogger>;
+};
 
-  const prepared = await prepareChatRequest(req);
-  if ("error" in prepared) return prepared.error;
-
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const encoder = new TextEncoder();
-      try {
-        metrics.inc("chat.stream.requests");
-        // Start event for clients to prep UI
-        controller.enqueue(encoder.encode(sseEncode("start", { requestId })));
-
-        const service = new ChatService();
-        const result = await service.handle(prepared.payload);
-
-        // Send citations early so UI can render sources while text streams
-        if (result.citations?.length) {
-          controller.enqueue(encoder.encode(sseEncode("citations", result.citations)));
-        }
-
-        // Stream the assistant text in small deltas
-        const deltas = chunkText(result.text ?? "");
-        for (const delta of deltas) {
-          controller.enqueue(encoder.encode(sseEncode("delta", { text: delta })));
-          // Small yield to flush
-          await new Promise((r) => setTimeout(r, 10));
-        }
-
-        // Final payload for any consumers expecting a summary
-        controller.enqueue(
-          encoder.encode(
-            sseEncode("final", {
-              text: result.text,
-              citations: result.citations,
-              fallback: result.fallback ?? false,
-            }),
-          ),
-        );
-
-        const latencyMs = Date.now() - start;
-        metrics.observe("chat.stream.latencyMs", latencyMs);
-        logger.info("Handled streaming chat request", {
-          requestId,
-          mode: prepared.payload.mode ?? "chat",
-          messageCount: prepared.payload.messages.length,
-          latencyMs,
-          fallback: result.fallback ?? false,
-        });
-
-        controller.enqueue(encoder.encode(sseEncode("done", { requestId })));
-        controller.close();
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.error("Streaming chat request failed", { requestId, message });
-        metrics.inc("chat.stream.errors");
-        controller.enqueue(
-          encoder.encode(
-            sseEncode("error", { code: "CHAT_UNAVAILABLE", message }),
-          ),
-        );
-        controller.close();
-      }
-    },
-  });
-
+function buildResponse(stream: ReadableStream<Uint8Array>): Response {
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
@@ -104,5 +41,80 @@ export async function POST(req: NextRequest) {
       Connection: "keep-alive",
     },
   });
+}
+
+async function runStreaming(
+  controller: ReadableStreamDefaultController<Uint8Array>,
+  encoder: TextEncoder,
+  ctx: StreamContext,
+  payload: Parameters<ChatService["handle"]>[0],
+) {
+  metrics.inc("chat.stream.requests");
+  controller.enqueue(encoder.encode(sseEncode("start", { requestId: ctx.requestId })));
+
+  const service = new ChatService();
+  const result = await service.handle(payload);
+
+  if (result.citations?.length) {
+    controller.enqueue(encoder.encode(sseEncode("citations", result.citations)));
+  }
+
+  for (const delta of chunkText(result.text ?? "")) {
+    controller.enqueue(encoder.encode(sseEncode("delta", { text: delta })));
+    // brief yield to flush
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise((r) => setTimeout(r, 10));
+  }
+
+  controller.enqueue(
+    encoder.encode(
+      sseEncode("final", {
+        text: result.text,
+        citations: result.citations,
+        fallback: result.fallback ?? false,
+      }),
+    ),
+  );
+
+  const latencyMs = Date.now() - ctx.start;
+  metrics.observe("chat.stream.latencyMs", latencyMs);
+  ctx.logger.info("Handled streaming chat request", {
+    requestId: ctx.requestId,
+    mode: payload.mode ?? "chat",
+    messageCount: payload.messages.length,
+    latencyMs,
+    fallback: result.fallback ?? false,
+  });
+
+  controller.enqueue(encoder.encode(sseEncode("done", { requestId: ctx.requestId })));
+  controller.close();
+}
+
+export async function POST(req: NextRequest) {
+  const prepared = await prepareChatRequest(req);
+  if ("error" in prepared) return prepared.error;
+
+  const ctx: StreamContext = {
+    start: Date.now(),
+    requestId: randomUUID(),
+    logger: createLogger("api.chat.stream.post"),
+  };
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const encoder = new TextEncoder();
+      try {
+        await runStreaming(controller, encoder, ctx, prepared.payload);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        ctx.logger.error("Streaming chat request failed", { requestId: ctx.requestId, message });
+        metrics.inc("chat.stream.errors");
+        controller.enqueue(encoder.encode(sseEncode("error", { code: "CHAT_UNAVAILABLE", message })));
+        controller.close();
+      }
+    },
+  });
+
+  return buildResponse(stream);
 }
 
