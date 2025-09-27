@@ -10,6 +10,7 @@ import type { NarrativeInput } from "@/lib/managers/NarrativeManager";
 import { NarrativeManager } from "@/lib/managers/NarrativeManager";
 import { ResearchManager } from "@/lib/managers/ResearchManager";
 import { RetrievalManager } from "@/lib/managers/RetrievalManager";
+import { metrics } from "@/lib/managers/metrics-manager";
 import { SYSTEM_PROMPT } from "@/lib/prompt";
 import type { KBDoc } from "@/lib/retrieval";
 import { initializeKnowledgeBase } from "@/lib/retrieval";
@@ -64,13 +65,16 @@ export class ChatService {
 
   public async handle({ messages, mode }: ChatRequest): Promise<ChatResponse> {
     await this.warm();
+    metrics.inc("chat.sessions");
 
     const latestUser = this.getLatestUserMessage(messages);
     const triage = this.buildTriage(latestUser);
     const retrieval = await this.retrieveKnowledge(latestUser, triage);
     const payload = this.buildPayload(retrieval.context, buildTriageContext(triage), messages);
 
+    const llmStart = Date.now();
     const llmResult = await this.llmClient.sendChat(payload);
+    metrics.observe("llm.roundtripMs", Date.now() - llmStart);
     const citations = this.buildCitations(retrieval.hits, triage);
     const guardrailOutcome = this.guardrailManagerCheck(llmResult, triage, citations);
     if (guardrailOutcome.type === "fallback") return guardrailOutcome.response;
@@ -90,6 +94,7 @@ export class ChatService {
       citationCount: citations.length,
       protocols: triage.matchedProtocols.map((protocol) => protocol.tp_code).slice(0, 3),
     });
+    metrics.inc("chat.success");
 
     return {
       text: guardrailOutcome.text,

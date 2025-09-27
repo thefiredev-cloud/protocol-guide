@@ -1,6 +1,6 @@
-# EmergiBot - LA County EMS Protocols
+# LA County Fire Medic Bot
 
-A comprehensive EMS protocol assistant for fire and first responders. Local JSON knowledge base + BM25 retrieval (MiniSearch) + any OpenAI‑compatible chat endpoint.
+An EMS protocol assistant for LA County field providers. Local JSON knowledge base + BM25 retrieval (MiniSearch) + any OpenAI‑compatible chat endpoint.
 
 ## Quickstart
 
@@ -27,21 +27,26 @@ A comprehensive EMS protocol assistant for fire and first responders. Local JSON
 
 ## What this is
 - Next.js App Router
-- API route `/api/chat` that:
-  - BM25 searches `./data/ems_kb.json` for top 6 chunks
-  - Calls your `LLM_BASE_URL /chat/completions` with the context and system prompt
-  - Returns the assistant text (non‑streaming for simplicity)
+- API routes:
+  - `/api/chat` – JSON response
+  - `/api/chat/stream` – SSE streaming response (delta events)
+  - `/api/dosing` – medication calculators (GET list, POST calculate)
+  - `/api/metrics` – runtime metrics snapshot (counters + latency histograms)
 
 ## Features
 - **LA County PCM focused** – KB scope restricted to clean PCM ingestion
 - **Rapid bullet-point answers** with base contact and med dosing
-- **Voice command optimized** for hands-free use
-- **Health endpoint** (`/api/health`) for deployments (reports KB attempts + LLM diagnostics)
+- **Voice input** for hands-free use
+- **Streaming responses (SSE)** for faster perceived latency
+- **Medication dosing UI** at `/dosing` backed by 17 calculators
+- **Protocol decision trees** at `/protocols` (Trauma Triage, Cardiac Arrest)
+- **PWA + offline** support (caches KB and core assets)
+- **Health endpoint** (`/api/health`) with KB diagnostics + metrics snapshot
+- **Anonymous runtime metrics** at `/api/metrics`
 - **Fallback guardrails** if LLM unreachable
 
 ## Upgrade paths
 - **Supabase + pgvector**: swap `lib/retrieval.ts` with your DB search and pass results to the model.
-- **Streaming**: switch the fetch in `app/api/chat/route.ts` to `stream: true` and stream SSE to the client.
 - **Add more protocols**: add chunks to `data/ems_kb.json` (fields are obvious).
 
 ## Scripts
@@ -63,7 +68,49 @@ A comprehensive EMS protocol assistant for fire and first responders. Local JSON
 - `docs/deployment-ops.md` lists the full checklist for warming and smoke testing
 - To clear caches between deploys: `node -e "import('./dist/lib/managers/knowledge-base-initializer.js').then(m => m.knowledgeBaseInitializer.reset())"`
 - Care plans in the UI include dosing tables generated from the medication registry; keep pediatric KB bundles updated.
-- Streaming endpoint available at `/api/chat/stream` (mirrors guardrails, currently returns buffered JSON pending SSE adoption).
+- Streaming endpoint available at `/api/chat/stream` (SSE events: `start`, `citations`, `delta`, `final`, `done`).
 
 ## Important
 This bot is **for educational reference** only and does not replace official prehospital training or command authority.
+
+---
+
+## Endpoints
+
+- Chat (JSON)
+  ```bash
+  curl -s localhost:3000/api/chat -H 'content-type: application/json' \
+    -d '{"messages":[{"role":"user","content":"Chest pain"}]}' | jq .
+  ```
+
+- Chat (SSE)
+  ```bash
+  curl -N localhost:3000/api/chat/stream -H 'content-type: application/json' \
+    -d '{"messages":[{"role":"user","content":"Chest pain"}]}'
+  ```
+
+- Dosing
+  ```bash
+  curl -s localhost:3000/api/dosing | jq .
+  curl -s localhost:3000/api/dosing -H 'content-type: application/json' \
+    -d '{"medicationId":"epinephrine","request":{"patientWeightKg":70,"scenario":"arrest"}}' | jq .
+  ```
+
+- Health + Metrics
+  ```bash
+  curl -s localhost:3000/api/health | jq .
+  curl -s localhost:3000/api/metrics | jq .
+  ```
+
+## PWA / Offline
+
+- `public/manifest.json` and `public/sw.js` enable install + offline caching (KB and static assets)
+- Service worker auto-registers in `app/layout.tsx`
+
+## New in this version
+
+- Real-time SSE streaming with client-side incremental rendering
+- Medication dosing UI (`/dosing`) powered by 17 calculators
+- Protocol decision trees (`/protocols`) for Trauma Triage and Cardiac Arrest
+- Offline/PWA support with service worker
+- Health metrics with `/api/metrics` and surfaced p50 latency in the UI

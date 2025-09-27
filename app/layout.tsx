@@ -59,6 +59,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0b0b0b" />
+      </head>
       <body>
         <header className="siteHeader">
           <div className="siteHeaderInner">
@@ -72,6 +76,19 @@ export default function RootLayout({
             <div className="envBadge">Enterprise</div>
           </div>
         </header>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function(){
+                    navigator.serviceWorker.register('/sw.js').catch(function(){ /* noop */ });
+                  });
+                }
+              })();
+            `,
+          }}
+        />
         {children}
       </body>
     </html>

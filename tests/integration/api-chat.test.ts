@@ -63,7 +63,7 @@ describe("POST /api/chat", () => {
     expect(body.runtime).toBe("test");
   });
 
-  it("returns assistant message for streaming route", async () => {
+  it("streams SSE events and completes with final text", async () => {
     const payload = { messages: [{ role: "user", content: "hi" }] };
     fetchSpy.mockResolvedValueOnce({
       ok: true,
@@ -76,8 +76,14 @@ describe("POST /api/chat", () => {
     }) as unknown as NextRequest);
 
     expect(response.status).toBe(200);
-    const body = await response.json();
-    expect(body.text).toBe("Stream");
+    expect(response.headers.get("content-type")).toContain("text/event-stream");
+
+    const text = await response.text();
+    expect(text).toContain("event: start");
+    expect(text).toContain("event: citations");
+    expect(text).toContain("event: delta");
+    expect(text).toContain("event: final");
+    expect(text).toContain("Stream");
   });
 });
 

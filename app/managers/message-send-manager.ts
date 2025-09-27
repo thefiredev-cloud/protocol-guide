@@ -56,17 +56,72 @@ export class MessageSendManager {
   }
 
   private async handleStreamResponse(stream: ReadableStream<Uint8Array>) {
-    const payloadText = await new Response(stream).text();
-    let data: unknown;
+    const reader = stream.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let accumulatedText = "";
+    let citations: SendResponse["citations"] | undefined;
+    let fallback = false;
 
-    try {
-      data = payloadText ? JSON.parse(payloadText) : {};
-    } catch (error) {
-      throw new Error("Unable to parse streamed response");
+    const processEventBlock = (raw: string) => {
+      if (!raw.trim()) return;
+      const lines = raw.split("\n");
+      let event = "message";
+      let dataRaw = "";
+      for (const line of lines) {
+        if (line.startsWith("event:")) event = line.slice(6).trim();
+        else if (line.startsWith("data:")) dataRaw += line.slice(5).trim();
+      }
+      if (!dataRaw) return;
+      try {
+        const data = JSON.parse(dataRaw) as Record<string, unknown>;
+        switch (event) {
+          case "citations": {
+            citations = data as SendResponse["citations"];
+            this.streamHandler.handleCitations(citations);
+            break;
+          }
+          case "delta": {
+            const delta = typeof data?.text === "string" ? (data.text as string) : "";
+            accumulatedText += delta;
+            break;
+          }
+          case "final": {
+            const finalText = typeof data?.text === "string" ? (data.text as string) : undefined;
+            if (finalText !== undefined) accumulatedText = finalText;
+            if (data?.fallback) {
+              fallback = true;
+              this.streamHandler.setErrorBanner("Limited mode - using offline guidance only.");
+            }
+            break;
+          }
+          case "error": {
+            const message = typeof data?.message === "string" ? (data.message as string) : "Streaming error";
+            throw new Error(message);
+          }
+          default:
+            break;
+        }
+      } catch {
+        // ignore malformed event
+      }
+    };
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sepIndex = buffer.indexOf("\n\n");
+      while (sepIndex !== -1) {
+        const block = buffer.slice(0, sepIndex);
+        buffer = buffer.slice(sepIndex + 2);
+        processEventBlock(block);
+        sepIndex = buffer.indexOf("\n\n");
+      }
     }
 
-    const typed = data as SendResponse;
-    this.handleResponseBody(typed);
+    const response: SendResponse = { text: accumulatedText, citations, fallback };
+    this.handleResponseBody(response);
   }
 }
 

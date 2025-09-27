@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createLogger } from "@/lib/log";
 import { EnvironmentManager } from "@/lib/managers/environment-manager";
 import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
+import { metrics } from "@/lib/managers/metrics-manager";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,7 @@ export async function GET() {
       },
       llm: diagnostics.env.llm,
       runtime: diagnostics.env.nodeEnv,
+      metrics: metrics.snapshot(),
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

@@ -9,6 +9,7 @@ type HealthStatusBannerProps = {
 export function HealthStatusBanner({ hidden }: HealthStatusBannerProps) {
   const [message, setMessage] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
+  const [p50Latency, setP50Latency] = useState<number | null>(null);
 
   const fallbackMessage = useMemo(() => "Limited mode - using offline guidance only.", []);
 
@@ -17,10 +18,12 @@ export function HealthStatusBanner({ hidden }: HealthStatusBannerProps) {
     async function fetchHealth() {
       try {
         const response = await fetch("/api/health");
-        const data = (await response.json()) as { status: string; error?: { message?: string } };
+        const data = (await response.json()) as { status: string; error?: { message?: string }; metrics?: { histograms?: Array<{ name: string; p50: number }> } };
         if (cancelled) return;
         if (response.ok) {
           setMessage(null);
+          const h = data?.metrics?.histograms?.find((m) => m.name === "chat.latencyMs");
+          if (h && typeof h.p50 === "number") setP50Latency(Math.round(h.p50));
         } else {
           setMessage(data.error?.message ?? fallbackMessage);
         }
@@ -47,7 +50,7 @@ export function HealthStatusBanner({ hidden }: HealthStatusBannerProps) {
       <span aria-hidden="true" style={{ marginRight: "8px", fontWeight: 600 }}>
         !
       </span>
-      <span>{message}</span>
+      <span>{message}{p50Latency ? ` • p50 ${p50Latency}ms` : ""}</span>
       <button
         type="button"
         onClick={() => setDismissed(true)}
