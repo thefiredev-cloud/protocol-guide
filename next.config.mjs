@@ -3,10 +3,10 @@ const isNetlifyPreview = process.env.CONTEXT === "deploy-preview";
 const contentSecurityPolicy = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-  "style-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data:",
   "connect-src 'self' https://api.openai.com",
-  "font-src 'self' data:",
+  "font-src 'self' data: https://fonts.gstatic.com",
   isNetlifyPreview ? "frame-ancestors 'self' https://app.netlify.com" : "frame-ancestors 'none'",
 ].join('; ');
 
