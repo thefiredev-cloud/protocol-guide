@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ClipboardList, MessageCircle, Pill } from 'lucide-react';
 
 export default function ScenePage() {
   const [seconds, setSeconds] = useState(0);
@@ -36,15 +37,15 @@ export default function ScenePage() {
 
       <div className="scene-grid">
         <a href="/" className="scene-card">
-          <span className="scene-card-icon">💬</span>
+          <MessageCircle size={32} strokeWidth={2} className="scene-card-icon" />
           <span className="scene-card-label">Chat</span>
         </a>
         <a href="/dosing" className="scene-card">
-          <span className="scene-card-icon">💊</span>
+          <Pill size={32} strokeWidth={2} className="scene-card-icon" />
           <span className="scene-card-label">Dosing</span>
         </a>
         <a href="/protocols" className="scene-card">
-          <span className="scene-card-icon">📋</span>
+          <ClipboardList size={32} strokeWidth={2} className="scene-card-icon" />
           <span className="scene-card-label">Protocols</span>
         </a>
       </div>

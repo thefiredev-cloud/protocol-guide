@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 export function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(true);
@@ -28,7 +29,7 @@ export function OfflineIndicator() {
 
   return (
     <div className="offline-banner" role="alert" aria-live="polite">
-      <span className="offline-icon">⚠️</span>
+      <AlertTriangle size={20} strokeWidth={2} className="offline-icon" />
       <span className="offline-text">Offline Mode</span>
       {lastSync && (
         <span className="offline-sync">

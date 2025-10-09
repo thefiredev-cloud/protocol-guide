@@ -1,4 +1,5 @@
 "use client";
+import { Hand } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
@@ -114,7 +115,7 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
         aria-label={oneHandedMode ? "Disable one-handed mode" : "Enable one-handed mode"}
         title={oneHandedMode ? "Disable One-Handed Mode" : "Enable One-Handed Mode"}
       >
-        👍
+        <Hand size={24} strokeWidth={2} />
       </button>
 
       {/* Quick Actions Bar */}

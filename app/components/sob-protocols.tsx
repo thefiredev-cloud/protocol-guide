@@ -1,5 +1,6 @@
 "use client";
 import { memo, useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 type ProtocolDef = {
   name: string;
@@ -160,7 +161,7 @@ const ProtocolCard = memo(function ProtocolCard({ k, protocol, expanded, onToggl
           </div>
         </div>
         <div style={{ fontSize: '20px' }}>
-          {expanded ? '▼' : '▶'}
+          {expanded ? <ChevronDown size={20} strokeWidth={2} /> : <ChevronRight size={20} strokeWidth={2} />}
         </div>
       </button>
       {expanded && <ProtocolDetails protocol={protocol} />}

@@ -1,8 +1,10 @@
 import "./globals.css";
 
+import { Ambulance } from "lucide-react";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
+
 import { MobileNavBar } from "./components/layout/mobile-nav-bar";
 import { OfflineIndicator } from "./components/layout/offline-indicator";
 
@@ -70,7 +72,9 @@ export default function RootLayout({
         <header className="siteHeader">
           <div className="siteHeaderInner">
             <div className="brand">
-              <div className="brandMark" aria-hidden="true">🚒</div>
+              <div className="brandMark" aria-hidden="true">
+                <Ambulance size={28} strokeWidth={2.5} />
+              </div>
               <div className="brandText">
                 <div className="brandTitle">LA County Fire</div>
                 <div className="brandSubtitle">Medic Bot • Prehospital Care Manual</div>

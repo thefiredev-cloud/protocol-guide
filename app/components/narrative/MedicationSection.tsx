@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export function MedicationSection({ medications }: { medications: string[] }) {
@@ -25,7 +26,9 @@ export function MedicationSection({ medications }: { medications: string[] }) {
     <div className={`collapsible-section ${isExpanded ? "expanded" : ""}`}>
       <div className="collapsible-header" onClick={toggleSection}>
         <h3>Medications ({checkedItems.size}/{medications.length} completed)</h3>
-        <div className="collapsible-icon">▼</div>
+        <div className="collapsible-icon">
+          <ChevronDown size={20} strokeWidth={2} />
+        </div>
       </div>
       <div className="collapsible-content">
         <ul className="checklist">

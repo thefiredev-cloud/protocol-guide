@@ -56,7 +56,7 @@ export function ChatInputRow({
         <textarea
           ref={taRef}
           value={input}
-          placeholder="Ask about LA County protocols, treatments, base contact requirements, emergency scenarios…"
+          placeholder="Ask about protocols, treatments, procedures…"
           onChange={handleInputChange}
           onKeyDown={onKeyDown}
           aria-label="Message Medic Bot"

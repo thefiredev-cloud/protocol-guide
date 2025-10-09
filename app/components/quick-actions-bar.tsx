@@ -1,5 +1,6 @@
 "use client";
 
+import { Pause, Phone, Pill, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { CarePlan } from "@/app/types/chat";
@@ -130,7 +131,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label={isTimerRunning ? "Pause scene timer" : "Start scene timer"}
             title={isTimerRunning ? "Pause Timer" : "Start Timer"}
           >
-            {isTimerRunning ? "⏸" : "▶"}
+            {isTimerRunning ? <Pause size={18} /> : <Play size={18} />}
           </button>
           <button
             type="button"
@@ -139,7 +140,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label="Reset scene timer"
             title="Reset Timer"
           >
-            ⏹
+            <Square size={18} />
           </button>
         </div>
 
@@ -154,7 +155,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
               aria-label="Call base hospital"
               title="Call Base - Contact Required"
             >
-              📞 Call Base
+              <Phone size={20} /> Call Base
             </button>
           )}
 
@@ -166,7 +167,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label="Open dosing calculator"
             title="Dosing Calculator"
           >
-            💊 Dosing
+            <Pill size={20} /> Dosing
           </button>
 
           {/* Read Aloud */}
@@ -178,7 +179,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label={isSpeaking ? "Stop reading aloud" : "Read narrative aloud"}
             title={isSpeaking ? "Stop Reading" : "Read Aloud"}
           >
-            {isSpeaking ? "🔇" : "🔊"} {isSpeaking ? "Stop" : "Read"}
+            {isSpeaking ? <VolumeX size={20} /> : <Volume2 size={20} />} {isSpeaking ? "Stop" : "Read"}
           </button>
         </div>
       </div>
