@@ -17,6 +17,14 @@ async function requestChat(payload: unknown, options?: { stream?: boolean }) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+
+  // Handle authentication errors
+  if (response.status === 401) {
+    // Redirect to login page
+    window.location.href = "/login";
+    throw new Error("Authentication required - redirecting to login...");
+  }
+
   if (!response.ok) throw new Error(await response.text());
   if (options?.stream) {
     return response.body as ReadableStream<Uint8Array>;

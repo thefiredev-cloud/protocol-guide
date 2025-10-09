@@ -73,7 +73,7 @@ export class MessageSendManager {
       try {
         const data = JSON.parse(dataRaw) as Record<string, unknown>;
         if (event === "citations") {
-          citations = data as SendResponse["citations"];
+          citations = data as unknown as SendResponse["citations"];
           this.streamHandler.handleCitations(citations);
         } else if (event === "delta") {
           const delta = typeof data?.text === "string" ? (data.text as string) : "";

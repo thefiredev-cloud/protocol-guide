@@ -3,6 +3,8 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
+import { MobileNavBar } from "./components/layout/mobile-nav-bar";
+import { OfflineIndicator } from "./components/layout/offline-indicator";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,6 +66,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0b0b0b" />
       </head>
       <body>
+        <OfflineIndicator />
         <header className="siteHeader">
           <div className="siteHeaderInner">
             <div className="brand">
@@ -74,6 +77,10 @@ export default function RootLayout({
               </div>
             </div>
             <div className="envBadge">Enterprise</div>
+            <nav className="headerNav">
+              <a href="/protocols">Protocols</a>
+              <a href="/dosing">Dosing</a>
+            </nav>
           </div>
         </header>
         <script
@@ -90,6 +97,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <MobileNavBar />
       </body>
     </html>
   );

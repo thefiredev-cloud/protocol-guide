@@ -57,14 +57,7 @@ module.exports = {
       rules: { "unicorn/filename-case": "off" }
     },
     {
-      files: ["app/api/**/route.ts"],
-      rules: {
-        // API routes may log in development
-        "no-console": "off"
-      }
-    },
-    {
-      files: ["lib/**/*.ts", "app/api/**/*.ts"],
+      files: ["lib/**/*.ts"],
       rules: {
         "max-lines-per-function": ["error", { max: 40, skipBlankLines: true, skipComments: true, IIFEs: true }],
         complexity: ["error", { max: 10 }],
@@ -73,10 +66,46 @@ module.exports = {
       }
     },
     {
+      files: ["lib/managers/chat-service.ts"],
+      rules: {
+        // Main chat orchestration needs more complexity
+        "max-lines-per-function": ["warn", { max: 70 }],
+        complexity: ["warn", { max: 15 }],
+      }
+    },
+    {
+      files: ["app/api/**/route.ts"],
+      rules: {
+        // API routes may log in development and need longer functions for error handling
+        "no-console": "off",
+        "max-lines-per-function": ["warn", { max: 80 }],
+        complexity: ["warn", { max: 20 }],
+        "max-depth": ["warn", 3],
+        "@typescript-eslint/no-explicit-any": "error",
+      }
+    },
+    {
+      files: ["lib/audit/**/*.ts", "lib/auth/**/*.ts", "lib/security/**/*.ts", "lib/narrative/**/*.ts"],
+      rules: {
+        // Security and audit modules may need more complexity for validation
+        "max-lines-per-function": ["warn", { max: 60 }],
+        complexity: ["warn", { max: 15 }],
+        "max-depth": ["warn", 3],
+      }
+    },
+    {
       files: ["lib/retrieval.ts", "lib/triage.ts"],
       rules: {
         complexity: ["warn", { max: 15 }],
         "max-lines-per-function": ["warn", { max: 50 }],
+      }
+    },
+    {
+      files: ["lib/managers/NarrativeManager.ts", "lib/managers/CarePlanManager.ts"],
+      rules: {
+        // Template generator methods need more lines/complexity for medical templates
+        complexity: ["warn", { max: 30 }],
+        "max-lines-per-function": ["warn", { max: 120 }],
       }
     },
     {

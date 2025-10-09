@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 type ProtocolDef = {
   name: string;
@@ -97,7 +97,7 @@ export function isSOBProtocolMessage(content: string) {
     content.includes("Respiratory Distress");
 }
 
-function ProtocolDetails({ protocol }: { protocol: ProtocolDef }) {
+const ProtocolDetails = memo(function ProtocolDetails({ protocol }: { protocol: ProtocolDef }) {
   return (
     <div className="protocol-dropdown" style={{
       background: 'var(--bg)',
@@ -128,9 +128,9 @@ function ProtocolDetails({ protocol }: { protocol: ProtocolDef }) {
       </div>
     </div>
   );
-}
+});
 
-function ProtocolCard({ k, protocol, expanded, onToggle }: { k: string; protocol: ProtocolDef; expanded: boolean; onToggle: (k: string) => void }) {
+const ProtocolCard = memo(function ProtocolCard({ k, protocol, expanded, onToggle }: { k: string; protocol: ProtocolDef; expanded: boolean; onToggle: (k: string) => void }) {
   return (
     <div style={{ marginBottom: '12px' }}>
       <button
@@ -166,7 +166,7 @@ function ProtocolCard({ k, protocol, expanded, onToggle }: { k: string; protocol
       {expanded && <ProtocolDetails protocol={protocol} />}
     </div>
   );
-}
+});
 
 function SOBSelector({ protocols }: { protocols: Record<string, ProtocolDef> }) {
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -198,11 +198,14 @@ export function SOBProtocolGateway({ onSelect }: { onSelect: (key: string) => vo
   );
 }
 
-export function MessageItem({ m, onProtocolSelect }: { m: { role: "user" | "assistant"; content: string }; onProtocolSelect: (key: string) => void }) {
+export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { m: { role: "user" | "assistant"; content: string }; onProtocolSelect: (key: string) => void }) {
   if (!isSOBProtocolMessage(m.content)) {
     return <div style={{ whiteSpace: 'pre-wrap' }}>{m.content}</div>;
   }
   return <SOBProtocolGateway onSelect={onProtocolSelect} />;
-}
+}, (prevProps, nextProps) => {
+  // Only re-render if content changed
+  return prevProps.m.content === nextProps.m.content;
+});
 
 

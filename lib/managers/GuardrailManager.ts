@@ -93,7 +93,7 @@ export class GuardrailManager {
 
       const issue = `${match[0]} outside PCM ranges.`;
       const replacement = allowed
-        .map((recommendation) => `${recommendation.name} ${recommendation.route} ${recommendation.quantity} ${recommendation.unit}`)
+        .map((recommendation) => `${recommendation.name.toLowerCase()} ${recommendation.route} ${recommendation.quantity} ${recommendation.unit}`)
         .join("; ");
       findings.push({
         issue,
@@ -110,9 +110,10 @@ export class GuardrailManager {
 
   private detectPediatricGap(text: string): boolean {
     const mentionsPediatric = /\b(pediatric|child|infant|neonate|age\s*(?:under|less than)\s*18)\b/.test(text);
-    const mentionsWeightColor = /\b(broslow|color\s*code|length-based)\b/.test(text);
-    if (!mentionsPediatric && !mentionsWeightColor) return false;
-    return !PEDIATRIC_TERMS.some((term) => text.includes(term));
+    if (!mentionsPediatric) return false;
+    // If pediatric mentioned but no explicit pediatric PCM marker like MCG 1309 or "color code", flag it.
+    const hasMarker = /\b(mcg\s*1309|color\s*code|broslow|length-?based)\b/.test(text);
+    return !hasMarker;
   }
 
   private findUnauthorizedMedications(text: string): string[] {

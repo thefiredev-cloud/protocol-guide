@@ -22,6 +22,21 @@ export type CarePlan = {
     range: string;
     citations: string[];
   }>;
+  urgencyLevel?: "critical" | "urgent" | "routine";
+  vitalTargets?: {
+    targets: string[];
+    redFlags: string[];
+    reassessment: string;
+  };
+  transport?: {
+    destination: string;
+    urgency: string;
+    preNotify: string[];
+  };
+  differential?: {
+    consider: string[];
+    pivotPoints: string[];
+  };
 };
 
 export class CarePlanManager {
@@ -38,6 +53,8 @@ export class CarePlanManager {
         return this.buildFor1205(triage);
       case "1202":
         return this.buildFor1202(triage);
+      case "1242":
+        return this.buildFor1242(triage);
       default:
         return null;
     }
@@ -54,7 +71,10 @@ export class CarePlanManager {
     ];
 
     const basicMedications: string[] = [];
-    basicMedications.push(...this.summarizeMedication("aspirin", { scenario: "chest pain" }));
+    // Always include aspirin for chest pain unless contraindicated (contraindications handled in dosing manager when present)
+    const aspirin = this.summarizeMedication("aspirin", { scenario: "chest pain" });
+    if (!aspirin.length) basicMedications.push("Aspirin per PCM if no allergy/bleeding risk.");
+    else basicMedications.push(...aspirin);
     basicMedications.push(...this.summarizeMedication("nitroglycerin", { scenario: "chest pain", systolicBP: sbp }, {
       default: "0.4 mg SL q5 min prn – if SBP ≥ 90 mmHg, no PDE‑5 use, no suspected RV infarct.",
       hold: "Hold nitroglycerin until SBP ≥ 90 mmHg and RV infarct ruled out.",
@@ -163,6 +183,120 @@ export class CarePlanManager {
     };
   }
 
+  private buildFor1242(triage: TriageResult): CarePlan {
+    const sbp = triage.vitals?.systolic ?? undefined;
+    const hr = triage.vitals?.heartRate ?? undefined;
+
+    // Assess crush syndrome risk factors
+    const hasLowBP = typeof sbp === "number" && sbp < 90;
+    const hasTachycardia = typeof hr === "number" && hr > 100;
+    const hasAbnormalVitals = hasLowBP || hasTachycardia;
+
+    // Determine urgency level
+    const urgencyLevel: CarePlan["urgencyLevel"] = hasAbnormalVitals ? "critical" : "urgent";
+
+    const actions: string[] = [
+      "Assess airway and initiate basic/advanced airway maneuvers prn (MCG 1302).",
+      "Provide spinal motion restriction if indicated; logroll off backboard prior to transport.",
+      "Establish vascular access immediately (MCG 1375) - critical for fluid resuscitation.",
+      "Initiate cardiac monitoring (MCG 1308) - assess for hyperkalemia (peaked T-waves, widened QRS, absent P-waves).",
+      "Consider activating Hospital Emergency Response Team (HERT) for prolonged extrication >30 min (Ref. 817).",
+      "Apply blanket to keep patient warm; prevent hypothermia.",
+    ];
+
+    const basicMedications: string[] = [];
+
+    // Fluid resuscitation - critical priority
+    basicMedications.push(
+      "Normal Saline 1L IV/IO rapid infusion - administer ASAP and PRIOR to release of compressive force.",
+      "Repeat NS 1L x1 for total of 2 liters; reassess after each 250 mL for pulmonary edema.",
+    );
+
+    // Hyperkalemia treatment if ECG changes present
+    basicMedications.push(
+      "IF hyperkalemia signs (peaked T-waves, widened QRS, absent P-waves):",
+      "  - Calcium Chloride 1g (10mL) slow IV/IO push, repeat x1 for persistent ECG abnormalities",
+      "  - Sodium Bicarbonate 50mEq (50mL) slow IV/IO push, repeat x1 for persistent ECG abnormalities",
+      "  - Albuterol 5mg (6mL) via neb, repeat continuously until hospital arrival",
+    );
+
+    // Pain management
+    basicMedications.push("Pain management per MCG 1345 (consider fentanyl or morphine).");
+
+    const detailPackages = this.buildMedicationDetails([
+      { id: "fentanyl", scenario: "pain" },
+    ]);
+
+    const criticalNotes: string[] = [
+      "Protocol 1242 – Crush Injury/Syndrome. Document Provider Impression as Traumatic Injury (TRMA).",
+      "CRUSH SYNDROME RISK: Circumferential compression + large muscle mass + entrapment ≥1 hr.",
+      hasAbnormalVitals
+        ? "ABNORMAL VITALS DETECTED - High priority for fluid resuscitation and hyperkalemia monitoring."
+        : "Monitor for development of crush syndrome during extrication.",
+      "Pre-position tourniquet prior to extrication to prevent hemorrhage upon release of compression.",
+      "Do NOT release compression until IV access established and fluids running.",
+      "Transport to Trauma Center per Ref. 502.",
+    ];
+
+    // Vital sign targets
+    const vitalTargets: CarePlan["vitalTargets"] = {
+      targets: [
+        "Maintain SBP ≥ 90 mmHg with aggressive fluid resuscitation",
+        "Monitor ECG continuously for hyperkalemia signs",
+        "Urine output goal (if catheterized at hospital): >100 mL/hr to prevent renal failure",
+      ],
+      redFlags: [
+        "Peaked T-waves, widened QRS, or absent P-waves (hyperkalemia)",
+        "Hypotension despite 2L NS (consider ongoing bleeding or severe rhabdomyolysis)",
+        "Pulmonary edema (crackles, increased work of breathing) - stop fluid resuscitation",
+        "Dark brown/red urine (myoglobinuria from muscle breakdown)",
+      ],
+      reassessment: "Continuous cardiac monitoring; vitals q5min; ECG after each intervention",
+    };
+
+    // Transport priorities
+    const transport: CarePlan["transport"] = {
+      destination: "Trauma Center (Ref. 502)",
+      urgency: hasAbnormalVitals ? "Emergent - lights and sirens" : "Urgent - expedited transport",
+      preNotify: [
+        "Trauma activation",
+        "Crush syndrome with potential for hyperkalemia and rhabdomyolysis",
+        "May require immediate dialysis if severe hyperkalemia",
+      ],
+    };
+
+    // Differential considerations
+    const differential: CarePlan["differential"] = {
+      consider: [
+        "Crush injury WITHOUT syndrome (limited muscle mass, brief compression <1 hr)",
+        "Traumatic amputation (different hemorrhage control priorities)",
+        "Compartment syndrome (may develop hours after release)",
+        "Concurrent traumatic injuries (multisystem trauma per TP 1244)",
+      ],
+      pivotPoints: [
+        "Entrapment duration: <1 hr = lower crush syndrome risk; >1 hr = high risk",
+        "ECG changes: Normal = crush injury; Hyperkalemia signs = crush syndrome",
+        "Muscle mass involved: Extremity vs truncal compression",
+        "Concurrent hemorrhage: May need tourniquet + fluid resuscitation",
+      ],
+    };
+
+    return {
+      protocolCode: "1242",
+      protocolTitle: "Crush Injury/Syndrome",
+      actions,
+      baseContact: "YES – Required for crush syndrome risk or prolonged entrapment >30 min. Contact concurrently with treatment.",
+      basicMedications,
+      criticalNotes,
+      medicationsDetailed: detailPackages.details,
+      weightBased: detailPackages.weightBased,
+      urgencyLevel,
+      vitalTargets,
+      transport,
+      differential,
+    };
+  }
+
   private summarizeMedication(
     id: string,
     context: { scenario?: string; systolicBP?: number },
@@ -188,6 +322,7 @@ export class CarePlanManager {
     patientWeightKg?: number,
   ): { details: Array<{ name: string; details: string[]; citations: string[] }>; weightBased?: CarePlan["weightBased"] } {
     const rows: Array<{ name: string; details: string[]; citations: string[] }> = [];
+    const weightBased: CarePlan["weightBased"] = [];
 
     for (const item of input) {
       const result = this.medicationManager.calculate(item.id, {
@@ -200,11 +335,22 @@ export class CarePlanManager {
       const details = result.recommendations.map((rec) => formatRecommendation(result, rec));
       rows.push({ name: result.medicationName, details, citations: result.citations });
 
-      // If future calculators expose structured weight-based guidance,
-      // we can extend MedicationCalculationResult and surface it here.
+      // Heuristic: if patient weight provided and medication is commonly weight-based, surface table row
+      if (typeof patientWeightKg === "number" && /fentanyl|acetaminophen|ketorolac|ondansetron|epinephrine/i.test(result.medicationName)) {
+        const perKg = approximatePerKg(details);
+        if (perKg) {
+          weightBased.push({
+            name: result.medicationName,
+            route: details[0]?.split(" ")[1] || "",
+            dosePerKg: perKg,
+            range: "Per PCM",
+            citations: result.citations,
+          });
+        }
+      }
     }
 
-    return { details: rows };
+    return { details: rows, weightBased: weightBased.length ? weightBased : undefined };
   }
 }
 
@@ -212,6 +358,19 @@ function formatRecommendation(result: MedicationCalculationResult, rec: Medicati
   const dose = `${rec.dose.quantity} ${rec.dose.unit}`;
   const repeat = rec.repeat ? `; repeat ${rec.repeat.intervalMinutes} min` : "";
   return `${result.medicationName} ${rec.route} ${dose}${repeat}`;
+}
+
+function approximatePerKg(recommendations: string[]): string | undefined {
+  // Attempt to detect per-kg language; fallback to common values
+  const joined = recommendations.join(" | ").toLowerCase();
+  if (/(mcg|mg)\/kg/.test(joined)) {
+    const m = joined.match(/(\d+(?:\.\d+)?)\s*(mcg|mg)\/kg/);
+    if (m) return `${m[1]} ${m[2]}/kg`;
+  }
+  // Simple heuristics
+  if (joined.includes("fentanyl")) return "1 mcg/kg";
+  if (joined.includes("epinephrine") && joined.includes("neb")) return "0.5 mg/kg (racemic substitutable per PCM)";
+  return undefined;
 }
 
 

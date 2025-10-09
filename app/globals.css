@@ -10,6 +10,31 @@
   --brand-dark: #7f1212;
   --brand-ink: #fff1f1;
   --accent: #38bdf8;
+
+  /* Urgency color system for field operations */
+  --critical-red: #dc2626;
+  --critical-red-dark: #991b1b;
+  --critical-red-light: #fca5a5;
+  --critical-red-bg: rgba(220, 38, 38, 0.15);
+  --critical-red-border: rgba(220, 38, 38, 0.4);
+
+  --warning-amber: #f59e0b;
+  --warning-amber-dark: #b45309;
+  --warning-amber-light: #fcd34d;
+  --warning-amber-bg: rgba(245, 158, 11, 0.15);
+  --warning-amber-border: rgba(245, 158, 11, 0.4);
+
+  --info-blue: #3b82f6;
+  --info-blue-dark: #1e40af;
+  --info-blue-light: #93c5fd;
+  --info-blue-bg: rgba(59, 130, 246, 0.15);
+  --info-blue-border: rgba(59, 130, 246, 0.4);
+
+  --success-green: #10b981;
+  --success-green-dark: #047857;
+  --success-green-light: #6ee7b7;
+  --success-green-bg: rgba(16, 185, 129, 0.15);
+  --success-green-border: rgba(16, 185, 129, 0.4);
 }
 
 html,
@@ -316,3 +341,977 @@ button:active:not(:disabled) {
 /* Protocol button polish */
 .protocol-button { transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease; }
 .protocol-button:hover { transform: translateY(-1px); }
+
+/* Login page */
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(180deg, var(--bg) 0%, #0a0d14 100%);
+}
+
+.loginContainer {
+  width: 100%;
+  max-width: 420px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.loginHeader h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  background: linear-gradient(135deg, var(--brand) 0%, #ef4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.loginHeader p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.loginForm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 32px rgba(12, 16, 24, 0.45);
+}
+
+.loginForm label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.loginForm input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+  margin-bottom: 16px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loginForm input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.loginForm button {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.loginError {
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  background: rgba(185, 28, 28, 0.15);
+  border: 1px solid rgba(185, 28, 28, 0.4);
+  border-radius: 12px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.loginHelp {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.loginHelp p {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.loginHelp ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.loginHelp li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 6px 0;
+}
+
+.loginHelp strong {
+  display: inline-block;
+  width: 50px;
+  font-family: 'Courier New', monospace;
+  color: var(--accent);
+}
+
+/* Page actions (logout button container) */
+.pageActions {
+  position: fixed;
+  top: 72px;
+  right: clamp(16px, 4vw, 32px);
+  z-index: 40;
+}
+
+.logoutButton {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 13px;
+  background: var(--surface-elevated);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(8, 12, 20, 0.3);
+}
+
+.logoutButton:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+/* Header navigation */
+.headerNav {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.headerNav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.headerNav a:hover {
+  color: var(--text-primary);
+}
+
+/* ====================================
+   PHASE 2: GLOVE-FRIENDLY UI ENHANCEMENTS
+   ==================================== */
+
+/* Badge system for urgency indicators */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.badge-critical {
+  background: var(--critical-red-bg);
+  border: 1px solid var(--critical-red-border);
+  color: var(--critical-red-light);
+}
+
+.badge-warning {
+  background: var(--warning-amber-bg);
+  border: 1px solid var(--warning-amber-border);
+  color: var(--warning-amber-light);
+}
+
+.badge-info {
+  background: var(--info-blue-bg);
+  border: 1px solid var(--info-blue-border);
+  color: var(--info-blue-light);
+}
+
+.badge-success {
+  background: var(--success-green-bg);
+  border: 1px solid var(--success-green-border);
+  color: var(--success-green-light);
+}
+
+/* Glove-friendly action buttons (minimum 56x56px touch target) */
+.action-button-primary {
+  min-height: 56px;
+  min-width: 56px;
+  padding: 12px 20px;
+  background: var(--critical-red);
+  border: 2px solid var(--critical-red-dark);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 8px 18px rgba(220, 38, 38, 0.35);
+}
+
+.action-button-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(220, 38, 38, 0.45);
+}
+
+.action-button-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.action-button-secondary {
+  min-height: 56px;
+  min-width: 56px;
+  padding: 12px 20px;
+  background: var(--surface-elevated);
+  border: 2px solid var(--border);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 12px rgba(8, 12, 20, 0.3);
+}
+
+.action-button-secondary:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(56, 189, 248, 0.25);
+}
+
+.action-button-secondary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(8, 12, 20, 0.2);
+}
+
+/* Quick actions container - sticky at bottom */
+.quick-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 96px; /* Above input row */
+  z-index: 25;
+  background: rgba(16, 19, 26, 0.96);
+  border-top: 1px solid var(--border);
+  padding: 12px clamp(16px, 4vw, 32px) calc(12px + env(safe-area-inset-bottom, 0));
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -4px 16px rgba(8, 12, 20, 0.4);
+}
+
+.quick-actions-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quick-actions button {
+  min-height: 56px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
+/* Timer display in quick actions */
+.timer-display {
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* Interactive checklist */
+.checklist {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: var(--surface-elevated);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px;
+}
+
+.checklist-item:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.checklist-item.checked {
+  background: var(--success-green-bg);
+  border-color: var(--success-green-border);
+}
+
+.checklist-item.checked .checklist-text {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.checklist-checkbox {
+  min-width: 28px;
+  min-height: 28px;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.checklist-item.checked .checklist-checkbox {
+  background: var(--success-green);
+  border-color: var(--success-green-dark);
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Collapsible sections */
+.collapsible-section {
+  margin-bottom: 16px;
+}
+
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  min-height: 56px;
+  transition: all 0.2s ease;
+}
+
+.collapsible-header:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.collapsible-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.collapsible-icon {
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.collapsible-section.expanded .collapsible-icon {
+  transform: rotate(180deg);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.collapsible-section.expanded .collapsible-content {
+  max-height: 2000px;
+  padding-top: 12px;
+}
+
+/* Base contact alert */
+.base-contact-alert {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 10px;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  transition: all 0.3s ease;
+}
+
+.base-contact-alert.required {
+  background: var(--critical-red-bg);
+  border-color: var(--critical-red-border);
+}
+
+.base-contact-alert.not-required {
+  background: var(--info-blue-bg);
+  border-color: var(--info-blue-border);
+}
+
+.base-contact-alert.flash-attention {
+  animation: flashAlert 0.5s ease-in-out 2;
+}
+
+@keyframes flashAlert {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--critical-red);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px 4px var(--critical-red);
+  }
+}
+
+.base-contact-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.base-contact-content {
+  flex: 1;
+}
+
+.base-contact-content p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.base-contact-alert.required .base-contact-content p {
+  color: var(--critical-red-light);
+}
+
+.base-contact-alert.not-required .base-contact-content p {
+  color: var(--info-blue-light);
+}
+
+/* One-handed mode toggle */
+.one-handed-toggle {
+  position: fixed;
+  bottom: 180px;
+  right: clamp(16px, 4vw, 32px);
+  z-index: 30;
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--surface-elevated);
+  border: 2px solid var(--border);
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  box-shadow: 0 8px 24px rgba(8, 12, 20, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.one-handed-toggle:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+.one-handed-toggle.active {
+  background: var(--accent);
+  border-color: var(--info-blue-dark);
+  color: #04111f;
+}
+
+/* One-handed mode layout adjustments */
+body.one-handed-mode .container {
+  padding-bottom: 260px; /* Extra space for thumb zone */
+}
+
+body.one-handed-mode .quick-actions {
+  bottom: 160px;
+}
+
+body.one-handed-mode .inputRow {
+  padding-bottom: 20px;
+}
+
+/* High contrast mode for sunlight visibility */
+@media (prefers-contrast: high) {
+  :root {
+    --bg: #000;
+    --surface: #0a0a0a;
+    --surface-elevated: #1a1a1a;
+    --border: #404040;
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+  }
+
+  button,
+  .action-button-primary,
+  .action-button-secondary {
+    border-width: 3px;
+  }
+
+  .badge {
+    border-width: 2px;
+    font-weight: 700;
+  }
+}
+
+/* Priority badges for actions */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Medication table improvements */
+.medication-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.medication-table th {
+  background: var(--surface-elevated);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+
+.medication-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.medication-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Weight table improvements */
+.weight-table {
+  margin: 16px 0;
+}
+
+.weight-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.weight-table th {
+  background: var(--warning-amber-bg);
+  border: 1px solid var(--warning-amber-border);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.weight-table td {
+  padding: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Responsive adjustments for quick actions */
+@media (min-width: 640px) {
+  .quick-actions {
+    bottom: 108px;
+  }
+
+  .quick-actions-inner {
+    flex-wrap: nowrap;
+  }
+
+  body.one-handed-mode .quick-actions {
+    bottom: 172px;
+  }
+}
+
+@media (min-width: 900px) {
+  .quick-actions-inner {
+    max-width: 980px;
+  }
+}
+
+/* ====================================
+   OFFLINE INDICATOR BANNER
+   ==================================== */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgba(234, 179, 8, 0.95);
+  color: #000;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(202, 138, 4, 0.8);
+}
+
+.offline-icon {
+  font-size: 18px;
+}
+
+.offline-text {
+  font-weight: 700;
+}
+
+.offline-sync {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* ====================================
+   MOBILE NAVIGATION BAR
+   ==================================== */
+
+/* Mobile Navigation Bar */
+.mobile-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(16, 19, 26, 0.98);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.nav-tab {
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  border-radius: 8px;
+}
+
+.nav-tab:hover,
+.nav-tab:focus {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab.active {
+  color: var(--accent);
+}
+
+.nav-tab-icon {
+  font-size: 24px;
+}
+
+.nav-tab-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Adjust main content padding for bottom nav on mobile */
+@media (max-width: 767px) {
+  .container {
+    padding-bottom: 88px !important; /* 64px nav + 24px spacing */
+  }
+
+  .inputRow {
+    bottom: 72px; /* Position above mobile nav */
+  }
+}
+
+/* Hide mobile nav on desktop */
+@media (min-width: 768px) {
+  .mobile-nav-bar {
+    display: none;
+  }
+}
+
+/* ====================================
+   SCENE PAGE STYLES
+   ==================================== */
+
+.scene-timer {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin: 24px 0;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(12, 16, 24, 0.45);
+}
+
+.scene-timer .timer-display {
+  font-family: 'Courier New', monospace;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.scene-timer .timer-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.scene-timer .timer-controls button {
+  min-width: 120px;
+}
+
+.scene-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.scene-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text-primary);
+  min-height: 140px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(8, 12, 20, 0.3);
+}
+
+.scene-card:hover,
+.scene-card:focus {
+  background: var(--surface-elevated);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.25);
+}
+
+.scene-card-icon {
+  font-size: 48px;
+}
+
+.scene-card-label {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+@media (min-width: 640px) {
+  .scene-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ====================================
+   PERFORMANCE OPTIMIZATIONS FOR LEGACY DEVICES
+   iPhone 6S (2015) / Android 5.0 Support
+   ==================================== */
+
+/* Simplify backdrop filters for mobile (expensive on old GPUs) */
+@media (max-width: 640px) {
+  .inputRow, .quick-actions, .siteHeader, .mobile-nav-bar {
+    background: rgba(16, 19, 26, 0.98);
+    backdrop-filter: none; /* Remove expensive blur on mobile */
+  }
+}
+
+/* Keep backdrop filter for desktop only */
+@media (min-width: 641px) {
+  .inputRow, .quick-actions, .siteHeader {
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Reduce motion for performance and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Use CSS containment for performance (prevents layout thrashing) */
+.msg, .card, .scene-card {
+  contain: layout style paint;
+}
+
+.chat {
+  contain: layout;
+}
+
+/* Simplify shadows on mobile for better performance */
+@media (max-width: 640px) {
+  .card, .msg, .scene-card {
+    box-shadow: 0 2px 8px rgba(12, 16, 24, 0.2); /* Simpler shadow */
+  }
+
+  button {
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2); /* Lighter shadow */
+  }
+
+  .action-button-primary {
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+  }
+
+  .action-button-secondary {
+    box-shadow: 0 2px 8px rgba(8, 12, 20, 0.2);
+  }
+
+  .one-handed-toggle {
+    box-shadow: 0 4px 16px rgba(8, 12, 20, 0.35);
+  }
+}
+
+/* Only use transform/opacity for animations (GPU accelerated) */
+button:active:not(:disabled) {
+  transform: translateY(0); /* Use transform instead of margin */
+}
+
+.collapsible-icon {
+  transition: transform 0.2s ease; /* Only transform, no other properties */
+}
+
+/* Optimize protocol button animations */
+.protocol-button:hover {
+  will-change: transform; /* Hint to browser for GPU acceleration */
+}
+
+.protocol-button:active {
+  transform: translateY(0);
+}
+
+/* Loading skeleton styles for lazy-loaded components */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-elevated) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-narrative {
+  min-height: 200px;
+  margin: 16px 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.skeleton-line {
+  height: 16px;
+  margin-bottom: 12px;
+  background: var(--surface-elevated);
+  border-radius: 4px;
+}
+
+.skeleton-line.skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 16px;
+}
+
+.skeleton-line.short {
+  width: 70%;
+}
+
+/* Optimize font rendering for performance */
+body {
+  text-rendering: optimizeSpeed; /* Faster than optimizeLegibility on old devices */
+}
+
+/* Reduce repaints by using GPU-accelerated properties */
+.one-handed-toggle,
+.quick-actions button,
+.action-button-primary,
+.action-button-secondary {
+  will-change: transform;
+}
+
+/* Remove will-change after transition completes to free GPU memory */
+.one-handed-toggle:not(:hover):not(:active),
+.quick-actions button:not(:hover):not(:active),
+.action-button-primary:not(:hover):not(:active),
+.action-button-secondary:not(:hover):not(:active),
+.protocol-button:not(:hover):not(:active) {
+  will-change: auto;
+}
+
+/* Disable expensive filters on mobile */
+@media (max-width: 640px) {
+  .msg {
+    backdrop-filter: none;
+  }
+}

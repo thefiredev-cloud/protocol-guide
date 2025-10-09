@@ -163,6 +163,8 @@ export class NarrativeManager {
     );
     return { title: "Weight-Based Dosing", lines };
   }
+
+  // Protocol-specific documentation builders moved to ProtocolDocBuilder to reduce responsibilities
 }
 
-
+// ProtocolDocumentation types are defined alongside ProtocolDocBuilder

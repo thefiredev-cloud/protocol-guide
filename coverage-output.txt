@@ -1,0 +1,252 @@
+
+> test:coverage
+> vitest run --coverage
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Tanner/Medic Bot/Medic-Bot[39m
+[2m      Coverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m tests/unit/managers/NarrativeManager.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/managers/EnvironmentManager.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/clinical/pediatric-dose-calculator.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/parsers/pediatric-weight-med.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstderr[2m | tests/unit/security/rate-limit.test.ts[2m > [22m[2mEnhancedRateLimiter[2m > [22m[2mshould decrease reputation on rate limit violations[22m[39m
+⚠️  Low reputation score for test-ban-key: 10
+⚠️  Low reputation score for test-ban-key: 0
+
+ [32m✓[39m tests/unit/security/rate-limit.test.ts [2m ([22m[2m16 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m tests/unit/managers/KnowledgeBaseManager.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/dosing/calculators/epinephrine.test.ts [2m ([22m[2m33 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/triage.parsers.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/triage.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/retrieval.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/managers/CarePlanManager.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/managers/GuardrailManager.test.ts [2m ([22m[2m6 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/triage.scoring.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/prompt.builder.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mreturns assistant message or error[22m[39m
+{"timestamp":"2025-10-09T03:35:21.062Z","context":"api.chat.prepare","level":"debug","message":"Knowledge base ready","loaded":true,"docCount":100,"sourcePath":"test"}
+{"timestamp":"2025-10-09T03:35:21.073Z","context":"audit.api.chat","level":"info","message":"chat.post","ok":true,"status":503,"durationMs":13}
+
+[90mstderr[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mreturns assistant message or error[22m[39m
+{"timestamp":"2025-10-09T03:35:21.072Z","context":"api.chat.post","level":"error","message":"[REDACTED]","requestId":"30b9c191-5432-43d5-96e5-d1c53231a765"}
+
+[90mstdout[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mhealth check returns diagnostics[22m[39m
+{"timestamp":"2025-10-09T03:35:21.077Z","context":"KnowledgeBaseInitializer","level":"info","message":"Knowledge base warmed","docCount":1,"sourcePath":"auto"}
+
+[90mstdout[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mstreams SSE events and completes with final text[22m[39m
+{"timestamp":"2025-10-09T03:35:21.079Z","context":"api.chat.prepare","level":"debug","message":"Knowledge base ready","loaded":true,"docCount":1}
+
+[90mstderr[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mstreams SSE events and completes with final text[22m[39m
+{"timestamp":"2025-10-09T03:35:21.369Z","context":"ChatService","level":"warn","message":"LLM unavailable, returning fallback","reason":"error","breaker":"closed"}
+
+[90mstdout[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mstreams SSE events and completes with final text[22m[39m
+{"timestamp":"2025-10-09T03:35:21.369Z","context":"ChatService","level":"info","message":"Returning fallback response","citationCount":0}
+
+[90mstderr[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mstreams SSE events and completes with final text[22m[39m
+<empty line>
+[90mstdout[2m | tests/integration/api-chat.test.ts[2m > [22m[2mPOST /api/chat[2m > [22m[2mstreams SSE events and completes with final text[22m[39m
+{"timestamp":"2025-10-09T03:35:21.421Z","context":"api.chat.stream.post","level":"info","message":"Handled streaming chat request","requestId":"4ad72f1a-5d86-44f6-83ae-4f17d858084e","mode":"chat","messageCount":1,"latencyMs":342,"fallback":true}
+
+ [32m✓[39m tests/integration/api-chat.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[33m 368[2mms[22m[39m
+[90mstdout[2m | tests/unit/managers/KnowledgeBaseInitializer.test.ts[2m > [22m[2mKnowledgeBaseInitializer[2m > [22m[2mreturns diagnostics with environment metadata[22m[39m
+{"timestamp":"2025-10-09T03:35:22.996Z","context":"KnowledgeBaseInitializer","level":"info","message":"Knowledge base warmed","docCount":0,"sourcePath":"auto"}
+
+ [32m✓[39m tests/unit/managers/KnowledgeBaseInitializer.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 2169[2mms[22m[39m
+ [32m✓[39m tests/unit/managers/LLMClient.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[33m 6027[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m      Tests [22m [1m[32m96 passed[39m[22m[90m (96)[39m
+[2m   Start at [22m 20:35:20
+[2m   Duration [22m 6.52s[2m (transform 1.26s, setup 2ms, collect 2.58s, tests 8.65s, environment 4ms, prepare 3.15s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   31.22 |    63.47 |   61.21 |   31.22 |                   
+ Medic-Bot         |       0 |        0 |       0 |       0 |                   
+  next.config.mjs  |       0 |        0 |       0 |       0 | 1-210             
+  ...ght.config.ts |       0 |        0 |       0 |       0 | 1-3               
+ Medic-Bot/app     |       0 |        0 |       0 |       0 |                   
+  layout.tsx       |       0 |        0 |       0 |       0 | 1-104             
+  page.tsx         |       0 |        0 |       0 |       0 | 1-144             
+ ...in/rate-limits |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-50              
+ .../app/api/audit |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-331             
+ ...t/app/api/chat |   76.38 |    28.57 |      80 |   76.38 |                   
+  route.ts         |   91.17 |    33.33 |     100 |   91.17 | 37-42             
+  shared.ts        |   63.15 |       25 |   66.66 |   63.15 | ...53,58-64,69-75 
+ ...pi/chat/stream |   93.79 |    56.25 |     100 |   93.79 |                   
+  route.ts         |   93.79 |    56.25 |     100 |   93.79 | 60-61,119-124     
+ .../flush-metrics |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-85              
+ ...app/api/dosing |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-104             
+ ...app/api/health |   68.88 |    30.43 |     100 |   68.88 |                   
+  route.ts         |   68.88 |    30.43 |     100 |   68.88 | ...95-200,219-224 
+ .../cad/incidents |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-186             
+ ...cr/medications |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-223             
+ ...epcr/narrative |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-186             
+ ...p/api/kb/smoke |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-31              
+ ...pp/api/metrics |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 1-9               
+ ...app/components |       0 |        0 |       0 |       0 |                   
+  ...input-row.tsx |       0 |        0 |       0 |       0 | 1-126             
+  chat-list.tsx    |       0 |        0 |       0 |       0 | 1-64              
+  ...sion-tree.tsx |       0 |        0 |       0 |       0 | 1-63              
+  ...us-banner.tsx |       0 |        0 |       0 |       0 | 1-64              
+  ...ive-panel.tsx |       0 |        0 |       0 |       0 | 1-80              
+  ...tions-bar.tsx |       0 |        0 |       0 |       0 | 1-187             
+  ...protocols.tsx |       0 |        0 |       0 |       0 | 1-209             
+  ...-examples.tsx |       0 |        0 |       0 |       0 | 1-34              
+  ...rd-header.tsx |       0 |        0 |       0 |       0 | 1-13              
+  ...protocols.tsx |       0 |        0 |       0 |       0 | 1-20              
+  welcome-card.tsx |       0 |        0 |       0 |       0 | 1-39              
+ ...ponents/layout |       0 |        0 |       0 |       0 |                   
+  ...e-nav-bar.tsx |       0 |        0 |       0 |       0 | 1-38              
+  ...indicator.tsx |       0 |        0 |       0 |       0 | 1-40              
+ ...ents/narrative |       0 |        0 |       0 |       0 |                   
+  ...tactAlert.tsx |       0 |        0 |       0 |       0 | 1-33              
+  ...anSection.tsx |       0 |        0 |       0 |       0 | 1-41              
+  ...nsSection.tsx |       0 |        0 |       0 |       0 | 1-19              
+  ...tiveState.tsx |       0 |        0 |       0 |       0 | 1-18              
+  ...ailsTable.tsx |       0 |        0 |       0 |       0 | 1-32              
+  ...onSection.tsx |       0 |        0 |       0 |       0 | 1-48              
+  ...eSections.tsx |       0 |        0 |       0 |       0 | 1-25              
+  ...isSection.tsx |       0 |        0 |       0 |       0 | 1-16              
+  ...rsSection.tsx |       0 |        0 |       0 |       0 | 1-13              
+  SectionCard.tsx  |       0 |        0 |       0 |       0 | 1-26              
+  ...asedTable.tsx |       0 |        0 |       0 |       0 | 1-33              
+ ...rative/actions |       0 |        0 |       0 |       0 |                   
+  ActionsList.tsx  |       0 |        0 |       0 |       0 | 1-52              
+ ...Bot/app/dosing |       0 |        0 |       0 |       0 |                   
+  page.tsx         |       0 |        0 |       0 |       0 | 1-163             
+ ...-Bot/app/hooks |       0 |        0 |       0 |       0 |                   
+  ...-assistant.ts |       0 |        0 |       0 |       0 | 1-16              
+  ...-narrative.ts |       0 |        0 |       0 |       0 | 1-57              
+  ...chat-state.ts |       0 |        0 |       0 |       0 | 1-37              
+  ...view-model.ts |       0 |        0 |       0 |       0 | 1-93              
+  ...tive-state.ts |       0 |        0 |       0 |       0 | 1-37              
+  ...-citations.ts |       0 |        0 |       0 |       0 | 1-42              
+  ...controller.ts |       0 |        0 |       0 |       0 | 1-174             
+  ...oll-anchor.ts |       0 |        0 |       0 |       0 | 1-9               
+  ...nd-handler.ts |       0 |        0 |       0 |       0 | 1-81              
+  ...oice-input.ts |       0 |        0 |       0 |       0 | 1-53              
+ ...t/app/managers |       0 |        0 |       0 |       0 |                   
+  ...nd-manager.ts |       0 |        0 |       0 |       0 | 1-112             
+ .../app/protocols |       0 |        0 |       0 |       0 |                   
+  page.tsx         |       0 |        0 |       0 |       0 | 1-41              
+ ...-Bot/app/scene |       0 |        0 |       0 |       0 |                   
+  page.tsx         |       0 |        0 |       0 |       0 | 1-53              
+ ...-Bot/app/tools |       0 |        0 |       0 |       0 |                   
+  ...to-resizer.ts |       0 |        0 |       0 |       0 | 1-17              
+ Medic-Bot/lib     |   64.72 |    75.38 |   82.14 |   64.72 |                   
+  ...ionManager.ts |       0 |        0 |       0 |       0 | 1-132             
+  log.ts           |   98.14 |    94.44 |     100 |   98.14 | 43                
+  prompt.ts        |     100 |      100 |     100 |     100 |                   
+  retrieval.ts     |   81.45 |    78.78 |      75 |   81.45 | ...63-267,271-272 
+  triage.ts        |   84.46 |    46.15 |     100 |   84.46 | 79,83-94,97-99    
+ Medic-Bot/lib/api |   50.88 |    33.33 |   66.66 |   50.88 |                   
+  handler.ts       |   60.56 |    36.36 |     100 |   60.56 | ...05-116,131-137 
+  rbac.ts          |       0 |        0 |       0 |       0 | 1-27              
+ ...-Bot/lib/audit |    66.9 |       50 |   56.25 |    66.9 |                   
+  audit-logger.ts  |    66.9 |       50 |   56.25 |    66.9 | ...95-398,413-414 
+ ...t/lib/clinical |   92.57 |    82.35 |   84.61 |   92.57 |                   
+  ...calculator.ts |   91.89 |    76.92 |   83.33 |   91.89 | 128-140,175-176   
+  peds-color.ts    |     100 |      100 |     100 |     100 |                   
+ ...Bot/lib/dosing |   58.02 |       75 |   69.23 |   58.02 |                   
+  math.ts          |   83.87 |    71.42 |   71.42 |   83.87 | 7-8,29-31         
+  ...ng-manager.ts |   93.33 |    85.71 |      75 |   93.33 | 28-29             
+  ...tion-index.ts |       0 |        0 |       0 |       0 | 1-61              
+  registry.ts      |     100 |      100 |     100 |     100 |                   
+ ...ng/calculators |   58.46 |    80.76 |   71.11 |   58.46 |                   
+  acetaminophen.ts |     100 |       40 |     100 |     100 | 11-21             
+  adenosine.ts     |   34.88 |      100 |      50 |   34.88 | 15-42             
+  albuterol.ts     |   25.64 |      100 |      50 |   25.64 | 10-38             
+  amiodarone.ts    |   34.88 |      100 |      50 |   34.88 | 15-42             
+  atropine.ts      |   23.91 |      100 |      50 |   23.91 | 11-45             
+  ...m-chloride.ts |    37.5 |      100 |      50 |    37.5 | 15-39             
+  epinephrine.ts   |   99.35 |     97.5 |     100 |   99.35 | 34                
+  fentanyl.ts      |     100 |    33.33 |     100 |     100 | 11-29             
+  ketamine.ts      |   36.58 |      100 |      50 |   36.58 | 15-40             
+  ketorolac.ts     |     100 |    33.33 |     100 |     100 | 15-30             
+  ...um-sulfate.ts |    37.5 |      100 |      50 |    37.5 | 15-39             
+  midazolam.ts     |   33.33 |      100 |      50 |   33.33 | 15-44             
+  nitroglycerin.ts |     100 |    66.66 |     100 |     100 | 48-51             
+  ondansetron.ts   |   40.54 |      100 |      50 |   40.54 | 15-36             
+  pralidoxime.ts   |   18.64 |      100 |   33.33 |   18.64 | 10-51,54-59       
+  push-dose-epi.ts |   36.84 |      100 |      50 |   36.84 | 14-37             
+  ...icarbonate.ts |    37.5 |      100 |      50 |    37.5 | 15-39             
+ ...t/lib/managers |   55.56 |    71.68 |    82.5 |   55.56 |                   
+  ...lanManager.ts |   58.55 |    67.39 |      80 |   58.55 | ...87-298,367-369 
+  ...ailManager.ts |     100 |       88 |     100 |     100 | 34,49,88          
+  ...iveManager.ts |    84.7 |    53.48 |    90.9 |    84.7 | 123,133-157       
+  ...DocBuilder.ts |       0 |        0 |       0 |       0 | 1-262             
+  ...rchManager.ts |      88 |      100 |       0 |      88 | 22-24             
+  ...valManager.ts |      70 |       75 |      75 |      70 | 39-41,46-60       
+  ...ortManager.ts |       0 |        0 |       0 |       0 | 1-358             
+  chat-service.ts  |    80.9 |    52.94 |    87.5 |    80.9 | ...82-184,192-205 
+  ...nt-manager.ts |     100 |      100 |     100 |     100 |                   
+  ...nitializer.ts |      95 |    91.66 |   85.71 |      95 | 44-45,59-60       
+  llm-client.ts    |   98.12 |    86.11 |     100 |   98.12 | 141-143           
+  ...cs-manager.ts |   59.69 |    66.66 |      60 |   59.69 | ...54-184,190-193 
+  ...ve-manager.ts |       0 |        0 |       0 |       0 | 1                 
+ .../lib/narrative |       0 |        0 |       0 |       0 |                   
+  builder.ts       |       0 |        0 |       0 |       0 | 1-179             
+ ...ot/lib/parsers |     100 |       75 |     100 |     100 |                   
+  ...weight-med.ts |     100 |       75 |     100 |     100 | 30,37             
+ ...Bot/lib/prompt |     100 |      100 |     100 |     100 |                   
+  PromptBuilder.ts |     100 |      100 |     100 |     100 |                   
+ ...t/lib/security |   72.65 |    90.32 |      60 |   72.65 |                   
+  ip-allowlist.ts  |       0 |        0 |       0 |       0 | 1-40              
+  rate-limit.ts    |   80.84 |    93.33 |   64.28 |   80.84 | ...92-301,309-355 
+ .../services/chat |   55.98 |    77.77 |   53.84 |   55.98 |                   
+  ChatProfiler.ts  |     100 |      100 |     100 |     100 |                   
+  ...ionService.ts |   69.56 |       50 |     100 |   69.56 | 10-12,18-21       
+  ...ailService.ts |      55 |      100 |      50 |      55 | 11-19             
+  ...nseBuilder.ts |    28.7 |      100 |    8.33 |    28.7 | ...3,86-93,96-107 
+  ...oadBuilder.ts |     100 |      100 |     100 |     100 |                   
+  TriageService.ts |   71.42 |    66.66 |     100 |   71.42 | 24-33             
+ ...ot/lib/storage |   24.39 |    69.23 |      80 |   24.39 |                   
+  ...ed-example.ts |       0 |        0 |       0 |       0 | 1-176             
+  ...se-chunked.ts |       0 |        0 |       0 |       0 | 1-252             
+  ...se-manager.ts |   89.88 |       75 |     100 |   89.88 | ...55-157,162-166 
+  ...base-merge.ts |       0 |        0 |       0 |       0 | 1-23              
+ ...Bot/lib/triage |     100 |    47.36 |     100 |     100 |                   
+  formatters.ts    |     100 |    47.36 |     100 |     100 | 5-9,14-25,29,41   
+ ...triage/parsers |     100 |    74.28 |     100 |     100 |                   
+  ...fComplaint.ts |     100 |    70.37 |     100 |     100 | 3,5-6,21,23-26    
+  demographics.ts  |     100 |    82.35 |     100 |     100 | 24,29-32          
+  history.ts       |     100 |      100 |     100 |     100 |                   
+  vitals.ts        |     100 |    56.25 |     100 |     100 | 14-16,27-29,39    
+ ...triage/scoring |   95.45 |    84.61 |     100 |   95.45 |                   
+  ...ionScoring.ts |   95.45 |    84.61 |     100 |   95.45 | 25-26             
+ Medic-Bot/public  |       0 |        0 |       0 |       0 |                   
+  sw.js            |       0 |        0 |       0 |       0 | 1-128             
+ Medic-Bot/scripts |       0 |        0 |       0 |       0 |                   
+  chunk-kb.mjs     |       0 |        0 |       0 |       0 | 1-95              
+  ...dfs-to-md.cjs |       0 |        0 |       0 |       0 | 1-101             
+  dev-search.cjs   |       0 |        0 |       0 |       0 | 1-73              
+  ...-clean-kb.cjs |       0 |        0 |       0 |       0 | 1-104             
+  extract-1242.mjs |       0 |        0 |       0 |       0 | 1-12              
+  ...olicy-832.cjs |       0 |        0 |       0 |       0 | 1-30              
+  ...09-dosing.cjs |       0 |        0 |       0 |       0 | 1-305             
+  ingest-md.cjs    |       0 |        0 |       0 |       0 | 1-144             
+  ingest-pdfs.cjs  |       0 |        0 |       0 |       0 | 1-118             
+  merge-kb.mjs     |       0 |        0 |       0 |       0 | 1-21              
+  profile.mjs      |       0 |        0 |       0 |       0 | 1-19              
+  smoke.mjs        |       0 |        0 |       0 |       0 | 1-71              
+  ...hunked-kb.mjs |       0 |        0 |       0 |       0 | 1-77              
+  ...hancements.ts |       0 |        0 |       0 |       0 | 1-221             
+  ...-limiting.mjs |       0 |        0 |       0 |       0 | 1-167             
+  ...-chunking.mjs |       0 |        0 |       0 |       0 | 1-191             
+ Medic-Bot/tools   |       0 |        0 |       0 |       0 |                   
+  pdf-to-md.mjs    |       0 |        0 |       0 |       0 | 1-94              
+-------------------|---------|----------|---------|---------|-------------------

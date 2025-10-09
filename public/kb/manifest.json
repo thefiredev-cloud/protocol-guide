@@ -1,0 +1,36 @@
+{
+  "version": "2.0",
+  "generatedAt": "2025-10-09T03:19:09.356Z",
+  "chunks": [
+    {
+      "category": "Medication",
+      "filename": "medication.json",
+      "count": 19,
+      "sizeKB": 86.29
+    },
+    {
+      "category": "Protocol",
+      "filename": "protocol.json",
+      "count": 3,
+      "sizeKB": 15.13
+    },
+    {
+      "category": "Pediatric Dosing",
+      "filename": "pediatric-dosing.json",
+      "count": 572,
+      "sizeKB": 229.85
+    },
+    {
+      "category": "Markdown",
+      "filename": "markdown.json",
+      "count": 6418,
+      "sizeKB": 10532.29
+    },
+    {
+      "category": "Clinical Decision Support",
+      "filename": "clinical-decision-support.json",
+      "count": 1,
+      "sizeKB": 14.87
+    }
+  ]
+}

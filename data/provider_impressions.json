@@ -6,7 +6,17 @@
     "tp_code": "1205",
     "tp_code_pediatric": "1205-P",
     "guidelines": "For any pain or problem in the abdominal/flank region that does not have a more specific PI, includes post-surgical complications.",
-    "keywords": ["abdominal", "pain", "stomach", "belly", "flank", "GI", "GU", "gastrointestinal", "genitourinary"]
+    "keywords": [
+      "abdominal",
+      "pain",
+      "stomach",
+      "belly",
+      "flank",
+      "GI",
+      "GU",
+      "gastrointestinal",
+      "genitourinary"
+    ]
   },
   {
     "pi_name": "Airway Obstruction/Choking",
@@ -95,7 +105,14 @@
     "tp_code": "1210",
     "tp_code_pediatric": "1210-P",
     "guidelines": "For non-traumatic cardiac arrest in which any resuscitation is initiated, NOT dead on arrival.",
-    "keywords": ["cardiac arrest", "CPR", "resuscitation", "pulseless", "unresponsive", "code"]
+    "keywords": [
+      "cardiac arrest",
+      "CPR",
+      "resuscitation",
+      "pulseless",
+      "unresponsive",
+      "code"
+    ]
   },
   {
     "pi_name": "Cardiac Dysrhythmia - Bradycardia",
@@ -128,7 +145,14 @@
     "tp_code": "1211",
     "tp_code_pediatric": "1211-P",
     "guidelines": "For any suspected STEMI, with or without chest pain.",
-    "keywords": ["chest pain", "STEMI", "heart attack", "cardiac", "myocardial infarction", "MI"]
+    "keywords": [
+      "chest pain",
+      "STEMI",
+      "heart attack",
+      "cardiac",
+      "myocardial infarction",
+      "MI"
+    ]
   },
   {
     "pi_name": "Chest Pain - Suspected Cardiac",
@@ -481,7 +505,18 @@
     "tp_code": "1232",
     "tp_code_pediatric": "1232-P",
     "guidelines": "For suspected stroke or transient ischemic attack (stroke symptoms that resolve rapidly).",
-    "keywords": ["stroke", "CVA", "TIA", "transient ischemic attack", "cerebrovascular", "neurological", "facial droop", "arm weakness", "speech difficulty", "FAST"]
+    "keywords": [
+      "stroke",
+      "CVA",
+      "TIA",
+      "transient ischemic attack",
+      "cerebrovascular",
+      "neurological",
+      "facial droop",
+      "arm weakness",
+      "speech difficulty",
+      "FAST"
+    ]
   },
   {
     "pi_name": "Submersion / Drowning",
@@ -516,13 +551,44 @@
     "guidelines": "For cardiac arrest with penetrating traumatic mechanism, including those declared deceased in the field by Ref. 814."
   },
   {
+    "pi_name": "Crush Injury/Syndrome",
+    "pi_code": "TRMA",
+    "tp_name": "Crush Injury/Syndrome",
+    "tp_code": "1242",
+    "tp_code_pediatric": "1242-P",
+    "guidelines": "For significant crush injuries with entrapment, especially with risk of crush syndrome (circumferential compression, large muscle groups, entrapment ≥1 hour). Also use TP 1244 for multi-system trauma.",
+    "keywords": [
+      "crush injury",
+      "crush syndrome",
+      "rhabdomyolysis",
+      "entrapment",
+      "extrication",
+      "entrapped",
+      "circumferential compression",
+      "compartment syndrome",
+      "hyperkalemia",
+      "myoglobin"
+    ]
+  },
+  {
     "pi_name": "Traumatic Injury",
     "pi_code": "TRMA",
     "tp_name": "Traumatic Injury",
     "tp_code": "1244",
     "tp_code_pediatric": "1244-P",
     "guidelines": "For any trauma-related injury including crush injury and conducted electrical weapons (CEW). May use in addition to another PI when medical condition also present (e.g., for syncope with trauma – use PI Syncope and PI Traumatic Injury; for CEW use in patient with agitation – use PI Behavioral/Psychiatric Crisis or PI Severe Agitation with ALOC as appropriate, and also PI Traumatic Injury).",
-    "keywords": ["trauma", "traumatic injury", "injury", "accident", "crush", "CEW", "conducted electrical weapon", "taser", "blunt", "penetrating"]
+    "keywords": [
+      "trauma",
+      "traumatic injury",
+      "injury",
+      "accident",
+      "crush",
+      "CEW",
+      "conducted electrical weapon",
+      "taser",
+      "blunt",
+      "penetrating"
+    ]
   },
   {
     "pi_name": "Upper GI Bleeding",

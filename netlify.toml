@@ -1,12 +1,158 @@
+# =============================================================================
+# LA County Fire Medic Bot - Netlify Configuration
+# =============================================================================
+# Documentation: https://docs.netlify.com/configure-builds/file-based-configuration/
+# =============================================================================
+
 [build]
+  # Build command
   command = "npm run build"
+
+  # Publish directory (Next.js output)
   publish = ".next"
 
 [build.environment]
+  # Node.js version (must match package.json engines)
   NODE_VERSION = "20"
+
+  # Disable Yarn (use npm)
   NETLIFY_USE_YARN = "false"
+
+  # Disable Husky git hooks in CI/CD
   HUSKY = "0"
 
+# =============================================================================
+# Next.js Plugin
+# =============================================================================
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# =============================================================================
+# Serverless Functions Configuration
+# =============================================================================
+[functions]
+  # Use esbuild for faster bundling
+  node_bundler = "esbuild"
+
+  # Function timeout (default: 10 seconds)
+  # Max: 26 seconds for Edge Functions
+  # directory = "netlify/functions"
+
+# =============================================================================
+# Cache Control Headers
+# =============================================================================
+
+# Knowledge base files (static, immutable)
+[[headers]]
+  for = "/kb/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# Static assets (images, fonts, etc.)
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Service worker (short cache for updates)
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+
+# PWA manifest (cache for 1 day)
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    X-Content-Type-Options = "nosniff"
+
+# API routes (no caching)
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# All pages (security headers)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # HSTS (Strict Transport Security)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Permissions Policy (disable unnecessary features)
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+# =============================================================================
+# Redirects and Rewrites
+# =============================================================================
+
+# API routes to serverless functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Legacy route redirects (if any)
+# [[redirects]]
+#   from = "/old-path"
+#   to = "/new-path"
+#   status = 301
+
+# =============================================================================
+# Context-Specific Configuration
+# =============================================================================
+
+# Production environment
+[context.production]
+  [context.production.environment]
+    NODE_ENV = "production"
+
+# Deploy Preview environment
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NODE_ENV = "production"
+
+# Branch deploy environment
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    NODE_ENV = "production"
+
+# Development environment (local)
+[context.dev]
+  [context.dev.environment]
+    NODE_ENV = "development"
+
+# =============================================================================
+# Edge Functions (Future)
+# =============================================================================
+# [edge_functions]
+#   # Path to edge functions directory
+#   # directory = "netlify/edge-functions"
+
+# =============================================================================
+# Split Testing (Future)
+# =============================================================================
+# [[edge_functions]]
+#   path = "/*"
+#   function = "ab-test"
+
+# =============================================================================
+# Notes
+# =============================================================================
+# 1. Environment variables should be set in Netlify UI (not in this file)
+# 2. Secrets (API keys, tokens) must NEVER be committed to git
+# 3. For local development, use .env.local (see .env.example)
+# 4. Cache headers are optimized for CDN performance
+# 5. Security headers meet HIPAA compliance requirements

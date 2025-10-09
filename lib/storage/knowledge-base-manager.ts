@@ -90,12 +90,19 @@ export class KnowledgeBaseManager {
   }
 
   private resolveLocalPaths(): string[] {
-    const paths: string[] = [];
-    const configured = this.options?.absolutePath ?? this.env.KB_DATA_PATH;
-    if (configured) paths.push(this.resolveToAbsolute(configured));
-    paths.push(path.join(process.cwd(), "public", "kb", "ems_kb_clean.json"));
-    paths.push(path.join(process.cwd(), "data", "ems_kb_clean.json"));
-    return paths;
+    // If an explicit absolutePath is provided, only try that path.
+    if (this.options?.absolutePath) {
+      return [this.resolveToAbsolute(this.options.absolutePath)];
+    }
+    // If KB_DATA_PATH is configured, prefer only that path.
+    if (this.env.KB_DATA_PATH) {
+      return [this.resolveToAbsolute(this.env.KB_DATA_PATH)];
+    }
+    // Otherwise, try defaults in order.
+    return [
+      path.join(process.cwd(), "public", "kb", "ems_kb_clean.json"),
+      path.join(process.cwd(), "data", "ems_kb_clean.json"),
+    ];
   }
 
   private resolveRemoteUrl(): string | null {

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import type { NextRequest } from "next/server";
 
+import { withApiHandler } from "@/lib/api/handler";
 import { createLogger } from "@/lib/log";
 import { ChatService } from "@/lib/managers/chat-service";
 import { metrics } from "@/lib/managers/metrics-manager";
@@ -90,9 +91,13 @@ async function runStreaming(
   controller.close();
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withApiHandler(async (input: unknown, req: NextRequest) => {
   const prepared = await prepareChatRequest(req);
   if ("error" in prepared) return prepared.error;
+
+  // Extract audit context from request
+  const ipAddress = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? undefined;
+  const userAgent = req.headers.get("user-agent") ?? undefined;
 
   const ctx: StreamContext = {
     start: Date.now(),
@@ -104,7 +109,12 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       const encoder = new TextEncoder();
       try {
-        await runStreaming(controller, encoder, ctx, prepared.payload);
+        await runStreaming(controller, encoder, ctx, {
+          ...prepared.payload,
+          sessionId: ctx.requestId,
+          ipAddress,
+          userAgent,
+        });
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
         ctx.logger.error("Streaming chat request failed", { requestId: ctx.requestId, message });
@@ -116,5 +126,5 @@ export async function POST(req: NextRequest) {
   });
 
   return buildResponse(stream);
-}
+}, { rateLimit: "CHAT", loggerName: "api.chat.stream" });
 

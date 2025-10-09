@@ -1,11 +1,34 @@
 "use client";
-import { useCallback } from "react";
+import dynamic from "next/dynamic";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 import { ChatInputRow } from "@/app/components/chat-input-row";
 import { ChatList } from "@/app/components/chat-list";
-import { NarrativePanel } from "@/app/components/narrative-panel";
 import { usePageController } from "@/app/hooks/use-page-controller";
 import type { ChatMessage } from "@/app/types/chat";
+
+// Lazy load heavy components for better initial load performance
+const NarrativePanel = dynamic(
+  () => import("@/app/components/narrative-panel").then((m) => ({ default: m.NarrativePanel })),
+  {
+    loading: () => (
+      <div className="skeleton skeleton-narrative">
+        <div className="skeleton-line skeleton-title" />
+        <div className="skeleton-line" />
+        <div className="skeleton-line" />
+        <div className="skeleton-line short" />
+      </div>
+    ),
+    ssr: false,
+  },
+);
+
+const QuickActionsBar = dynamic(
+  () => import("@/app/components/quick-actions-bar").then((m) => ({ default: m.QuickActionsBar })),
+  {
+    ssr: false,
+  },
+);
 
 function initialAssistantMessage(): ChatMessage {
   return {
@@ -16,6 +39,8 @@ function initialAssistantMessage(): ChatMessage {
 }
 
 function ChatExperience({ controller }: { controller: ReturnType<typeof usePageController> }) {
+  const [oneHandedMode, setOneHandedMode] = useState(false);
+
   const handleExampleSelect = useCallback(
     (value: string) => {
       controller.chat.setInput(value);
@@ -23,6 +48,33 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
     },
     [controller.chat, controller.taRef],
   );
+
+  const toggleOneHandedMode = useCallback(() => {
+    setOneHandedMode((prev) => !prev);
+  }, []);
+
+  const handleCallBase = useCallback(() => {
+    // Scroll to base contact alert
+    const baseContactAlert = document.querySelector('[data-section="base-contact"]');
+    if (baseContactAlert) {
+      baseContactAlert.scrollIntoView({ behavior: "smooth", block: "center" });
+      // Flash the alert to draw attention
+      baseContactAlert.classList.add("flash-attention");
+      setTimeout(() => baseContactAlert.classList.remove("flash-attention"), 1000);
+    }
+  }, []);
+
+  // Apply one-handed mode class to body
+  useEffect(() => {
+    if (oneHandedMode) {
+      document.body.classList.add("one-handed-mode");
+    } else {
+      document.body.classList.remove("one-handed-mode");
+    }
+    return () => {
+      document.body.classList.remove("one-handed-mode");
+    };
+  }, [oneHandedMode]);
 
   return (
     <div className="container">
@@ -32,16 +84,44 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
         onExampleSelect={handleExampleSelect}
         errorBanner={controller.errorBanner}
       />
-      <NarrativePanel
-        soap={controller.narrative.soap}
-        chronological={controller.narrative.chronological}
-        nemsis={controller.narrative.nemsis}
-        carePlan={controller.narrative.carePlan}
-        citations={controller.narrative.citations}
-        recentOrders={controller.narrative.recentOrders}
-        onBuildNarrative={controller.buildNarrative}
-      />
+      <Suspense
+        fallback={
+          <div className="skeleton skeleton-narrative">
+            <div className="skeleton-line skeleton-title" />
+            <div className="skeleton-line" />
+            <div className="skeleton-line" />
+            <div className="skeleton-line short" />
+          </div>
+        }
+      >
+        <NarrativePanel
+          soap={controller.narrative.soap}
+          chronological={controller.narrative.chronological}
+          nemsis={controller.narrative.nemsis}
+          carePlan={controller.narrative.carePlan}
+          citations={controller.narrative.citations}
+          recentOrders={controller.narrative.recentOrders}
+          onBuildNarrative={controller.buildNarrative}
+        />
+      </Suspense>
       <div ref={controller.endRef} />
+
+      {/* One-handed mode toggle button */}
+      <button
+        type="button"
+        onClick={toggleOneHandedMode}
+        className={`one-handed-toggle ${oneHandedMode ? "active" : ""}`}
+        aria-label={oneHandedMode ? "Disable one-handed mode" : "Enable one-handed mode"}
+        title={oneHandedMode ? "Disable One-Handed Mode" : "Enable One-Handed Mode"}
+      >
+        👍
+      </button>
+
+      {/* Quick Actions Bar */}
+      <Suspense fallback={null}>
+        <QuickActionsBar carePlan={controller.narrative.carePlan} onCallBase={handleCallBase} />
+      </Suspense>
+
       <ChatInputRow
         input={controller.chat.input}
         loading={controller.chat.loading}
