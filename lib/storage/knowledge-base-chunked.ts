@@ -1,4 +1,4 @@
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { DBSchema, IDBPDatabase,openDB } from 'idb';
 import MiniSearch from 'minisearch';
 
 interface KBChunk {
@@ -79,7 +79,7 @@ export class ChunkedKnowledgeBaseManager {
         },
       });
 
-      console.log('[ChunkedKB] Initialized with', this.manifest.chunks.length, 'chunks');
+      console.log('[ChunkedKB] Initialized with', this.manifest?.chunks.length ?? 0, 'chunks');
     } catch (error) {
       console.error('[ChunkedKB] Initialization error:', error);
       throw error;
@@ -166,7 +166,14 @@ export class ChunkedKnowledgeBaseManager {
       );
     }
 
-    return this.searchIndex.search(query);
+    const results = this.searchIndex.search(query);
+    return results.map(result => ({
+      id: result.id,
+      title: (result as unknown as KBDocument).title,
+      category: (result as unknown as KBDocument).category,
+      score: result.score,
+      match: result.match,
+    }));
   }
 
   /**

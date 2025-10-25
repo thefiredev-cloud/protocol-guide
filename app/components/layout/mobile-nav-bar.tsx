@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ClipboardList, MessageCircle, Pill, Timer } from 'lucide-react';
+import { ClipboardList, MessageCircle, Pill, Timer, type LucideIcon } from 'lucide-react';
 
 interface NavTabProps {
   href: string;
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number; 'aria-hidden'?: boolean }>;
+  icon: LucideIcon;
   label: string;
   active: boolean;
 }
@@ -20,7 +20,7 @@ function NavTab({ href, icon: Icon, label, active }: NavTabProps) {
       aria-current={active ? 'page' : undefined}
     >
       <span className="nav-tab-icon">
-        <Icon size={24} strokeWidth={2} aria-hidden="true" />
+        <Icon size={24} strokeWidth={2} aria-hidden={true} />
       </span>
       <span className="nav-tab-label">{label}</span>
     </Link>

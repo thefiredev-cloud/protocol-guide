@@ -1,10 +1,10 @@
+import { formatDemographics, formatProtocolCandidates, formatVitalsLine } from "@/lib/triage/formatters";
+import { parseChiefComplaint } from "@/lib/triage/parsers/chiefComplaint";
 import { parseAge, parsePregnancy, parseSex, parseWeightKg } from "@/lib/triage/parsers/demographics";
+import { parseAllergies, parseMedications } from "@/lib/triage/parsers/history";
 import type { Vitals } from "@/lib/triage/parsers/vitals";
 import { parseVitals } from "@/lib/triage/parsers/vitals";
-import { parseAllergies, parseMedications } from "@/lib/triage/parsers/history";
-import { parseChiefComplaint } from "@/lib/triage/parsers/chiefComplaint";
 import { topProviderImpressions } from "@/lib/triage/scoring/providerImpressionScoring";
-import { formatDemographics, formatProtocolCandidates, formatVitalsLine } from "@/lib/triage/formatters";
 
 export type TriageResult = {
   age?: number;

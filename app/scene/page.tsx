@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ClipboardList, MessageCircle, Pill } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function ScenePage() {
   const [seconds, setSeconds] = useState(0);

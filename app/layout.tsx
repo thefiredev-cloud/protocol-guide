@@ -2,17 +2,13 @@ import "./globals.css";
 
 import { Ambulance } from "lucide-react";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import React from "react";
 
 import { MobileNavBar } from "./components/layout/mobile-nav-bar";
 import { OfflineIndicator } from "./components/layout/offline-indicator";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+// Using system font stack for offline build compatibility
+const fontClass = "";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fanciful-pithivier-308482.netlify.app"),
@@ -62,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={fontClass}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0b0b0b" />

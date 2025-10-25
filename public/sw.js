@@ -117,14 +117,69 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Background sync for failed requests (future enhancement)
+// Background sync for failed requests
 self.addEventListener("sync", (event) => {
   if (event.tag === "sync-chat") {
     event.waitUntil(syncPendingMessages());
   }
 });
 
+/**
+ * Sync pending chat messages from IndexedDB to server
+ * Called when network connection is restored
+ */
 async function syncPendingMessages() {
-  // TODO: Sync pending chat messages from IndexedDB
-  console.log("Background sync triggered");
+  try {
+    // Open IndexedDB database
+    const db = await openDatabase();
+    const tx = db.transaction('pending-messages', 'readwrite');
+    const store = tx.objectStore('pending-messages');
+    const messages = await store.getAll();
+
+    console.log('[SW] Syncing', messages.length, 'pending messages');
+
+    // Attempt to send each pending message
+    for (const message of messages) {
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(message.data)
+        });
+
+        if (response.ok) {
+          // Remove successfully synced message
+          await store.delete(message.id);
+          console.log('[SW] Synced message:', message.id);
+        }
+      } catch (error) {
+        console.error('[SW] Failed to sync message:', message.id, error);
+        // Keep in queue for next sync attempt
+      }
+    }
+
+    await tx.complete;
+    console.log('[SW] Background sync complete');
+  } catch (error) {
+    console.error('[SW] Sync failed:', error);
+  }
+}
+
+/**
+ * Open IndexedDB database for offline message queue
+ */
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('medic-bot-offline', 1);
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('pending-messages')) {
+        db.createObjectStore('pending-messages', { keyPath: 'id', autoIncrement: true });
+      }
+    };
+  });
 }

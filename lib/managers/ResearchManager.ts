@@ -13,15 +13,33 @@ export type ResearchHit = {
 };
 
 /**
- * Stub for Hyperbrowser integration. Wire actual client here later.
- * Keep interface simple so callers can swap providers.
+ * Research manager for external web searches.
+ * Currently returns empty results as external research is disabled.
+ * Future: integrate Hyperbrowser SDK/client or other research APIs.
  */
-// eslint-disable-next-line unicorn/filename-case
 export class ResearchManager {
-  async search(): Promise<ResearchHit[]> {
-    // TODO: integrate Hyperbrowser SDK/client
+  /**
+   * Search external sources for research.
+   * Currently disabled - returns empty array.
+   *
+   * @param _query - Research query (unused in current implementation)
+   * @returns Empty array until external research is enabled
+   */
+  async search(_query?: ResearchQuery): Promise<ResearchHit[]> {
+    // External research disabled for now
+    // Future integration points:
+    // 1. Hyperbrowser SDK for web research
+    // 2. PubMed API for medical literature
+    // 3. JEMS/EMS journals
+    // 4. CDC/WHO guidelines
     return [];
   }
+
+  /**
+   * Check if research is available
+   * @returns false - research is currently disabled
+   */
+  isAvailable(): boolean {
+    return false;
+  }
 }
-
-

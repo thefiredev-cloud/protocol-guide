@@ -1,21 +1,20 @@
 import type { ChatMessage } from "@/app/types/chat";
 import { auditLogger } from "@/lib/audit/audit-logger";
 import { createLogger } from "@/lib/log";
+import type { CarePlan } from "@/lib/managers/CarePlanManager";
 import { EnvironmentManager } from "@/lib/managers/environment-manager";
 import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
 import { LLMClient } from "@/lib/managers/llm-client";
 import { metrics } from "@/lib/managers/metrics-manager";
-import type { KBDoc } from "@/lib/retrieval";
+import { RetrievalManager } from "@/lib/managers/RetrievalManager";
 import { initializeKnowledgeBase } from "@/lib/retrieval";
-import type { CarePlan } from "@/lib/managers/CarePlanManager";
-import type { TriageResult } from "@/lib/triage";
+import { ChatProfiler } from "@/lib/services/chat/ChatProfiler";
 import { CitationService } from "@/lib/services/chat/CitationService";
 import { GuardrailService } from "@/lib/services/chat/GuardrailService";
 import { NarrativeResponseBuilder } from "@/lib/services/chat/NarrativeResponseBuilder";
 import { PayloadBuilder } from "@/lib/services/chat/PayloadBuilder";
 import { TriageService } from "@/lib/services/chat/TriageService";
-import { ChatProfiler } from "@/lib/services/chat/ChatProfiler";
-import { RetrievalManager } from "@/lib/managers/RetrievalManager";
+import type { TriageResult } from "@/lib/triage";
 
 type ChatMode = "chat" | "narrative" | undefined;
 
