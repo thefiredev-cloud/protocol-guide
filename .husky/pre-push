@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run secret scanner before pushing
+echo "Running secret scan..."
+npm run -s scan:secrets || exit 1
+
+exit 0
+

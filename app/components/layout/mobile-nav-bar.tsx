@@ -1,8 +1,8 @@
 'use client';
 
+import { ClipboardList, type LucideIcon, MessageCircle, Pill, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ClipboardList, MessageCircle, Pill, Timer, type LucideIcon } from 'lucide-react';
 
 interface NavTabProps {
   href: string;

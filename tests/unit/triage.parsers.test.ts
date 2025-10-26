@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { parseAge, parsePregnancy, parseSex, parseWeightKg } from '../../lib/triage/parsers/demographics';
 import { parseVitals } from '../../lib/triage/parsers/vitals';
 import { parseAllergies, parseMedications } from '../../lib/triage/parsers/history';
-import { parseChiefComplaint } from '../../lib/triage/parsers/chiefComplaint';
+import { parseChiefComplaint } from '../../lib/triage/parsers/chief-complaint';
 
 describe('triage parsers', () => {
   it('parses demographics', () => {

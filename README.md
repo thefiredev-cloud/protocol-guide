@@ -4,6 +4,15 @@ Production-grade medical AI assistant for 3,200+ LA County Fire paramedics. Zero
 
 ## 🚀 Quick Start
 
+### For Paramedics (End Users)
+**See the [Quick Start Guide](docs/QUICK_START.md)** for:
+- How to use keyboard shortcuts
+- Settings panel configuration
+- PWA installation instructions
+- Common tasks and troubleshooting
+
+### For Developers
+
 ```bash
 # Install dependencies
 npm install
@@ -28,6 +37,87 @@ npm run dev
 - **Real-Time Streaming** - SSE streaming for faster perceived latency
 - **PWA Support** - Installable web app with background sync
 
+### User Experience Features (Week 1 Enhancements)
+
+#### Error Boundary
+Comprehensive error handling that prevents app crashes in the field:
+- **Graceful Fallbacks**: Catches React errors and displays user-friendly error UI
+- **Automatic Retry**: One-click recovery from transient failures
+- **Reliability**: Prevents full app crashes from isolated component errors
+- **Field-Optimized**: Critical for unreliable network conditions in ambulances
+- **User Control**: Clear error messages with actionable recovery options
+
+#### Toast Notifications
+Real-time feedback system for user actions and system events:
+- **4 Notification Types**:
+  - Success (green) - Completed actions (message sent, settings saved)
+  - Error (red) - Failures with actionable error messages
+  - Warning (orange) - Cautionary information
+  - Info (blue) - System status updates
+- **Smart Dismissal**: Auto-dismiss after 5 seconds or manual close
+- **Accessibility**: ARIA live regions for screen reader announcements
+- **Non-Intrusive**: Bottom-right positioning doesn't block critical content
+
+#### Settings Panel
+Personalized user experience for diverse field conditions:
+- **Font Size Control**: 3 levels (Normal, Large, Extra Large) for readability in moving ambulances
+- **Theme Options**:
+  - Light Mode - Bright outdoor daylight conditions
+  - Dark Mode - Low-light ambulance interiors at night
+  - High Contrast - Maximum readability for visual impairments
+- **Reduced Motion**: Disables animations for users with vestibular disorders
+- **Persistent Storage**: Settings saved in localStorage across sessions
+- **Instant Access**: Press `s` key or click settings icon
+
+#### Keyboard Shortcuts
+Power-user efficiency for experienced paramedics:
+- **`?`** - Display keyboard shortcuts help modal
+- **`/`** or **`Cmd+K`** - Focus chat input for quick query entry
+- **`n`** - Start new conversation (clears chat history)
+- **`d`** - Navigate to dosing calculator page
+- **`p`** - Navigate to protocols page
+- **`s`** - Open settings panel
+- **`Esc`** - Close modals, dialogs, and overlays
+- **`Ctrl+Enter`** - Send message (hands-free submission)
+
+**Benefits**: Reduces mouse reliance, speeds up workflow on laptops/tablets, improves one-handed operation.
+
+#### PWA Install Prompt
+Smart installation guidance for offline capability:
+- **One-Time Prompt**: First-time users see installation reminder
+- **7-Day Dismissal**: Prevents notification fatigue if declined
+- **Offline Benefits**: Encourages PWA installation for full offline functionality
+- **Native Experience**: Add to home screen on mobile, install as app on desktop
+- **Respectful UX**: Won't nag users who explicitly decline
+
+#### Web Vitals Monitoring
+Real-time performance insights for continuous optimization:
+- **CLS (Cumulative Layout Shift)**: Visual stability during loading
+- **INP (Interaction to Next Paint)**: UI responsiveness to user input
+- **FCP (First Contentful Paint)**: Perceived load speed
+- **LCP (Largest Contentful Paint)**: Main content visibility time
+- **TTFB (Time to First Byte)**: Server response latency
+- **Anonymous Metrics**: Sent to `/api/metrics` endpoint (no PHI)
+- **Purpose**: Identify performance regressions, optimize for legacy devices (10+ year old smartphones)
+
+#### Medical-Grade Design System
+Professional LA County Fire Department branding:
+- **WCAG AAA Compliant**: 7:1+ color contrast for sunlight readability
+- **Enhanced Typography**: Inter UI font + JetBrains Mono for medical data
+- **Emergency Colors**: Red (#ff3b30) for critical, Blue (#0a84ff) for medical actions
+- **68 Utility Components**: Buttons, cards, inputs, badges, alerts
+- **Sunlight Optimization**: High contrast mode for outdoor visibility
+- **Full Documentation**: See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)
+
+#### Enhanced Header
+Professional emergency services branding:
+- **Fire Badge**: Star emblem with emergency red glow effect
+- **Clear Identity**: "LA County Fire Department • EMS Decision Support"
+- **Version Tracking**: v2.0 badge for feature awareness
+- **Status Indicator**: Online/offline with animated pulse
+- **Modern UI**: Sticky header with backdrop blur effect
+- **Mobile-Responsive**: 320px+ device support (glove-friendly)
+
 ## 🏗️ Architecture
 
 ### Technology Stack
@@ -49,17 +139,33 @@ npm run dev
 
 ```bash
 npm run test              # Run all tests (Vitest)
-npm run test:unit         # Unit tests only (80%+ coverage)
+npm run test:unit         # Unit tests only
 npm run test:integration  # API integration tests
 npm run test:e2e          # Playwright E2E tests
+npm run test:coverage     # Generate coverage report
 npm run smoke             # Smoke test deployed environment
 ```
 
-### Test Coverage
-- Unit tests: 40+ tests covering core managers
-- Integration tests: API endpoints validated
+### Test Coverage (Week 1 Status)
+**Total Test Suites**: 27 test files
+**Total Tests**: 247 tests (184 passing, 75% pass rate)
+
+**Week 1 UX Component Tests** (New):
+- `error-boundary.test.tsx` - Error recovery flows
+- `toast-notification.test.tsx` - Notification system
+- `settings-panel.test.tsx` - User preferences
+- `keyboard-shortcuts.test.tsx` - Keyboard navigation
+- `pwa-install-prompt.test.tsx` - PWA installation
+- `web-vitals.test.tsx` - Performance monitoring
+- `memory-leak-fixes.test.ts` - Memory leak prevention
+- `settings-panel-integration.test.ts` - React Context integration
+- `ux-features.test.tsx` - Integration tests for all UX features
+
+**Core System Tests**:
+- Unit tests: 20+ test files covering managers, parsers, calculators
+- Integration tests: API endpoints, chat service, dosing
 - E2E tests: Security headers, user workflows
-- Medical validation: Pediatric dosing, protocol accuracy
+- Medical validation: Pediatric dosing, protocol accuracy, Protocol 1210
 
 ## 📊 Performance Targets
 
@@ -183,6 +289,77 @@ curl -s http://localhost:3000/api/metrics | jq .
 - **Background Sync**: Queues requests when offline
 - **Install**: Add to home screen on mobile
 - **Storage**: ~12MB for full offline capability
+
+## 📦 Week 1 Components
+
+### New UX Components (v2.0.0)
+Located in `app/components/`:
+
+#### ErrorBoundary (`error-boundary.tsx`)
+Catches React errors and prevents full app crashes:
+```typescript
+<ErrorBoundary>
+  <YourComponent />
+</ErrorBoundary>
+```
+- Displays user-friendly fallback UI
+- Automatic retry mechanism
+- Logs errors for debugging
+
+#### ToastNotification (`toast-notification.tsx`)
+Global notification system:
+```typescript
+const { addToast } = useToast();
+addToast('Settings saved!', 'success');
+```
+- 4 types: success, error, warning, info
+- Auto-dismiss after 5 seconds
+- Accessible (ARIA live regions)
+
+#### SettingsPanel (`settings-panel.tsx`)
+User preferences interface:
+```typescript
+<SettingsPanel isOpen={true} onClose={() => {}} />
+```
+- Font size: Normal, Large, Extra Large
+- Theme: Light, Dark, High Contrast
+- Reduced motion toggle
+- localStorage persistence
+
+#### KeyboardShortcuts (`keyboard-shortcuts.tsx`)
+Power-user keyboard navigation:
+```typescript
+<KeyboardShortcuts />
+```
+- 8 shortcuts for common actions
+- Help modal (press `?`)
+- Customizable key bindings
+
+#### PWAInstallPrompt (`pwa-install-prompt.tsx`)
+Smart installation guidance:
+```typescript
+<PWAInstallPrompt />
+```
+- Detects PWA capability
+- One-time prompt with 7-day dismissal
+- Native install trigger
+
+#### WebVitals (`web-vitals.tsx`)
+Performance monitoring:
+```typescript
+<WebVitals />
+```
+- Tracks CLS, INP, FCP, LCP, TTFB
+- Sends anonymous metrics
+- Helps optimize for legacy devices
+
+### Integration Architecture
+Week 1 components integrate via:
+- **RootLayoutContent** (`app/components/layout/root-layout-content.tsx`)
+  - Wrapper component managing all UX features
+  - React Context for settings state
+  - Event-driven architecture for keyboard shortcuts
+  - Centralized error boundary and toast provider
 
 ## 🛠️ Development
 

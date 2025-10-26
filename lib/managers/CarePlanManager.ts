@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn/filename-case, max-depth */
 import { createDefaultMedicationManager } from "@/lib/dosing/registry";
 import type { MedicationCalculationResult } from "@/lib/dosing/types";
 import type { TriageResult } from "@/lib/triage";

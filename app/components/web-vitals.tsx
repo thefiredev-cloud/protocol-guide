@@ -6,12 +6,22 @@ import { useEffect } from 'react';
  * Web Vitals monitoring component
  * Tracks Core Web Vitals and sends to analytics
  */
-export function WebVitals() {
+type WebVitalsLoader = () => Promise<{
+  onCLS: (callback: (metric: Metric) => void) => void;
+  onINP: (callback: (metric: Metric) => void) => void;
+  onFCP: (callback: (metric: Metric) => void) => void;
+  onLCP: (callback: (metric: Metric) => void) => void;
+  onTTFB: (callback: (metric: Metric) => void) => void;
+}>;
+
+const defaultLoader: WebVitalsLoader = () => import('web-vitals');
+
+export function WebVitals({ load = defaultLoader }: { load?: WebVitalsLoader } = {}) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     // Dynamically import web-vitals to reduce bundle size
-    import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
+    load().then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
       onCLS(sendToAnalytics);
       onINP(sendToAnalytics);
       onFCP(sendToAnalytics);
@@ -21,7 +31,7 @@ export function WebVitals() {
       // Gracefully handle if web-vitals fails to load
       console.warn('Web vitals monitoring failed to load');
     });
-  }, []);
+  }, [load]);
 
   return null; // This component doesn't render anything
 }

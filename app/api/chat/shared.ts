@@ -1,4 +1,3 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -19,7 +18,7 @@ export const requestSchema = z.object({
 
 export type PreparedRequest = { payload: z.infer<typeof requestSchema> } | { error: NextResponse };
 
-export async function prepareChatRequest(req: NextRequest): Promise<PreparedRequest> {
+export async function prepareChatRequest(input: unknown): Promise<PreparedRequest> {
   const logger = createLogger("api.chat.prepare");
   try {
     const status = await knowledgeBaseInitializer.warm();
@@ -32,12 +31,7 @@ export async function prepareChatRequest(req: NextRequest): Promise<PreparedRequ
     }
   }
 
-  const parsedJson = await parseAndValidateJson(req);
-  if ("error" in parsedJson) return parsedJson;
-
-  const json = parsedJson.data;
-
-  const parsed = requestSchema.safeParse(json);
+  const parsed = requestSchema.safeParse(input);
   if (!parsed.success) return validationErrorResponse(parsed.error.issues.map((i) => i.message));
 
   return { payload: parsed.data };
@@ -50,28 +44,5 @@ function validationErrorResponse(messages: string[]): { error: NextResponse } {
       { status: 400 },
     ),
   };
-}
-
-async function parseAndValidateJson(req: NextRequest): Promise<{ data: unknown } | { error: NextResponse }> {
-  const raw = await req.text();
-  if (raw.length > 40_000) {
-    return {
-      error: NextResponse.json(
-        { error: { code: "PAYLOAD_TOO_LARGE", message: "Payload exceeds 40KB" } },
-        { status: 413 },
-      ),
-    };
-  }
-  try {
-    const json = raw ? JSON.parse(raw) : {};
-    return { data: json };
-  } catch {
-    return {
-      error: NextResponse.json(
-        { error: { code: "INVALID_JSON", message: "Request body must be valid JSON" } },
-        { status: 400 },
-      ),
-    };
-  }
 }
 

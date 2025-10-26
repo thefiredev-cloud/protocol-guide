@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function, complexity, max-depth */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { ZodSchema } from "zod";

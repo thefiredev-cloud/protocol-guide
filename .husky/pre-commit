@@ -1,0 +1,17 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Block committing obvious secrets
+if git diff --cached -U0 -a | grep -E '(^|\+)\s*LLM_API_KEY=' >/dev/null; then
+  echo "Commit blocked: LLM_API_KEY detected in staged changes." >&2
+  exit 1
+fi
+
+# Common OpenAI-style key pattern (sk-...)
+if git diff --cached -U0 -a | grep -E '(^|\+).*(sk-[A-Za-z0-9_-]{20,})' >/dev/null; then
+  echo "Commit blocked: potential API key detected (sk-...)." >&2
+  exit 1
+fi
+
+exit 0
+

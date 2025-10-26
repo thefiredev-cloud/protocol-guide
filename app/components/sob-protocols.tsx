@@ -1,6 +1,7 @@
 "use client";
-import { memo, useState } from "react";
+
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { memo, useState } from "react";
 
 type ProtocolDef = {
   name: string;

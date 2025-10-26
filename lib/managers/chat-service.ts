@@ -8,12 +8,12 @@ import { LLMClient } from "@/lib/managers/llm-client";
 import { metrics } from "@/lib/managers/metrics-manager";
 import { RetrievalManager } from "@/lib/managers/RetrievalManager";
 import { initializeKnowledgeBase } from "@/lib/retrieval";
-import { ChatProfiler } from "@/lib/services/chat/ChatProfiler";
-import { CitationService } from "@/lib/services/chat/CitationService";
-import { GuardrailService } from "@/lib/services/chat/GuardrailService";
-import { NarrativeResponseBuilder } from "@/lib/services/chat/NarrativeResponseBuilder";
-import { PayloadBuilder } from "@/lib/services/chat/PayloadBuilder";
-import { TriageService } from "@/lib/services/chat/TriageService";
+import { ChatProfiler } from "@/lib/services/chat/chat-profiler";
+import { CitationService } from "@/lib/services/chat/citation-service";
+import { GuardrailService } from "@/lib/services/chat/guardrail-service";
+import { NarrativeResponseBuilder } from "@/lib/services/chat/narrative-response-builder";
+import { PayloadBuilder } from "@/lib/services/chat/payload-builder";
+import { TriageService } from "@/lib/services/chat/triage-service";
 import type { TriageResult } from "@/lib/triage";
 
 type ChatMode = "chat" | "narrative" | undefined;
@@ -57,8 +57,8 @@ export class ChatService {
     this.llmClient = llmClient ?? new LLMClient({
       baseUrl: this.env.llmBaseUrl,
       apiKey: this.env.LLM_API_KEY,
-      maxRetries: 0,
-      timeoutMs: 2_000,
+      maxRetries: 2,
+      timeoutMs: 12_000,
       // Explicitly inject global fetch so tests can spy on it reliably
       fetchImpl: (globalThis as unknown as { fetch: typeof fetch }).fetch,
     });

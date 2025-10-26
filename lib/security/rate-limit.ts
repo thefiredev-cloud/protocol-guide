@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /**
  * Enhanced Rate Limiting Utilities with Request Fingerprinting
  *

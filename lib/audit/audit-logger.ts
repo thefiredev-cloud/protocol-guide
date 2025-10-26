@@ -267,9 +267,61 @@ export class AuditLogger {
       console.log("[AUDIT]", JSON.stringify(event));
     }
 
-    // File sink (production)
+    // File sink (production - always enabled as backup)
     if (this.config.fileEnabled) {
       await this.writeToFile(event);
+    }
+
+    // Database sink (if enabled via environment variable)
+    if (process.env.ENABLE_DB_AUDIT === 'true') {
+      await this.writeToDatabase(event).catch(error => {
+        // Don't fail audit logging if database write fails
+        // eslint-disable-next-line no-console
+        console.error('[AUDIT] Database write failed (file backup preserved):', error);
+      });
+    }
+  }
+
+  /**
+   * Write event to database (Supabase)
+   * Uses dual-write strategy: file is primary, database is secondary
+   */
+  private async writeToDatabase(event: AuditEvent): Promise<void> {
+    try {
+      // Lazy-load database client to avoid import errors when DB not configured
+      const { db } = await import('../db/client');
+
+      // Check if database is available
+      if (!db.isAvailable) {
+        return; // Silently skip if database not configured
+      }
+
+      // Map event to database schema
+      const dbEvent = {
+        event_id: event.eventId,
+        timestamp: event.timestamp,
+        user_id: event.userId ?? null,
+        user_role: event.userRole ?? null,
+        session_id: event.sessionId ?? null,
+        action: event.action,
+        resource: event.resource,
+        outcome: event.outcome,
+        metadata: event.metadata ?? null,
+        ip_address: event.ipAddress ?? null,
+        user_agent: event.userAgent ?? null,
+        error_message: event.errorMessage ?? null,
+        duration_ms: event.durationMs ?? null,
+      };
+
+      // Insert to database (use admin client to bypass RLS)
+      const { error } = await db.admin.from('audit_logs').insert(dbEvent);
+
+      if (error) {
+        throw new Error(`Supabase insert failed: ${error.message}`);
+      }
+    } catch (error) {
+      // Re-throw to be caught by caller
+      throw error;
     }
   }
 

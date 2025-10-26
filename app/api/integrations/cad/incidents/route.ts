@@ -128,7 +128,7 @@ export const POST = withApiHandler(async (input: unknown, req: NextRequest) => {
  * Verify webhook signature using HMAC
  * In production, use environment variable for secret key
  */
-function verifyWebhookSignature(signature: string, _data: unknown): boolean {
+function verifyWebhookSignature(signature: string, data: unknown): boolean {
   // Placeholder for signature verification
   // In production:
   // 1. Get webhook secret from environment
@@ -136,10 +136,12 @@ function verifyWebhookSignature(signature: string, _data: unknown): boolean {
   // 3. Compare with provided signature
   // Example:
   // const secret = process.env.CAD_WEBHOOK_SECRET;
-  // const computed = crypto.createHmac('sha256', secret).update(JSON.stringify(_data)).digest('hex');
+  // const computed = crypto.createHmac('sha256', secret).update(JSON.stringify(data)).digest('hex');
   // return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computed));
 
   console.log('[CAD] Signature verification:', signature ? 'present' : 'missing');
+  // Data parameter intentionally unused in stub - will be used for HMAC computation in production
+  void data;
   return true; // Accept all in development
 }
 

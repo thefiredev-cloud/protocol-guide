@@ -1,7 +1,9 @@
 'use client';
 
 import { Command, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { useSettings } from '../contexts/settings-context';
 
 interface Shortcut {
   keys: string[];
@@ -26,6 +28,16 @@ const shortcuts: Shortcut[] = [
  */
 export function KeyboardShortcuts() {
   const [isOpen, setIsOpen] = useState(false);
+  const { openSettings } = useSettings();
+
+  // Use ref to avoid re-registering event listener on every isOpen change
+  // This prevents memory leak from accumulating event listeners
+  const isOpenRef = useRef(isOpen);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,22 +54,23 @@ export function KeyboardShortcuts() {
         return;
       }
 
-      // Show shortcuts help
-      if (e.key === '?' && !e.shiftKey) {
+      // Show shortcuts help ( '?' and Shift + '/' )
+      const isQuestionMarkShortcut = e.key === '?' || (e.key === '/' && e.shiftKey);
+      if (isQuestionMarkShortcut) {
         e.preventDefault();
         setIsOpen(true);
         return;
       }
 
-      // Close shortcuts help
-      if (e.key === 'Escape' && isOpen) {
+      // Close shortcuts help - use ref to avoid re-registering listener
+      if (e.key === 'Escape' && isOpenRef.current) {
         e.preventDefault();
         setIsOpen(false);
         return;
       }
 
-      // Focus input
-      if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && !isOpen) {
+      // Focus input - use ref to avoid re-registering listener
+      if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && !isOpenRef.current) {
         e.preventDefault();
         const input = document.querySelector('textarea, input[type="text"]') as HTMLElement;
         if (input) input.focus();
@@ -81,16 +94,18 @@ export function KeyboardShortcuts() {
             break;
           case 's':
             e.preventDefault();
-            // Trigger settings panel
-            document.dispatchEvent(new CustomEvent('open-settings'));
+            // Open settings panel via context
+            openSettings();
             break;
         }
       }
     };
 
+    // Register event listener only once on mount
     window.addEventListener('keydown', handleKeyDown);
+    // Clean up on unmount
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [openSettings]); // Add openSettings to dependency array
 
   if (!isOpen) return null;
 

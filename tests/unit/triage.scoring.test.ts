@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { topProviderImpressions } from '../../lib/triage/scoring/providerImpressionScoring';
+import { topProviderImpressions } from '../../lib/triage/scoring/provider-impression-scoring';
 
 describe('triage scoring', () => {
   it('returns top provider impressions based on keywords', () => {

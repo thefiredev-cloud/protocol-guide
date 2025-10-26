@@ -92,7 +92,7 @@ async function runStreaming(
 }
 
 export const POST = withApiHandler(async (input: unknown, req: NextRequest) => {
-  const prepared = await prepareChatRequest(req);
+  const prepared = await prepareChatRequest(input);
   if ("error" in prepared) return prepared.error;
 
   // Extract audit context from request

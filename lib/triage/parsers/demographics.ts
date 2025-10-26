@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 export function parseAge(text: string): number | undefined {
   const ageMatch = text.match(/\b(\d{1,3})\s*(?:yo|y\/o|years? old|y\s?o)\b/i);
   if (ageMatch) {

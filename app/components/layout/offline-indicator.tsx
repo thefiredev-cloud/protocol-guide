@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(true);

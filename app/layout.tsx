@@ -1,14 +1,10 @@
 import "./globals.css";
 
-import { Ambulance } from "lucide-react";
 import type { Metadata, Viewport } from "next";
 import React from "react";
 
 import { ErrorBoundary } from "./components/error-boundary";
-import { KeyboardShortcuts } from "./components/keyboard-shortcuts";
-import { MobileNavBar } from "./components/layout/mobile-nav-bar";
-import { OfflineIndicator } from "./components/layout/offline-indicator";
-import { PWAInstallPrompt } from "./components/pwa-install-prompt";
+import { RootLayoutContent } from "./components/layout/root-layout-content";
 import { ToastProvider } from "./components/toast-notification";
 import { WebVitals } from "./components/web-vitals";
 
@@ -72,42 +68,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <ToastProvider>
             <WebVitals />
-            <KeyboardShortcuts />
-            <OfflineIndicator />
-            <PWAInstallPrompt />
-            <header className="siteHeader">
-              <div className="siteHeaderInner">
-                <div className="brand">
-                  <div className="brandMark" aria-hidden="true">
-                    <Ambulance size={28} strokeWidth={2.5} />
-                  </div>
-                  <div className="brandText">
-                    <div className="brandTitle">LA County Fire</div>
-                    <div className="brandSubtitle">Medic Bot • Prehospital Care Manual</div>
-                  </div>
-                </div>
-                <div className="envBadge">Enterprise</div>
-                <nav className="headerNav">
-                  <a href="/protocols">Protocols</a>
-                  <a href="/dosing">Dosing</a>
-                </nav>
-              </div>
-            </header>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  (function(){
-                    if ('serviceWorker' in navigator) {
-                      window.addEventListener('load', function(){
-                        navigator.serviceWorker.register('/sw.js').catch(function(){ /* noop */ });
-                      });
-                    }
-                  })();
-                `,
-              }}
-            />
-            {children}
-            <MobileNavBar />
+            <RootLayoutContent>{children}</RootLayoutContent>
           </ToastProvider>
         </ErrorBoundary>
       </body>

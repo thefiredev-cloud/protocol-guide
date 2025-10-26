@@ -18,7 +18,7 @@ export const POST = withApiHandler(async (input: unknown, req: NextRequest) => {
   const requestId = randomUUID();
   const logger = createLogger("api.chat.post");
 
-  const prepared = await prepareChatRequest(req);
+  const prepared = await prepareChatRequest(input);
   if ("error" in prepared) return prepared.error;
 
   const ctx: RequestContext = {

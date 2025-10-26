@@ -22,7 +22,7 @@ describe("POST /api/chat", () => {
     warmSpy.mockResolvedValue({ loaded: true, docCount: 100, sourcePath: "test" });
     kbSpy.mockResolvedValue();
     vi.spyOn(KnowledgeBaseManager.prototype, "load").mockResolvedValue([
-      { id: "test-1", content: "Test protocol content", metadata: { protocol: "TEST-001" } }
+      { id: "test-1", title: "Test Protocol", category: "protocols", content: "Test protocol content" }
     ]);
   });
 

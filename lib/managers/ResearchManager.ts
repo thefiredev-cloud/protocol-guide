@@ -22,10 +22,9 @@ export class ResearchManager {
    * Search external sources for research.
    * Currently disabled - returns empty array.
    *
-   * @param _query - Research query (unused in current implementation)
    * @returns Empty array until external research is enabled
    */
-  async search(_query?: ResearchQuery): Promise<ResearchHit[]> {
+  async search(): Promise<ResearchHit[]> {
     // External research disabled for now
     // Future integration points:
     // 1. Hyperbrowser SDK for web research

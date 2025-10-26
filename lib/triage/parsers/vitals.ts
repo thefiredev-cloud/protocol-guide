@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 export type Vitals = {
   systolic?: number;
   diastolic?: number;

@@ -2,12 +2,12 @@
 
 import { useCallback } from "react";
 
-import { CarePlanSection } from "@/app/components/narrative/CarePlanSection";
-import { CitationsSection } from "@/app/components/narrative/CitationsSection";
-import { EmptyNarrativeState } from "@/app/components/narrative/EmptyNarrativeState";
-import { NarrativeSections } from "@/app/components/narrative/NarrativeSections";
-import { NemsisSection } from "@/app/components/narrative/NemsisSection";
-import { OrdersSection } from "@/app/components/narrative/OrdersSection";
+import { CarePlanSection } from "@/app/components/narrative/care-plan-section";
+import { CitationsSection } from "@/app/components/narrative/citations-section";
+import { EmptyNarrativeState } from "@/app/components/narrative/empty-narrative-state";
+import { NarrativeSections } from "@/app/components/narrative/narrative-sections";
+import { NemsisSection } from "@/app/components/narrative/nemsis-section";
+import { OrdersSection } from "@/app/components/narrative/orders-section";
 import type { CarePlan, Citation, NarrativeDraft, NemsisNarrative } from "@/app/types/chat";
 
 type CandidateInput = {

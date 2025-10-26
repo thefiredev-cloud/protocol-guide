@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn/filename-case, max-lines-per-function, complexity */
 
 export type ProtocolDocumentation = {
   requiredFields: string[];

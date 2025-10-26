@@ -25,7 +25,8 @@ export type GuardrailCheck = GuardrailDetection & {
 
 const UNAUTHORIZED_MEDICATIONS = ["lorazepam", "diazepam", "ativan", "valium"] as const;
 const SCENE_SAFETY_TERMS = ["scene unsafe", "leave patient", "exit immediately", "retreat"] as const;
-const PEDIATRIC_TERMS = ["pediatric", "child", "infant", "neonate", "mcg 1309", "color code"] as const;
+// TODO: Use PEDIATRIC_TERMS for enhanced pediatric-specific guardrails in future
+// const PEDIATRIC_TERMS = ["pediatric", "child", "infant", "neonate", "mcg 1309", "color code"] as const;
 
 export class GuardrailManager {
   private readonly medicationManager = createDefaultMedicationManager();

@@ -48,9 +48,31 @@
       "Bash(tee:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nfeat: comprehensive enhancements across platform\n\n- Enhanced SSE streaming with refactored route complexity\n- Improved dosing UI and protocols page\n- PWA offline capabilities and health metrics\n- Analytics and monitoring improvements\n- LA County PCM pediatric dosing with weight-based calculations\n- Broselow color-coded medication dosing\n- Expanded medication parser synonyms\n- Security improvements and CSP adjustments\n- Comprehensive test coverage additions\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npx madge:*)",
+      "Bash(npm ls:*)",
+      "Bash(jobs)",
+      "Read(//private/tmp/**)",
+      "Read(//Users/tanner-osterkamp/.claude/**)",
+      "Bash(git mv:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "disabledMcpjsonServers": [
+    "github",
+    "memory",
+    "sequential-thinking",
+    "netlify",
+    "stripe",
+    "supabase",
+    "octagon",
+    "filesystem",
+    "brave-search",
+    "puppeteer",
+    "chrome-devtools"
+  ]
 }

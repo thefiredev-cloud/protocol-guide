@@ -1,0 +1,224 @@
+┌─────────────────────────────────────────────────────────────────────┐
+│                     Settings Panel Integration                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+FILE STRUCTURE:
+═══════════════════════════════════════════════════════════════════════
+
+app/
+├── layout.tsx (Modified)
+│   └── RootLayout (Server Component)
+│       └── <RootLayoutContent> (Client Wrapper)
+│
+├── components/
+│   ├── settings-panel.tsx (Existing - Not Modified)
+│   │   └── SettingsPanel({ isOpen, onClose })
+│   │       ├── State: fontSize, theme, highContrast, reducedMotion
+│   │       ├── Effects: Load from localStorage, Apply to body
+│   │       └── Renders when isOpen=true
+│   │
+│   ├── keyboard-shortcuts.tsx (Existing - Not Modified)
+│   │   └── KeyboardShortcuts()
+│   │       └── Line 85: document.dispatchEvent('open-settings')
+│   │
+│   └── layout/
+│       └── root-layout-content.tsx (NEW - Created)
+│           └── RootLayoutContent({ children })
+│               ├── State: isSettingsOpen
+│               ├── Event Listener: 'open-settings' → setIsSettingsOpen(true)
+│               ├── Escape Handler: ESC key → setIsSettingsOpen(false)
+│               └── Renders: KeyboardShortcuts, SettingsPanel, etc.
+
+
+EVENT FLOW:
+═══════════════════════════════════════════════════════════════════════
+
+┌─────────────┐
+│ User Press  │
+│   's' Key   │
+└──────┬──────┘
+       │
+       ▼
+┌──────────────────────────────────────────────────────────────┐
+│ KeyboardShortcuts Component                                  │
+│ File: app/components/keyboard-shortcuts.tsx (line 82-86)     │
+│                                                               │
+│   case 's':                                                   │
+│     e.preventDefault();                                       │
+│     document.dispatchEvent(new CustomEvent('open-settings')) │
+└────────────────────────┬─────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│ RootLayoutContent Component                                  │
+│ File: app/components/layout/root-layout-content.tsx (line 23)│
+│                                                               │
+│   useEffect(() => {                                           │
+│     const handleOpenSettings = () => {                        │
+│       setIsSettingsOpen(true);  ◄─────────┐                  │
+│     };                                     │                  │
+│     document.addEventListener('open-settings', handleOpenSettings);
+│   }, []);                                                     │
+└────────────────────────┬─────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│ State Update: isSettingsOpen = true                          │
+└────────────────────────┬─────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│ SettingsPanel Component Renders                              │
+│ File: app/components/settings-panel.tsx                      │
+│                                                               │
+│   <SettingsPanel                                              │
+│     isOpen={true}                                             │
+│     onClose={() => setIsSettingsOpen(false)}                 │
+│   />                                                          │
+│                                                               │
+│   ┌──────────────────────────────────────────────┐           │
+│   │ Settings Panel UI                            │           │
+│   │ ┌────────────────────────────────┐           │           │
+│   │ │ Settings            [X]        │           │           │
+│   │ ├────────────────────────────────┤           │           │
+│   │ │ Font Size: [Normal][Large][XL] │           │           │
+│   │ │ Theme: [Dark][Light]           │           │           │
+│   │ │ ☑ High Contrast Mode           │           │           │
+│   │ │ ☐ Reduce Animations            │           │           │
+│   │ └────────────────────────────────┘           │           │
+│   └──────────────────────────────────────────────┘           │
+└──────────────────────────────────────────────────────────────┘
+
+
+CLOSING FLOW:
+═══════════════════════════════════════════════════════════════════════
+
+Three Ways to Close:
+
+1. ESCAPE KEY
+   ┌──────────────┐
+   │ User Presses │
+   │  ESC Key     │
+   └──────┬───────┘
+          │
+          ▼
+   ┌────────────────────────────────────────┐
+   │ RootLayoutContent (line 36-47)         │
+   │                                        │
+   │   if (e.key === 'Escape') {            │
+   │     setIsSettingsOpen(false);          │
+   │   }                                    │
+   └────────────────────────────────────────┘
+
+2. CLOSE BUTTON (X)
+   ┌──────────────┐
+   │ User Clicks  │
+   │  X Button    │
+   └──────┬───────┘
+          │
+          ▼
+   ┌────────────────────────────────────────┐
+   │ SettingsPanel (line 62)                │
+   │                                        │
+   │   <button onClick={onClose}>           │
+   │     <X />                              │
+   │   </button>                            │
+   └──────┬─────────────────────────────────┘
+          │
+          ▼
+   ┌────────────────────────────────────────┐
+   │ onClose() called                       │
+   │   → setIsSettingsOpen(false)           │
+   └────────────────────────────────────────┘
+
+3. OVERLAY CLICK
+   ┌──────────────┐
+   │ User Clicks  │
+   │  Outside     │
+   └──────┬───────┘
+          │
+          ▼
+   ┌────────────────────────────────────────┐
+   │ SettingsPanel overlay (line 55)       │
+   │                                        │
+   │   <div onClick={onClose}>              │
+   └──────┬─────────────────────────────────┘
+          │
+          ▼
+   ┌────────────────────────────────────────┐
+   │ onClose() called                       │
+   │   → setIsSettingsOpen(false)           │
+   └────────────────────────────────────────┘
+
+
+DATA PERSISTENCE:
+═══════════════════════════════════════════════════════════════════════
+
+┌──────────────────┐
+│ User Changes     │
+│ Font Size to     │
+│ "Large"          │
+└────────┬─────────┘
+         │
+         ▼
+┌────────────────────────────────────────────────────────────┐
+│ SettingsPanel useEffect (line 40-50)                      │
+│                                                            │
+│   useEffect(() => {                                        │
+│     localStorage.setItem('fontSize', 'large');             │
+│     document.body.setAttribute('data-font-size', 'large'); │
+│   }, [fontSize])                                           │
+└────────────────┬───────────────────────────────────────────┘
+                 │
+                 ├──────────────────────┬─────────────────────┐
+                 │                      │                     │
+                 ▼                      ▼                     ▼
+         ┌──────────────┐      ┌──────────────┐     ┌──────────────┐
+         │ localStorage │      │ DOM body     │     │ CSS applies  │
+         │              │      │ data-font-   │     │ font styles  │
+         │ fontSize:    │      │ size="large" │     │ from         │
+         │ "large"      │      │              │     │ globals.css  │
+         └──────────────┘      └──────────────┘     └──────────────┘
+                 │
+                 │ (On page reload)
+                 ▼
+         ┌──────────────┐
+         │ Settings     │
+         │ Restored     │
+         │ from         │
+         │ localStorage │
+         └──────────────┘
+
+
+COMPONENT HIERARCHY:
+═══════════════════════════════════════════════════════════════════════
+
+<RootLayout> (Server Component)
+  └── <html>
+      └── <body>
+          └── <ErrorBoundary>
+              └── <ToastProvider>
+                  ├── <WebVitals />
+                  └── <RootLayoutContent> ◄──── NEW CLIENT WRAPPER
+                      ├── <KeyboardShortcuts />
+                      ├── <SettingsPanel       ◄──── NOW INTEGRATED
+                      │     isOpen={isSettingsOpen}
+                      │     onClose={closeHandler}
+                      │   />
+                      ├── <OfflineIndicator />
+                      ├── <PWAInstallPrompt />
+                      ├── <header>...</header>
+                      ├── {children}
+                      └── <MobileNavBar />
+
+
+KEY INTEGRATION POINTS:
+═══════════════════════════════════════════════════════════════════════
+
+✓ State Management: useState hook in RootLayoutContent
+✓ Event Listening: useEffect with document.addEventListener
+✓ Keyboard Handling: Escape key handler in RootLayoutContent
+✓ Props Passing: isOpen and onClose to SettingsPanel
+✓ Cleanup: Event listener cleanup in useEffect return
+✓ Persistence: localStorage in SettingsPanel component
+✓ DOM Updates: document.body attributes for theming

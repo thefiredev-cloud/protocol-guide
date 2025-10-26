@@ -1,7 +1,7 @@
 'use client';
 
 import { AlertCircle, CheckCircle, Info, X, XCircle } from 'lucide-react';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -30,6 +30,19 @@ export function useToast() {
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  // Store timeout IDs to prevent memory leaks - clear on manual dismiss or unmount
+  const timeoutRefs = useRef<Map<string, NodeJS.Timeout>>(new Map());
+
+  // removeToast defined first so it can be included in addToast dependencies
+  const removeToast = useCallback((id: string) => {
+    // Clear the timeout for this toast to prevent memory leak
+    const timeoutId = timeoutRefs.current.get(id);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutRefs.current.delete(id);
+    }
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).slice(2, 11);
@@ -38,13 +51,22 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
     // Auto-remove after duration
     const duration = toast.duration ?? 5000;
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       removeToast(id);
     }, duration);
-  }, []);
 
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+    // Store timeout ID for cleanup when toast is manually dismissed
+    timeoutRefs.current.set(id, timeoutId);
+  }, [removeToast]);
+
+  // Cleanup all timeouts on unmount to prevent memory leaks
+  useEffect(() => {
+    // Capture the current ref value for cleanup
+    const timeouts = timeoutRefs.current;
+    return () => {
+      timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+      timeouts.clear();
+    };
   }, []);
 
   return (
