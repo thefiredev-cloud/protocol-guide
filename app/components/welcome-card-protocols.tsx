@@ -1,16 +1,10 @@
 export function WelcomeCardProtocols({ items }: { items: string[] }) {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+    <div className="welcome-protocols-container">
       {items.map((item) => (
         <span
           key={item}
-          style={{
-            borderRadius: "6px",
-            background: "var(--bg-muted)",
-            padding: "6px 10px",
-            fontSize: "13px",
-            color: "var(--muted)",
-          }}
+          className="welcome-protocol-badge"
         >
           {item}
         </span>
