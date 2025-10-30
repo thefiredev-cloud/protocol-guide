@@ -24,7 +24,25 @@
     "tp_name": "Airway Obstruction",
     "tp_code": "1234",
     "tp_code_pediatric": "1234-P",
-    "guidelines": "For any upper airway emergency including choking, foreign body, swelling, stridor, croup, and obstructed tracheostomy"
+    "guidelines": "For any upper airway emergency including choking, foreign body, swelling, stridor, croup, and obstructed tracheostomy",
+    "keywords": [
+      "airway",
+      "obstruction",
+      "choking",
+      "stridor",
+      "foreign body",
+      "swelling",
+      "croup",
+      "tracheostomy",
+      "obstructed",
+      "upper airway",
+      "barking cough",
+      "inspiratory stridor",
+      "wheezing",
+      "drooling",
+      "tripod position",
+      "muffled voice"
+    ]
   },
   {
     "pi_name": "Alcohol Intoxication",
@@ -32,7 +50,17 @@
     "tp_name": "Overdose/Poisoning/Ingestion",
     "tp_code": "1241",
     "tp_code_pediatric": "1241-P",
-    "guidelines": "For alcohol intoxication if it is the primary problem. Use of secondary PI if the patient has another acute emergency."
+    "guidelines": "For alcohol intoxication if it is the primary problem. Use of secondary PI if the patient has another acute emergency.",
+    "keywords": [
+      "alcohol",
+      "intoxication",
+      "drunk",
+      "ethanol",
+      "ETOH",
+      "intoxicated",
+      "inebriated",
+      "drinking"
+    ]
   },
   {
     "pi_name": "Allergic Reaction",
@@ -40,7 +68,18 @@
     "tp_name": "Allergy",
     "tp_code": "1219",
     "tp_code_pediatric": "1219-P",
-    "guidelines": "For any simple allergic reaction that is isolated to the skin (hives/urticarial only) and does not meet definition of anaphylaxis"
+    "guidelines": "For any simple allergic reaction that is isolated to the skin (hives/urticarial only) and does not meet definition of anaphylaxis",
+    "keywords": [
+      "allergic",
+      "allergy",
+      "hives",
+      "urticaria",
+      "urticarial",
+      "rash",
+      "itching",
+      "pruritus",
+      "skin reaction"
+    ]
   },
   {
     "pi_name": "ALOC - Not Hypoglycemia or Seizure",
@@ -48,7 +87,21 @@
     "tp_name": "ALOC",
     "tp_code": "1229",
     "tp_code_pediatric": "1229-P",
-    "guidelines": "For altered mental status not attributed to a more specific PI (i.e., cause unknown). Use as secondary PI when cause known."
+    "guidelines": "For altered mental status not attributed to a more specific PI (i.e., cause unknown). Use as secondary PI when cause known.",
+    "keywords": [
+      "ALOC",
+      "altered",
+      "mental status",
+      "confusion",
+      "confused",
+      "disoriented",
+      "lethargic",
+      "obtunded",
+      "AMS",
+      "altered consciousness",
+      "unresponsive",
+      "not alert"
+    ]
   },
   {
     "pi_name": "Anaphylaxis",
@@ -56,7 +109,24 @@
     "tp_name": "Allergy",
     "tp_code": "1219",
     "tp_code_pediatric": "1219-P",
-    "guidelines": "For anaphylaxis."
+    "guidelines": "For anaphylaxis.",
+    "keywords": [
+      "anaphylaxis",
+      "anaphylactic",
+      "severe allergic",
+      "airway swelling",
+      "throat swelling",
+      "angioedema",
+      "wheezing",
+      "respiratory distress",
+      "hypotension",
+      "shock",
+      "epi",
+      "epinephrine",
+      "stridor",
+      "urticaria",
+      "hives"
+    ]
   },
   {
     "pi_name": "Behavioral/Psychiatric Crisis",
@@ -64,7 +134,19 @@
     "tp_name": "Behavioral/Psychiatric Crisis",
     "tp_code": "1209",
     "tp_code_pediatric": "1209-P",
-    "guidelines": "For psychiatric crisis that is the primary problem. NOT for anxiety/agitation secondary to medical etiology – use PI related to medical issue."
+    "guidelines": "For psychiatric crisis that is the primary problem. NOT for anxiety/agitation secondary to medical etiology – use PI related to medical issue.",
+    "keywords": [
+      "psychiatric",
+      "behavioral",
+      "mental health",
+      "agitated",
+      "agitation",
+      "psychosis",
+      "suicidal",
+      "homicidal",
+      "violent",
+      "combative"
+    ]
   },
   {
     "pi_name": "Body Pain - Non Traumatic",
@@ -88,7 +170,23 @@
     "tp_name": "Burns",
     "tp_code": "1220",
     "tp_code_pediatric": "1220-P",
-    "guidelines": "For any burn injury to skin. For inhalation injury use PI Inhalation Injury. Use with PI Traumatic Injury if other trauma present."
+    "guidelines": "For any burn injury to skin. For inhalation injury use PI Inhalation Injury. Use with PI Traumatic Injury if other trauma present.",
+    "keywords": [
+      "burn",
+      "burned",
+      "thermal",
+      "scald",
+      "flame",
+      "fire",
+      "hot",
+      "skin burn",
+      "blistering",
+      "charred",
+      "second degree",
+      "third degree",
+      "partial thickness",
+      "full thickness"
+    ]
   },
   {
     "pi_name": "Carbon Monoxide",
@@ -96,7 +194,19 @@
     "tp_name": "Carbon Monoxide Exposure",
     "tp_code": "1238",
     "tp_code_pediatric": "1238-P",
-    "guidelines": "For suspected or known carbon monoxide exposure."
+    "guidelines": "For suspected or known carbon monoxide exposure.",
+    "keywords": [
+      "carbon monoxide",
+      "CO",
+      "CO poisoning",
+      "smoke",
+      "headache",
+      "nausea",
+      "carboxyhemoglobin",
+      "COHb",
+      "exposure",
+      "monoxide"
+    ]
   },
   {
     "pi_name": "Cardiac Arrest - Non-traumatic",
@@ -120,7 +230,22 @@
     "tp_name": "Cardiac Dysrhythmia - Bradycardia",
     "tp_code": "1212",
     "tp_code_pediatric": "1212-P",
-    "guidelines": "For any bradycardic rhythm <60bpm."
+    "guidelines": "For any bradycardic rhythm <60bpm.",
+    "keywords": [
+      "bradycardia",
+      "slow heart rate",
+      "bradycardic",
+      "heart block",
+      "AV block",
+      "symptomatic bradycardia",
+      "HR 40",
+      "HR 42",
+      "HR 45",
+      "heart rate 40",
+      "heart rate 42",
+      "heart rate 45",
+      "dizzy"
+    ]
   },
   {
     "pi_name": "Cardiac Dysrhythmia - Tachycardia",
@@ -128,7 +253,21 @@
     "tp_name": "Cardiac Dysrhythmia - Tachycardia",
     "tp_code": "1213",
     "tp_code_pediatric": "1213-P",
-    "guidelines": "For any tachydysrhythmia and for sinus tachycardia (ST) of unclear etiology. NOT for ST secondary to known cause – use more specific PI (e.g., Fever)"
+    "guidelines": "For any tachydysrhythmia and for sinus tachycardia (ST) of unclear etiology. NOT for ST secondary to known cause – use more specific PI (e.g., Fever)",
+    "keywords": [
+      "tachycardia",
+      "fast heart rate",
+      "rapid heart rate",
+      "SVT",
+      "supraventricular tachycardia",
+      "VT",
+      "ventricular tachycardia",
+      "AFib",
+      "atrial fibrillation",
+      "AFlutter",
+      "atrial flutter",
+      "tachycardic"
+    ]
   },
   {
     "pi_name": "Chest Pain - Not Cardiac",
@@ -136,7 +275,15 @@
     "tp_name": "General Medical",
     "tp_code": "1202",
     "tp_code_pediatric": "1202-P",
-    "guidelines": "For musculoskeletal and pleuritic pain and any chest pain that is NOT of possible cardiovascular etiology."
+    "guidelines": "For musculoskeletal and pleuritic pain and any chest pain that is NOT of possible cardiovascular etiology.",
+    "keywords": [
+      "chest pain",
+      "musculoskeletal",
+      "pleuritic",
+      "chest wall",
+      "costochondritis",
+      "reproducible"
+    ]
   },
   {
     "pi_name": "Chest Pain - STEMI",
@@ -160,7 +307,21 @@
     "tp_name": "Cardiac Chest Pain",
     "tp_code": "1211",
     "tp_code_pediatric": "1211-P",
-    "guidelines": "For any chest pain/symptom that is of possible cardiovascular etiology but NOT STEMI (e.g., NSTEMI, pericarditis, dissection)."
+    "guidelines": "For any chest pain/symptom that is of possible cardiovascular etiology but NOT STEMI (e.g., NSTEMI, pericarditis, dissection).",
+    "keywords": [
+      "chest pain",
+      "cardiac",
+      "angina",
+      "substernal",
+      "pressure",
+      "crushing",
+      "radiating",
+      "jaw pain",
+      "arm pain",
+      "NSTEMI",
+      "ACS",
+      "acute coronary syndrome"
+    ]
   },
   {
     "pi_name": "Childbirth (Mother)",
@@ -216,7 +377,15 @@
     "tp_name": "Electrocution",
     "tp_code": "1221",
     "tp_code_pediatric": "1221-P",
-    "guidelines": "For any electrocution injury."
+    "guidelines": "For any electrocution injury.",
+    "keywords": [
+      "electrocution",
+      "electrical",
+      "shock",
+      "electric",
+      "lightning",
+      "high voltage"
+    ]
   },
   {
     "pi_name": "ENT / Dental Emergencies",
@@ -272,7 +441,16 @@
     "tp_name": "HAZMAT",
     "tp_code": "1240",
     "tp_code_pediatric": "1240-P",
-    "guidelines": "For any hazardous material (chemical) exposure. May use with another PI (e.g., Inhalation Injury or Burns) when applicable."
+    "guidelines": "For any hazardous material (chemical) exposure. May use with another PI (e.g., Inhalation Injury or Burns) when applicable.",
+    "keywords": [
+      "hazmat",
+      "hazardous material",
+      "chemical",
+      "exposure",
+      "decontamination",
+      "toxic",
+      "contamination"
+    ]
   },
   {
     "pi_name": "Headache - Non-Traumatic",
@@ -304,7 +482,16 @@
     "tp_name": "Hyperthermia (Environmental)",
     "tp_code": "1222",
     "tp_code_pediatric": "1222-P",
-    "guidelines": "For environmental exposure causing hyperthermia, e.g., heat exhaustion and heat stroke, drugs may also be a contributing factor."
+    "guidelines": "For environmental exposure causing hyperthermia, e.g., heat exhaustion and heat stroke, drugs may also be a contributing factor.",
+    "keywords": [
+      "hyperthermia",
+      "heat stroke",
+      "heat exhaustion",
+      "heat exposure",
+      "hot",
+      "overheated",
+      "high temperature"
+    ]
   },
   {
     "pi_name": "Hypoglycemia",
@@ -312,7 +499,20 @@
     "tp_name": "Diabetic Emergencies",
     "tp_code": "1203",
     "tp_code_pediatric": "1203-P",
-    "guidelines": "For glucose <60mg/dL."
+    "guidelines": "For glucose <60mg/dL.",
+    "keywords": [
+      "hypoglycemia",
+      "hypoglycemic",
+      "low blood sugar",
+      "low glucose",
+      "diabetic",
+      "altered",
+      "glucose 45",
+      "glucose 50",
+      "glucose 55",
+      "diaphoretic",
+      "sweaty"
+    ]
   },
   {
     "pi_name": "Hypotension",
@@ -320,7 +520,13 @@
     "tp_name": "Shock / Hypotension",
     "tp_code": "1207",
     "tp_code_pediatric": "1207-P",
-    "guidelines": "For SBP <90mmHg in adults or below normal for size per 1309 in children with transient low BP or rapidly responds to fluid resuscitation and without signs of shock."
+    "guidelines": "For SBP <90mmHg in adults or below normal for size per 1309 in children with transient low BP or rapidly responds to fluid resuscitation and without signs of shock.",
+    "keywords": [
+      "hypotension",
+      "low blood pressure",
+      "low BP",
+      "hypotensive"
+    ]
   },
   {
     "pi_name": "Hypothermia / Cold Injury",
@@ -328,7 +534,16 @@
     "tp_name": "Hypothermia / Cold Injury",
     "tp_code": "1223",
     "tp_code_pediatric": "1223-P",
-    "guidelines": "For environmental exposures causing hypothermia and/or frostbite injury."
+    "guidelines": "For environmental exposures causing hypothermia and/or frostbite injury.",
+    "keywords": [
+      "hypothermia",
+      "hypothermic",
+      "cold",
+      "cold exposure",
+      "frostbite",
+      "frozen",
+      "low temperature"
+    ]
   },
   {
     "pi_name": "Inhalation Injury",
@@ -336,7 +551,27 @@
     "tp_name": "Inhalation Injury",
     "tp_code": "1236",
     "tp_code_pediatric": "1236-P",
-    "guidelines": "For any signs/symptoms related to inhaling a gas or substance other than smoke or carbon monoxide."
+    "guidelines": "For any signs/symptoms related to inhaling a gas or substance other than smoke or carbon monoxide.",
+    "keywords": [
+      "inhalation",
+      "inhaled",
+      "gas",
+      "fumes",
+      "stridor",
+      "hoarse",
+      "hoarseness",
+      "toxic fumes",
+      "chemical exposure",
+      "respiratory distress",
+      "airway burn",
+      "carbonaceous sputum",
+      "singed nasal hairs",
+      "shortness of breath",
+      "SOB",
+      "breathing difficulty",
+      "wheezing",
+      "cough"
+    ]
   },
   {
     "pi_name": "Lower GI Bleeding",
@@ -384,7 +619,20 @@
     "tp_name": "Overdose/Poisoning/Ingestion",
     "tp_code": "1241",
     "tp_code_pediatric": "1241-P",
-    "guidelines": "For any intentional or unintentional overdose/poisoning by any route, includes illicit substances and prescription medications, overdose and/or adverse reactions."
+    "guidelines": "For any intentional or unintentional overdose/poisoning by any route, includes illicit substances and prescription medications, overdose and/or adverse reactions.",
+    "keywords": [
+      "overdose",
+      "OD",
+      "poisoning",
+      "ingestion",
+      "toxic",
+      "toxicity",
+      "intoxication",
+      "drug",
+      "narcotics",
+      "opioid",
+      "medications"
+    ]
   },
   {
     "pi_name": "Palpitations",
@@ -416,7 +664,17 @@
     "tp_name": "Respiratory Distress",
     "tp_code": "1237",
     "tp_code_pediatric": "1237-P",
-    "guidelines": "For patients requiring positive-pressure ventilation and/or hypoxia despite 100% oxygen."
+    "guidelines": "For patients requiring positive-pressure ventilation and/or hypoxia despite 100% oxygen.",
+    "keywords": [
+      "respiratory arrest",
+      "respiratory failure",
+      "apnea",
+      "not breathing",
+      "hypoxia",
+      "ventilation",
+      "intubation",
+      "agonal breathing"
+    ]
   },
   {
     "pi_name": "Respiratory Distress / Bronchospasm",
@@ -424,7 +682,19 @@
     "tp_name": "Respiratory Distress",
     "tp_code": "1237",
     "tp_code_pediatric": "1237-P",
-    "guidelines": "For COPD/asthma exacerbations and any bronchospasms/wheezing not from pulmonary edema."
+    "guidelines": "For COPD/asthma exacerbations and any bronchospasms/wheezing not from pulmonary edema.",
+    "keywords": [
+      "shortness of breath",
+      "SOB",
+      "dyspnea",
+      "asthma",
+      "COPD",
+      "bronchospasm",
+      "wheezing",
+      "reactive airway",
+      "exacerbation",
+      "difficulty breathing"
+    ]
   },
   {
     "pi_name": "Respiratory Distress / Other",
@@ -432,7 +702,17 @@
     "tp_name": "Respiratory Distress",
     "tp_code": "1237",
     "tp_code_pediatric": "1237-P",
-    "guidelines": "For patients with pulmonary disease that is not edema or bronchospasm, includes suspected pneumonia, PE, pneumothorax and non-pulmonary and unknown causes of respiratory distress."
+    "guidelines": "For patients with pulmonary disease that is not edema or bronchospasm, includes suspected pneumonia, PE, pneumothorax and non-pulmonary and unknown causes of respiratory distress.",
+    "keywords": [
+      "respiratory distress",
+      "dyspnea",
+      "pneumonia",
+      "PE",
+      "pulmonary embolism",
+      "pneumothorax",
+      "lung disease",
+      "breathing difficulty"
+    ]
   },
   {
     "pi_name": "Respiratory Distress / Pulmonary Edema / CHF",
@@ -440,7 +720,19 @@
     "tp_name": "Pulmonary Edema / CHF",
     "tp_code": "1214",
     "tp_code_pediatric": "1214-P",
-    "guidelines": "For congestive heart failure exacerbation."
+    "guidelines": "For congestive heart failure exacerbation.",
+    "keywords": [
+      "CHF",
+      "congestive heart failure",
+      "pulmonary edema",
+      "rales",
+      "crackles",
+      "orthopnea",
+      "paroxysmal nocturnal dyspnea",
+      "PND",
+      "edema",
+      "fluid overload"
+    ]
   },
   {
     "pi_name": "Seizure - Active",
@@ -448,7 +740,16 @@
     "tp_name": "Seizure",
     "tp_code": "1231",
     "tp_code_pediatric": "1231-P",
-    "guidelines": "For seizure witnessed by EMS, whether treated or not."
+    "guidelines": "For seizure witnessed by EMS, whether treated or not.",
+    "keywords": [
+      "seizure",
+      "seizing",
+      "convulsion",
+      "convulsing",
+      "tonic-clonic",
+      "status epilepticus",
+      "epilepsy"
+    ]
   },
   {
     "pi_name": "Seizure - Postictal",
@@ -456,7 +757,15 @@
     "tp_name": "Seizure",
     "tp_code": "1231",
     "tp_code_pediatric": "1231-P",
-    "guidelines": "For any seizure that stopped prior to EMS arrival and there is no further seizure activity during EMS contact."
+    "guidelines": "For any seizure that stopped prior to EMS arrival and there is no further seizure activity during EMS contact.",
+    "keywords": [
+      "postictal",
+      "post-seizure",
+      "after seizure",
+      "seizure",
+      "confused",
+      "lethargic"
+    ]
   },
   {
     "pi_name": "Sepsis",
@@ -464,7 +773,17 @@
     "tp_name": "Fever / Sepsis",
     "tp_code": "1204",
     "tp_code_pediatric": "1204-P",
-    "guidelines": "For patients with suspected sepsis (i.e., signs suggestive of sepsis including fever, tachycardia, suspected infection)."
+    "guidelines": "For patients with suspected sepsis (i.e., signs suggestive of sepsis including fever, tachycardia, suspected infection).",
+    "keywords": [
+      "sepsis",
+      "septic",
+      "infection",
+      "fever",
+      "tachycardia",
+      "hypotension",
+      "altered",
+      "SIRS"
+    ]
   },
   {
     "pi_name": "Severe Agitation with ALOC",
@@ -480,7 +799,18 @@
     "tp_name": "Shock / Hypotension",
     "tp_code": "1207",
     "tp_code_pediatric": "1207-P",
-    "guidelines": "For patients with poor perfusion not rapidly responsive to IV fluids."
+    "guidelines": "For patients with poor perfusion not rapidly responsive to IV fluids.",
+    "keywords": [
+      "shock",
+      "hypoperfusion",
+      "poor perfusion",
+      "hypotension",
+      "low blood pressure",
+      "pale",
+      "cool",
+      "clammy",
+      "tachycardia"
+    ]
   },
   {
     "pi_name": "Smoke Inhalation",
@@ -488,7 +818,19 @@
     "tp_name": "Inhalation Injury",
     "tp_code": "1236",
     "tp_code_pediatric": "1236-P",
-    "guidelines": "For patients with smoke inhalation."
+    "guidelines": "For patients with smoke inhalation.",
+    "keywords": [
+      "smoke",
+      "inhalation",
+      "inhaled smoke",
+      "fire",
+      "enclosed space",
+      "soot",
+      "carbonaceous",
+      "hoarse",
+      "cough",
+      "stridor"
+    ]
   },
   {
     "pi_name": "Stings / Venomous Bites",
@@ -524,7 +866,18 @@
     "tp_name": "Submersion",
     "tp_code": "1225",
     "tp_code_pediatric": "1225-P",
-    "guidelines": "For any submersion injury, including drowning and dive (decompression) emergencies."
+    "guidelines": "For any submersion injury, including drowning and dive (decompression) emergencies.",
+    "keywords": [
+      "drowning",
+      "drowned",
+      "submersion",
+      "submerged",
+      "water rescue",
+      "near drowning",
+      "dive",
+      "diving",
+      "decompression"
+    ]
   },
   {
     "pi_name": "Syncope / Near Syncope",
@@ -532,7 +885,17 @@
     "tp_name": "Syncope / Near Syncope",
     "tp_code": "1233",
     "tp_code_pediatric": "1233-P",
-    "guidelines": "For syncope (transient loss of consciousness). NOT for cardiac arrest, use PI Cardiac Arrest – Non-traumatic only."
+    "guidelines": "For syncope (transient loss of consciousness). NOT for cardiac arrest, use PI Cardiac Arrest – Non-traumatic only.",
+    "keywords": [
+      "syncope",
+      "fainted",
+      "fainting",
+      "passed out",
+      "loss of consciousness",
+      "LOC",
+      "near syncope",
+      "presyncope"
+    ]
   },
   {
     "pi_name": "Traumatic Arrest - Blunt",
@@ -587,7 +950,9 @@
       "conducted electrical weapon",
       "taser",
       "blunt",
-      "penetrating"
+      "penetrating",
+      "impalement",
+      "impaled"
     ]
   },
   {

@@ -16,7 +16,7 @@ export function SettingsPanel() {
     updateSettings({ fontSize });
   };
 
-  const handleThemeChange = (theme: 'dark' | 'light') => {
+  const handleThemeChange = (theme: 'dark' | 'light' | 'sunlight') => {
     updateSettings({ theme });
   };
 
@@ -76,7 +76,7 @@ export function SettingsPanel() {
           {/* Theme */}
           <div className="setting-group">
             <label className="setting-label">
-              {settings.theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
+              {settings.theme === 'dark' ? <Moon size={18} /> : settings.theme === 'sunlight' ? <Sun size={18} /> : <Sun size={18} />}
               Theme
             </label>
             <div className="setting-options">
@@ -95,6 +95,15 @@ export function SettingsPanel() {
               >
                 <Sun size={16} />
                 Light
+              </button>
+              <button
+                onClick={() => handleThemeChange('sunlight')}
+                className={`setting-option ${settings.theme === 'sunlight' ? 'active' : ''}`}
+                type="button"
+                title="Ultra-high contrast for bright outdoor conditions and reduced blue light for night operations"
+              >
+                <Sun size={16} />
+                Sunlight
               </button>
             </div>
           </div>

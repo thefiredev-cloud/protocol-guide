@@ -43,8 +43,8 @@
 ### Phase 6: Documentation ✓
 - [x] Created comprehensive documentation (`docs/kb-chunking-implementation.md`)
 - [x] Created architecture diagram (`docs/chunking-architecture.md`)
-- [x] Created quick start guide (`CHUNKED-KB-QUICKSTART.md`)
-- [x] Created implementation summary (`IMPLEMENTATION_SUMMARY.txt`)
+- [x] Created quick start guide (`docs/CHUNKED-KB-QUICKSTART.md`)
+- [x] Created implementation summary (`docs/notes/IMPLEMENTATION_SUMMARY.txt`)
 - [x] Created this checklist
 
 ## ☐ PENDING TASKS
@@ -200,12 +200,12 @@ const results = await kb.search(query, ['Medication', 'Protocol']); // Optional 
 ## 📚 DOCUMENTATION
 
 All documentation created:
-- ✓ `CHUNKED-KB-QUICKSTART.md` - Quick reference
-- ✓ `IMPLEMENTATION_SUMMARY.txt` - Complete summary
+- ✓ `docs/CHUNKED-KB-QUICKSTART.md` - Quick reference
+- ✓ `docs/notes/IMPLEMENTATION_SUMMARY.txt` - Complete summary
 - ✓ `docs/kb-chunking-implementation.md` - Full docs
 - ✓ `docs/chunking-architecture.md` - Architecture diagrams
 - ✓ `lib/storage/knowledge-base-chunked-example.ts` - Usage examples
-- ✓ `CHUNKING-CHECKLIST.md` - This file
+- ✓ `docs/CHUNKING-CHECKLIST.md` - This file
 
 ## ⚠️ NOTES
 

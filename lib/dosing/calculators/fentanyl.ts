@@ -12,23 +12,37 @@ export class FentanylCalculator implements MedicationCalculator {
     const isAdult = (request.patientAgeYears ?? 0) >= 15 || weightKg >= 45;
 
     const adultDose = 50; // mcg
-    const pediatricDose = mcgPerKgPerDose(weightKg, 1, 50, 0);
+    const pediatricDoseIV = mcgPerKgPerDose(weightKg, 1, 50, 0); // 1 mcg/kg IV/IO/IM
+    const pediatricDoseIN = mcgPerKgPerDose(weightKg, 1.5, undefined, 1); // 1.5 mcg/kg IN
 
     const recommendations: MedicationDoseRecommendation[] = [
       {
-        label: "Analgesia IV/IO",
+        label: "Analgesia IV/IO/IM",
         route: "IV",
-        dose: { quantity: isAdult ? adultDose : pediatricDose, unit: "mcg" },
-        repeat: { intervalMinutes: 5, maxRepeats: 2, criteria: "Pain persists; monitor for respiratory depression" },
-        maxTotalDose: { quantity: isAdult ? 150 : 150, unit: "mcg" },
-        administrationNotes: ["Titrate slowly", "Monitor respiratory status"],
+        dose: { quantity: isAdult ? adultDose : pediatricDoseIV, unit: "mcg" },
+        repeat: { intervalMinutes: 5, maxRepeats: 1, criteria: "Pain persists; monitor for respiratory depression" },
+        maxTotalDose: { quantity: isAdult ? 150 : pediatricDoseIV * 2, unit: "mcg" },
+        administrationNotes: [
+          "Slow IV/IO push or IM",
+          isAdult 
+            ? "Contact Base for additional dosing after 150mcg (max total 250mcg)"
+            : "Contact Base for additional dosing after 2 doses (max total 4 doses)",
+          "Titrate slowly", 
+          "Monitor respiratory status"
+        ],
       },
       {
-        label: "IN/IM",
+        label: "IN",
         route: "IN",
-        dose: { quantity: isAdult ? 50 : pediatricDose, unit: "mcg" },
-        repeat: { intervalMinutes: 10, maxRepeats: 2 },
-        administrationNotes: ["Divide dose between nares", "IM alternative if IN unavailable"],
+        dose: { quantity: isAdult ? 50 : pediatricDoseIN, unit: "mcg" },
+        repeat: { intervalMinutes: 5, maxRepeats: 1 },
+        maxTotalDose: { quantity: isAdult ? 150 : pediatricDoseIN * 2, unit: "mcg" },
+        administrationNotes: [
+          "Divide dose between nares",
+          isAdult 
+            ? "Contact Base for additional dosing after 150mcg (max total 250mcg)"
+            : "Contact Base for additional dosing after 2 doses (max total 4 doses)",
+        ],
       },
     ];
 

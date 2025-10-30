@@ -1,6 +1,6 @@
 "use client";
 
-import { Pause, Phone, Pill, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { ChevronUp, Pause, Phone, Pill, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { CarePlan } from "@/app/types/chat";
@@ -11,6 +11,7 @@ type QuickActionsBarProps = {
 };
 
 export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
@@ -112,12 +113,44 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
     setIsSpeaking(true);
   }, [speechSupported, isSpeaking]);
 
+  const handleToggle = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
   // Determine if base contact is required
   const baseContactRequired =
     carePlan?.baseContact && !carePlan.baseContact.toLowerCase().includes("no base contact");
 
+  // When closed, render only the toggle button (no bar wrapper)
+  if (!isOpen) {
+    return (
+      <button
+        type="button"
+        onClick={handleToggle}
+        className="quick-actions-toggle quick-actions-toggle-closed"
+        aria-label="Show quick actions"
+        title="Show Actions"
+      >
+        <ChevronUp size={20} />
+      </button>
+    );
+  }
+
+  // When open, render the full bar
   return (
-    <div className="quick-actions">
+    <div className="quick-actions quick-actions-open">
+      {/* Toggle Button */}
+      <button
+        type="button"
+        onClick={handleToggle}
+        className="quick-actions-toggle quick-actions-toggle-open"
+        aria-label="Hide quick actions"
+        title="Hide Actions"
+      >
+        <ChevronUp size={20} className="rotate-180" />
+      </button>
+
+      {/* Quick Actions Content */}
       <div className="quick-actions-inner">
         {/* Scene Timer */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

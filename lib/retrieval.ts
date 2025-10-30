@@ -72,6 +72,10 @@ const SYNONYM_RULES: readonly SynonymRule[] = [
     expansions: ["protocol 1305", "trauma triage", "base contact"],
   },
   {
+    patterns: [/\bimpalement|impaled|penetrating\s+injury|penetrating\s+trauma\b/],
+    expansions: ["protocol 1305", "protocol 1244", "trauma triage", "penetrating trauma"],
+  },
+  {
     patterns: [/\boverdose\b/, /\bpoison\b/, /\bingestion\b/, /\bopioid\b/, /\bnaloxone\b/],
     expansions: ["protocol 1229", "protocol 1235", "naloxone", "activated charcoal"],
   },

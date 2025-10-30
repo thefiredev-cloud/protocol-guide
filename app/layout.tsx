@@ -47,10 +47,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
-  ],
+  themeColor: "#ffffff", // Force light mode theme color
 };
 
 export default function RootLayout({
@@ -62,7 +59,7 @@ export default function RootLayout({
     <html lang="en" className={fontClass}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#0b0b0b" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body>
         <ErrorBoundary>

@@ -345,7 +345,7 @@ Response time: ~1.5 seconds
 
 ```bash
 # .env.local (required)
-LLM_API_KEY=sk-...                    # OpenAI API key (REQUIRED)
+LLM_API_KEY=your-api-key  # OpenAI API key (REQUIRED)
 LLM_BASE_URL=https://api.openai.com/v1  # Default OpenAI endpoint
 LLM_MODEL=gpt-4o-mini                # Model to use
 ```

@@ -31,6 +31,13 @@ const QuickActionsBar = dynamic(
   },
 );
 
+const QuickAccessFeatures = dynamic(
+  () => import("@/app/components/quick-access-features").then((m) => ({ default: m.QuickAccessFeatures })),
+  {
+    ssr: false,
+  },
+);
+
 function initialAssistantMessage(): ChatMessage {
   return {
     role: "assistant",
@@ -64,6 +71,15 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
       setTimeout(() => baseContactAlert.classList.remove("flash-attention"), 1000);
     }
   }, []);
+
+  const handleProtocolSelect = useCallback(
+    (protocol: string) => {
+      controller.chat.setInput(protocol);
+      controller.taRef.current?.focus();
+      controller.send();
+    },
+    [controller]
+  );
 
   // Apply one-handed mode class to body
   useEffect(() => {
@@ -121,6 +137,11 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
       {/* Quick Actions Bar */}
       <Suspense fallback={null}>
         <QuickActionsBar carePlan={controller.narrative.carePlan} onCallBase={handleCallBase} />
+      </Suspense>
+
+      {/* Quick Access Features */}
+      <Suspense fallback={null}>
+        <QuickAccessFeatures onSelectProtocol={handleProtocolSelect} />
       </Suspense>
 
       <ChatInputRow

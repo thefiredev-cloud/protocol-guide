@@ -24,6 +24,24 @@ const schema = z.object({
   KB_DATA_PATH: z.string().optional(),
   KB_REMOTE_URL: z.string().url().optional(),
   KB_REMOTE_BASE_URL: z.string().url().optional(),
+  ENABLE_MARKDOWN_PREPROCESSING: z
+    .string()
+    .default("false")
+    .transform((val) => val.toLowerCase() === "true"),
+  MARKDOWN_CHUNK_SIZE: z
+    .string()
+    .default("2000")
+    .transform((val) => Number.parseInt(val, 10))
+    .refine((val) => val > 0 && val <= 10000, {
+      message: "MARKDOWN_CHUNK_SIZE must be between 1 and 10000",
+    }),
+  MARKDOWN_CONTEXT_LIMIT: z
+    .string()
+    .default("12000")
+    .transform((val) => Number.parseInt(val, 10))
+    .refine((val) => val > 0 && val <= 50000, {
+      message: "MARKDOWN_CONTEXT_LIMIT must be between 1 and 50000",
+    }),
 });
 
 export type EnvironmentConfig = z.infer<typeof schema> & {
@@ -31,6 +49,9 @@ export type EnvironmentConfig = z.infer<typeof schema> & {
   llmModel: string;
   kbScope: string;
   kbSource: string;
+  enableMarkdownPreprocessing: boolean;
+  markdownChunkSize: number;
+  markdownContextLimit: number;
 };
 
 export type EnvironmentDiagnostics = {
@@ -67,6 +88,9 @@ export class EnvironmentManager {
         llmModel: env.LLM_MODEL,
         kbScope: env.KB_SCOPE,
         kbSource: env.KB_SOURCE,
+        enableMarkdownPreprocessing: env.ENABLE_MARKDOWN_PREPROCESSING,
+        markdownChunkSize: env.MARKDOWN_CHUNK_SIZE,
+        markdownContextLimit: env.MARKDOWN_CONTEXT_LIMIT,
       };
     }
 

@@ -1,10 +1,10 @@
 import { formatDemographics, formatProtocolCandidates, formatVitalsLine } from "@/lib/triage/formatters";
-import { parseChiefComplaint } from "@/lib/triage/parsers/chiefComplaint";
+import { parseChiefComplaint } from "@/lib/triage/parsers/chief-complaint";
 import { parseAge, parsePregnancy, parseSex, parseWeightKg } from "@/lib/triage/parsers/demographics";
 import { parseAllergies, parseMedications } from "@/lib/triage/parsers/history";
 import type { Vitals } from "@/lib/triage/parsers/vitals";
 import { parseVitals } from "@/lib/triage/parsers/vitals";
-import { topProviderImpressions } from "@/lib/triage/scoring/providerImpressionScoring";
+import { topProviderImpressions } from "@/lib/triage/scoring/provider-impression-scoring";
 
 export type TriageResult = {
   age?: number;
@@ -37,7 +37,23 @@ export function triageInput(text: string): TriageResult {
   const medications = parseMedications(text);
 
   const lower = text.toLowerCase();
-  const scored = topProviderImpressions(lower);
+
+  // Build partial triage result for advanced scoring
+  const partialTriage: TriageResult = {
+    age,
+    sex,
+    pregnant,
+    weightKg,
+    chiefComplaint: cc,
+    painLocation,
+    vitals,
+    allergies,
+    medications,
+    matchedProtocols: [], // Will be filled below
+  };
+
+  // Get scored protocols with advanced engine (passing triage context)
+  const scored = topProviderImpressions(lower, partialTriage);
 
   return {
     age,
@@ -74,30 +90,41 @@ export function buildSearchAugmentation(result: TriageResult): string {
   if (result.chiefComplaint) parts.push(result.chiefComplaint);
   if (result.painLocation) parts.push(result.painLocation);
 
-  // Protocol-specific search augmentation
-  const hasProtocol1242 = result.matchedProtocols.some(mp =>
-    mp.tp_code === "1242" || mp.tp_code_pediatric === "1242-P"
-  );
-
-  if (hasProtocol1242) {
-    // Enhanced search terms for Protocol 1242: Crush Injury/Syndrome
-    parts.push("hyperkalemia ECG peaked T waves");
-    parts.push("crush syndrome criteria 1 hour entrapment circumferential");
-    parts.push("calcium chloride sodium bicarbonate timing before extrication");
-    parts.push("trauma center transport compartment syndrome");
-    parts.push("rhabdomyolysis myoglobin nephrology dialysis");
-    parts.push("widened QRS absent P waves");
-    parts.push("neurovascular compromise");
-    parts.push("large muscle group thigh pelvic girdle");
-    parts.push("fluid resuscitation pulmonary edema");
-    parts.push("tourniquet hemorrhage control");
+  // Only augment with top matched protocol to reduce noise
+  const topProtocol = result.matchedProtocols[0];
+  if (topProtocol) {
+    // Add top protocol identifiers strongly
+    parts.push(topProtocol.tp_name);
+    parts.push(topProtocol.tp_code);
+    if (topProtocol.tp_code_pediatric) {
+      parts.push(topProtocol.tp_code_pediatric);
+    }
+    
+    // Protocol-specific enhanced search terms (only for top match)
+    const hasProtocol1242 = topProtocol.tp_code === "1242" || topProtocol.tp_code_pediatric === "1242-P";
+    if (hasProtocol1242) {
+      // Enhanced search terms for Protocol 1242: Crush Injury/Syndrome
+      parts.push("hyperkalemia ECG peaked T waves");
+      parts.push("crush syndrome criteria 1 hour entrapment circumferential");
+      parts.push("calcium chloride sodium bicarbonate timing before extrication");
+      parts.push("trauma center transport compartment syndrome");
+      parts.push("rhabdomyolysis myoglobin nephrology dialysis");
+      parts.push("widened QRS absent P waves");
+      parts.push("neurovascular compromise");
+      parts.push("large muscle group thigh pelvic girdle");
+      parts.push("fluid resuscitation pulmonary edema");
+      parts.push("tourniquet hemorrhage control");
+    }
+    
+    const hasProtocol1236 = topProtocol.tp_code === "1236" || topProtocol.tp_code_pediatric === "1236-P";
+    if (hasProtocol1236) {
+      // Enhanced search terms for Protocol 1236: Inhalation Injury
+      parts.push("stridor hoarseness airway burn carbonaceous sputum");
+      parts.push("toxic gas exposure chemical inhalation");
+      parts.push("singed nasal hairs facial burns enclosed space");
+      parts.push("respiratory distress supplemental oxygen airway management");
+    }
   }
-
-  result.matchedProtocols.slice(0, 3).forEach(mp => {
-    parts.push(mp.tp_name);
-    parts.push(mp.tp_code);
-    if (mp.tp_code_pediatric) parts.push(mp.tp_code_pediatric);
-  });
 
   return parts.join(" ");
 }

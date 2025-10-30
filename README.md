@@ -24,7 +24,7 @@ cp .env.example .env
 # Run development server
 npm run dev
 
-# Open http://localhost:3000
+# Open http://localhost:3001
 ```
 
 ## 📱 Features
@@ -226,14 +226,14 @@ NODE_ENV=production
 
 ### Chat (JSON)
 ```bash
-curl -s http://localhost:3000/api/chat \
+curl -s http://localhost:3001/api/chat \
   -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"Chest pain protocol"}]}' | jq .
 ```
 
 ### Chat (SSE Streaming)
 ```bash
-curl -N http://localhost:3000/api/chat/stream \
+curl -N http://localhost:3001/api/chat/stream \
   -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"Cardiac arrest management"}]}'
 ```
@@ -241,10 +241,10 @@ curl -N http://localhost:3000/api/chat/stream \
 ### Dosing Calculator
 ```bash
 # List available medications
-curl -s http://localhost:3000/api/dosing | jq .
+curl -s http://localhost:3001/api/dosing | jq .
 
 # Calculate dose
-curl -s http://localhost:3000/api/dosing \
+curl -s http://localhost:3001/api/dosing \
   -H 'content-type: application/json' \
   -d '{
     "medicationId":"epinephrine",
@@ -257,12 +257,12 @@ curl -s http://localhost:3000/api/dosing \
 
 ### Health Check
 ```bash
-curl -s http://localhost:3000/api/health | jq .
+curl -s http://localhost:3001/api/health | jq .
 ```
 
 ### Metrics
 ```bash
-curl -s http://localhost:3000/api/metrics | jq .
+curl -s http://localhost:3001/api/metrics | jq .
 ```
 
 ## 🚑 Features in Detail
@@ -494,12 +494,25 @@ LA County Fire Department Internal Use Only
 - ✅ PWA/offline support
 - ✅ Comprehensive testing
 
-### Phase 2 (In Progress)
-- 🔄 Enhanced analytics dashboard
-- 🔄 CAD/ePCR integration
-- 🔄 Medical director QA tools
+### Phase 2: ImageTrend Integration (In Progress)
+**Focus**: Embed Medic Bot as integrated widget within ImageTrend Elite ePCR
 
-### Phase 3 (Planned)
+**Current Phase (Phase 0-1)**:
+- 🔄 ImageTrend Partner Program enrollment
+- 🔄 Widget/embedding architecture (iframe, PostMessage API)
+- 🔄 Single sign-on integration (OAuth/SAML)
+- 🔄 Patient data synchronization
+
+**Upcoming Phases**:
+- 📋 Data integration (narrative export, medication sync)
+- 📋 UI/UX optimization for embedded mode
+- 📋 Testing & validation
+- 📋 Pilot deployment (3-5 stations)
+- 📋 Production rollout (all LA County stations)
+
+**See**: [`docs/planning/imagetrend-integration-roadmap.md`](docs/planning/imagetrend-integration-roadmap.md) for complete roadmap
+
+### Phase 3 (Future Enhancements)
 - 📋 Real-time protocol updates
 - 📋 Hospital destination routing
 - 📋 Predictive dosing suggestions

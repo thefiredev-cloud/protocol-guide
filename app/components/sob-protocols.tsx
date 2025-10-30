@@ -3,6 +3,8 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { memo, useState } from "react";
 
+import { ProtocolFormatter } from "./protocol-formatter";
+
 type ProtocolDef = {
   name: string;
   description: string;
@@ -202,6 +204,10 @@ export function SOBProtocolGateway({ onSelect }: { onSelect: (key: string) => vo
 
 export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { m: { role: "user" | "assistant"; content: string }; onProtocolSelect: (key: string) => void }) {
   if (!isSOBProtocolMessage(m.content)) {
+    // Use ProtocolFormatter for assistant messages
+    if (m.role === "assistant") {
+      return <ProtocolFormatter content={m.content} />;
+    }
     return <div style={{ whiteSpace: 'pre-wrap' }}>{m.content}</div>;
   }
   return <SOBProtocolGateway onSelect={onProtocolSelect} />;

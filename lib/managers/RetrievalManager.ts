@@ -1,14 +1,17 @@
-/* eslint-disable unicorn/filename-case */
 import { PediatricDoseCalculator } from "@/lib/clinical/pediatric-dose-calculator";
 import { extractPediatricWeightMedQueries } from "@/lib/parsers/pediatric-weight-med";
+import { EnvironmentManager } from "@/lib/managers/environment-manager";
+import { createLogger } from "@/lib/log";
 import type { KBDoc } from "@/lib/retrieval";
 import { buildContext, searchKB } from "@/lib/retrieval";
+import { MarkdownPreprocessor } from "@/lib/services/chat/markdown-preprocessor";
 import type { TriageResult } from "@/lib/triage";
 
 export type RetrievalQuery = {
   rawText: string;
   triage?: TriageResult;
   maxChunks?: number;
+  useMarkdown?: boolean; // Optional flag to enable markdown preprocessing
 };
 
 export type RetrievalResult = {
@@ -23,13 +26,20 @@ export type RetrievalResult = {
 // eslint-disable-next-line unicorn/filename-case
 export class RetrievalManager {
   private readonly defaultLimit: number;
+  private readonly markdownPreprocessor: MarkdownPreprocessor;
+  private readonly env: ReturnType<typeof EnvironmentManager.load>;
+  private readonly logger = createLogger("RetrievalManager");
 
   constructor(options?: { defaultLimit?: number }) {
     this.defaultLimit = options?.defaultLimit ?? 6;
+    this.markdownPreprocessor = new MarkdownPreprocessor();
+    this.env = EnvironmentManager.load();
   }
 
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {
     const limit = query.maxChunks ?? this.defaultLimit;
+    const useMarkdown = query.useMarkdown ?? this.env.enableMarkdownPreprocessing;
+
     let context = await buildContext(query.rawText, limit);
     const hits = await searchKB(query.rawText, limit);
 
@@ -39,7 +49,34 @@ export class RetrievalManager {
       const pedLines = buildPediatricLines(extracted);
       context = pedLines + context;
     }
+
+    // Convert to markdown if enabled
+    if (useMarkdown) {
+      context = this.convertToMarkdown(context, hits);
+    }
+
     return { context, hits };
+  }
+
+  /**
+   * Convert context and hits to markdown format
+   */
+  private convertToMarkdown(context: string, hits: KBDoc[]): string {
+    try {
+      // Build markdown from hits
+      const markdownContext = this.markdownPreprocessor.buildContextMarkdown(hits);
+
+      // Preserve pediatric dosing section if present
+      const pediatricSection = context.match(/\*\*PEDIATRIC WEIGHT-BASED DOSING[\s\S]*?---/);
+      const pediatricPrefix = pediatricSection ? `${pediatricSection[0]}\n\n` : "";
+
+      // Combine pediatric section with markdown context
+      return pediatricPrefix + markdownContext;
+    } catch (error) {
+      // Fallback to original context if markdown conversion fails
+      this.logger.warn("Markdown conversion failed, using original context", { error });
+      return context;
+    }
   }
 }
 

@@ -10,6 +10,7 @@ import { KetamineCalculator } from "@/lib/dosing/calculators/ketamine";
 import { KetorolacCalculator } from "@/lib/dosing/calculators/ketorolac";
 import { MagnesiumSulfateCalculator } from "@/lib/dosing/calculators/magnesium-sulfate";
 import { MidazolamCalculator } from "@/lib/dosing/calculators/midazolam";
+import { MorphineCalculator } from "@/lib/dosing/calculators/morphine";
 import { NitroglycerinCalculator } from "@/lib/dosing/calculators/nitroglycerin";
 import { OndansetronCalculator } from "@/lib/dosing/calculators/ondansetron";
 import { PralidoximeCalculator } from "@/lib/dosing/calculators/pralidoxime";
@@ -31,6 +32,7 @@ export function createDefaultMedicationManager(): MedicationDosingManager {
   manager.register(new SodiumBicarbonateCalculator());
   manager.register(new MagnesiumSulfateCalculator());
   manager.register(new FentanylCalculator());
+  manager.register(new MorphineCalculator());
   manager.register(new KetorolacCalculator());
   manager.register(new AcetaminophenCalculator());
   manager.register(new MidazolamCalculator());

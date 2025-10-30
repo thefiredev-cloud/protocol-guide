@@ -7,7 +7,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
 
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3001",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
@@ -25,7 +25,7 @@ export default defineConfig({
 
   webServer: {
     command: "npm run dev",
-    port: 3000,
+    port: 3001,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
   },

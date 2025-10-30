@@ -13,8 +13,12 @@ import { CitationService } from "@/lib/services/chat/citation-service";
 import { GuardrailService } from "@/lib/services/chat/guardrail-service";
 import { NarrativeResponseBuilder } from "@/lib/services/chat/narrative-response-builder";
 import { PayloadBuilder } from "@/lib/services/chat/payload-builder";
+import { ProtocolRetrievalService } from "@/lib/services/chat/protocol-retrieval-service";
+import { ProtocolToolManager } from "@/lib/services/chat/protocol-tool-manager";
 import { TriageService } from "@/lib/services/chat/triage-service";
+import { functionCallRateLimiter } from "@/lib/services/chat/function-call-rate-limiter";
 import type { TriageResult } from "@/lib/triage";
+import type { FunctionCallHandler } from "@/lib/managers/llm-client";
 
 type ChatMode = "chat" | "narrative" | undefined;
 
@@ -52,6 +56,7 @@ export class ChatService {
   private readonly citationService: CitationService;
   private readonly guardrailService: GuardrailService;
   private readonly narrativeBuilder: NarrativeResponseBuilder;
+  private readonly protocolRetrievalService = new ProtocolRetrievalService();
 
   constructor(llmClient?: LLMClient) {
     this.llmClient = llmClient ?? new LLMClient({
@@ -90,11 +95,17 @@ export class ChatService {
     profiler.markEnd("retrieval");
     profiler.markStart("payload");
     const intake = this.triageService.buildIntake(triage);
-    const payload = this.payloadBuilder.build(retrieval.context, intake, messages);
+    
+    // Get protocol retrieval tools
+    const tools = ProtocolToolManager.getTools();
+    const payload = this.payloadBuilder.build(retrieval.context, intake, messages, tools);
     profiler.markEnd("payload");
 
     profiler.markStart("llm");
-    const llmResult = await this.llmClient.sendChat(payload);
+    // Create function call handler with rate limiting
+    const functionCallHandler = this.createFunctionCallHandler(sessionId);
+    const rateLimiter = (sid: string) => functionCallRateLimiter.check(sid);
+    const llmResult = await this.llmClient.sendChat(payload, functionCallHandler, sessionId, rateLimiter);
     profiler.markEnd("llm");
     const durationMs = 0; // recorded via profiler histogram
     metrics.observe("llm.roundtripMs", durationMs);
@@ -170,6 +181,13 @@ export class ChatService {
     triage: TriageResult,
     citations: ChatResponse["citations"],
   ): { type: "fallback"; response: ChatResponse } | { type: "success"; text: string } {
+    if (llmResult.type === "function-call") {
+      // This shouldn't happen as function calls should be handled internally
+      // But if it does, fall back
+      this.logger.warn("Unexpected function-call result in guardrail check");
+      return { type: "fallback", response: this.buildFallbackResponse(triage, citations) };
+    }
+
     if (llmResult.type !== "success" || !llmResult.text) {
       this.logger.warn("LLM unavailable, returning fallback", {
         reason: llmResult.type,
@@ -201,6 +219,119 @@ export class ChatService {
       errorMessage: "Guardrail fallback triggered",
     });
     return this.buildFallbackResponse(triage, citations, notes);
+  }
+
+  /**
+   * Create function call handler for protocol retrieval tools
+   */
+  private createFunctionCallHandler(sessionId?: string): FunctionCallHandler {
+    return async (name: string, args: unknown): Promise<unknown> => {
+      const startTime = Date.now();
+      metrics.inc("protocol.tool.calls.total");
+      metrics.inc(`protocol.tool.calls.by_name.${name}`);
+
+      try {
+        switch (name) {
+          case "search_protocols_by_patient_description": {
+            const params = args as {
+              age?: number;
+              sex?: "male" | "female" | "unknown";
+              chiefComplaint: string;
+              symptoms?: string[];
+              vitals?: Record<string, number>;
+              allergies?: string[];
+              medications?: string[];
+              weightKg?: number;
+            };
+            const result = await this.protocolRetrievalService.searchByPatientDescription(params);
+            const latencyMs = Date.now() - startTime;
+            metrics.observe("protocol.tool.latency_ms", latencyMs);
+            metrics.observe("protocol.matches.count", result.protocols.length);
+            if (result.protocols.length > 0) {
+              metrics.observe("protocol.matches.score", result.protocols[0].score);
+            }
+            if (sessionId) {
+              functionCallRateLimiter.recordCall(sessionId, name);
+            }
+            return result;
+          }
+
+          case "search_protocols_by_call_type": {
+            const params = args as { dispatchCode?: string; callType?: string };
+            const result = await this.protocolRetrievalService.searchByCallType(params);
+            const latencyMs = Date.now() - startTime;
+            metrics.observe("protocol.tool.latency_ms", latencyMs);
+            metrics.observe("protocol.matches.count", result.protocols.length);
+            if (result.protocols.length > 0) {
+              metrics.observe("protocol.matches.score", result.protocols[0].score);
+            }
+            if (sessionId) {
+              functionCallRateLimiter.recordCall(sessionId, name);
+            }
+            return result;
+          }
+
+          case "search_protocols_by_chief_complaint": {
+            const params = args as {
+              chiefComplaint: string;
+              painLocation?: string;
+              severity?: "mild" | "moderate" | "severe" | "critical";
+            };
+            const result = await this.protocolRetrievalService.searchByChiefComplaint(params);
+            const latencyMs = Date.now() - startTime;
+            metrics.observe("protocol.tool.latency_ms", latencyMs);
+            metrics.observe("protocol.matches.count", result.protocols.length);
+            if (result.protocols.length > 0) {
+              metrics.observe("protocol.matches.score", result.protocols[0].score);
+            }
+            if (sessionId) {
+              functionCallRateLimiter.recordCall(sessionId, name);
+            }
+            return result;
+          }
+
+          case "get_protocol_by_code": {
+            const params = args as { tpCode: string; includePediatric?: boolean };
+            const result = await this.protocolRetrievalService.getProtocolByCode(params);
+            const latencyMs = Date.now() - startTime;
+            metrics.observe("protocol.tool.latency_ms", latencyMs);
+            metrics.observe("protocol.matches.count", result.protocols.length);
+            if (result.protocols.length > 0) {
+              metrics.observe("protocol.matches.score", result.protocols[0].score);
+            }
+            if (sessionId) {
+              functionCallRateLimiter.recordCall(sessionId, name);
+            }
+            return result;
+          }
+
+          case "get_provider_impressions": {
+            const params = args as { symptoms: string[]; keywords?: string[] };
+            const result = await this.protocolRetrievalService.getProviderImpressions(params);
+            const latencyMs = Date.now() - startTime;
+            metrics.observe("protocol.tool.latency_ms", latencyMs);
+            metrics.observe("protocol.matches.count", result.protocols.length);
+            if (result.protocols.length > 0) {
+              metrics.observe("protocol.matches.score", result.protocols[0].score);
+            }
+            if (sessionId) {
+              functionCallRateLimiter.recordCall(sessionId, name);
+            }
+            return result;
+          }
+
+          default:
+            metrics.inc("protocol.tool.calls.errors");
+            return { error: `Unknown function: ${name}` };
+        }
+      } catch (error) {
+        metrics.inc("protocol.tool.calls.errors");
+        this.logger.error("Function call handler error", { name, error });
+        return {
+          error: error instanceof Error ? error.message : String(error),
+        };
+      }
+    };
   }
 
   private buildFallbackResponse(triage: TriageResult, citations: ChatResponse["citations"], notes?: string[]): ChatResponse {

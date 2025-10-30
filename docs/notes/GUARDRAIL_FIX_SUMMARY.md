@@ -54,4 +54,4 @@ Run the following queries to verify:
 - `/Users/tanner-osterkamp/Medic-Bot/lib/managers/chat-service.ts` (lines 60-61)
 
 ## Documentation
-See `/Users/tanner-osterkamp/Medic-Bot/GUARDRAIL_FIX_REPORT.md` for comprehensive details.
+See `docs/notes/GUARDRAIL_FIX_REPORT.md` for comprehensive details.

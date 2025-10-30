@@ -7,7 +7,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
  */
 export interface UserSettings {
   fontSize: 'normal' | 'large' | 'xlarge';
-  theme: 'dark' | 'light';
+  theme: 'dark' | 'light' | 'sunlight';
   highContrast: boolean;
   reducedMotion: boolean;
 }
@@ -28,7 +28,7 @@ interface SettingsContextType {
  */
 const DEFAULT_SETTINGS: UserSettings = {
   fontSize: 'normal',
-  theme: 'dark',
+  theme: 'light', // Force light mode only
   highContrast: false,
   reducedMotion: false,
 };
@@ -75,7 +75,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
 
       setSettings({
         fontSize: savedFontSize || DEFAULT_SETTINGS.fontSize,
-        theme: savedTheme || DEFAULT_SETTINGS.theme,
+        theme: 'light', // Force light mode only - ignore saved theme
         highContrast: savedHighContrast,
         reducedMotion: localStorage.getItem('reducedMotion') !== null 
           ? savedReducedMotion 
@@ -97,9 +97,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       // Apply font size to body
       document.body.setAttribute('data-font-size', settings.fontSize);
 
-      // Apply theme to body and html
-      document.body.setAttribute('data-theme', settings.theme);
-      document.documentElement.setAttribute('data-theme', settings.theme);
+      // Apply theme to body and html - always use light mode
+      const theme = 'light';
+      document.body.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme);
 
       // Apply high contrast
       if (settings.highContrast) {
@@ -119,7 +120,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
 
       // Save to localStorage
       localStorage.setItem('fontSize', settings.fontSize);
-      localStorage.setItem('theme', settings.theme);
+      localStorage.setItem('theme', 'light'); // Always save light mode
       localStorage.setItem('highContrast', String(settings.highContrast));
       localStorage.setItem('reducedMotion', String(settings.reducedMotion));
     } catch (error) {
@@ -133,7 +134,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       if (e.key === 'fontSize' && e.newValue) {
         setSettings((prev) => ({ ...prev, fontSize: e.newValue as UserSettings['fontSize'] }));
       } else if (e.key === 'theme' && e.newValue) {
-        setSettings((prev) => ({ ...prev, theme: e.newValue as UserSettings['theme'] }));
+        // Ignore theme changes - always use light mode
+        setSettings((prev) => ({ ...prev, theme: 'light' }));
       } else if (e.key === 'highContrast' && e.newValue !== null) {
         setSettings((prev) => ({ ...prev, highContrast: e.newValue === 'true' }));
       } else if (e.key === 'reducedMotion' && e.newValue !== null) {
@@ -154,10 +156,15 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   }, []);
 
   const updateSettings = useCallback((newSettings: Partial<UserSettings>) => {
-    setSettings((prev) => ({
-      ...prev,
-      ...newSettings,
-    }));
+    setSettings((prev) => {
+      const updated = {
+        ...prev,
+        ...newSettings,
+      };
+      // Force theme to always be light
+      updated.theme = 'light';
+      return updated;
+    });
   }, []);
 
   const value: SettingsContextType = {
