@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
 import { KeyboardShortcuts } from '../keyboard-shortcuts';
-import { PWAInstallPrompt } from '../pwa-install-prompt';
 import { SettingsPanel } from '../settings-panel';
 import { MobileNavBar } from './mobile-nav-bar';
 import { OfflineIndicator } from './offline-indicator';
@@ -57,36 +56,39 @@ function RootLayoutInner({ children }: RootLayoutContentProps) {
       <KeyboardShortcuts />
       <SettingsPanel />
       <OfflineIndicator />
-      <PWAInstallPrompt />
       <header className="header-enhanced">
         <div className="header-content-enhanced">
-          <div className="logo-section-enhanced">
-            {/* LA County Fire Badge/Logo placeholder */}
-            <div className="fire-badge" aria-hidden="true">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="20" r="18" stroke="var(--accent)" strokeWidth="2"/>
-                <path d="M20 8L24 16H28L22 22L24 30L20 26L16 30L18 22L12 16H16L20 8Z" fill="var(--accent)"/>
-              </svg>
-            </div>
+          {/* Home Button - CRITICAL FIX */}
+          <a href="/" className="home-button-tablet" aria-label="Return to home" title="Home">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" strokeWidth="2" fill="none"/>
+              <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" strokeWidth="2" fill="none"/>
+            </svg>
+          </a>
+
+          <div className="logo-section-enhanced logo-clickable">
+            {/* LA County Fire Badge/Logo - now clickable for home */}
+            <a href="/" className="fire-badge-link" aria-label="Go to home">
+              <div className="fire-badge" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="20" cy="20" r="18" stroke="var(--accent)" strokeWidth="2"/>
+                  <path d="M20 8L24 16H28L22 22L24 30L20 26L16 30L18 22L12 16H16L20 8Z" fill="var(--accent)"/>
+                </svg>
+              </div>
+            </a>
 
             <div className="title-group">
               <h1 className="app-title-enhanced">
                 <span className="title-primary">Medic-Bot</span>
-                <span className="title-version">v2.0</span>
               </h1>
-              <div className="subtitle-enhanced">
-                <span className="org-name">LA County Fire Department</span>
-                <span className="divider" aria-hidden="true">•</span>
-                <span className="system-type">EMS Decision Support</span>
-              </div>
             </div>
           </div>
 
-          {/* Status indicator for offline/online */}
-          <div className="header-status">
-            <div className="status-indicator" data-status={isOnline === undefined ? 'unknown' : (isOnline ? 'online' : 'offline')}>
+          {/* Status indicator for offline/online - compressed */}
+          <div className="header-status-compact">
+            <div className="status-indicator-compact" data-status={isOnline === undefined ? 'unknown' : (isOnline ? 'online' : 'offline')}>
               <span className="status-dot"></span>
-              <span className="status-text">{isOnline === undefined ? 'Checking...' : (isOnline ? 'Online' : 'Offline')}</span>
+              <span className="status-text-compact">{isOnline === undefined ? '...' : (isOnline ? 'Online' : 'Offline')}</span>
             </div>
           </div>
         </div>

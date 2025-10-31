@@ -1,6 +1,6 @@
 'use client';
 
-import { ClipboardList, MessageCircle, Pill } from 'lucide-react';
+import { ClipboardList, FileText, MessageCircle, Phone, Pill } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function ScenePage() {
@@ -19,36 +19,55 @@ export default function ScenePage() {
     return `${mins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')}`;
   };
 
-  return (
-    <div className="container">
-      <h1>Scene Dashboard</h1>
+  const baseHospitalNumber = '(323) 881-2411';
 
-      <div className="scene-timer">
-        <div className="timer-display">{formatTime(seconds)}</div>
-        <div className="timer-controls">
-          <button onClick={() => setIsRunning(!isRunning)}>
-            {isRunning ? 'Pause' : 'Start'}
-          </button>
-          <button onClick={() => { setSeconds(0); setIsRunning(false); }}>
-            Reset
-          </button>
+  return (
+    <div className="scene-container">
+      <div className="scene-header">
+        <h1 style={{ fontSize: '36px', fontWeight: 800, margin: 0 }}>Scene Dashboard</h1>
+        <div className="scene-timer-compact">
+          <div className="timer-display-large">{formatTime(seconds)}</div>
+          <div className="timer-controls-inline">
+            <button onClick={() => setIsRunning(!isRunning)} style={{ minHeight: '56px', fontSize: '18px', fontWeight: 700, padding: '0 28px', borderRadius: '12px' }}>
+              {isRunning ? 'Pause' : 'Start'}
+            </button>
+            <button onClick={() => { setSeconds(0); setIsRunning(false); }} style={{ minHeight: '56px', fontSize: '18px', fontWeight: 700, padding: '0 28px', borderRadius: '12px' }}>
+              Reset
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="scene-grid">
-        <a href="/" className="scene-card">
-          <MessageCircle size={32} strokeWidth={2} className="scene-card-icon" />
-          <span className="scene-card-label">Chat</span>
+      <div className="scene-action-grid">
+        <a href="/" className="scene-action-card">
+          <MessageCircle size={56} strokeWidth={2.5} className="scene-action-icon" />
+          <span className="scene-action-label">Chat</span>
+          <span className="scene-action-description">Protocol guidance</span>
         </a>
-        <a href="/dosing" className="scene-card">
-          <Pill size={32} strokeWidth={2} className="scene-card-icon" />
-          <span className="scene-card-label">Dosing</span>
+        <a href="/dosing" className="scene-action-card">
+          <Pill size={56} strokeWidth={2.5} className="scene-action-icon" />
+          <span className="scene-action-label">Dosing</span>
+          <span className="scene-action-description">Medication calculator</span>
         </a>
-        <a href="/protocols" className="scene-card">
-          <ClipboardList size={32} strokeWidth={2} className="scene-card-icon" />
-          <span className="scene-card-label">Protocols</span>
+        <a href="/protocols" className="scene-action-card">
+          <ClipboardList size={56} strokeWidth={2.5} className="scene-action-icon" />
+          <span className="scene-action-label">Protocols</span>
+          <span className="scene-action-description">Decision trees</span>
+        </a>
+        <a href="#narrative" className="scene-action-card">
+          <FileText size={56} strokeWidth={2.5} className="scene-action-icon" />
+          <span className="scene-action-label">Narrative</span>
+          <span className="scene-action-description">Build report</span>
         </a>
       </div>
+
+      <a href={`tel:${baseHospitalNumber}`} className="base-hospital-button">
+        <Phone size={32} strokeWidth={2.5} />
+        <div className="base-hospital-text">
+          <span className="base-hospital-label">Base Hospital</span>
+          <span className="base-hospital-number">{baseHospitalNumber}</span>
+        </div>
+      </a>
     </div>
   );
 }

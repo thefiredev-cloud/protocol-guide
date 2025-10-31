@@ -35,7 +35,7 @@ class KnowledgeBaseInitializer {
   public async warm(): Promise<KnowledgeBaseStatus> {
     if (this.status.loaded) return this.status;
 
-    const env = EnvironmentManager.load();
+    const env = EnvironmentManager.loadSafe();
     const docs = await this.getManager().load();
     // Ensure retrieval subsystem is initialized for downstream services/tests
     try {

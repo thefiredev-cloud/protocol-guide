@@ -33,7 +33,7 @@ export class RetrievalManager {
   constructor(options?: { defaultLimit?: number }) {
     this.defaultLimit = options?.defaultLimit ?? 6;
     this.markdownPreprocessor = new MarkdownPreprocessor();
-    this.env = EnvironmentManager.load();
+    this.env = EnvironmentManager.loadSafe();
   }
 
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {

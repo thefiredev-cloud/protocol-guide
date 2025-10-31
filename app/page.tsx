@@ -5,6 +5,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 
 import { ChatInputRow } from "@/app/components/chat-input-row";
 import { ChatList } from "@/app/components/chat-list";
+import { WelcomeHero } from "@/app/components/welcome-hero";
 import { usePageController } from "@/app/hooks/use-page-controller";
 import type { ChatMessage } from "@/app/types/chat";
 
@@ -93,15 +94,25 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
     };
   }, [oneHandedMode]);
 
+  // Show welcome hero when only the initial assistant message exists (no user interaction yet)
+  const showWelcome = controller.chat.messages.length <= 1;
+
   return (
     <div className="container">
-      <ChatList
-        messages={controller.chat.messages}
-        onProtocolSelect={controller.sendProtocolSelection}
-        onExampleSelect={handleExampleSelect}
-        errorBanner={controller.errorBanner}
-      />
-      <Suspense
+      {showWelcome ? (
+        <WelcomeHero
+          onProtocolSelect={handleProtocolSelect}
+          onExampleSelect={handleExampleSelect}
+        />
+      ) : (
+        <>
+          <ChatList
+            messages={controller.chat.messages}
+            onProtocolSelect={controller.sendProtocolSelection}
+            onExampleSelect={handleExampleSelect}
+            errorBanner={controller.errorBanner}
+          />
+          <Suspense
         fallback={
           <div className="skeleton skeleton-narrative">
             <div className="skeleton-line skeleton-title" />
@@ -120,29 +131,31 @@ function ChatExperience({ controller }: { controller: ReturnType<typeof usePageC
           recentOrders={controller.narrative.recentOrders}
           onBuildNarrative={controller.buildNarrative}
         />
-      </Suspense>
-      <div ref={controller.endRef} />
+          </Suspense>
+          <div ref={controller.endRef} />
 
-      {/* One-handed mode toggle button */}
-      <button
-        type="button"
-        onClick={toggleOneHandedMode}
-        className={`one-handed-toggle ${oneHandedMode ? "active" : ""}`}
-        aria-label={oneHandedMode ? "Disable one-handed mode" : "Enable one-handed mode"}
-        title={oneHandedMode ? "Disable One-Handed Mode" : "Enable One-Handed Mode"}
-      >
-        <Hand size={24} strokeWidth={2} />
-      </button>
+          {/* One-handed mode toggle button */}
+          <button
+            type="button"
+            onClick={toggleOneHandedMode}
+            className={`one-handed-toggle ${oneHandedMode ? "active" : ""}`}
+            aria-label={oneHandedMode ? "Disable one-handed mode" : "Enable one-handed mode"}
+            title={oneHandedMode ? "Disable One-Handed Mode" : "Enable One-Handed Mode"}
+          >
+            <Hand size={24} strokeWidth={2} />
+          </button>
 
-      {/* Quick Actions Bar */}
-      <Suspense fallback={null}>
-        <QuickActionsBar carePlan={controller.narrative.carePlan} onCallBase={handleCallBase} />
-      </Suspense>
+          {/* Quick Actions Bar */}
+          <Suspense fallback={null}>
+            <QuickActionsBar carePlan={controller.narrative.carePlan} onCallBase={handleCallBase} />
+          </Suspense>
 
-      {/* Quick Access Features */}
-      <Suspense fallback={null}>
-        <QuickAccessFeatures onSelectProtocol={handleProtocolSelect} />
-      </Suspense>
+          {/* Quick Access Features */}
+          <Suspense fallback={null}>
+            <QuickAccessFeatures onSelectProtocol={handleProtocolSelect} />
+          </Suspense>
+        </>
+      )}
 
       <ChatInputRow
         input={controller.chat.input}

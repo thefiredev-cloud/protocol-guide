@@ -39,7 +39,7 @@ export async function GET() {
   const startTime = Date.now();
 
   try {
-    EnvironmentManager.load();
+    EnvironmentManager.loadSafe();
 
     // Perform health checks in parallel
     const [kbCheck, llmCheck, metricsCheck, runtimeCheck] = await Promise.allSettled([

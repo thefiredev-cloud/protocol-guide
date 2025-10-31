@@ -3,8 +3,8 @@ import { z } from "zod";
 const schema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   LLM_API_KEY: z
-    .string({ required_error: "LLM_API_KEY is required" })
-    .min(1, { message: "LLM_API_KEY is required" }),
+    .string({ required_error: "LLM_API_KEY is required. Please add it to your .env.local file." })
+    .min(1, { message: "LLM_API_KEY is required. Please add it to your .env.local file." }),
   LLM_BASE_URL: z.string().url("LLM_BASE_URL must be a valid URL").optional(),
   LLM_MODEL: z.string().min(1).default("gpt-4o-mini"),
   KB_SCOPE: z
@@ -95,6 +95,53 @@ export class EnvironmentManager {
     }
 
     return EnvironmentManager.cached;
+  }
+
+  /**
+   * Safe load that handles errors gracefully in production
+   * Throws only in development to catch configuration issues early
+   * In production, returns fallback config and logs errors for monitoring
+   */
+  public static loadSafe(): EnvironmentConfig {
+    try {
+      return EnvironmentManager.load();
+    } catch (error) {
+      const isDevelopment = process.env.NODE_ENV === "development";
+      const errorMessage = error instanceof Error ? error.message : String(error);
+
+      // In development, throw to catch config issues early
+      if (isDevelopment) {
+        throw error;
+      }
+
+      // In production, log error and return minimal fallback
+      // This prevents user-facing errors while maintaining functionality
+      console.error(`[EnvironmentManager] Configuration error (production fallback): ${errorMessage}`);
+
+      // Return minimal fallback config for production
+      // This allows the app to function even if some env vars are missing
+      return {
+        NODE_ENV: "production",
+        LLM_API_KEY: "", // Will be caught by LLMClient as unavailable
+        LLM_BASE_URL: process.env.LLM_BASE_URL ?? "https://api.openai.com/v1",
+        LLM_MODEL: process.env.LLM_MODEL ?? "gpt-4o-mini",
+        KB_SCOPE: "pcm",
+        KB_SOURCE: "clean",
+        KB_DATA_PATH: process.env.KB_DATA_PATH,
+        KB_REMOTE_URL: process.env.KB_REMOTE_URL,
+        KB_REMOTE_BASE_URL: process.env.KB_REMOTE_BASE_URL,
+        ENABLE_MARKDOWN_PREPROCESSING: false,
+        MARKDOWN_CHUNK_SIZE: 2000,
+        MARKDOWN_CONTEXT_LIMIT: 12000,
+        llmBaseUrl: process.env.LLM_BASE_URL ?? "https://api.openai.com/v1",
+        llmModel: process.env.LLM_MODEL ?? "gpt-4o-mini",
+        kbScope: "pcm",
+        kbSource: "clean",
+        enableMarkdownPreprocessing: false,
+        markdownChunkSize: 2000,
+        markdownContextLimit: 12000,
+      };
+    }
   }
 
   public static diagnostics(): EnvironmentDiagnostics {

@@ -38,41 +38,66 @@
   cursor: not-allowed;
 }
 
-/* Voice Button Styling */
+/* Voice Button Styling - Enhanced for Tablet */
 .action-button.voice-button {
   position: relative;
-  width: 52px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   display: grid;
   place-items: center;
   background: var(--surface-elevated);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  color: var(--text-secondary);
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action-button.voice-button svg {
+  width: 28px;
+  height: 28px;
 }
 
 .action-button.voice-button:hover:not(:disabled) {
   border-color: #C41E3A;
   color: #C41E3A;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(196, 30, 58, 0.25);
 }
 
 .action-button.voice-button.listening {
   background: #C41E3A;
   color: #ffffff;
   border-color: #A01A2E;
+  animation: voicePulse 1.5s infinite;
+  box-shadow: 0 0 0 8px rgba(196, 30, 58, 0.2);
 }
 
 .action-button.voice-button.listening .voice-recording-indicator {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   background: currentColor;
   border-radius: 50%;
-  top: 6px;
-  right: 6px;
-  animation: pulse 2s infinite;
+  top: 8px;
+  right: 8px;
+  animation: pulse 1s infinite;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes voicePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(196, 30, 58, 0);
+  }
 }
 
 /* Dropdown Toggle Icon */
@@ -166,6 +191,76 @@
   }
 }
 
+/* SIMPLIFIED ACTION BAR - No Dropdowns for Tablet */
+.inputActions.expanded-controls-simplified {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+/* Send Button - Tablet Optimized */
+.action-button.send-button-tablet {
+  flex: 1;
+  max-width: 200px;
+  height: 56px;
+  background: #C41E3A;
+  color: white;
+  gap: 10px;
+}
+
+.action-button.send-button-tablet:hover:not(:disabled) {
+  background: #A01A2E;
+}
+
+/* Voice Button - Tablet Optimized (Circular) */
+.action-button.voice-button-tablet {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.action-button.voice-button-tablet:hover:not(:disabled) {
+  border-color: #C41E3A;
+  color: #C41E3A;
+  transform: scale(1.08);
+}
+
+.action-button.voice-button-tablet.listening {
+  background: #C41E3A;
+  color: white;
+  border-color: #A01A2E;
+  animation: voicePulse 1.5s infinite;
+}
+
+/* Narrative Button - Tablet Optimized */
+.action-button.narrative-button-tablet {
+  flex: 1;
+  max-width: 200px;
+  height: 56px;
+  background: #C41E3A;
+  color: white;
+  gap: 10px;
+}
+
+.action-button.narrative-button-tablet:hover:not(:disabled) {
+  background: #A01A2E;
+}
+
+.button-label {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 /* Desktop Layout */
 @media (min-width: 768px) {
   .inputActions.expanded-controls {
@@ -173,6 +268,12 @@
     gap: 12px;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  .inputActions.expanded-controls-simplified {
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .button-group {

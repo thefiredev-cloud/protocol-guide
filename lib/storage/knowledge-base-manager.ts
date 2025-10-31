@@ -42,7 +42,7 @@ export class KnowledgeBaseManager {
   private static cache: KnowledgeBaseAsset[] | null = null;
   private static resolutionState: KnowledgeBaseResolutionState = { lastSource: null, attempts: [] };
   private readonly options?: KnowledgeBaseSourceOptions;
-  private readonly env = EnvironmentManager.load();
+  private readonly env = EnvironmentManager.loadSafe();
 
   constructor(options?: KnowledgeBaseSourceOptions) {
     this.options = options;

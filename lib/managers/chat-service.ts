@@ -47,7 +47,7 @@ export type ChatResponse = {
 };
 
 export class ChatService {
-  private readonly env = EnvironmentManager.load();
+  private readonly env = EnvironmentManager.loadSafe();
   private readonly retrieval = new RetrievalManager();
   private readonly logger = createLogger("ChatService");
   private readonly llmClient: LLMClient;
