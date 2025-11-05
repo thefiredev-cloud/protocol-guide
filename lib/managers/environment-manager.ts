@@ -70,9 +70,17 @@ export type EnvironmentDiagnostics = {
   };
 };
 
+/**
+ * Manages environment configuration loading and validation
+ * Provides singleton access to validated environment variables
+ */
 export class EnvironmentManager {
   private static cached: EnvironmentConfig | null = null;
 
+  /**
+   * Load and validate environment configuration
+   * Throws error if required variables are missing or invalid
+   */
   public static load(): EnvironmentConfig {
     if (!EnvironmentManager.cached) {
       const parsed = schema.safeParse(process.env);
@@ -144,6 +152,10 @@ export class EnvironmentManager {
     }
   }
 
+  /**
+   * Get environment diagnostics for troubleshooting
+   * Returns configuration details without exposing sensitive values
+   */
   public static diagnostics(): EnvironmentDiagnostics {
     const env = EnvironmentManager.load();
     return {
@@ -163,6 +175,9 @@ export class EnvironmentManager {
     };
   }
 
+  /**
+   * Reset cached environment configuration (for testing)
+   */
   public static reset(): void {
     EnvironmentManager.cached = null;
   }

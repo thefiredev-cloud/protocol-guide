@@ -24,6 +24,17 @@ export type ApiHandlerOptions<TInput> = {
 
 type HandlerResult = Response | NextResponse;
 
+/**
+ * Higher-order function that wraps API route handlers with:
+ * - Request validation using Zod schemas
+ * - Rate limiting with fingerprinting and reputation tracking
+ * - Error handling with standardized error responses
+ * - Audit logging for security compliance
+ *
+ * @param handler - The async route handler function
+ * @param options - Configuration for validation, rate limiting, and auditing
+ * @returns Wrapped handler with middleware applied
+ */
 export function withApiHandler<TInput = unknown>(
   handler: (input: TInput, req: NextRequest) => Promise<HandlerResult> | HandlerResult,
   options: ApiHandlerOptions<TInput> = {},

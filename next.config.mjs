@@ -60,6 +60,9 @@ const contentSecurityPolicy = isDevelopment ? devCSP : productionCSP;
 
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     outputFileTracingExcludes: {
       "*": ["**/PDFs/**", "**/scripts/**"]

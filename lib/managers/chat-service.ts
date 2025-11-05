@@ -4,21 +4,21 @@ import { createLogger } from "@/lib/log";
 import type { CarePlan } from "@/lib/managers/CarePlanManager";
 import { EnvironmentManager } from "@/lib/managers/environment-manager";
 import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
+import type { FunctionCallHandler } from "@/lib/managers/llm-client";
 import { LLMClient } from "@/lib/managers/llm-client";
 import { metrics } from "@/lib/managers/metrics-manager";
 import { RetrievalManager } from "@/lib/managers/RetrievalManager";
 import { initializeKnowledgeBase } from "@/lib/retrieval";
 import { ChatProfiler } from "@/lib/services/chat/chat-profiler";
 import { CitationService } from "@/lib/services/chat/citation-service";
+import { functionCallRateLimiter } from "@/lib/services/chat/function-call-rate-limiter";
 import { GuardrailService } from "@/lib/services/chat/guardrail-service";
 import { NarrativeResponseBuilder } from "@/lib/services/chat/narrative-response-builder";
 import { PayloadBuilder } from "@/lib/services/chat/payload-builder";
 import { ProtocolRetrievalService } from "@/lib/services/chat/protocol-retrieval-service";
 import { ProtocolToolManager } from "@/lib/services/chat/protocol-tool-manager";
 import { TriageService } from "@/lib/services/chat/triage-service";
-import { functionCallRateLimiter } from "@/lib/services/chat/function-call-rate-limiter";
 import type { TriageResult } from "@/lib/triage";
-import type { FunctionCallHandler } from "@/lib/managers/llm-client";
 
 type ChatMode = "chat" | "narrative" | undefined;
 
@@ -80,70 +80,188 @@ export class ChatService {
     await initializeKnowledgeBase();
   }
 
+  /**
+   * Handle chat request - main entry point
+   */
   public async handle({ messages, mode, userId, sessionId, ipAddress, userAgent }: ChatRequest): Promise<ChatResponse> {
+    const requestStart = Date.now();
     await this.warm();
     metrics.inc("chat.sessions");
     const profiler = new ChatProfiler();
 
     const latestUser = this.getLatestUserMessage(messages);
+    const { triage, retrieval, profiler: updatedProfiler } = await this.performTriageAndRetrieval(latestUser, profiler);
+    const { llmResult, citations, durationMs } = await this.invokeLLM({
+      messages,
+      triage,
+      retrieval,
+      sessionId,
+      profiler: updatedProfiler,
+      requestStart,
+    });
+
+    return this.processLLMResponse({
+      llmResult,
+      triage,
+      citations,
+      latestUser,
+      mode,
+      userId,
+      sessionId,
+      ipAddress,
+      userAgent,
+      durationMs,
+      profiler: updatedProfiler,
+    });
+  }
+
+  /**
+   * Perform triage and protocol retrieval
+   */
+  private async performTriageAndRetrieval(latestUser: string, profiler: ChatProfiler) {
     profiler.markStart("triage");
     const triage = this.triageService.build(latestUser);
     profiler.markEnd("triage");
+
     profiler.markStart("retrieval");
     const searchQuery = this.triageService.buildSearchQuery(latestUser, triage);
     const retrieval = await this.retrieval.search({ rawText: searchQuery, maxChunks: 6 });
     profiler.markEnd("retrieval");
+
+    return { triage, retrieval, profiler };
+  }
+
+  /**
+   * Invoke LLM with protocol context
+   */
+  private async invokeLLM(args: {
+    messages: ChatMessage[];
+    triage: TriageResult;
+    retrieval: Awaited<ReturnType<RetrievalManager["search"]>>;
+    sessionId?: string;
+    profiler: ChatProfiler;
+    requestStart: number;
+  }) {
+    const { messages, triage, retrieval, sessionId, profiler, requestStart } = args;
     profiler.markStart("payload");
     const intake = this.triageService.buildIntake(triage);
-    
-    // Get protocol retrieval tools
     const tools = ProtocolToolManager.getTools();
     const payload = this.payloadBuilder.build(retrieval.context, intake, messages, tools);
     profiler.markEnd("payload");
 
     profiler.markStart("llm");
-    // Create function call handler with rate limiting
     const functionCallHandler = this.createFunctionCallHandler(sessionId);
     const rateLimiter = (sid: string) => functionCallRateLimiter.check(sid);
+    const llmStart = Date.now();
     const llmResult = await this.llmClient.sendChat(payload, functionCallHandler, sessionId, rateLimiter);
+    const llmDurationMs = Date.now() - llmStart;
     profiler.markEnd("llm");
-    const durationMs = 0; // recorded via profiler histogram
-    metrics.observe("llm.roundtripMs", durationMs);
+    metrics.observe("llm.roundtripMs", llmDurationMs);
+
     const citations = this.citationService.build(retrieval.hits, triage);
+    const durationMs = Date.now() - requestStart;
+
+    return { llmResult, citations, durationMs };
+  }
+
+  /**
+   * Process LLM response and apply guardrails
+   */
+  private async processLLMResponse(args: {
+    llmResult: Awaited<ReturnType<LLMClient["sendChat"]>>;
+    triage: TriageResult;
+    citations: ChatResponse["citations"];
+    latestUser: string;
+    mode?: ChatMode;
+    userId?: string;
+    sessionId?: string;
+    ipAddress?: string;
+    userAgent?: string;
+    durationMs: number;
+    profiler: ChatProfiler;
+  }): Promise<ChatResponse> {
+    const { llmResult, triage, citations, latestUser, mode, userId, sessionId, ipAddress, userAgent, durationMs, profiler } = args;
+
     profiler.markStart("guardrail");
     const guardrailOutcome = this.guardrailManagerCheck(llmResult, triage, citations);
     profiler.markEnd("guardrail");
 
-    // Extract protocol references for audit log
-    const protocolsReferenced = triage.matchedProtocols
-      .slice(0, 3)
-      .map((p) => `${p.tp_code} - ${p.tp_name}`);
+    const protocolsReferenced = this.extractProtocolReferences(triage);
 
+    // Handle guardrail fallback
     if (guardrailOutcome.type === "fallback") {
-      // Log failed/fallback protocol query
-      await auditLogger.logProtocolQuery({
-        userId,
-        sessionId,
-        query: latestUser,
-        protocolsReferenced,
-        outcome: "failure",
-        ipAddress,
-        userAgent,
-        durationMs,
-        errorMessage: "Guardrail fallback triggered",
-      });
-      return guardrailOutcome.response;
+      return this.handleGuardrailFallback({ latestUser, triage, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, response: guardrailOutcome.response });
     }
 
-    // Apply non-critical corrections while preserving notes
-    const evaluated = this.guardrailService.evaluate(guardrailOutcome.type === "success" ? guardrailOutcome.text : null);
+    // Evaluate response
+    const evaluated = this.guardrailService.evaluate(guardrailOutcome.text);
     if (evaluated.type === "fallback") {
       return this.buildFallbackAndAudit({ latestUser, triage, citations, userId, sessionId, ipAddress, userAgent, durationMs, notes: evaluated.notes });
     }
+
+    return this.buildSuccessResponse({ evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, profiler });
+  }
+
+  /**
+   * Extract protocol references for audit logging
+   */
+  private extractProtocolReferences(triage: TriageResult): string[] {
+    return triage.matchedProtocols
+      .slice(0, 3)
+      .map((p) => `${p.tp_code} - ${p.tp_name}`);
+  }
+
+  /**
+   * Handle guardrail fallback with audit logging
+   */
+  private async handleGuardrailFallback(args: {
+    latestUser: string;
+    triage: TriageResult;
+    protocolsReferenced: string[];
+    userId?: string;
+    sessionId?: string;
+    ipAddress?: string;
+    userAgent?: string;
+    durationMs: number;
+    response: ChatResponse;
+  }): Promise<ChatResponse> {
+    const { latestUser, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, response } = args;
+    await auditLogger.logProtocolQuery({
+      userId,
+      sessionId,
+      query: latestUser,
+      protocolsReferenced,
+      outcome: "failure",
+      ipAddress,
+      userAgent,
+      durationMs,
+      errorMessage: "Guardrail fallback triggered",
+    });
+    return response;
+  }
+
+  /**
+   * Build success response with audit logging
+   */
+  private async buildSuccessResponse(args: {
+    evaluated: { text: string; notes: string[]; dosingIssues?: string[] };
+    triage: TriageResult;
+    citations: ChatResponse["citations"];
+    mode?: ChatMode;
+    latestUser: string;
+    protocolsReferenced: string[];
+    userId?: string;
+    sessionId?: string;
+    ipAddress?: string;
+    userAgent?: string;
+    durationMs: number;
+    profiler: ChatProfiler;
+  }): Promise<ChatResponse> {
+    const { evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, profiler } = args;
+
     const text = evaluated.text;
     const notes = [...evaluated.notes, ...(evaluated.dosingIssues ?? [])];
 
-    // Log successful protocol query
     await auditLogger.logProtocolQuery({
       userId,
       sessionId,
@@ -231,99 +349,12 @@ export class ChatService {
       metrics.inc(`protocol.tool.calls.by_name.${name}`);
 
       try {
-        switch (name) {
-          case "search_protocols_by_patient_description": {
-            const params = args as {
-              age?: number;
-              sex?: "male" | "female" | "unknown";
-              chiefComplaint: string;
-              symptoms?: string[];
-              vitals?: Record<string, number>;
-              allergies?: string[];
-              medications?: string[];
-              weightKg?: number;
-            };
-            const result = await this.protocolRetrievalService.searchByPatientDescription(params);
-            const latencyMs = Date.now() - startTime;
-            metrics.observe("protocol.tool.latency_ms", latencyMs);
-            metrics.observe("protocol.matches.count", result.protocols.length);
-            if (result.protocols.length > 0) {
-              metrics.observe("protocol.matches.score", result.protocols[0].score);
-            }
-            if (sessionId) {
-              functionCallRateLimiter.recordCall(sessionId, name);
-            }
-            return result;
-          }
-
-          case "search_protocols_by_call_type": {
-            const params = args as { dispatchCode?: string; callType?: string };
-            const result = await this.protocolRetrievalService.searchByCallType(params);
-            const latencyMs = Date.now() - startTime;
-            metrics.observe("protocol.tool.latency_ms", latencyMs);
-            metrics.observe("protocol.matches.count", result.protocols.length);
-            if (result.protocols.length > 0) {
-              metrics.observe("protocol.matches.score", result.protocols[0].score);
-            }
-            if (sessionId) {
-              functionCallRateLimiter.recordCall(sessionId, name);
-            }
-            return result;
-          }
-
-          case "search_protocols_by_chief_complaint": {
-            const params = args as {
-              chiefComplaint: string;
-              painLocation?: string;
-              severity?: "mild" | "moderate" | "severe" | "critical";
-            };
-            const result = await this.protocolRetrievalService.searchByChiefComplaint(params);
-            const latencyMs = Date.now() - startTime;
-            metrics.observe("protocol.tool.latency_ms", latencyMs);
-            metrics.observe("protocol.matches.count", result.protocols.length);
-            if (result.protocols.length > 0) {
-              metrics.observe("protocol.matches.score", result.protocols[0].score);
-            }
-            if (sessionId) {
-              functionCallRateLimiter.recordCall(sessionId, name);
-            }
-            return result;
-          }
-
-          case "get_protocol_by_code": {
-            const params = args as { tpCode: string; includePediatric?: boolean };
-            const result = await this.protocolRetrievalService.getProtocolByCode(params);
-            const latencyMs = Date.now() - startTime;
-            metrics.observe("protocol.tool.latency_ms", latencyMs);
-            metrics.observe("protocol.matches.count", result.protocols.length);
-            if (result.protocols.length > 0) {
-              metrics.observe("protocol.matches.score", result.protocols[0].score);
-            }
-            if (sessionId) {
-              functionCallRateLimiter.recordCall(sessionId, name);
-            }
-            return result;
-          }
-
-          case "get_provider_impressions": {
-            const params = args as { symptoms: string[]; keywords?: string[] };
-            const result = await this.protocolRetrievalService.getProviderImpressions(params);
-            const latencyMs = Date.now() - startTime;
-            metrics.observe("protocol.tool.latency_ms", latencyMs);
-            metrics.observe("protocol.matches.count", result.protocols.length);
-            if (result.protocols.length > 0) {
-              metrics.observe("protocol.matches.score", result.protocols[0].score);
-            }
-            if (sessionId) {
-              functionCallRateLimiter.recordCall(sessionId, name);
-            }
-            return result;
-          }
-
-          default:
-            metrics.inc("protocol.tool.calls.errors");
-            return { error: `Unknown function: ${name}` };
+        const result = await this.dispatchFunctionCall(name, args);
+        this.recordToolMetrics(startTime, result);
+        if (sessionId) {
+          functionCallRateLimiter.recordCall(sessionId, name);
         }
+        return result;
       } catch (error) {
         metrics.inc("protocol.tool.calls.errors");
         this.logger.error("Function call handler error", { name, error });
@@ -332,6 +363,96 @@ export class ChatService {
         };
       }
     };
+  }
+
+  /**
+   * Dispatch function call to appropriate protocol retrieval service method
+   */
+  private async dispatchFunctionCall(name: string, args: unknown): Promise<unknown> {
+    switch (name) {
+      case "search_protocols_by_patient_description":
+        return this.handlePatientDescriptionSearch(args);
+      case "search_protocols_by_call_type":
+        return this.handleCallTypeSearch(args);
+      case "search_protocols_by_chief_complaint":
+        return this.handleChiefComplaintSearch(args);
+      case "get_protocol_by_code":
+        return this.handleProtocolByCode(args);
+      case "get_provider_impressions":
+        return this.handleProviderImpressions(args);
+      default:
+        metrics.inc("protocol.tool.calls.errors");
+        return { error: `Unknown function: ${name}` };
+    }
+  }
+
+  /**
+   * Handle patient description search
+   */
+  private async handlePatientDescriptionSearch(args: unknown): Promise<unknown> {
+    const params = args as {
+      age?: number;
+      sex?: "male" | "female" | "unknown";
+      chiefComplaint: string;
+      symptoms?: string[];
+      vitals?: Record<string, number>;
+      allergies?: string[];
+      medications?: string[];
+      weightKg?: number;
+    };
+    return this.protocolRetrievalService.searchByPatientDescription(params);
+  }
+
+  /**
+   * Handle call type search
+   */
+  private async handleCallTypeSearch(args: unknown): Promise<unknown> {
+    const params = args as { dispatchCode?: string; callType?: string };
+    return this.protocolRetrievalService.searchByCallType(params);
+  }
+
+  /**
+   * Handle chief complaint search
+   */
+  private async handleChiefComplaintSearch(args: unknown): Promise<unknown> {
+    const params = args as {
+      chiefComplaint: string;
+      painLocation?: string;
+      severity?: "mild" | "moderate" | "severe" | "critical";
+    };
+    return this.protocolRetrievalService.searchByChiefComplaint(params);
+  }
+
+  /**
+   * Handle protocol by code lookup
+   */
+  private async handleProtocolByCode(args: unknown): Promise<unknown> {
+    const params = args as { tpCode: string; includePediatric?: boolean };
+    return this.protocolRetrievalService.getProtocolByCode(params);
+  }
+
+  /**
+   * Handle provider impressions lookup
+   */
+  private async handleProviderImpressions(args: unknown): Promise<unknown> {
+    const params = args as { symptoms: string[]; keywords?: string[] };
+    return this.protocolRetrievalService.getProviderImpressions(params);
+  }
+
+  /**
+   * Record metrics for tool call results
+   */
+  private recordToolMetrics(startTime: number, result: unknown): void {
+    const latencyMs = Date.now() - startTime;
+    metrics.observe("protocol.tool.latency_ms", latencyMs);
+
+    if (result && typeof result === "object" && "protocols" in result) {
+      const protocols = (result as { protocols: unknown[] }).protocols;
+      metrics.observe("protocol.matches.count", protocols.length);
+      if (protocols.length > 0 && "score" in protocols[0]) {
+        metrics.observe("protocol.matches.score", (protocols[0] as { score: number }).score);
+      }
+    }
   }
 
   private buildFallbackResponse(triage: TriageResult, citations: ChatResponse["citations"], notes?: string[]): ChatResponse {

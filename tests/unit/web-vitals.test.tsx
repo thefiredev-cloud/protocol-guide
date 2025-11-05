@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { WebVitals } from '@/app/components/web-vitals';
+import { WebVitals } from '@/app/components/layout/web-vitals';
 
 // Spy helpers
 const mockOnCLS = vi.fn();

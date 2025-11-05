@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { SettingsPanel } from '@/app/components/settings-panel';
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
 import { SettingsProvider, useSettings } from '@/app/contexts/settings-context';
 
 // Test component to trigger settings panel

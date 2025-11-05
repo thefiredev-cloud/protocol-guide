@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { ToastProvider, useToast } from '@/app/components/toast-notification';
+import { ToastProvider, useToast } from '@/app/components/layout/toast-notification';
 
 // Test component to trigger toasts
 function ToastTrigger() {

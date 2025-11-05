@@ -1,0 +1,260 @@
+-- Performance Optimizations for Medic-Bot
+-- Migration: 005_performance_optimizations.sql
+-- Purpose: Optimize database queries and add performance enhancements
+-- Date: October 2025
+
+-- =============================================================================
+-- AUDIT LOG PERFORMANCE OPTIMIZATIONS
+-- =============================================================================
+
+-- Compound index for common audit queries (action + outcome + timestamp)
+CREATE INDEX CONCURRENTLY idx_audit_logs_action_outcome_timestamp
+ON audit_logs(action, outcome, timestamp DESC);
+
+-- Index for IP-based queries (rate limiting)
+CREATE INDEX CONCURRENTLY idx_audit_logs_ip_timestamp
+ON audit_logs(ip_address, timestamp DESC)
+WHERE ip_address IS NOT NULL;
+
+-- Partial index for failed operations (error tracking)
+CREATE INDEX CONCURRENTLY idx_audit_logs_failures
+ON audit_logs(timestamp DESC, error_message)
+WHERE outcome = 'failure' AND error_message IS NOT NULL;
+
+-- Index for duration analysis (performance monitoring)
+CREATE INDEX CONCURRENTLY idx_audit_logs_duration
+ON audit_logs(duration_ms DESC)
+WHERE duration_ms IS NOT NULL AND duration_ms > 0;
+
+-- =============================================================================
+-- MATERIALIZED VIEWS FOR ANALYTICS
+-- =============================================================================
+
+-- Daily performance summary (refreshed hourly)
+CREATE MATERIALIZED VIEW daily_performance_stats AS
+SELECT
+  DATE(timestamp) as date,
+  action,
+  outcome,
+  COUNT(*) as total_requests,
+  AVG(duration_ms) as avg_response_time,
+  PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms) as p95_response_time,
+  PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY duration_ms) as p99_response_time,
+  COUNT(*) FILTER (WHERE outcome = 'failure') as failure_count,
+  ROUND(
+    COUNT(*) FILTER (WHERE outcome = 'success')::numeric /
+    NULLIF(COUNT(*), 0) * 100, 2
+  ) as success_rate_percent
+FROM audit_logs
+WHERE timestamp >= CURRENT_DATE - INTERVAL '30 days'
+  AND duration_ms IS NOT NULL
+GROUP BY DATE(timestamp), action, outcome
+ORDER BY date DESC, action, outcome;
+
+-- Create unique index for concurrent refresh
+CREATE UNIQUE INDEX idx_daily_performance_stats
+ON daily_performance_stats(date, action, outcome);
+
+-- User activity summary (refreshed daily)
+CREATE MATERIALIZED VIEW user_activity_summary AS
+SELECT
+  user_id,
+  DATE(last_activity) as last_active_date,
+  COUNT(*) as total_actions,
+  COUNT(*) FILTER (WHERE outcome = 'success') as successful_actions,
+  AVG(duration_ms) as avg_response_time,
+  MAX(timestamp) as last_action_time,
+  array_agg(DISTINCT action) FILTER (WHERE action IS NOT NULL) as actions_used
+FROM audit_logs
+WHERE user_id IS NOT NULL
+  AND timestamp >= CURRENT_DATE - INTERVAL '90 days'
+GROUP BY user_id, DATE(last_activity);
+
+CREATE UNIQUE INDEX idx_user_activity_summary
+ON user_activity_summary(user_id, last_active_date);
+
+-- =============================================================================
+-- QUERY OPTIMIZATION FUNCTIONS
+-- =============================================================================
+
+-- Function to get recent performance metrics
+CREATE OR REPLACE FUNCTION get_performance_metrics(
+  p_hours INTEGER DEFAULT 24
+)
+RETURNS TABLE (
+  metric_name TEXT,
+  avg_value NUMERIC,
+  min_value NUMERIC,
+  max_value NUMERIC,
+  p95_value NUMERIC,
+  sample_count BIGINT
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    'response_time_ms'::TEXT as metric_name,
+    ROUND(AVG(duration_ms), 2) as avg_value,
+    MIN(duration_ms) as min_value,
+    MAX(duration_ms) as max_value,
+    ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms), 2) as p95_value,
+    COUNT(*) as sample_count
+  FROM audit_logs
+  WHERE timestamp >= NOW() - (p_hours || ' hours')::INTERVAL
+    AND duration_ms IS NOT NULL
+    AND outcome = 'success'
+
+  UNION ALL
+
+  SELECT
+    'success_rate_percent'::TEXT as metric_name,
+    ROUND(
+      COUNT(*) FILTER (WHERE outcome = 'success')::numeric /
+      NULLIF(COUNT(*), 0) * 100, 2
+    ) as avg_value,
+    NULL::NUMERIC, NULL::NUMERIC, NULL::NUMERIC,
+    COUNT(*) as sample_count
+  FROM audit_logs
+  WHERE timestamp >= NOW() - (p_hours || ' hours')::INTERVAL;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to get slow queries for optimization
+CREATE OR REPLACE FUNCTION get_slow_queries(
+  p_threshold_ms INTEGER DEFAULT 3000,
+  p_limit INTEGER DEFAULT 50
+)
+RETURNS TABLE (
+  timestamp TIMESTAMPTZ,
+  action audit_action,
+  resource VARCHAR,
+  duration_ms INTEGER,
+  user_id VARCHAR,
+  ip_address INET
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    a.timestamp,
+    a.action,
+    a.resource,
+    a.duration_ms,
+    a.user_id,
+    a.ip_address
+  FROM audit_logs a
+  WHERE a.duration_ms >= p_threshold_ms
+    AND a.timestamp >= NOW() - INTERVAL '7 days'
+  ORDER BY a.duration_ms DESC
+  LIMIT p_limit;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =============================================================================
+-- AUTOMATED MAINTENANCE
+-- =============================================================================
+
+-- Function to refresh materialized views (call via cron)
+CREATE OR REPLACE FUNCTION refresh_performance_views()
+RETURNS VOID AS $$
+BEGIN
+  -- Refresh materialized views concurrently
+  REFRESH MATERIALIZED VIEW CONCURRENTLY daily_performance_stats;
+  REFRESH MATERIALIZED VIEW CONCURRENTLY user_activity_summary;
+
+  -- Log the refresh operation
+  INSERT INTO audit_logs (action, resource, outcome, metadata)
+  VALUES (
+    'system.startup',
+    'performance_views_refresh',
+    'success',
+    jsonb_build_object(
+      'refreshed_views', ARRAY['daily_performance_stats', 'user_activity_summary'],
+      'refresh_time', NOW()
+    )
+  );
+END;
+$$ LANGUAGE plpgsql;
+
+-- =============================================================================
+-- ADDITIONAL INDEXES FOR COMMON QUERIES
+-- =============================================================================
+
+-- Index for chat queries (most common action)
+CREATE INDEX CONCURRENTLY idx_audit_logs_chat_queries
+ON audit_logs(timestamp DESC, duration_ms)
+WHERE action = 'chat.query' AND duration_ms IS NOT NULL;
+
+-- Index for protocol searches
+CREATE INDEX CONCURRENTLY idx_audit_logs_protocol_searches
+ON audit_logs(resource, timestamp DESC)
+WHERE action IN ('protocol.view', 'protocol.search');
+
+-- Index for dosing calculations
+CREATE INDEX CONCURRENTLY idx_audit_logs_dosing
+ON audit_logs(resource, timestamp DESC)
+WHERE action IN ('dosing.calculate', 'dosing.list');
+
+-- =============================================================================
+-- PARTITIONING SETUP (FOR FUTURE SCALING)
+-- =============================================================================
+
+-- Note: Enable partitioning on audit_logs table when data volume exceeds 100M rows
+-- This migration sets up the foundation for time-based partitioning
+
+-- Function to create monthly partitions (call via cron)
+CREATE OR REPLACE FUNCTION create_audit_log_partition(
+  p_year INTEGER,
+  p_month INTEGER
+)
+RETURNS VOID AS $$
+DECLARE
+  partition_name TEXT;
+  start_date DATE;
+  end_date DATE;
+BEGIN
+  partition_name := format('audit_logs_y%sm%s', p_year, LPAD(p_month::TEXT, 2, '0'));
+  start_date := make_date(p_year, p_month, 1);
+  end_date := start_date + INTERVAL '1 month';
+
+  -- Check if partition already exists
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE c.relname = partition_name AND n.nspname = 'public'
+  ) THEN
+    -- Create partition (commented out until needed for scaling)
+    -- EXECUTE format('CREATE TABLE %I PARTITION OF audit_logs FOR VALUES FROM (%L) TO (%L)',
+    --   partition_name, start_date, end_date);
+    NULL;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- =============================================================================
+-- FINALIZE MIGRATION
+-- =============================================================================
+
+-- Log migration completion
+INSERT INTO audit_logs (action, resource, outcome, metadata)
+VALUES (
+  'system.startup',
+  'migration_005_performance_optimizations',
+  'success',
+  jsonb_build_object(
+    'migration_version', '005',
+    'optimizations_added', ARRAY[
+      'compound_indexes',
+      'materialized_views',
+      'performance_functions',
+      'maintenance_automation',
+      'query_indexes'
+    ],
+    'applied_at', NOW()
+  )
+);
+
+-- Add comments for documentation
+COMMENT ON MATERIALIZED VIEW daily_performance_stats IS 'Daily aggregated performance metrics for the last 30 days. Refreshed hourly.';
+COMMENT ON MATERIALIZED VIEW user_activity_summary IS 'User activity summaries for the last 90 days. Refreshed daily.';
+COMMENT ON FUNCTION get_performance_metrics IS 'Get performance metrics for the specified time period.';
+COMMENT ON FUNCTION get_slow_queries IS 'Identify slow queries above threshold for optimization.';
+COMMENT ON FUNCTION refresh_performance_views IS 'Refresh all performance-related materialized views.';

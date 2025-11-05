@@ -32,15 +32,17 @@ export class FunctionCallRateLimiter {
 
     // New session or expired session
     if (!session || now - session.lastCallAt > this.sessionTtlMs) {
-      this.sessions.set(sessionId, {
-        callCount: 0,
+      const nextSession: SessionState = {
+        callCount: 1,
         firstCallAt: now,
         lastCallAt: now,
-      });
+      };
+      this.sessions.set(sessionId, nextSession);
       metrics.inc("protocol.tool.calls.allowed");
+      metrics.observe("protocol.tool.calls.per_session", nextSession.callCount);
       return {
         allowed: true,
-        remaining: this.maxCallsPerSession,
+        remaining: this.maxCallsPerSession - nextSession.callCount,
         resetAt: now + this.sessionTtlMs,
       };
     }
@@ -144,4 +146,3 @@ if (typeof setInterval !== "undefined") {
     functionCallRateLimiter.cleanup();
   }, 5 * 60 * 1000);
 }
-

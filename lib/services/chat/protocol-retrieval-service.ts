@@ -3,12 +3,12 @@
  * Executes searches using existing RetrievalManager and TriageService.
  */
 
-import type { TriageResult } from "@/lib/triage";
+import { RetrievalManager } from "@/lib/managers/RetrievalManager";
+import type { KBDoc } from "@/lib/retrieval";
+import { searchKB } from "@/lib/retrieval";
 import { triageInput } from "@/lib/triage";
 import { ProtocolMatcher } from "@/lib/triage/protocol-matcher";
-import { RetrievalManager } from "@/lib/managers/RetrievalManager";
-import { searchKB } from "@/lib/retrieval";
-import type { KBDoc } from "@/lib/retrieval";
+
 import { protocolCache } from "./protocol-cache-service";
 
 export type ProtocolSearchResult = {

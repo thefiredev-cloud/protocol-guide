@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PWAInstallPrompt } from '@/app/components/pwa-install-prompt';
+import { PWAInstallPrompt } from '@/app/components/layout/pwa-install-prompt';
 import { createMockBeforeInstallPromptEvent } from '@/tests/utils/test-helpers';
 
 describe('PWAInstallPrompt', () => {

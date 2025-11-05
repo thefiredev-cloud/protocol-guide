@@ -1,6 +1,7 @@
 "use client";
 
-import { DecisionTree, type TreeNode } from "@/app/components/decision-tree";
+import { DecisionTree, type TreeNode } from "@/app/components/protocols/decision-tree";
+import { ScrollProgress } from "@/app/components/ui/scroll-progress";
 
 const traumaNodes: TreeNode[] = [
   // Main entry
@@ -288,7 +289,6 @@ const arrestNodes: TreeNode[] = [
     id: "doa",
     type: "result",
     text: "Dead on Arrival - No Resuscitation",
-    urgency: "Determined",
     baseContact: "Not Required",
     criteria: [
       "Meets Ref 814 Section I - Obvious Death Criteria",
@@ -1921,7 +1921,7 @@ interface CategorySection {
 const categories: CategorySection[] = [
   {
     title: "Cardiac Emergencies",
-    icon: "❤️",
+    icon: "",
     trees: [
       { title: "Cardiac Arrest (Adult) (PCM 1207)", nodes: arrestNodes, startId: "start" },
       { title: "Chest Pain / Acute Coronary Syndrome (PCM 1211)", nodes: chestPainNodes, startId: "start" },
@@ -1929,14 +1929,14 @@ const categories: CategorySection[] = [
   },
   {
     title: "Respiratory Emergencies",
-    icon: "🫁",
+    icon: "",
     trees: [
       { title: "Respiratory Distress (PCM 1233)", nodes: respiratoryNodes, startId: "start" },
     ],
   },
   {
     title: "Neurological Emergencies",
-    icon: "🧠",
+    icon: "",
     trees: [
       { title: "Stroke Assessment & Management (PCM 1235)", nodes: strokeNodes, startId: "start" },
       { title: "Altered Mental Status (PCM 1234)", nodes: alteredMentalStatusNodes, startId: "start" },
@@ -1945,14 +1945,14 @@ const categories: CategorySection[] = [
   },
   {
     title: "Trauma",
-    icon: "🚑",
+    icon: "",
     trees: [
       { title: "Trauma Triage (PCM Ref 506)", nodes: traumaNodes, startId: "start" },
     ],
   },
   {
     title: "Medical Emergencies",
-    icon: "⚕️",
+    icon: "",
     trees: [
       { title: "Anaphylaxis (PCM 1215)", nodes: anaphylaxisNodes, startId: "start" },
       { title: "Diabetic Emergency (PCM 1223)", nodes: diabeticNodes, startId: "start" },
@@ -1962,7 +1962,9 @@ const categories: CategorySection[] = [
 
 export default function ProtocolsPage() {
   return (
-    <div style={{ display: "grid", gap: 48, padding: 24, paddingBottom: 120, maxWidth: "1400px", margin: "0 auto" }}>
+    <>
+      <ScrollProgress />
+      <div style={{ display: "grid", gap: 48, padding: 24, paddingBottom: 120, maxWidth: "1400px", margin: "0 auto" }}>
       <div>
         <h1 style={{ fontSize: "48px", fontWeight: 900, margin: "0 0 12px 0", color: "var(--text-primary)" }}>
           LA County Protocol Decision Trees
@@ -2003,8 +2005,8 @@ export default function ProtocolsPage() {
           ))}
         </div>
       ))}
-    </div>
+      </div>
+    </>
   );
 }
-
 

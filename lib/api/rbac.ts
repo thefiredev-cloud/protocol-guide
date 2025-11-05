@@ -39,23 +39,36 @@ export async function requirePermission(
   req: NextRequest,
   permission: string
 ): Promise<PermissionResult> {
+  const env = process.env.NODE_ENV ?? "development";
+  const allowInsecure = (process.env.ALLOW_INSECURE_RBAC ?? "").toLowerCase() === "true";
+
   // In test environment, allow all permissions
-  if (process.env.NODE_ENV === "test") {
+  if (env === "test") {
     return { ok: true };
   }
 
-  // ⚠️ SECURITY WARNING: This allows ALL requests in production
-  // This is intentionally left as a stub for Week 1 demo/pitch purposes only
-  // DO NOT deploy to production without implementing real authentication
+  // Permit local development unless explicitly disabled
+  if (env === "development" || allowInsecure) {
+    console.warn(
+      "[SECURITY] RBAC stub called - allow listed due to development/override. " +
+      "Implement JWT authentication before production deployment."
+    );
+    void req;
+    void permission;
+    return { ok: true };
+  }
 
-  // Parameters intentionally unused in stub - will be used for JWT verification in production
-  void req;
-  void permission;
+  // Block in production-like environments until real authentication lands
+  const message = JSON.stringify({
+    error: "UNAUTHORIZED",
+    message: "RBAC not implemented. Access requires authenticated permissions.",
+  });
 
-  console.warn(
-    '[SECURITY] RBAC stub called - all requests allowed. ' +
-    'Implement JWT authentication before production deployment.'
-  );
-
-  return { ok: true };
+  return {
+    ok: false,
+    error: new Response(message, {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    }),
+  };
 }

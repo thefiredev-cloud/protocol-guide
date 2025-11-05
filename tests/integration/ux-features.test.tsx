@@ -3,10 +3,10 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ErrorBoundary } from '@/app/components/error-boundary';
-import { KeyboardShortcuts } from '@/app/components/keyboard-shortcuts';
-import { SettingsPanel } from '@/app/components/settings-panel';
-import { ToastProvider, useToast } from '@/app/components/toast-notification';
+import { ErrorBoundary } from '@/app/components/layout/error-boundary';
+import { KeyboardShortcuts } from '@/app/components/layout/keyboard-shortcuts';
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
+import { ToastProvider, useToast } from '@/app/components/layout/toast-notification';
 import { triggerKeyboardEvent } from '@/tests/utils/test-helpers';
 
 describe('UX Features Integration', () => {

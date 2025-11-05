@@ -82,7 +82,7 @@
 
   --accent: #c41e3a;
   --accent-hover: #a01a2e;
-  --accent-light: rgba(196, 30, 58, 0.12);
+  --accent-light: rgba(196, 30, 58, 0.18);
 
   --brand: #c41e3a;
   --brand-dark: #a01a2e;
@@ -229,7 +229,7 @@
 [data-theme='sunlight'] .protocol-priority-p2,
 [data-theme='sunlight'] .protocol-priority-p3 {
   border-width: 5px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 [data-theme='sunlight'] .alert-critical,
@@ -272,69 +272,327 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* iPad portrait optimization */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  body {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .protocol-response {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+}
+
 /* Tablet landscape optimization */
 @media (min-width: 768px) and (orientation: landscape) {
   body {
     font-size: 18px;
     line-height: 1.65;
   }
+
+  .protocol-response {
+    font-size: 19px;
+    line-height: 1.7;
+  }
 }
 
-/* Medical data requires monospace for precision */
-/* Protocol Priority Styling */
-.protocol-priority-p1 {
-  color: #ff3b30;
+/* Protocol Header Section - Prominent protocol identification */
+.protocol-header-section {
+  margin: 0 0 24px 0;
+  padding: 16px;
+  background: var(--surface-elevated);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.protocol-badge-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.protocol-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
   font-weight: 700;
-  border-left: 4px solid #ff3b30;
-  padding-left: 12px;
-  margin: 12px 0;
-  background: rgba(255, 59, 48, 0.08);
+  padding: 6px 12px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.protocol-badge-critical {
+  background: rgba(255, 59, 48, 0.15);
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.3);
+}
+
+.protocol-badge-high {
+  background: rgba(255, 149, 0, 0.15);
+  color: #ff9500;
+  border: 1px solid rgba(255, 149, 0, 0.3);
+}
+
+.protocol-urgency-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
   border-radius: 4px;
-  padding: 8px 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.urgency-critical {
+  background: #ff3b30;
+  color: #ffffff;
+}
+
+.urgency-high {
+  background: #ff9500;
+  color: #ffffff;
+}
+
+.protocol-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Numbered Protocol Sections - Enhanced visual hierarchy */
+.numbered-protocol-section {
+  margin-bottom: 32px;
+  padding-bottom: 0;
+}
+
+.protocol-section-header {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 18px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  letter-spacing: -0.02em;
+  padding-top: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--border-subtle);
+}
+
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.protocol-section-content {
+  margin-left: 44px;
+  margin-top: 4px;
+  line-height: 1.7;
+}
+
+.protocol-section-content ul {
+  margin: 14px 0;
+  padding-left: 26px;
+  list-style-type: disc;
+}
+
+.protocol-section-content li {
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+/* Protocol Priority Styling - Enhanced with better visual distinction */
+.protocol-priority-p1 {
+  color: var(--text-primary);
+  font-weight: 600;
+  border-left: 4px solid #ff3b30;
+  padding: 16px;
+  margin: 16px 0;
+  background: rgba(255, 59, 48, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.25);
+  line-height: 1.7;
+}
+
+.protocol-priority-p1::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #ff3b30 0%, #ff6b60 100%);
+  border-radius: 2px;
 }
 
 .protocol-priority-p2 {
-  color: #ff9500;
+  color: var(--text-primary);
   font-weight: 600;
   border-left: 4px solid #ff9500;
-  padding-left: 12px;
-  margin: 12px 0;
-  background: rgba(255, 149, 0, 0.08);
-  border-radius: 4px;
-  padding: 8px 12px;
+  padding: 14px;
+  margin: 14px 0;
+  background: rgba(255, 149, 0, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.25);
+  line-height: 1.7;
 }
 
 .protocol-priority-p3 {
-  color: #ffd60a;
+  color: var(--text-primary);
   font-weight: 600;
   border-left: 4px solid #ffd60a;
-  padding-left: 12px;
+  padding: 12px;
   margin: 12px 0;
-  background: rgba(255, 214, 10, 0.08);
-  border-radius: 4px;
-  padding: 8px 12px;
+  background: rgba(255, 214, 10, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 214, 10, 0.25);
+  line-height: 1.7;
+}
+
+/* Nested lists within priority sections */
+.protocol-priority-p1 ul,
+.protocol-priority-p2 ul,
+.protocol-priority-p3 ul,
+.numbered-protocol-section ul {
+  margin: 8px 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.protocol-priority-p1 li,
+.protocol-priority-p2 li,
+.protocol-priority-p3 li,
+.numbered-protocol-section li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.protocol-priority-p1 li::marker {
+  color: #ff3b30;
+}
+
+.protocol-priority-p2 li::marker {
+  color: #ff9500;
+}
+
+.protocol-priority-p3 li::marker {
+  color: #ffd60a;
+}
+
+/* Thinking Animation - Shows when LLM is processing */
+.thinking-indicator {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  opacity: 0.9;
+  animation: thinking-pulse 2s ease-in-out infinite;
+}
+
+.thinking-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.thinking-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.thinking-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: thinking-bounce 1.4s ease-in-out infinite both;
+}
+
+.thinking-dot:nth-child(1) { animation-delay: -0.32s; }
+.thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+.thinking-dot:nth-child(3) { animation-delay: 0s; }
+
+.thinking-text {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+@keyframes thinking-pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+@keyframes thinking-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Medication Highlighting */
 .medication-highlight {
   color: var(--text-primary);
   font-weight: 600;
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2px 4px;
+  border-radius: 3px;
   font-family: inherit;
 }
 
 .dosing-value {
-  font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+  font-family: inherit;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  font-size: 18px;
-  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Critical medication doses - High-risk drugs requiring red emphasis */
+.dosing-value-critical {
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--accent);
-  background: rgba(255, 59, 48, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Contextual measurements - Volumes, flow rates, counts (de-emphasized) */
+.measurement-value {
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  padding: 1px 3px;
 }
 
 * { box-sizing: border-box; }
@@ -342,7 +600,7 @@ body {
 .container {
   max-width: 860px;
   margin: 0 auto;
-  padding: 104px clamp(20px, 4vw, 36px) 192px;
+  padding: 104px clamp(20px, 4vw, 36px) 280px; /* Space for: input row (~160px) + nav bar (88px offset + 72px height) + margins */
 }
 
 .card {
@@ -362,26 +620,45 @@ body {
   margin-top: 20px;
 }
 
+/* Chat message cards - Design system compliant */
 .msg {
-  padding: 16px 20px;
-  border-radius: 14px;
+  padding: 16px;
+  border-radius: 12px;
   white-space: pre-wrap;
   border: 1px solid var(--border);
   color: var(--text-primary);
-  backdrop-filter: blur(4px);
-  line-height: 1.7;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
 }
 
+.msg:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* User messages - Elevated card with subtle accent */
 .user {
-  background: linear-gradient(180deg, rgba(196, 30, 58, 0.12), rgba(160, 26, 46, 0.18));
-  border-color: rgba(196, 30, 58, 0.3);
+  background: var(--surface-elevated);
+  border-color: rgba(196, 30, 58, 0.2);
+  border-left: 4px solid var(--accent);
   align-self: flex-end;
+  max-width: 80%;
 }
 
+.user-message-content {
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Assistant messages - Protocol information card */
 .assistant {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
-  border-color: var(--border);
+  background: var(--surface);
+  border-color: var(--border-subtle);
   align-self: flex-start;
+  max-width: 100%;
 }
 
 
@@ -389,11 +666,12 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 88px; /* Position above mobile nav bar (72px) + 16px breathing room */
   background: rgba(255, 255, 255, 0.98);
   border-top: 1px solid var(--border);
-  padding: 16px clamp(20px, 4vw, 36px) calc(16px + env(safe-area-inset-bottom, 0));
+  padding: 16px clamp(20px, 4vw, 36px) 16px;
   backdrop-filter: blur(12px);
+  margin-bottom: 0; /* Ensure no extra margin */
 }
 
 .inputInner {
@@ -768,8 +1046,8 @@ button[aria-label*="Menu"],
 
 /* Protocol response typography - Enhanced readability */
 .protocol-response {
-  font-size: 17px;
-  line-height: 1.75;
+  font-size: 18px;
+  line-height: 1.7;
   letter-spacing: 0.01em;
   color: var(--text-primary);
   margin: 16px 0;
@@ -777,19 +1055,18 @@ button[aria-label*="Menu"],
 
 .protocol-response p {
   margin-bottom: 16px;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .protocol-response ul,
 .protocol-response ol {
   margin: 16px 0;
-  padding-left: 28px;
-  line-height: 1.75;
+  padding-left: 24px;
+  line-height: 1.7;
 }
 
 .protocol-response li {
   margin-bottom: 10px;
-  padding-left: 8px;
 }
 
 .protocol-response li::marker {
@@ -813,12 +1090,12 @@ button[aria-label*="Menu"],
   padding-bottom: 0;
 }
 
-/* Focus treatment - Enhanced for better visibility */
+/* Focus treatment - Design system compliant (blue focus, not red) */
 textarea:focus,
 input[type="text"]:focus,
 input[type="number"]:focus {
-  border-color: #C41E3A;
-  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.15);
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
 }
 
 /* Error/Success states */
@@ -1728,7 +2005,7 @@ body.one-handed-mode .quick-actions {
 @media (max-width: 640px) {
   /* Optimize vertical space on mobile */
   .container {
-    padding: 56px 12px 80px;
+    padding: 56px 12px 100px;
     max-width: 100%;
   }
 
@@ -1800,8 +2077,8 @@ body.one-handed-mode .quick-actions {
 
   /* Protocol response mobile adjustments */
   .protocol-response {
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.7;
     margin: 12px 0;
   }
 
@@ -1813,6 +2090,23 @@ body.one-handed-mode .quick-actions {
   .protocol-response ol {
     margin: 12px 0;
     padding-left: 24px;
+  }
+
+  /* Reduce section content indentation on mobile */
+  .protocol-section-content {
+    margin-left: 24px;
+  }
+
+  /* Mobile badge sizing */
+  .section-number {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .protocol-section-header {
+    font-size: 19px;
+    gap: 10px;
   }
 
   /* Improve welcome card on mobile */
@@ -1829,7 +2123,7 @@ body.one-handed-mode .quick-actions {
 
   /* Reduce section margins on mobile */
   .protocol-section {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     padding-bottom: 16px;
   }
 
@@ -2240,6 +2534,29 @@ body.one-handed-mode .quick-actions {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
+.protocol-number-button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.protocol-number-button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Success animation for protocol selection */
+.protocol-number-button.success {
+  animation: pulse-success 0.6s ease-out;
+  background: rgba(48, 209, 88, 0.1);
+  border-color: var(--success);
+}
+
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 .protocol-number {
   font-size: 36px;
   font-weight: 900;
@@ -2294,6 +2611,16 @@ body.one-handed-mode .quick-actions {
 .protocol-quick-button:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.protocol-quick-button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.protocol-quick-button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .quick-button-code {

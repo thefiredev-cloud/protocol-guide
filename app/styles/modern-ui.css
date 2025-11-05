@@ -1,0 +1,490 @@
+/**
+ * MODERN UI SYSTEM - ZERO DEPENDENCIES
+ * Native CSS features for next-generation UX
+ *
+ * Features:
+ * - Glassmorphism design system
+ * - Scroll-driven animations
+ * - View Transitions API
+ * - Container queries
+ * - Modern CSS nesting
+ * - Advanced gradients
+ */
+
+/* ============================================================================
+   GLASSMORPHISM DESIGN SYSTEM
+   ============================================================================ */
+
+/* Base glass effect - frosted backdrop */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Elevated glass - stronger effect for modals */
+.glass-elevated {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Subtle glass - lighter for cards */
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Accent glass - with theme color */
+.glass-accent {
+  background: rgba(255, 59, 48, 0.1);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  box-shadow:
+    0 8px 32px rgba(255, 59, 48, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Blue glass - medical authority */
+.glass-blue {
+  background: rgba(10, 132, 255, 0.1);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(10, 132, 255, 0.2);
+  box-shadow:
+    0 8px 32px rgba(10, 132, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Light theme adaptations */
+[data-theme='light'] .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='light'] .glass-elevated {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ============================================================================
+   MODERN GRADIENTS
+   ============================================================================ */
+
+/* Mesh gradient - multi-point radial */
+.gradient-mesh {
+  background:
+    radial-gradient(at 40% 20%, var(--medical-blue) 0, transparent 50%),
+    radial-gradient(at 80% 0%, var(--accent) 0, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(100, 210, 255, 0.5) 0, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(48, 209, 88, 0.3) 0, transparent 50%),
+    var(--background);
+  background-blend-mode: normal;
+}
+
+/* Medical gradient - brand colors */
+.gradient-medical {
+  background: linear-gradient(135deg,
+    var(--medical-blue) 0%,
+    var(--accent) 100%);
+}
+
+/* Shimmer effect for loading states */
+.gradient-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================================================
+   SCROLL-DRIVEN ANIMATIONS
+   ============================================================================ */
+
+/* Fade + slide up on scroll into view */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale in on scroll */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Blur in effect */
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Apply scroll-driven animations (browsers that support it) */
+@supports (animation-timeline: view()) {
+  .scroll-animate-fade {
+    animation: fadeSlideUp linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+
+  .scroll-animate-scale {
+    animation: scaleIn linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 25%;
+  }
+
+  .scroll-animate-blur {
+    animation: blurIn linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+  }
+}
+
+/* Scroll progress indicator */
+.scroll-progress-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--medical-blue), var(--accent));
+  width: 0;
+  z-index: 9999;
+  box-shadow: 0 0 10px var(--accent);
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-indicator {
+    width: 100%;
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: scroll-progress linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes scroll-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
+/* ============================================================================
+   VIEW TRANSITIONS
+   ============================================================================ */
+
+/* Default page transition */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root) {
+    animation: fade-out 0.3s ease-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: fade-in 0.3s ease-in;
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* Slide transition for specific elements */
+.view-transition-slide {
+  view-transition-name: slide-element;
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(slide-element) {
+    animation: slide-out-left 0.4s ease-out;
+  }
+
+  ::view-transition-new(slide-element) {
+    animation: slide-in-right 0.4s ease-in;
+  }
+
+  @keyframes slide-out-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+}
+
+/* ============================================================================
+   CONTAINER QUERIES
+   ============================================================================ */
+
+.container-responsive {
+  container-type: inline-size;
+}
+
+/* Card adapts based on container width, not viewport */
+@container (min-width: 400px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@container (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================================================
+   MICRO-INTERACTIONS
+   ============================================================================ */
+
+/* Button press effect */
+.btn-press {
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+}
+
+.btn-press:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth hover glow */
+.hover-glow {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, var(--medical-blue), var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+.hover-glow:hover::before {
+  opacity: 0.6;
+}
+
+/* Ripple effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Magnetic button - follows cursor */
+@media (hover: hover) {
+  .magnetic {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .magnetic:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================================================
+   LOADING STATES
+   ============================================================================ */
+
+/* Skeleton loader with pulse */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-elevated) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+}
+
+/* Spinner with medical theme */
+.spinner-medical {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--surface-elevated);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   PARALLAX EFFECTS
+   ============================================================================ */
+
+.parallax-slow {
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .parallax-slow {
+    animation: parallax-transform linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes parallax-transform {
+    to { transform: translateY(-50px); }
+  }
+}
+
+/* ============================================================================
+   POPOVER STYLES (Native Popover API)
+   ============================================================================ */
+
+[popover] {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  margin: auto;
+  max-width: 500px;
+}
+
+[popover]:popover-open {
+  animation: popover-slide-up 0.2s ease-out;
+}
+
+@keyframes popover-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Popover backdrop */
+[popover]::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.2s ease-out;
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scroll-animate-fade,
+  .scroll-animate-scale,
+  .scroll-animate-blur {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Focus visible enhancement */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass,
+  .glass-elevated,
+  .glass-subtle {
+    background: var(--surface);
+    backdrop-filter: none;
+    border-width: 2px;
+  }
+}

@@ -18,6 +18,163 @@ type SynonymRule = {
 };
 
 const SYNONYM_RULES: readonly SynonymRule[] = [
+  // Cardiac - Common colloquial terms
+  {
+    patterns: [/\bheart attack\b/, /\bmi\b(?!\s*miles)/, /\bmyocardial\b/],
+    expansions: ["myocardial infarction", "stemi", "cardiac chest pain", "protocol 1211", "nitroglycerin", "aspirin"],
+  },
+  {
+    patterns: [/\bstemi\b/, /\bchest pain\b/, /\bacs\b/, /\bangina\b/],
+    expansions: ["protocol 1211", "cardiac chest pain", "nitroglycerin", "aspirin", "morphine"],
+  },
+  {
+    patterns: [/\bchf\b/, /\bcongestive heart failure\b/, /\bpulmonary edema\b/, /\bfluid in lungs\b/],
+    expansions: ["protocol 1214", "CHF", "pulmonary edema", "nitroglycerin", "furosemide"],
+  },
+  {
+    patterns: [/\bcardiac arrest\b/, /\bno pulse\b/, /\bpulseless\b/, /\bcode\b(?!\s*3)/, /\bcpr\b/],
+    expansions: ["protocol 1210", "cardiac arrest", "epinephrine", "amiodarone", "CPR"],
+  },
+
+  // Respiratory - Firefighter language
+  {
+    patterns: [/\bcan'?t breathe\b/, /\btrouble breathing\b/, /\bhard to breathe\b/, /\blabored breathing\b/],
+    expansions: ["shortness of breath", "SOB", "dyspnea", "respiratory distress", "protocol 1237"],
+  },
+  {
+    patterns: [/\bbronchospasm\b/, /\bcopd\b/, /\basthma\b/, /\bwheez(?:e|ing)\b/, /\brespiratory distress\b/],
+    expansions: ["shortness of breath", "protocol 1237", "protocol 1233", "albuterol", "nebulizer"],
+  },
+  {
+    patterns: [/\bchoking\b/, /\bairway obstruction\b/, /\bobstructed airway\b/],
+    expansions: ["protocol 1234", "airway obstruction", "foreign body"],
+  },
+
+  // Neurological - Common terms
+  {
+    patterns: [/\bpassed out\b/, /\bblacked out\b/, /\bfainted\b/, /\bsyncope\b/],
+    expansions: ["syncope", "loss of consciousness", "LOC", "protocol 1233", "altered mental status"],
+  },
+  {
+    patterns: [/\bunresponsive\b/, /\bunconscious\b/, /\bloc\b/, /\baltered\b/, /\bconfused\b/],
+    expansions: ["altered mental status", "protocol 1229", "AMS", "ALOC", "unresponsive"],
+  },
+  {
+    patterns: [/\bseizure\b/, /\bseizing\b/, /\bconvuls(?:ion|ing)\b/, /\bpostictal\b/, /\bstatus epilepticus\b/],
+    expansions: ["protocol 1231", "seizure", "benzodiazepine", "midazolam"],
+  },
+  {
+    patterns: [/\bstroke\b/, /\bcva\b/, /\btia\b/, /\bfacial droop\b/, /\bslurred speech\b/, /\bmLAPSS\b/, /\blams\b/],
+    expansions: ["protocol 1232", "stroke assessment", "CVA", "base contact"],
+  },
+
+  // Trauma - Field terminology
+  {
+    patterns: [/\bgsw\b/, /\bgunshot\b/, /\bgun shot\b/, /\bballistic\b/],
+    expansions: ["gunshot wound", "penetrating trauma", "protocol 1244", "trauma triage"],
+  },
+  {
+    patterns: [/\bmvc\b/, /\bmotor vehicle\b/, /\bcar accident\b/, /\bauto accident\b/, /\bcollision\b/],
+    expansions: ["motor vehicle collision", "blunt trauma", "protocol 1244", "trauma triage"],
+  },
+  {
+    patterns: [/\bfall\b/, /\bfell\b/, /\bfalling\b/, /\bfallen\b/],
+    expansions: ["traumatic injury", "fall", "mechanism of injury", "protocol 1244"],
+  },
+  {
+    patterns: [/\btrauma\b/, /\bmechanism\b/, /\bblunt\b/, /\bpenetrating\b/],
+    expansions: ["protocol 1244", "trauma triage", "traumatic injury"],
+  },
+  {
+    patterns: [/\bimpalement|impaled|penetrating\s+injury|penetrating\s+trauma\b/],
+    expansions: ["protocol 1244", "trauma triage", "penetrating trauma"],
+  },
+  {
+    patterns: [/\bcrush\b/, /\bentrapped\b/, /\bentrapment\b/],
+    expansions: ["crush injury", "protocol 1242", "crush syndrome", "hyperkalemia", "sodium bicarbonate"],
+  },
+
+  // GI/Abdominal - Common language
+  {
+    patterns: [/\bbelly pain\b/, /\bstomach pain\b/, /\babdominal pain\b/, /\babdomen\b/, /\btummy\b/],
+    expansions: ["abdominal pain", "GI emergency", "protocol 1205"],
+  },
+  {
+    patterns: [/\bthrowing up\b/, /\bvomiting\b/, /\bpuking\b/, /\bemesis\b/, /\bnausea\b/],
+    expansions: ["nausea", "vomiting", "emesis", "GI emergency", "protocol 1205", "ondansetron"],
+  },
+  {
+    patterns: [/\bgi bleed\b/, /\bbleeding internally\b/, /\bvomiting blood\b/, /\bhematemesis\b/, /\bmelena\b/],
+    expansions: ["GI bleed", "hemorrhage", "protocol 1207", "shock"],
+  },
+
+  // Bleeding/Hemorrhage
+  {
+    patterns: [/\bbleeding out\b/, /\bhemorrhage\b/, /\blost blood\b/, /\bheavy bleeding\b/],
+    expansions: ["hemorrhage", "shock", "hypotension", "protocol 1207", "protocol 1230"],
+  },
+
+  // Allergic/Anaphylaxis
+  {
+    patterns: [/\banaphylaxis\b/, /\ballergic reaction\b/, /\bthroat swelling\b/, /\bangioedema\b/],
+    expansions: ["protocol 1219", "anaphylaxis", "epinephrine", "diphenhydramine"],
+  },
+
+  // OB/GYN - Pregnancy related
+  {
+    patterns: [/\bpregnant\b/, /\bpregnancy\b/, /\bdelivery\b/, /\blabor\b/, /\bcontractions\b/],
+    expansions: ["protocol 1217", "pregnancy complication", "delivery", "eclampsia"],
+  },
+  {
+    patterns: [/\beclampsia\b/, /\bpre-eclampsia\b/, /\bpreeclampsia\b/, /\bseizure.*pregnant\b/],
+    expansions: ["eclampsia", "protocol 1217", "magnesium sulfate", "base contact"],
+  },
+
+  // Overdose/Poisoning
+  {
+    patterns: [/\boverdose\b/, /\bpoison\b/, /\bingestion\b/, /\bopioid\b/],
+    expansions: ["protocol 1241", "overdose", "naloxone", "activated charcoal"],
+  },
+  {
+    patterns: [/\bnarcan\b/],
+    expansions: ["naloxone", "opioid overdose", "protocol 1241"],
+  },
+
+  // Behavioral/Psych
+  {
+    patterns: [/\bbehavioral\b/, /\bagitation\b/, /\bpsych\b/, /\bagitated\b/, /\bviolent\b/],
+    expansions: ["protocol 1209", "behavioral crisis", "psychiatric", "midazolam"],
+  },
+
+  // Diabetic emergencies
+  {
+    patterns: [/\bdiabetic\b/, /\bhypoglycemi\w+\b/, /\bhyperglycemi\w+\b/, /\blow blood sugar\b/, /\bhigh blood sugar\b/],
+    expansions: ["protocol 1203", "diabetic emergency", "hypoglycemia", "dextrose", "glucagon"],
+  },
+
+  // Medication brand names to generic
+  {
+    patterns: [/\bversed\b/],
+    expansions: ["midazolam", "seizure", "sedation", "protocol 1231"],
+  },
+  {
+    patterns: [/\bbenadryl\b/],
+    expansions: ["diphenhydramine", "allergy", "protocol 1219"],
+  },
+  {
+    patterns: [/\bzofran\b/],
+    expansions: ["ondansetron", "nausea", "vomiting", "protocol 1205"],
+  },
+  {
+    patterns: [/\btoradol\b/],
+    expansions: ["ketorolac", "pain management", "protocol 1245"],
+  },
+  {
+    patterns: [/\btylenol\b/],
+    expansions: ["acetaminophen", "pain management", "fever"],
+  },
+
+  // Existing rules (preserved)
   {
     patterns: [
       /\bsodium\s*bi\s*carb\b/,
@@ -26,10 +183,6 @@ const SYNONYM_RULES: readonly SynonymRule[] = [
       /\bnahco3\b/,
     ],
     expansions: ["sodium bicarbonate"],
-  },
-  {
-    patterns: [/\bcrush\b/],
-    expansions: ["crush injury 1242", "crush syndrome", "hyperkalemia", "sodium bicarbonate"],
   },
   {
     patterns: [/\b(tca|tricyclic)\b/],
@@ -41,50 +194,14 @@ const SYNONYM_RULES: readonly SynonymRule[] = [
   },
   {
     patterns: [/\bdialysis\b/, /\brenal failure\b/, /\bckd\b/],
-    expansions: ["hyperkalemia", "sodium bicarbonate"],
+    expansions: ["hyperkalemia", "sodium bicarbonate", "renal failure"],
   },
   {
     patterns: [/\bpeaked\s*t\s*waves?\b/],
     expansions: ["hyperkalemia", "sodium bicarbonate"],
   },
   {
-    patterns: [/\bbronchospasm\b/, /\bcopd\b/, /\basthma\b/, /\bwheez(?:e|ing)\b/, /\brespiratory distress\b/],
-    expansions: ["shortness of breath", "protocol 1231", "protocol 1233", "albuterol", "nebulizer"],
-  },
-  {
-    patterns: [/\banaphylaxis\b/, /\ballergic reaction\b/],
-    expansions: ["protocol 1230", "epinephrine", "diphenhydramine"],
-  },
-  {
-    patterns: [/\bseizure\b/, /\bpostictal\b/, /\bstatus epilepticus\b/],
-    expansions: ["protocol 1239", "benzodiazepine", "midazolam", "diazepam"],
-  },
-  {
-    patterns: [/\bstemi\b/, /\bchest pain\b/, /\bacs\b/, /\bmyocardial infarction\b/],
-    expansions: ["protocol 1211", "nitroglycerin", "aspirin"],
-  },
-  {
-    patterns: [/\bstroke\b/, /\bcva\b/, /\btia\b/, /\bmLAPSS\b/, /\blams\b/],
-    expansions: ["protocol 1232", "stroke assessment", "base contact"],
-  },
-  {
-    patterns: [/\btrauma\b/, /\bmvc\b/, /\bmechanism\b/, /\bblunt\b/, /\bpenetrating\b/],
-    expansions: ["protocol 1305", "trauma triage", "base contact"],
-  },
-  {
-    patterns: [/\bimpalement|impaled|penetrating\s+injury|penetrating\s+trauma\b/],
-    expansions: ["protocol 1305", "protocol 1244", "trauma triage", "penetrating trauma"],
-  },
-  {
-    patterns: [/\boverdose\b/, /\bpoison\b/, /\bingestion\b/, /\bopioid\b/, /\bnaloxone\b/],
-    expansions: ["protocol 1229", "protocol 1235", "naloxone", "activated charcoal"],
-  },
-  {
-    patterns: [/\bbehavioral\b/, /\bagitation\b/, /\bpsych\b/],
-    expansions: ["protocol 1231", "protocol 1237", "midazolam"],
-  },
-  {
-    patterns: [/\bpediatric\b/, /\bchild\b/, /\bnewborn\b/, /\bneonate\b/],
+    patterns: [/\bpediatric\b/, /\bchild\b/, /\bnewborn\b/, /\bneonate\b/, /\binfant\b/],
     expansions: ["MCG 1309", "color code", "weight based", "pediatric doses"],
   },
 ];

@@ -4,10 +4,8 @@ export function SectionCard({ title, items }: { title: string; items: string[] }
   if (!items?.length) return null;
   return (
     <div
-      className="protocol-dropdown"
+      className="protocol-dropdown glass-subtle scroll-animate-fade"
       style={{
-        background: "var(--bg)",
-        border: "1px solid var(--border)",
         borderRadius: "8px",
         padding: "16px",
         marginTop: "8px",

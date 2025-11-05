@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
-import { KeyboardShortcuts } from '../keyboard-shortcuts';
-import { SettingsPanel } from '../settings-panel';
+import { KeyboardShortcuts } from './keyboard-shortcuts';
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
 import { MobileNavBar } from './mobile-nav-bar';
 import { OfflineIndicator } from './offline-indicator';
 

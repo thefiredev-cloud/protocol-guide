@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { KeyboardShortcuts } from '@/app/components/keyboard-shortcuts';
-import { SettingsPanel } from '@/app/components/settings-panel';
+import { KeyboardShortcuts } from '@/app/components/layout/keyboard-shortcuts';
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
 import { SettingsProvider } from '@/app/contexts/settings-context';
 import { triggerKeyboardEvent } from '@/tests/utils/test-helpers';
 

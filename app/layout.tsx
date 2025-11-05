@@ -1,12 +1,13 @@
 import "./globals.css";
+import "./styles/modern-ui.css";
 
 import type { Metadata, Viewport } from "next";
 import React from "react";
 
-import { ErrorBoundary } from "./components/error-boundary";
+import { ErrorBoundary } from "./components/layout/error-boundary";
 import { RootLayoutContent } from "./components/layout/root-layout-content";
-import { ToastProvider } from "./components/toast-notification";
-import { WebVitals } from "./components/web-vitals";
+import { ToastProvider } from "./components/layout/toast-notification";
+import { WebVitals } from "./components/layout/web-vitals";
 
 // Using system font stack for offline build compatibility
 const fontClass = "";

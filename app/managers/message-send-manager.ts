@@ -25,6 +25,10 @@ type SendDependencies = {
   streamHandler: StreamHandler;
 };
 
+/**
+ * Manages message sending and response handling for chat interactions
+ * Supports both standard JSON responses and Server-Sent Events (SSE) streaming
+ */
 export class MessageSendManager {
   private readonly request: SendDependencies["request"];
 
@@ -35,6 +39,10 @@ export class MessageSendManager {
     this.streamHandler = streamHandler;
   }
 
+  /**
+   * Send a chat message and handle the response
+   * Automatically detects stream vs JSON responses and routes accordingly
+   */
   async send(payload: SendRequestPayload, options?: { stream?: boolean }) {
     const response = await this.request(payload, options);
     if (response instanceof ReadableStream) {
@@ -89,8 +97,8 @@ export class MessageSendManager {
           const message = typeof data?.message === "string" ? (data.message as string) : "Streaming error";
           throw new Error(message);
         }
-      } catch {
-        // ignore
+      } catch (error) {
+        throw error instanceof Error ? error : new Error(String(error));
       }
     };
 
@@ -110,4 +118,3 @@ export class MessageSendManager {
     this.handleResponseBody({ text: accumulatedText, citations, fallback });
   }
 }
-

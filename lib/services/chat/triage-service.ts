@@ -1,19 +1,34 @@
 import type { TriageResult } from "@/lib/triage";
 import { buildSearchAugmentation, buildTriageContext, triageInput } from "@/lib/triage";
 
+/**
+ * Service for patient triage and protocol matching
+ * Analyzes firefighter input to extract patient details and match protocols
+ */
 export class TriageService {
+  /**
+   * Build triage result from user message
+   * Extracts demographics, vitals, chief complaint, and matched protocols
+   */
   public build(latestUserMessage: string): TriageResult {
     const triage = triageInput(latestUserMessage);
     this.applyProtocolOverride(latestUserMessage, triage);
     return triage;
   }
 
+  /**
+   * Build enhanced search query from triage results
+   * Combines original message with protocol-specific keywords
+   */
   public buildSearchQuery(latestUserMessage: string, triage: TriageResult): string {
     const searchAugmentation = buildSearchAugmentation(triage);
     const combined = [latestUserMessage, searchAugmentation].filter(Boolean).join(" ").trim();
     return combined || latestUserMessage;
   }
 
+  /**
+   * Build formatted patient intake summary for LLM context
+   */
   public buildIntake(triage: TriageResult): string {
     return buildTriageContext(triage);
   }

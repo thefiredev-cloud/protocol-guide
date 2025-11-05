@@ -1,4 +1,4 @@
-import { DivisionHospitalDirectory } from '@/app/components/division-hospital-directory';
+import { DivisionHospitalDirectory } from '@/app/components/directories/division-hospital-directory';
 
 export const metadata = {
   title: 'Base Hospital Directory | Medic Bot',
@@ -12,4 +12,3 @@ export default function BaseHospitalsPage() {
     </main>
   );
 }
-
