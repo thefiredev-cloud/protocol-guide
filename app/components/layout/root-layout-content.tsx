@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
+
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
 import { KeyboardShortcuts } from './keyboard-shortcuts';
-import { SettingsPanel } from '@/app/components/settings/settings-panel';
 import { MobileNavBar } from './mobile-nav-bar';
 import { OfflineIndicator } from './offline-indicator';
 
@@ -67,19 +68,9 @@ function RootLayoutInner({ children }: RootLayoutContentProps) {
           </a>
 
           <div className="logo-section-enhanced logo-clickable">
-            {/* LA County Fire Badge/Logo - now clickable for home */}
-            <a href="/" className="fire-badge-link" aria-label="Go to home">
-              <div className="fire-badge" aria-hidden="true">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="18" stroke="var(--accent)" strokeWidth="2"/>
-                  <path d="M20 8L24 16H28L22 22L24 30L20 26L16 30L18 22L12 16H16L20 8Z" fill="var(--accent)"/>
-                </svg>
-              </div>
-            </a>
-
             <div className="title-group">
               <h1 className="app-title-enhanced">
-                <span className="title-primary">Medic-Bot</span>
+                <span className="title-primary">LaCoFD</span>
               </h1>
             </div>
           </div>

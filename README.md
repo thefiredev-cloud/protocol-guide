@@ -13,19 +13,36 @@ Production-grade medical AI assistant for 3,200+ LA County Fire paramedics. Zero
 
 ### For Developers
 
+**5-Minute Setup:**
+
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env and add your LLM_API_KEY
+# 2. Start local Supabase (requires Docker)
+supabase start
 
-# Run development server
-npm run dev
+# 3. Set up environment variables
+cp .env.example .env.local
+# Add your Supabase keys from step 2 output
+# Add your LLM API key (Claude or OpenAI)
 
-# Open http://localhost:3001
+# 4. Run database migrations
+supabase db push
+
+# 5. Start development server
+PORT=3002 npm run dev
+
+# Open http://localhost:3002
 ```
+
+**Full Setup Guide:** See [QUICK_START.md](./QUICK_START.md) for detailed instructions including database population and testing.
+
+**Documentation:**
+- [Architecture Guide](./docs/ARCHITECTURE.md) - System design and components
+- [Database Guide](./docs/DATABASE.md) - Schema, migrations, and queries
+- [Testing Guide](./docs/TESTING.md) - Running tests and writing new ones
+- [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment process
 
 ## 📱 Features
 
@@ -121,19 +138,231 @@ Professional emergency services branding:
 ## 🏗️ Architecture
 
 ### Technology Stack
-- **Frontend**: Next.js 14, React 18, Tailwind CSS
-- **Knowledge Base**: 11MB JSON → Chunked loading (98% reduction in initial load)
-- **LLM**: OpenAI GPT-4o-mini with streaming support
+- **Frontend**: Next.js 14 (App Router), React 18, TypeScript 5, Tailwind CSS
+- **Database**: Supabase (PostgreSQL + pgvector for vector search)
+- **Knowledge Base**: Dual-layer (Supabase + in-memory MiniSearch)
+- **LLM**: Claude 3.7 Sonnet via Anthropic API
+- **Search**: PostgreSQL full-text search (ts_vector) + BM25 semantic ranking
 - **Deployment**: Netlify Edge Functions, CDN caching
 - **Security**: IP rate limiting, request fingerprinting, HIPAA-compliant audit logs
 
-### Key Components
-- **ChatService**: Manages LLM interactions, retrieval-augmented generation
-- **KnowledgeBaseManager**: BM25 retrieval with MiniSearch indexing
-- **CarePlanManager**: Generates structured treatment plans
-- **NarrativeManager**: Creates formatted patient care narratives
-- **GuardrailManager**: Validates medical responses for safety
-- **MetricsManager**: Tracks performance and usage analytics
+### System Architecture
+
+```
+User Query
+    ↓
+[Chat UI] → POST /api/chat
+    ↓
+[ChatService]
+    ├─→ [TriageService] - Parse demographics/vitals
+    ├─→ [ProtocolMatcher] - Score candidate protocols
+    ├─→ [RetrievalManager] - Fetch protocol context
+    │       ├─→ [MiniSearch] - In-memory BM25 search
+    │       └─→ [ProtocolRepository] - Database fallback
+    │               └─→ [Supabase] - PostgreSQL + pgvector
+    ├─→ [PromptBuilder] - Assemble system prompt + context
+    ├─→ [LLMClient] - Claude API (function calling)
+    │       └─→ [ProtocolRetrievalService] - Tool execution
+    ├─→ [ValidationPipeline] - 4-stage validation
+    └─→ [GuardrailService] - Safety checks
+    ↓
+Response → {text, citations, carePlan, triage}
+```
+
+### Core Components
+
+#### Service Layer
+- **ChatService** (`lib/managers/chat-service.ts`)
+  - Orchestrates triage → retrieval → LLM → validation flow
+  - Supports narrative and chat modes
+  - Function calling for protocol retrieval tools
+  - Audit logging for compliance
+
+- **ProtocolRepository** (`lib/db/protocol-repository.ts`)
+  - Supabase client wrapper for database operations
+  - Full-text search with PostgreSQL `ts_rank`
+  - Hybrid search (full-text + vector similarity)
+  - Protocol analytics and usage tracking
+
+- **RetrievalManager** (`lib/managers/RetrievalManager.ts`)
+  - Dual-path retrieval (in-memory → database)
+  - MiniSearch-based semantic search
+  - Synonym expansion (medical terminology)
+  - Age-based protocol filtering
+
+#### Business Logic
+- **CarePlanManager** (`lib/managers/CarePlanManager.ts`)
+  - Protocol-specific care plan builders (1211, 1205, 1202, 1242)
+  - Medication dosing integration
+  - Vitals-aware recommendations
+  - Weight-based pediatric dosing tables
+
+- **ValidationPipeline** (`lib/protocols/validation-pipeline.ts`)
+  - **Stage 1**: Query validation (TP codes, medication context)
+  - **Stage 2**: Protocol validation (versioning, completeness)
+  - **Stage 3**: Context validation (citations, dose ranges)
+  - **Stage 4**: Hallucination detection (response verification)
+
+- **GuardrailManager** (`lib/managers/GuardrailManager.ts`)
+  - Medication formulary compliance
+  - Citation verification
+  - Dose range validation (LA County ranges)
+  - Contraindication checking
+
+#### Triage System
+- **TriageService** (`lib/triage.ts`)
+  - Parses patient demographics (age, sex, weight)
+  - Extracts vitals (BP, HR, RR, SpO2, glucose)
+  - Chief complaint extraction
+  - Advanced scoring engine for protocol matching
+
+- **ProtocolMatcher** (`lib/triage/protocol-matcher.ts`)
+  - Patient description → Provider Impression → TP Code
+  - Call type/dispatch code matching
+  - Chief complaint keyword matching
+  - Demographic modifiers (pediatric, pregnancy)
+
+#### Error Recovery
+- **Circuit Breaker Pattern** (`lib/protocols/circuit-breaker.ts`)
+  - Prevents cascade failures
+  - States: closed → open → half-open
+  - Used in: LLMClient, DatabaseOperationRunner
+
+- **Retry Logic** (`lib/db/retry/`)
+  - Exponential backoff with jitter
+  - Error classification (network, timeout, rate limit)
+  - Max 3 retries with configurable delays
+
+### Database Layer
+
+#### Schema
+```sql
+protocols (
+  id UUID PRIMARY KEY,
+  tp_code VARCHAR(20),        -- e.g., "1211", "1242-P"
+  tp_name TEXT,               -- "Cardiac Chest Pain"
+  full_text TEXT,             -- Complete protocol content
+  is_current BOOLEAN,
+  effective_date TIMESTAMPTZ,
+  base_contact_required BOOLEAN,
+  contraindications TEXT[],
+  warnings TEXT[]
+)
+
+protocol_chunks (
+  id TEXT PRIMARY KEY,
+  protocol_id UUID,
+  title TEXT,
+  content TEXT,              -- Chunked content for search
+  chunk_index INTEGER
+)
+
+protocol_embeddings (
+  id UUID PRIMARY KEY,
+  chunk_id TEXT,
+  embedding VECTOR(1536),    -- OpenAI text-embedding-3-small
+  content_hash TEXT          -- For change detection
+)
+
+provider_impressions (
+  pi_code VARCHAR(20),        -- e.g., "CPMI" (Chest Pain - STEMI)
+  pi_name TEXT,
+  tp_code VARCHAR(20),        -- Maps to protocols.tp_code
+  keywords TEXT[]
+)
+```
+
+#### Indexes
+- B-tree on `tp_code` for fast lookups
+- GIN for full-text search (`to_tsvector('english', content)`)
+- HNSW for vector similarity (m=16, ef_construction=64)
+- Partial indexes on `is_current = true` for active protocols
+
+#### Migration Management
+- Single migration: `006_protocol_foundation_simple.sql`
+- Data import: `scripts/migrate-protocols-to-db.mjs` (7,014 protocols)
+- Embedding generation: `scripts/generate-embeddings.mjs` (optional)
+
+### Validation Pipeline
+
+**Four-Stage Validation:**
+
+1. **Pre-Retrieval (Query Validation)**
+   - TP code existence check
+   - Medication context validation
+   - Query normalization (typos, abbreviations)
+   - Vague query detection
+
+2. **During-Retrieval (Protocol Validation)**
+   - Version check (`is_current = true`)
+   - Effective date validation
+   - Completeness verification
+   - Conflict detection
+
+3. **Pre-Response (Context Validation)**
+   - Citation verification (all cited protocols in context?)
+   - Medication formulary compliance (LA County approved only)
+   - Dose range validation (30+ medications)
+   - Base contact requirement check
+   - Contraindication verification
+
+4. **Post-Response (Hallucination Detection)**
+   - Cross-reference citations (response vs source)
+   - Medication formulary re-check
+   - Dose validation against reference ranges
+   - Contradiction detection
+   - Missing critical elements check
+
+**LA County Medication Dose Ranges:**
+```typescript
+// Example: Epinephrine validation
+{
+  medication: "Epinephrine",
+  indication: "Cardiac Arrest",
+  adultDose: { min: 1.0, max: 1.0, unit: "mg" },
+  pediatricDose: { min: 0.01, max: 0.01, unit: "mg/kg" },
+  routes: ["IV", "IO"],
+  maxSingleDose: 1.0,
+  citations: ["PCM Section 1.2.1", "MCG 1309"]
+}
+```
+
+### Protocol Retrieval Tools
+
+**Function Calling (LLM → Database):**
+```typescript
+// Tools available to LLM
+const tools = [
+  {
+    name: "search_protocols_by_patient_description",
+    description: "Search by demographics + vitals + symptoms",
+    parameters: { age, sex, chiefComplaint, vitals }
+  },
+  {
+    name: "search_protocols_by_call_type",
+    description: "Search by dispatch code (e.g., '32B1')",
+    parameters: { callType }
+  },
+  {
+    name: "get_protocol_by_code",
+    description: "Direct TP code lookup",
+    parameters: { tpCode }
+  }
+];
+```
+
+**Age-Based Protocol Safety:**
+- Age <18 → Pediatric protocols (`1242-P`) with weight-based dosing
+- Age ≥18 → Adult protocols (`1242`) with fixed dosing
+- Unknown age → Warn and provide both options
+
+**Retrieval Strategy:**
+1. Triage extracts patient info
+2. ProtocolMatcher scores candidates
+3. LLM uses function calling to fetch protocols
+4. ProtocolRetrievalService executes tools
+5. Database/in-memory search returns context
+6. ValidationPipeline verifies results
 
 ## 🧪 Testing
 
@@ -224,27 +453,32 @@ NODE_ENV=production
 
 ## 📚 API Endpoints
 
-### Chat (JSON)
+### Chat Endpoints
+
+**JSON (Non-Streaming):**
 ```bash
-curl -s http://localhost:3001/api/chat \
+curl -s http://localhost:3002/api/chat \
   -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"Chest pain protocol"}]}' | jq .
 ```
 
-### Chat (SSE Streaming)
+**SSE Streaming:**
 ```bash
-curl -N http://localhost:3001/api/chat/stream \
+curl -N http://localhost:3002/api/chat/stream \
   -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"Cardiac arrest management"}]}'
 ```
 
 ### Dosing Calculator
-```bash
-# List available medications
-curl -s http://localhost:3001/api/dosing | jq .
 
-# Calculate dose
-curl -s http://localhost:3001/api/dosing \
+**List Medications:**
+```bash
+curl -s http://localhost:3002/api/dosing | jq .
+```
+
+**Calculate Dose:**
+```bash
+curl -s http://localhost:3002/api/dosing \
   -H 'content-type: application/json' \
   -d '{
     "medicationId":"epinephrine",
@@ -255,15 +489,42 @@ curl -s http://localhost:3001/api/dosing \
   }' | jq .
 ```
 
-### Health Check
+### Health & Monitoring
+
+**Full Health Check:**
 ```bash
-curl -s http://localhost:3001/api/health | jq .
+curl -s http://localhost:3002/api/health | jq .
 ```
 
-### Metrics
+**Quick Liveness Check:**
 ```bash
-curl -s http://localhost:3001/api/metrics | jq .
+curl -s http://localhost:3002/api/health/quick | jq .
 ```
+
+**Protocol Availability:**
+```bash
+curl -s http://localhost:3002/api/health/protocols | jq .
+```
+
+**Performance Metrics:**
+```bash
+curl -s http://localhost:3002/api/metrics | jq .
+```
+
+### Admin Endpoints (Protected)
+
+**Rate Limit Stats:**
+```bash
+curl -s http://localhost:3002/api/admin/rate-limits \
+  -H "X-Admin-Token: $ADMIN_TOKEN" | jq .
+```
+
+**Integration Endpoints:**
+- `POST /api/integrations/cad/incidents` - CAD system sync
+- `POST /api/integrations/epcr/narrative` - ePCR narrative export
+- `POST /api/integrations/epcr/medications` - Medication order sync
+
+**See full API documentation:** [docs/API.md](./docs/API.md)
 
 ## 🚑 Features in Detail
 

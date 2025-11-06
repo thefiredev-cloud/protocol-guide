@@ -81,8 +81,8 @@ export class ProtocolRetrievalService {
     // Use enhanced protocol matcher
     const matchedProtocols = ProtocolMatcher.matchByPatientDescription(triage, params.symptoms);
 
-    // Retrieve KB chunks for matched protocols
-    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, params.chiefComplaint);
+    // Retrieve KB chunks for matched protocols (age-based filtering)
+    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, params.chiefComplaint, triage);
     const kbChunks = await searchKB(searchQuery, 8);
 
     const result: ProtocolSearchResult = {
@@ -132,7 +132,7 @@ export class ProtocolRetrievalService {
       };
     }
 
-    // Retrieve KB chunks
+    // Retrieve KB chunks (no triage context for call type search - defaults to adult)
     const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, params.callType || "");
     const kbChunks = await searchKB(searchQuery, 6);
 
@@ -180,8 +180,11 @@ export class ProtocolRetrievalService {
       };
     }
 
+    // Parse triage from chief complaint for age-based filtering
+    const triage = triageInput(params.chiefComplaint);
+
     // Retrieve KB chunks
-    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, params.chiefComplaint);
+    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, params.chiefComplaint, triage);
     const kbChunks = await searchKB(searchQuery, 6);
 
     const result: ProtocolSearchResult = {
@@ -285,8 +288,8 @@ export class ProtocolRetrievalService {
     // Use protocol matcher with patient description approach
     const matchedProtocols = ProtocolMatcher.matchByPatientDescription(triage, params.keywords);
 
-    // Retrieve KB chunks
-    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, symptomText);
+    // Retrieve KB chunks with age-based filtering
+    const searchQuery = this.buildSearchQueryFromProtocols(matchedProtocols, symptomText, triage);
     const kbChunks = await searchKB(searchQuery, 6);
 
     const result: ProtocolSearchResult = {
@@ -355,15 +358,24 @@ export class ProtocolRetrievalService {
   private buildSearchQueryFromProtocols(
     protocols: Array<{ tp_code: string; tp_name: string; tp_code_pediatric?: string }>,
     additionalText: string,
+    triage?: { age?: number },
   ): string {
     const parts: string[] = [additionalText];
 
+    // Age-based protocol selection: CRITICAL for correct dosing
+    const isPediatric = triage?.age !== undefined && triage.age < 18;
+
     protocols.slice(0, 5).forEach((protocol) => {
       parts.push(protocol.tp_name);
-      parts.push(`protocol ${protocol.tp_code}`);
-      parts.push(`TP ${protocol.tp_code}`);
-      if (protocol.tp_code_pediatric) {
+
+      if (isPediatric && protocol.tp_code_pediatric) {
+        // Pediatric patient: use pediatric protocol only
         parts.push(`protocol ${protocol.tp_code_pediatric}`);
+        parts.push(`TP ${protocol.tp_code_pediatric}`);
+      } else {
+        // Adult patient or unknown age: use adult protocol
+        parts.push(`protocol ${protocol.tp_code}`);
+        parts.push(`TP ${protocol.tp_code}`);
       }
     });
 

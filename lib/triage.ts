@@ -95,9 +95,19 @@ export function buildSearchAugmentation(result: TriageResult): string {
   if (topProtocol) {
     // Add top protocol identifiers strongly
     parts.push(topProtocol.tp_name);
-    parts.push(topProtocol.tp_code);
-    if (topProtocol.tp_code_pediatric) {
+
+    // Age-based protocol selection: CRITICAL for correct dosing
+    const isPediatric = result.age !== undefined && result.age < 18;
+
+    if (isPediatric && topProtocol.tp_code_pediatric) {
+      // Pediatric patient: use pediatric protocol only
       parts.push(topProtocol.tp_code_pediatric);
+    } else if (!isPediatric) {
+      // Adult patient (age ≥18 or unknown): use adult protocol only
+      parts.push(topProtocol.tp_code);
+    } else {
+      // Fallback: unknown age, include adult protocol
+      parts.push(topProtocol.tp_code);
     }
     
     // Protocol-specific enhanced search terms (only for top match)

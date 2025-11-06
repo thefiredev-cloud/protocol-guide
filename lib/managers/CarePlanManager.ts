@@ -210,18 +210,32 @@ export class CarePlanManager {
     basicMedications.push(
       "Normal Saline 1L IV/IO rapid infusion - administer ASAP and PRIOR to release of compressive force.",
       "Repeat NS 1L x1 for total of 2 liters; reassess after each 250 mL for pulmonary edema.",
+      "CONTACT BASE to obtain order for additional NS if persistent entrapment.",
     );
 
-    // Hyperkalemia treatment if ECG changes present
+    // Pre-extrication prophylaxis for crush syndrome patients
     basicMedications.push(
-      "IF hyperkalemia signs (peaked T-waves, widened QRS, absent P-waves):",
+      "",
+      "FOR CRUSH SYNDROME RISK (circumferential compression + large muscle mass + entrapment ≥1 hr):",
+      "CONTACT BASE HOSPITAL PRIOR TO EXTRICATION - administer 5 minutes before release:",
+      "  - Calcium Chloride 1g (10mL) slow IV/IO push",
+      "  - Flush IV line with NS (Ca²⁺ and NaHCO₃ precipitate if mixed)",
+      "  - Sodium Bicarbonate 50mEq (50mL) slow IV/IO push",
+      "  - Albuterol 5mg (6mL) via mask neb x2 doses for total 10mg",
+    );
+
+    // Reactive hyperkalemia treatment if ECG changes already present
+    basicMedications.push(
+      "",
+      "IF HYPERKALEMIA SIGNS PRESENT (peaked T-waves, widened QRS, absent P-waves):",
       "  - Calcium Chloride 1g (10mL) slow IV/IO push, repeat x1 for persistent ECG abnormalities",
       "  - Sodium Bicarbonate 50mEq (50mL) slow IV/IO push, repeat x1 for persistent ECG abnormalities",
       "  - Albuterol 5mg (6mL) via neb, repeat continuously until hospital arrival",
+      "  - CONTACT BASE for persistent ECG abnormalities to obtain order for additional medications",
     );
 
     // Pain management
-    basicMedications.push("Pain management per MCG 1345 (consider fentanyl or morphine).");
+    basicMedications.push("", "Pain management per MCG 1345 (consider fentanyl or morphine).");
 
     const detailPackages = this.buildMedicationDetails([
       { id: "fentanyl", scenario: "pain" },
@@ -233,9 +247,12 @@ export class CarePlanManager {
       hasAbnormalVitals
         ? "ABNORMAL VITALS DETECTED - High priority for fluid resuscitation and hyperkalemia monitoring."
         : "Monitor for development of crush syndrome during extrication.",
+      "Flush IV line with NS between Ca²⁺ and NaHCO₃ - medications precipitate if mixed together.",
+      "Medication duration ~30 min - contact Base for re-dosing if ETA to hospital >30 min or persistent hyperkalemia.",
       "Pre-position tourniquet prior to extrication to prevent hemorrhage upon release of compression.",
+      "If unable to establish vascular access while entrapped AND crush syndrome risk: place tourniquet PRIOR to extrication.",
       "Do NOT release compression until IV access established and fluids running.",
-      "Transport to Trauma Center per Ref. 502.",
+      "Transport to Trauma Center per Ref. 506.",
     ];
 
     // Vital sign targets
@@ -285,7 +302,7 @@ export class CarePlanManager {
       protocolCode: "1242",
       protocolTitle: "Crush Injury/Syndrome",
       actions,
-      baseContact: "YES – Required for crush syndrome risk or prolonged entrapment >30 min. Contact concurrently with treatment.",
+      baseContact: "YES – REQUIRED for crush syndrome risk or prolonged entrapment >30 min. Contact Base Hospital PRIOR TO EXTRICATION for pre-extrication medication orders.",
       basicMedications,
       criticalNotes,
       medicationsDetailed: detailPackages.details,

@@ -59,7 +59,19 @@
       "Bash(lsof:*)",
       "Bash(xargs kill:*)",
       "Bash(git commit:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(ESLINT_NO_DEV_ERRORS=true npm run build:*)",
+      "Bash(awk:*)",
+      "SlashCommand(/agents-plan Comprehensive analysis of LA County EMS protocols in PDFs and JSON data - assess current state, identify gaps, validation issues, completeness, accuracy as of January 2025, metadata quality, retrieval effectiveness, and all necessary improvements for 100% reliability)",
+      "SlashCommand(/agents-plan:*)",
+      "Bash(supabase --version:*)",
+      "Bash(docker:*)",
+      "Bash(PORT=3002 npm run dev:*)",
+      "Bash(supabase start:*)",
+      "Bash(open http://127.0.0.1:54323)",
+      "Bash(supabase status:*)",
+      "Bash(supabase stop:*)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": []
