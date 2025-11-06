@@ -1,4 +1,4 @@
-# Medic-Bot - LA County Fire EMS AI Assistant
+LA County Fire EMS AI Assistant
 
 Production-grade medical AI assistant for 3,200+ LA County Fire paramedics. Zero authentication, mobile-first, offline-capable.
 
