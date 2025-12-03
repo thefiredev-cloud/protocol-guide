@@ -46,6 +46,24 @@ export class ProtocolToolManager {
   }
 
   /**
+   * Get all available protocol retrieval tools as Claude tool definitions
+   */
+  public static getClaudeTools(): ClaudeTool[] {
+    return this.getTools().map(this.convertOpenAIToClaude);
+  }
+
+  /**
+   * Convert OpenAI function format to Claude tool format
+   */
+  private static convertOpenAIToClaude(openAITool: OpenAIFunction): ClaudeTool {
+    return {
+      name: openAITool.function.name,
+      description: openAITool.function.description,
+      input_schema: openAITool.function.parameters,
+    };
+  }
+
+  /**
    * Search protocols using patient demographics, symptoms, and vitals
    */
   private static getSearchProtocolsByPatientDescriptionTool(): OpenAIFunction {
