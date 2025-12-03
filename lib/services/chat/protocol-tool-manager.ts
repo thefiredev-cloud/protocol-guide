@@ -1,7 +1,9 @@
 /**
- * ProtocolToolManager defines OpenAI function calling schemas for protocol retrieval.
+ * ProtocolToolManager defines function calling schemas for protocol retrieval.
  * These tools enable the LLM to actively query protocols based on patient descriptions,
  * call types, and chief complaints.
+ *
+ * Supports both OpenAI and Claude tool formats.
  */
 
 export type OpenAIFunction = {
@@ -14,6 +16,16 @@ export type OpenAIFunction = {
       properties: Record<string, unknown>;
       required?: string[];
     };
+  };
+};
+
+export type ClaudeTool = {
+  name: string;
+  description: string;
+  input_schema: {
+    type: "object";
+    properties: Record<string, unknown>;
+    required?: string[];
   };
 };
 
