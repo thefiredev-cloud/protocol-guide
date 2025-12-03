@@ -1,11 +1,12 @@
 'use client';
 
-import { ClipboardList, type LucideIcon, MessageCircle, Pill, Timer, Phone } from 'lucide-react';
+import { ClipboardList, type LucideIcon, MessageCircle, Phone,Pill, Timer } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname,useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
+
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
+import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
 
 interface NavTabProps {
   href: string;

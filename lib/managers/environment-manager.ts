@@ -94,7 +94,8 @@ export class EnvironmentManager {
       const env = parsed.data;
       EnvironmentManager.cached = {
         ...env,
-        llmBaseUrl: env.LLM_BASE_URL ?? "https://api.openai.com/v1",
+        llmProvider: env.LLM_PROVIDER,
+        llmBaseUrl: env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
         llmModel: env.LLM_MODEL,
         kbScope: env.KB_SCOPE,
         kbSource: env.KB_SOURCE,
