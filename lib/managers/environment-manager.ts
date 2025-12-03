@@ -5,8 +5,9 @@ const schema = z.object({
   LLM_API_KEY: z
     .string({ required_error: "LLM_API_KEY is required. Please add it to your .env.local file." })
     .min(1, { message: "LLM_API_KEY is required. Please add it to your .env.local file." }),
+  LLM_PROVIDER: z.enum(["anthropic", "openai"]).default("anthropic"),
   LLM_BASE_URL: z.string().url("LLM_BASE_URL must be a valid URL").optional(),
-  LLM_MODEL: z.string().min(1).default("gpt-4o-mini"),
+  LLM_MODEL: z.string().min(1).default("claude-sonnet-4-5-20250929"),
   KB_SCOPE: z
     .string()
     .default("pcm")
