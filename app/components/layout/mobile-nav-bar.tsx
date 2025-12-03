@@ -3,7 +3,7 @@
 import { ClipboardList, type LucideIcon, MessageCircle, Phone,Pill, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname,useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
