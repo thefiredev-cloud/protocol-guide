@@ -46,6 +46,7 @@ const schema = z.object({
 });
 
 export type EnvironmentConfig = z.infer<typeof schema> & {
+  llmProvider: "anthropic" | "openai";
   llmBaseUrl: string;
   llmModel: string;
   kbScope: string;
