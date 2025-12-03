@@ -71,7 +71,8 @@
       "Bash(open http://127.0.0.1:54323)",
       "Bash(supabase status:*)",
       "Bash(supabase stop:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(PORT=3000 npm run dev:*)"
     ],
     "deny": [],
     "ask": []
