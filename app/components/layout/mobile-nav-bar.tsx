@@ -3,7 +3,7 @@
 import { ClipboardList, type LucideIcon, MessageCircle, Pill, Timer, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 
@@ -12,21 +12,36 @@ interface NavTabProps {
   icon: LucideIcon;
   label: string;
   active: boolean;
+  isOnline: boolean;
 }
 
-function NavTab({ href, icon: Icon, label, active }: NavTabProps) {
+function NavTab({ href, icon: Icon, label, active, isOnline }: NavTabProps) {
   const { tap } = useHapticFeedback();
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <Link
       href={href}
-      className={`nav-tab ${active ? 'active' : ''}`}
+      className={`nav-tab ${active ? 'active' : ''} ${isPressed ? 'pressed' : ''}`}
       aria-label={label}
       aria-current={active ? 'page' : undefined}
-      onPointerDown={tap}
+      onPointerDown={(e) => {
+        tap();
+        setIsPressed(true);
+      }}
+      onPointerUp={() => setIsPressed(false)}
+      onPointerLeave={() => setIsPressed(false)}
+      onPointerCancel={() => setIsPressed(false)}
     >
       <span className="nav-tab-icon">
-        <Icon size={24} strokeWidth={2} aria-hidden={true} />
+        <Icon size={28} strokeWidth={2} aria-hidden={true} />
+        {/* Online/Offline status indicator - only show on first tab (Chat) */}
+        {href === '/' && (
+          <span
+            className={`nav-status-indicator ${isOnline ? 'online' : 'offline'}`}
+            aria-label={isOnline ? 'Online' : 'Offline'}
+          />
+        )}
       </span>
       <span className="nav-tab-label">{label}</span>
     </Link>
