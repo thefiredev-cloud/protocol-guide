@@ -134,8 +134,9 @@ export class EnvironmentManager {
       return {
         NODE_ENV: "production",
         LLM_API_KEY: "", // Will be caught by LLMClient as unavailable
-        LLM_BASE_URL: process.env.LLM_BASE_URL ?? "https://api.openai.com/v1",
-        LLM_MODEL: process.env.LLM_MODEL ?? "gpt-4o-mini",
+        LLM_PROVIDER: (process.env.LLM_PROVIDER as "anthropic" | "openai") ?? "anthropic",
+        LLM_BASE_URL: process.env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
+        LLM_MODEL: process.env.LLM_MODEL ?? "claude-sonnet-4-5-20250929",
         KB_SCOPE: "pcm",
         KB_SOURCE: "clean",
         KB_DATA_PATH: process.env.KB_DATA_PATH,
@@ -144,8 +145,9 @@ export class EnvironmentManager {
         ENABLE_MARKDOWN_PREPROCESSING: false,
         MARKDOWN_CHUNK_SIZE: 2000,
         MARKDOWN_CONTEXT_LIMIT: 12000,
-        llmBaseUrl: process.env.LLM_BASE_URL ?? "https://api.openai.com/v1",
-        llmModel: process.env.LLM_MODEL ?? "gpt-4o-mini",
+        llmProvider: (process.env.LLM_PROVIDER as "anthropic" | "openai") ?? "anthropic",
+        llmBaseUrl: process.env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
+        llmModel: process.env.LLM_MODEL ?? "claude-sonnet-4-5-20250929",
         kbScope: "pcm",
         kbSource: "clean",
         enableMarkdownPreprocessing: false,
