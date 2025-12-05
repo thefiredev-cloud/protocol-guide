@@ -1,7 +1,5 @@
-# LA County EMS Protocol Assistant & AI Chatbot
-
-**Production-grade, field-tested medical AI solution for LA County Fire paramedics.**  
-- Instant access: **No login required**
+# County EMS Protocol Assistant & AI Chatbot
+**Production-grade, field-tested medical AI solution for emergency medical services.**- Instant access: **No login required**
 - **Mobile-first, PWA, fully offline-capable**
 
 ***
@@ -113,8 +111,7 @@ See [docs/API.md](docs/API.md) for full documentation.
 
 - **Use for education/reference only—not official clinical authority.**
 - **HIPAA compliant**
-- LA County Fire Department Internal Use Only
-
+- **For authorized EMS agency use only**
 ***
 
 ## 🚀 **Roadmap**
@@ -131,5 +128,4 @@ See [ImageTrend Roadmap](docs/planning/imagetrend-integration-roadmap.md)
 ***
 
 
-**Version:** 0.8 | **Updated:** Jan 2025 | **Classification:** LA County Fire
-
+**Version:** 0.8 | **Updated:** Jan 2025 | **Classification:** EMS Protocol Assistant
