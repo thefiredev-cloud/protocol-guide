@@ -5,7 +5,7 @@
 
 > **The EMS protocol assistant and AI copilot for prehospital care**
 
-[Next.js](https://nextjs.org/) · [React](https://react.dev/) · [TypeScript](https://www.typescriptlang.org/) · [Supabase](https://supabase.com/) · [Netlify](https://www.netlify.com/) · PWA
+![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js) ![React](https://img.shields.io/badge/React-18.3-blue?logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?logo=supabase) ![Hosted](https://img.shields.io/badge/Hosted-Netlify-teal?logo=netlify) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Status](https://img.shields.io/badge/Status-Production-brightgreen)(https://www.netlify.com/) · PWA
 
 **[Visit County‑Medic →](https://county-medic.netlify.app/)** -  **Documentation (coming soon)** -  **Report Issue (GitHub Issues)**
 
