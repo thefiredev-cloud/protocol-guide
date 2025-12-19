@@ -150,47 +150,53 @@ NON-EMERGENT → MAR with potential secondary transfer:
 - Delayed symptoms after flying
 - Delayed minor symptoms after 24 hours
 
-**PSYCHIATRIC URGENT CARE CENTER (PUCC) CRITERIA (Ref 526):**
+**PSYCHIATRIC URGENT CARE CENTER (PUCC) CRITERIA (Ref 526.1):**
 TAD-trained paramedics ONLY. Transport within 15 min. ALL criteria must be met:
 
 INCLUSION (all required):
-- Age 18-64 years
+- Age 18-64 years (≥18 and <65)
 - Behavioral/psychiatric crisis (voluntary or 5150)
-- Ambulatory (no wheelchair)
-- No emergent medical condition or trauma
+- Ambulatory (no wheelchair), no focal neurological deficit
+- No emergent medical condition
+- No injury meeting trauma center criteria
 - GCS ≥14
 - HR 60-119, RR 12-23, SpO2 ≥94% RA, SBP 100-179
-- If diabetic: BGL 60-249, no ketoacidosis signs
-- No focal neurological deficit
+- If diabetic: BGL 60-249
 
 EXCLUSION (any → ED instead):
-- Suicidal/homicidal ideation
-- Intoxication requiring medical management
-- Severe behavioral disturbance/dangerous behavior
+- Altered level of consciousness
+- Chest pain, SOB, abdominal/pelvic pain, or syncope
+- Open wounds or bleeding
+- Clinical intoxication (drugs and/or alcohol)
+- Dangerous behavior
 - Given midazolam for agitation
 - Suspected pregnancy
+- Requires special medical equipment
 - Intellectual/developmental disability
 - EMS clinician judgment: patient not stable for PUCC
 
-**SOBERING CENTER CRITERIA (Ref 528):**
+**SOBERING CENTER CRITERIA (Ref 528.1):**
 TAD-trained paramedics ONLY. Transport within 15 min. ALL criteria must be met:
 
 INCLUSION (all required):
-- Age ≥18 years
-- Alcohol intoxication (found on street/shelter/police custody)
-- Voluntary consent or implied
+- Age 18-64 years (≥18 and <65)
+- Alcohol intoxication
+- Verbalizes consent
 - Cooperative (no restraints), ambulatory
-- GCS ≥14
+- No focal neurological deficit
+- GCS ≥14 (see note: intoxicated patient may initially score 13, reassess)
 - HR 60-119, RR 12-23, SpO2 ≥94% RA, SBP 100-179
-- If diabetic: BGL 60-249, no ketoacidosis signs
+- If diabetic: BGL 60-249
 - No bruising/hematoma above clavicles
 
 EXCLUSION (any → ED instead):
-- Emergent medical condition or trauma
-- Chest pain, SOB, abdominal pain, syncope
-- Bleeding (hemoptysis, GI bleed)
+- Emergent medical condition
+- Injury meeting trauma center criteria
+- Chest pain, SOB, abdominal/pelvic pain, syncope
+- Bleeding (hemoptysis, GI bleed, open wounds)
+- Loss of consciousness within 24 hours (syncopal or seizure)
 - Suicidal ideation
-- On anticoagulants
+- On anticoagulants (Warfarin, Plavix, Xarelto, Eliquis, Pradaxa, Lovenox)
 - Suspected pregnancy
 - Intellectual/developmental disability
 - EMS clinician judgment: patient not stable for Sobering Center
