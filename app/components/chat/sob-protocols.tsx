@@ -1,7 +1,9 @@
 "use client";
 
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, FileText } from "lucide-react";
 import { memo, useState } from "react";
+
+import type { ChatMessage, Citation } from "@/app/types/chat";
 
 import { ProtocolFormatter } from "./protocol-formatter";
 
@@ -202,11 +204,92 @@ export function SOBProtocolGateway({ onSelect }: { onSelect: (key: string) => vo
   );
 }
 
-export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { m: { role: "user" | "assistant"; content: string }; onProtocolSelect: (key: string) => void }) {
+/**
+ * Citation reference card - shows protocol sources at top of response
+ * Displays LA County Reference numbers (500-series) and TP codes prominently
+ */
+const CitationCard = memo(function CitationCard({ citation }: { citation: Citation }) {
+  // Use pre-extracted codes from citation, or fall back to regex extraction
+  const codeMatch = citation.title.match(/^(\d{3,4}(?:-P)?)/);
+  const protocolCode = citation.protocolCode || codeMatch?.[1];
+
+  // Extract reference number if not already provided
+  const refMatch = citation.title.match(/Ref(?:erence)?\s*(\d{3}(?:\.\d+)?)/i);
+  const referenceNumber = citation.referenceNumber || refMatch?.[1];
+
+  const handleViewProtocol = () => {
+    // Use protocol code or reference number for PDF search
+    const searchTerm = protocolCode || referenceNumber || citation.title.split(" ")[0];
+    const url = `https://file.lacounty.gov/SDSInter/dhs/1143706_2024PCMPublic.pdf#search=${encodeURIComponent(searchTerm)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <div className="citation-card">
+      <div className="citation-header">
+        <FileText size={16} className="citation-icon" />
+        {referenceNumber && (
+          <span className="citation-ref-badge">Ref {referenceNumber}</span>
+        )}
+        {protocolCode && (
+          <span className="citation-protocol-badge">TP {protocolCode}</span>
+        )}
+        <span className="citation-category">{citation.category}</span>
+        {citation.subcategory && (
+          <span className="citation-subcategory">• {citation.subcategory}</span>
+        )}
+      </div>
+      <div className="citation-title">{citation.title}</div>
+      {(protocolCode || referenceNumber) && (
+        <button
+          type="button"
+          className="citation-link"
+          onClick={handleViewProtocol}
+        >
+          View in PCM →
+        </button>
+      )}
+    </div>
+  );
+});
+
+/**
+ * Citations list - displays protocol sources at top of assistant response
+ */
+const CitationsList = memo(function CitationsList({ citations }: { citations: Citation[] }) {
+  if (!citations || citations.length === 0) return null;
+
+  return (
+    <div className="citations-container">
+      <div className="citations-header">
+        <FileText size={14} />
+        <span>Protocol References</span>
+      </div>
+      <div className="citations-list">
+        {citations.map((citation, idx) => (
+          <CitationCard key={`${citation.title}-${idx}`} citation={citation} />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { m: ChatMessage; onProtocolSelect: (key: string) => void }) {
   if (!isSOBProtocolMessage(m.content)) {
     // Use ProtocolFormatter for assistant messages
     if (m.role === "assistant") {
-      return <ProtocolFormatter content={m.content} />;
+      return (
+        <div className="assistant-response">
+          {/* Citations/Protocol References FIRST */}
+          {m.citations && m.citations.length > 0 && (
+            <CitationsList citations={m.citations} />
+          )}
+          {/* Then the response content */}
+          <div className="response-content">
+            <ProtocolFormatter content={m.content} />
+          </div>
+        </div>
+      );
     }
     // User messages - simple, clean text display
     return (
@@ -217,8 +300,9 @@ export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { 
   }
   return <SOBProtocolGateway onSelect={onProtocolSelect} />;
 }, (prevProps, nextProps) => {
-  // Only re-render if content changed
-  return prevProps.m.content === nextProps.m.content;
+  // Only re-render if content or citations changed
+  return prevProps.m.content === nextProps.m.content &&
+         prevProps.m.citations === nextProps.m.citations;
 });
 
 

@@ -1,10 +1,57 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef } from "react";
+import { memo, useMemo } from "react";
 
 /**
- * ProtocolFormatter - Formats protocol text with priority indicators,
- * medication highlighting, and visual structure for emergency medical use
+ * Whitelist of actual medication names - only these get bold highlighting
+ */
+const MEDICATION_NAMES = [
+  // Cardiac/Emergency
+  "Epinephrine", "Norepinephrine", "Dopamine", "Dobutamine", "Atropine",
+  "Amiodarone", "Lidocaine", "Adenosine", "Vasopressin", "Calcium Chloride",
+  "Calcium Gluconate", "Sodium Bicarbonate", "Magnesium Sulfate",
+  // Sedation/Analgesia
+  "Fentanyl", "Morphine", "Ketamine", "Midazolam", "Etomidate", "Propofol",
+  "Versed", "Dilaudid", "Hydromorphone",
+  // Paralytic
+  "Rocuronium", "Vecuronium", "Succinylcholine",
+  // Respiratory
+  "Albuterol", "Ipratropium", "Duoneb", "Oxygen",
+  // Fluids/Other
+  "Normal Saline", "Lactated Ringers", "Dextrose", "D10", "D50",
+  "Nitroglycerin", "Aspirin", "Ondansetron", "Zofran", "Diphenhydramine",
+  "Benadryl", "Glucagon", "Naloxone", "Narcan", "Thiamine",
+  // Push-dose
+  "Push-dose Epinephrine", "Push-dose Epi",
+];
+
+/**
+ * Section headers that should be bold
+ */
+const SECTION_HEADERS = [
+  "PROTOCOL",
+  "BASE HOSPITAL CONTACT REQUIRED",
+  "BASE CONTACT REQUIRED",
+  "IMMEDIATE ACTIONS",
+  "MEDICATIONS",
+  "KEY ASSESSMENTS",
+  "TRANSPORT",
+  "RED FLAGS",
+  "CONTRAINDICATIONS",
+  "DOSING",
+  "ASSESSMENT",
+  "INTERVENTIONS",
+  "NOTES",
+  "WARNING",
+  "CAUTION",
+];
+
+/**
+ * ProtocolFormatter - Formats protocol text with proper structure:
+ * - Bold section headers
+ * - Bold medication names (whitelist only)
+ * - Bullet points for list items
+ * - Clean, scannable layout
  */
 export const ProtocolFormatter = memo(function ProtocolFormatter({
   content,
@@ -15,308 +62,178 @@ export const ProtocolFormatter = memo(function ProtocolFormatter({
     return formatProtocolText(content);
   }, [content]);
 
-  const announcementRef = useRef<HTMLDivElement>(null);
-  const previousContentRef = useRef<string>("");
-
-  // Screen reader announcements for critical information
-  useEffect(() => {
-    if (!announcementRef.current || content === previousContentRef.current) return;
-    
-    const hasPriority = /\b(P[123]|Priority\s*[123])\b/i.test(content);
-    const hasMedications = /\b([A-Z][a-z]+(?:\s+\d+\.?\d*\s*(?:mg|mcg|g|mL|units?|puffs?|tablets?))?)\b/.test(content);
-    const hasCriticalInfo = /\b(critical|urgent|emergency|immediate|base\s+contact|base\s+hospital)\b/i.test(content);
-
-    if (hasPriority || hasMedications || hasCriticalInfo) {
-      const announcement = [];
-      if (hasPriority) {
-        const priorityMatch = content.match(/\b(P[123]|Priority\s*[123])\b/i);
-        if (priorityMatch) {
-          announcement.push(`Priority ${priorityMatch[1].toUpperCase().replace('P', '')} protocol information`);
-        }
-      }
-      if (hasMedications) {
-        announcement.push("Medication dosing information included");
-      }
-      if (hasCriticalInfo) {
-        announcement.push("Critical information present");
-      }
-
-      announcementRef.current.textContent = announcement.join(". ");
-      announcementRef.current.setAttribute("aria-live", "polite");
-      announcementRef.current.setAttribute("aria-atomic", "true");
-    }
-
-    previousContentRef.current = content;
-  }, [content]);
-
   return (
-    <>
-      <div 
-        ref={announcementRef}
-        className="sr-only"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      />
-      <div 
-        className="protocol-response"
-        role="article"
-        aria-label="Protocol information"
-      >
-        {formattedContent}
-      </div>
-    </>
+    <div className="protocol-response" role="article" aria-label="Protocol information">
+      {formattedContent}
+    </div>
   );
 });
 
 /**
- * Formats protocol text by:
- * - Detecting numbered sections (1., 2., 3., etc.)
- * - Extracting protocol headers
- * - Detecting priority indicators (P1, P2, P3)
- * - Highlighting medication names and dosages
- * - Adding visual structure with proper hierarchy
+ * Main formatting function - parses protocol text into structured React elements
  */
 function formatProtocolText(text: string): React.ReactNode {
-  // Split text into paragraphs/sections
-  const paragraphs = text.split(/\n\n+/).filter((p) => p.trim());
-  
-  if (paragraphs.length === 0) {
-    return <div>{text}</div>;
-  }
+  // Clean up the text
+  const cleanText = text
+    .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/[\u{1F600}-\u{1F64F}]/gu, "")
+    .replace(/[\u{1F300}-\u{1F5FF}]/gu, "")
+    .replace(/[\u{1F680}-\u{1F6FF}]/gu, "")
+    .replace(/[\u{2600}-\u{26FF}]/gu, "")
+    .replace(/🚨|⚠️|📍|🚑/g, "")
+    .trim();
 
+  // Split into lines for processing
+  const lines = cleanText.split("\n");
   const elements: React.ReactNode[] = [];
-  let protocolNumber: string | null = null;
-  let protocolName: string | null = null;
-  let protocolUrgency: string | null = null;
+  let currentList: string[] = [];
+  let listKey = 0;
 
-  paragraphs.forEach((paragraph, index) => {
-    const trimmed = paragraph.trim();
-    if (!trimmed) return;
+  const flushList = () => {
+    if (currentList.length > 0) {
+      elements.push(
+        <ul key={`list-${listKey++}`} className="protocol-list">
+          {currentList.map((item, i) => (
+            <li key={i}>{highlightMedications(item)}</li>
+          ))}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
 
-    // Detect numbered sections (e.g., "1. **SECTION NAME**" or "2. **Protocol: 1207...")
-    const numberedSectionMatch = trimmed.match(/^(\d+)\.\s+\*\*(.+?)\*\*/);
-    const isNumberedSection = numberedSectionMatch !== null;
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushList();
+      return;
+    }
+
+    // Check if line is a section header (ends with : or is all caps with known header)
+    const isHeader = isSectionHeader(trimmed);
     
-    // Extract protocol header (e.g., "2. **Protocol: 1207 - Shock/Hypotension** (Critical)")
-    const protocolHeaderMatch = trimmed.match(/^(\d+)\.\s+\*\*Protocol:\s*(\d+)\s*-\s*(.+?)\*\*\s*\((.+?)\)/i);
-    if (protocolHeaderMatch) {
-      protocolNumber = protocolHeaderMatch[2];
-      protocolName = protocolHeaderMatch[3];
-      protocolUrgency = protocolHeaderMatch[4];
-      
-      // Render protocol header with badge
+    // Check if line is a list item (starts with - or •)
+    const isListItem = /^[-•]\s+/.test(trimmed);
+
+    if (isHeader) {
+      flushList();
       elements.push(
-        <div key={`protocol-header-${index}`} className="protocol-header-section">
-          <div className="protocol-badge-container">
-            <span className={`protocol-badge protocol-badge-${protocolUrgency.toLowerCase()}`}>
-              Protocol {protocolNumber}
-            </span>
-            <span className={`protocol-urgency-badge urgency-${protocolUrgency.toLowerCase()}`}>
-              {protocolUrgency}
-            </span>
-          </div>
-          <h2 className="protocol-title">{protocolName}</h2>
-        </div>,
+        <div key={`header-${index}`} className="protocol-section-header">
+          <strong>{trimmed}</strong>
+        </div>
       );
-      return;
-    }
-
-    // Detect priority indicators (P1, P2, P3)
-    const priorityMatch = trimmed.match(/\b(P[123]|Priority\s*[123])\b/i);
-    const priority: "P1" | "P2" | "P3" | null = priorityMatch
-      ? priorityMatch[1].toUpperCase().includes("P1")
-        ? "P1"
-        : priorityMatch[1].toUpperCase().includes("P2")
-          ? "P2"
-          : "P3"
-      : null;
-
-    const formatted = highlightMedications(trimmed);
-
-    // Numbered section headers (but not protocol header)
-    if (isNumberedSection && !protocolHeaderMatch) {
-      const sectionNumber = numberedSectionMatch[1];
-      const sectionTitle = numberedSectionMatch[2].replace(/\*\*/g, '').trim();
-      const restOfContent = trimmed.substring(numberedSectionMatch[0].length).trim();
-      
-      elements.push(
-        <div key={`numbered-section-${index}`} className="numbered-protocol-section">
-          <h3 className="protocol-section-header">
-            <span className="section-number">{sectionNumber}.</span>
-            {sectionTitle}
-          </h3>
-          {restOfContent && (
-            <div className="protocol-section-content">
-              {highlightMedications(restOfContent)}
-            </div>
-          )}
-        </div>,
-      );
-      return;
-    }
-
-    // Priority-highlighted sections
-    if (priority) {
-      const priorityLevel = priority === "P1" ? "Critical" : priority === "P2" ? "High" : "Medium";
-      elements.push(
-        <div 
-          key={`priority-${priority}-${index}`} 
-          className={`protocol-priority-${priority.toLowerCase()}`}
-          role="alert"
-          aria-label={`Priority ${priority} - ${priorityLevel} priority protocol section`}
-        >
-          <span className="sr-only">Priority {priority}: {priorityLevel} priority</span>
-          {formatted}
-        </div>,
-      );
+    } else if (isListItem) {
+      // Add to current list
+      const itemText = trimmed.replace(/^[-•]\s+/, "");
+      currentList.push(itemText);
     } else {
-      // Regular protocol sections
+      flushList();
+      // Regular paragraph
       elements.push(
-        <section 
-          key={`section-${index}`} 
-          className="protocol-section"
-          aria-label={`Protocol section ${index + 1}`}
-        >
-          {formatted}
-        </section>,
+        <p key={`p-${index}`} className="protocol-paragraph">
+          {highlightMedications(trimmed)}
+        </p>
       );
     }
   });
 
-  return elements.length > 0 ? <>{elements}</> : <div>{text}</div>;
+  // Flush any remaining list items
+  flushList();
+
+  return elements.length > 0 ? <>{elements}</> : <p>{text}</p>;
 }
 
 /**
- * Highlights medication names and dosages in text
+ * Check if a line is a section header
+ */
+function isSectionHeader(line: string): boolean {
+  const upper = line.toUpperCase();
+  
+  // Check against known headers
+  for (const header of SECTION_HEADERS) {
+    if (upper.startsWith(header)) {
+      return true;
+    }
+  }
+  
+  // Check for "WORD:" or "WORD WORD:" pattern at start (like "TRANSPORT:" or "RED FLAGS:")
+  if (/^[A-Z][A-Z\s]+:/.test(line)) {
+    return true;
+  }
+  
+  // Check for protocol reference like "PROTOCOL: TP 1207"
+  if (/^PROTOCOL:/i.test(line)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Highlights only actual medication names from the whitelist
  */
 function highlightMedications(text: string): React.ReactNode {
-  // First, strip markdown formatting and emojis for clean display
-  const cleanText = text
-    // Remove bold/italic markdown
-    .replace(/\*\*\*(.+?)\*\*\*/g, '$1')  // ***text*** -> text
-    .replace(/\*\*(.+?)\*\*/g, '$1')      // **text** -> text
-    .replace(/\*(.+?)\*/g, '$1')          // *text* -> text
-    // Remove headers
-    .replace(/^#{1,6}\s+/gm, '')          // ### Header -> Header
-    // Remove emojis
-    .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
-    .replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
-    .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
-    .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Flags
-    .replace(/[\u{2600}-\u{26FF}]/gu, '')   // Misc symbols
-    .replace(/[\u{2700}-\u{27BF}]/gu, '')   // Dingbats
-    .replace(/🚨|⚠️|📍|🚑/g, '')            // Specific emojis from prompt
-    // Clean up extra spaces
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  // Critical medications requiring red emphasis
-  const CRITICAL_MEDICATIONS = [
-    'epinephrine', 'norepinephrine', 'dopamine', 'dobutamine',
-    'rocuronium', 'vecuronium', 'succinylcholine', 'ketamine',
-    'etomidate', 'propofol', 'midazolam', 'fentanyl', 'morphine',
-    'atropine', 'calcium', 'amiodarone', 'lidocaine'
-  ];
-
-  // Simple approach: look for medication patterns and replace them
-  const patterns: Array<{ regex: RegExp; className: string }> = [
-    // Critical drug doses (epinephrine 0.5mg, etc.) - Gets red emphasis
-    {
-      regex: new RegExp(`\\b(${CRITICAL_MEDICATIONS.join('|')})\\s+(\\d+\\.?\\d*\\s*(?:mg|mcg|g|units?))\\b`, 'gi'),
-      className: "dosing-value-critical",
-    },
-    // Medication doses (mg, mcg, g, units) - Normal emphasis
-    {
-      regex: /\b(\d+\.?\d*\s*(?:mg|mcg|g|units?))\b/gi,
-      className: "dosing-value",
-    },
-    // Contextual measurements (mL, L/min, puffs) - De-emphasized
-    {
-      regex: /\b(\d+\.?\d*\s*(?:mL|L(?:\/min)?|puffs?|tablets?))\b/gi,
-      className: "measurement-value",
-    },
-    // Medication names with dosages: "Epinephrine 0.5mg", "Albuterol 5mg"
-    {
-      regex: /\b([A-Z][a-z]+(?:\s+\d+\.?\d*\s*(?:mg|mcg|g|mL|units?|puffs?|tablets?))?)\b/g,
-      className: "medication-highlight",
-    },
-    // Protocol numbers: "Protocol 1231"
-    {
-      regex: /\b(Protocol\s+\d+)\b/gi,
-      className: "medication-highlight",
-    },
-  ];
-
   const parts: Array<string | JSX.Element> = [];
-  let lastIndex = 0;
+  let remaining = text;
   let keyCounter = 0;
 
-  // Collect all matches
-  const allMatches: Array<{ index: number; length: number; text: string; className: string }> = [];
+  // Build regex from medication names (case insensitive, word boundaries)
+  const medicationPattern = new RegExp(
+    `\\b(${MEDICATION_NAMES.map(m => m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})\\b`,
+    "gi"
+  );
 
-  patterns.forEach(({ regex, className }) => {
-    let match;
-    const regexCopy = new RegExp(regex.source, regex.flags);
-    while ((match = regexCopy.exec(cleanText)) !== null) {
-      allMatches.push({
-        index: match.index,
-        length: match[0].length,
-        text: match[0],
-        className,
-      });
-    }
-  });
+  // Also match protocol codes like "TP 1207" or "Protocol 1207"
+  const protocolPattern = /\b(TP\s*\d{4}|Protocol\s+\d{4})\b/gi;
 
-  // Sort by index and remove overlaps (keep first match)
-  allMatches.sort((a, b) => a.index - b.index);
-  const filteredMatches: typeof allMatches = [];
+  // Find all medication matches
+  let match;
+  let lastIndex = 0;
+  const matches: Array<{ index: number; text: string; type: "med" | "protocol" }> = [];
 
-  for (const match of allMatches) {
-    const overlaps = filteredMatches.some(
+  // Find medications
+  while ((match = medicationPattern.exec(text)) !== null) {
+    matches.push({ index: match.index, text: match[0], type: "med" });
+  }
+
+  // Find protocol codes
+  while ((match = protocolPattern.exec(text)) !== null) {
+    matches.push({ index: match.index, text: match[0], type: "protocol" });
+  }
+
+  // Sort by position and remove overlaps
+  matches.sort((a, b) => a.index - b.index);
+  const filtered: typeof matches = [];
+  for (const m of matches) {
+    const overlaps = filtered.some(
       (existing) =>
-        match.index < existing.index + existing.length &&
-        match.index + match.length > existing.index,
+        m.index < existing.index + existing.text.length &&
+        m.index + m.text.length > existing.index
     );
     if (!overlaps) {
-      filteredMatches.push(match);
+      filtered.push(m);
     }
   }
 
   // Build result
-  filteredMatches.forEach((match) => {
-    // Add text before match
-    if (match.index > lastIndex) {
-      parts.push(cleanText.slice(lastIndex, match.index));
+  for (const m of filtered) {
+    if (m.index > lastIndex) {
+      parts.push(text.slice(lastIndex, m.index));
     }
-
-    // Add highlighted match
-    const isMedication = match.className === "medication-highlight";
-    const isDosing = match.className === "dosing-value";
-    const ariaLabel = isMedication
-      ? `Medication: ${match.text}`
-      : isDosing
-        ? `Dosage: ${match.text}`
-        : undefined;
-
     parts.push(
-      <span
-        key={`med-${keyCounter++}`}
-        className={match.className}
-        aria-label={ariaLabel}
-        role={isMedication ? "text" : undefined}
-      >
-        {match.text}
-      </span>,
+      <strong key={`highlight-${keyCounter++}`} className={m.type === "med" ? "medication-name" : "protocol-code"}>
+        {m.text}
+      </strong>
     );
-
-    lastIndex = match.index + match.length;
-  });
-
-  // Add remaining text
-  if (lastIndex < cleanText.length) {
-    parts.push(cleanText.slice(lastIndex));
+    lastIndex = m.index + m.text.length;
   }
 
-  return parts.length > 0 ? <>{parts}</> : cleanText;
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? <>{parts}</> : text;
 }

@@ -1,11 +1,12 @@
 "use client";
 
-import { Mic, Send } from "lucide-react";
+import { Loader2, Mic, Send } from "lucide-react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { ProtocolAutocomplete } from "@/app/components/chat/protocol-autocomplete";
 import { TextAreaAutoResizer } from "@/app/tools/text-area-auto-resizer";
+import type { RecorderState } from "@/lib/AudioRecorderManager";
 
 export interface VoiceFirstInputProps {
   input: string;
@@ -17,6 +18,8 @@ export interface VoiceFirstInputProps {
   onToggleVoice: () => void;
   voiceSupported: boolean;
   listening: boolean;
+  /** Voice recorder state for better UI feedback */
+  voiceState?: RecorderState;
 }
 
 /**
@@ -33,6 +36,7 @@ export function VoiceFirstInput({
   onToggleVoice,
   voiceSupported,
   listening,
+  voiceState = "idle",
 }: VoiceFirstInputProps) {
   const resizer = useMemo(() => new TextAreaAutoResizer({ minHeight: 48, maxHeight: 120 }), []);
 
@@ -66,9 +70,18 @@ export function VoiceFirstInput({
 
   const getVoiceStatus = () => {
     if (!voiceSupported) return "Voice not supported";
-    if (listening) return "Listening...";
-    return "Tap to speak";
+    switch (voiceState) {
+      case "recording":
+        return "Listening... (tap to stop)";
+      case "transcribing":
+        return "Transcribing...";
+      default:
+        return "Tap to speak";
+    }
   };
+
+  const isTranscribing = voiceState === "transcribing";
+  const isDisabled = loading || !voiceSupported || isTranscribing;
 
   return (
     <div className="chatbot-input-area">
@@ -76,38 +89,36 @@ export function VoiceFirstInput({
         {/* Voice button - primary input */}
         <button
           type="button"
-          className={`voice-button ${listening ? "listening" : ""}`}
+          className={`voice-button ${listening ? "listening" : ""} ${isTranscribing ? "transcribing" : ""}`}
           onClick={onToggleVoice}
-          disabled={loading || !voiceSupported}
+          disabled={isDisabled}
           aria-label={listening ? "Stop listening" : "Start voice input"}
         >
-          <Mic />
+          {isTranscribing ? <Loader2 className="animate-spin" /> : <Mic />}
         </button>
-        <span className={`voice-status ${listening ? "active" : ""}`}>
+        <span className={`voice-status ${listening ? "active" : ""} ${isTranscribing ? "transcribing" : ""}`}>
           {getVoiceStatus()}
         </span>
 
         {/* Text input row - secondary */}
         <div className="text-input-row">
-          <div style={{ position: "relative", flex: 1 }}>
-            {input.trim() && (
-              <ProtocolAutocomplete
-                input={input}
-                onSelect={handleProtocolSelect}
-                onInputChange={onInput}
-              />
-            )}
-            <textarea
-              ref={taRef}
-              value={input}
-              placeholder="Or type your question..."
-              onChange={handleInputChange}
-              onKeyDown={onKeyDown}
-              className="text-input"
-              aria-label="Message input"
-              rows={1}
+          {input.trim() && (
+            <ProtocolAutocomplete
+              input={input}
+              onSelect={handleProtocolSelect}
+              onInputChange={onInput}
             />
-          </div>
+          )}
+          <textarea
+            ref={taRef}
+            value={input}
+            placeholder="Type your question..."
+            onChange={handleInputChange}
+            onKeyDown={onKeyDown}
+            className="text-input"
+            aria-label="Message input"
+            rows={1}
+          />
           <button
             type="button"
             onClick={handleSubmit}
@@ -115,7 +126,7 @@ export function VoiceFirstInput({
             className="send-button"
             aria-label="Send message"
           >
-            <Send size={20} />
+            <Send size={18} />
           </button>
         </div>
       </div>

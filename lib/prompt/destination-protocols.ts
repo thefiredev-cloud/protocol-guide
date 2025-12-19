@@ -1,7 +1,7 @@
 /**
  * LA County Destination Protocol Criteria (500-series References)
- * Source: LA County 2024 Prehospital Care Manual (PCM)
- * https://file.lacounty.gov/SDSInter/dhs/1143706_2024PCMPublic.pdf
+ * Source: LA County Prehospital Care Manual (PCM)
+ * VERIFIED against official documents 2025-12-19
  */
 
 export const DESTINATION_PROTOCOL_CRITERIA = `
@@ -30,37 +30,46 @@ Emergency Department Approved for Pediatrics - for pediatric patients (≤14 yea
 - Do NOT meet PMC criteria above
 - Require pediatric-capable emergency care
 - Include newly born patients (with Perinatal referral if indicated)
-EDAP hospitals have demonstrated pediatric equipment, trained staff, QI programs.
 Transport: If PMC criteria NOT met → nearest EDAP.
 
-**TRAUMA CENTER CRITERIA (Ref 506):**
-Section I - Transport to TC if ANY:
-- SBP <90 (<70 for infants <1yr)
-- RR >29, <10, or ventilatory support needed
-- Penetrating injuries to head/neck/torso/proximal extremities
-- GCS ≤14 with head injury
-- Spinal injury with neuro deficit
-- Flail chest, diffuse abdominal tenderness, pelvic fracture
-- Extremity neuro/vascular compromise or amputation
-- Fall >10 feet, ejection, auto vs ped >20mph
-- Major burns (≥20% TBSA for adults, ≥10% for peds)
-Transport: TC if ≤30 min
+**TRAUMA CENTER CRITERIA (Ref 506 Section I) - Revised 01-01-24:**
+Transport to designated trauma center if transport ≤30 min AND ANY of:
+A. SBP <90 mmHg (or <70 mmHg in infants <1 year)
+B. RR >29 sustained, <10, <20 in infants <1 year, or requiring ventilatory support
+C. Cardiopulmonary arrest with penetrating torso trauma (unless apneic, pulseless, asystolic, without pupillary reflexes on EMS arrival)
+D. All penetrating injuries to head, neck, torso, and extremities proximal to elbow or knee
+E. Blunt head injury with: suspected skull fracture, GCS ≤14, seizures, unequal pupils, or focal neurological deficit
+F. Spinal injury with acute sensory or motor deficit
+G. Flail chest (unstable chest wall)
+H. Diffuse abdominal tenderness
+I. Suspected pelvic fracture (excluding isolated hip fracture from ground level fall)
+J. Extremity with:
+   1. Neuro/vascular compromise, crushed, degloved, or mangled
+   2. Amputation proximal to wrist or ankle
+   3. Fractures of 2+ proximal long-bones (humerus/femur)
+   4. Bleeding requiring tourniquet or hemostatic agent (not controlled by direct pressure)
+K. Fall from height >10 feet (all patients)
+L. Passenger space intrusion >12 inches into OCCUPIED passenger space
+M. Ejected from vehicle (partial or complete)
+N. Auto vs pedestrian/bicyclist/motorcyclist: thrown, run over, OR >20 mph impact
+O. Unenclosed transport crash >20 mph impact
+P. Major burns (excluding if MAR is burn center):
+   1. Adults ≥15 yrs: ≥20% TBSA 2nd/3rd degree
+   2. Pediatric ≤14 yrs: ≥10% TBSA 2nd/3rd degree
 
-**PTC (PEDIATRIC TRAUMA CENTER) CRITERIA (Ref 506 Section II):**
-Transport pediatric trauma patients (≤14 years) to PTC if:
-- Meets ANY trauma triage criteria above AND
-- PTC is accessible within 30 minutes
+**PTC (PEDIATRIC TRAUMA CENTER) CRITERIA (Ref 506/510):**
+Pediatric trauma patients (≤14 years) meeting ANY trauma criteria → PTC if ≤30 min
 LA County PTCs: Children's Hospital Los Angeles (CHLA), LAC+USC Pediatric
-If PTC not accessible → transport to nearest adult Trauma Center.
+If PTC not accessible → nearest adult Trauma Center
 
-**STROKE CENTER CRITERIA (Ref 521/322):**
+**STROKE CENTER CRITERIA (Ref 521) - Revised 10-01-24:**
 
 mLAPSS SCREENING (ALL must be positive):
-- No seizure/epilepsy history
+- No history of seizures or epilepsy
 - Age ≥40 years
 - Not wheelchair-bound/bedridden at baseline
 - Blood glucose 60-400 mg/dL
-- Unilateral weakness (facial droop, grip, arm drift)
+- Unilateral weakness: facial droop, grip, OR arm strength asymmetry
 
 LAMS SCORE (0-5):
 - Facial droop: 0 (absent) / 1 (present)
@@ -68,68 +77,103 @@ LAMS SCORE (0-5):
 - Grip strength: 0 (normal) / 1 (weak grip) / 2 (no grip)
 
 ROUTING:
-- mLAPSS+ AND LAMS ≤3 AND LKWT ≤24h → Closest PSC (Primary Stroke Center)
-- mLAPSS+ AND LAMS 4-5 AND LKWT ≤24h → CSC if ≤30 min (Comprehensive Stroke Center)
-- If CSC >30 min → transport to closest PSC instead
+- mLAPSS+ AND LAMS ≤3 AND LKWT ≤24h → Closest stroke center (PSC or CSC)
+- mLAPSS+ AND LAMS 4-5 AND LKWT ≤24h → CSC if ≤30 min, otherwise closest PSC
+- LKWT >24 hours → Base hospital determines destination
+- No stroke center within 30 min → Most accessible receiving facility
 
-**PERINATAL CENTER CRITERIA (Ref 511):**
-Transport to Perinatal Center if ANY:
-- Pregnancy >20 weeks with complications
-- Active labor with complications (breech, prolapsed cord, multiple gestation)
-- Eclampsia or severe preeclampsia (BP ≥140/90 + headache/vision changes/RUQ pain)
-- Vaginal bleeding with hemodynamic instability
-- Preterm labor <34 weeks → Perinatal Center with NICU capability
-- Fetal distress or absent fetal heart tones
-Transport: Perinatal Center if ≤30 min, otherwise closest EDAP
+**PERINATAL CENTER CRITERIA (Ref 511) - Revised 10-01-23:**
+Transport to Perinatal Center if ANY (Section I):
+A. Patients in active labor (whether or not delivery appears imminent)
+B. Chief complaint related to pregnancy
+C. Perinatal complications
+D. Injured patients who do NOT meet trauma criteria
+E. Hypertension (BP ≥140/90 mmHg)
+
+Post-partum (up to 6 weeks) with hypertension → Perinatal center
+Newly delivered prior to hospital arrival → Closest perinatal center with EDAP (consider NICU)
+Meets trauma criteria → Trauma center (Section IV)
+Cardiac arrest + perinatal → SRC with perinatal capability when feasible (Section V)
+Transport >30 min → EDAP (Section VI)
+
+Transport to MAR if (Section VII):
+- In acute respiratory distress
+- Chief complaint clearly NOT related to pregnancy
+
+Preterm ≤34 weeks with pregnancy complaints → Perinatal with NICU if feasible
 
 **BURN CENTER CRITERIA (Ref 512):**
-Transport to Burn Center if ANY:
-- Adults (≥15 yrs): ≥20% TBSA 2nd/3rd degree burns
-- Pediatric (≤14 yrs): ≥10% TBSA 2nd/3rd degree burns
-- Inhalation injury (singed facial hair, carbonaceous sputum, stridor)
-- Circumferential burns to extremity or chest
-- Chemical or electrical burns
-- Burns to face, hands, feet, genitalia, perineum, major joints
-- Burns with associated trauma (Trauma Center takes priority)
-LA County Burn Centers: LAC+USC, Torrance Memorial
-Transport: Burn Center if ≤30 min
+LA County does NOT have separate burn center routing criteria beyond TBSA thresholds.
+Major/Critical Burns meeting trauma criteria → Closest Trauma Center OR recognized Burn Center if more accessible
+
+Burn Centers: LA General Medical Center (LAC+USC), Torrance Memorial, West Hills Hospital
+
+Burn TBSA Thresholds (per Ref 506.P):
+- Adults ≥15 yrs: ≥20% TBSA 2nd/3rd degree
+- Pediatric ≤14 yrs: ≥10% TBSA 2nd/3rd degree
+
+Note: Additional burn criteria (inhalation injury, circumferential, chemical, electrical, facial) are from ABA guidelines and treatment protocols, not LA County Ref 512 destination policy.
 
 **STEMI RECEIVING CENTER (SRC) CRITERIA (Ref 513):**
-Transport to SRC if ANY:
-- 12-lead ECG showing ST elevation ≥1mm in 2+ contiguous leads
-- New or presumably new LBBB with chest pain
-- Posterior MI pattern (ST depression V1-V3 with tall R waves)
-Required: 12-lead ECG acquisition and transmission
-Transport: SRC if ≤30 min, otherwise activate cath lab at nearest facility
-Time goal: First medical contact to balloon <90 minutes
+Transport to SRC if ground transport ≤30 min AND:
+- 12-lead ECG demonstrates STEMI (or manufacturer equivalent) AND
+- Consistent with paramedic interpretation and/or clinical presentation
+- Provider impression = Chest Pain - STEMI (CPMI)
 
-**CARDIAC ARREST DESTINATION (Ref 516):**
-ROSC achieved → Transport to most appropriate facility
+If paramedic impression differs or uncertain → Base contact required
+Transport: SRC if ≤30 min regardless of service area boundaries
+If >30 min to SRC → Most accessible receiving facility
+STEMI patients → Transport to SRC regardless of ED Diversion status
+Notify receiving SRC and discuss cath lab activation for all CPMI patients
 
-ECPR CANDIDATE CRITERIA (transport to ECPR center):
-- Witnessed arrest (bystander or EMS)
-- Initial shockable rhythm (VF/pVT) at any point
-- Age 18-75 years
-- No known terminal illness or DNR
-- Estimated down time <60 minutes
-- High-quality CPR ongoing
-- ECPR center accessible within 30 minutes
-LA County ECPR Centers: Cedars-Sinai, UCLA, LAC+USC
+**CARDIAC ARREST DESTINATION (Ref 516) - Revised 07-01-25:**
 
-NO ECPR if: Unwitnessed arrest, asystole throughout, >75 years, known DNR, prolonged down time
+ECPR CANDIDATE CRITERIA - Transport to ECPR center if ALL met:
+A. Age ≥15 to ≤75 years old
+B. Mechanical compression device (MCD) available AND patient body habitus accommodates device
+C. Initial shockable rhythm with REFRACTORY OR RECURRENT VF/VT, OR presumed massive PE
+D. Scene time can be limited to ≤15 minutes (no factors delaying transport)
+E. Patient does NOT have: DNR, known terminal illness, or baseline severe neurologic dysfunction
 
-**SART CENTER CRITERIA (Ref 508):**
-Sexual Assault Response Team - Transport to SART Center if:
-- Sexual assault within 120 HOURS (5 days)
-- Patient requests forensic examination
-Transport: Designated SART Center regardless of distance if patient stable
-If SART would unreasonably remove unit from response area → MAR instead
+Transport: Closest ECPR Receiving Center if ground transport ≤30 min
+
+Non-ECPR cardiac arrest → Transport to SRC if ≤30 min if ANY (Section V):
+A. Sustained ROSC
+B. ROSC who re-arrests en route
+C. Persistent arrest where Base Physician determines transport required
+D. Base judgment for ECPR when closest SRC is ECPR center
+E. Progressed into arrest en route with pre-arrest STEMI 12-lead
+
+If SRC >30 min → Transport to MAR
+Cardiac arrest patients → Transport to SRC regardless of ED Diversion status
+
+Pediatric cardiac arrest (≤14 years) → Ref 510 (Pediatric Patient Destination)
+Traumatic arrest → Ref 506 (Trauma Triage)
+
+**SART CENTER CRITERIA (Ref 508/508.1) - Revised 07-10-25:**
+Sexual assault → Transport to designated SART Center
+
+EMS-APPROVED SART CENTERS (Section I):
+1. Antelope Valley Hospital - Lancaster (661-723-7273) - Adults/Pediatrics
+2. LA General Medical Center - Los Angeles (323-409-5086) - Adults/Pediatrics
+3. Pomona Valley Hospital Medical Center - Pomona (562-497-0147) - Adults/Pediatrics
+4. PIH Health Hospital - Whittier (562-497-0147) - Adults/Pediatrics
+5. Providence Little Company of Mary - San Pedro (562-497-0147) - Adults/Pediatrics
+6. San Gabriel Valley Medical Center - San Gabriel (877-209-3049) - ADULTS ONLY
+7. Santa Monica-UCLA Medical Center (424-259-7208) - Adults/Pediatrics
+
+LAW ENFORCEMENT TRANSPORT ONLY (not EMS):
+- Long Beach SART Center
+- Northridge Hospital Medical Center (CATS)
+- Providence Little Company of Mary - Torrance
+
+DCFS ONLY (Pediatrics):
+- Harbor-UCLA KIDS Hub - Pediatrics ONLY
+- Martin Luther King Pediatric Clinic - Pediatrics ONLY
+- Olive View SCAN Clinic - Pediatrics ONLY
+
+If SART unreasonably removes unit from response area → MAR
 MANDATORY: Notify local law enforcement regardless of patient injury complaints
-Evidence Preservation:
-- Do NOT wash or clean patient
-- Do NOT allow patient to void if possible
-- Do NOT remove foreign bodies - document only
-- Offer supportive care, maintain privacy and dignity
 Base Contact: Required for all sexual assault cases
 
 **DECOMPRESSION EMERGENCY (Ref 518):**
@@ -141,7 +185,7 @@ IMMEDIATE → Hyperbaric Chamber if ANY:
 - Pulseless
 - Omitted decompression (premature ascent without completing stops)
 
-EMERGENT → Hyperbaric OR MAR (per hyperbaric physician consultation):
+EMERGENT → Hyperbaric OR MAR (per hyperbaric physician):
 - Any neurological symptoms
 - Severe dyspnea
 - Chest discomfort
@@ -150,7 +194,7 @@ NON-EMERGENT → MAR with potential secondary transfer:
 - Delayed symptoms after flying
 - Delayed minor symptoms after 24 hours
 
-**PSYCHIATRIC URGENT CARE CENTER (PUCC) CRITERIA (Ref 526.1):**
+**PSYCHIATRIC URGENT CARE CENTER (PUCC) CRITERIA (Ref 526.1) - Revised 07-01-25:**
 TAD-trained paramedics ONLY. Transport within 15 min. ALL criteria must be met:
 
 INCLUSION (all required):
@@ -175,7 +219,7 @@ EXCLUSION (any → ED instead):
 - Intellectual/developmental disability
 - EMS clinician judgment: patient not stable for PUCC
 
-**SOBERING CENTER CRITERIA (Ref 528.1):**
+**SOBERING CENTER CRITERIA (Ref 528.1) - Revised 01-01-24:**
 TAD-trained paramedics ONLY. Transport within 15 min. ALL criteria must be met:
 
 INCLUSION (all required):
@@ -184,7 +228,7 @@ INCLUSION (all required):
 - Verbalizes consent
 - Cooperative (no restraints), ambulatory
 - No focal neurological deficit
-- GCS ≥14 (see note: intoxicated patient may initially score 13, reassess)
+- GCS ≥14 (intoxicated patient may initially score 13, reassess)
 - HR 60-119, RR 12-23, SpO2 ≥94% RA, SBP 100-179
 - If diabetic: BGL 60-249
 - No bruising/hematoma above clavicles
@@ -205,4 +249,6 @@ PROHIBITED HALLUCINATIONS:
 - 'cardiac ischemia' (correct: 'cardiac dysrhythmia')
 - 'Newly born → PMC' (correct: 'Newly born → EDAP + Perinatal')
 - Inventing criteria not in the protocols
+- Using ABA burn criteria as LA County policy
+- Adding 'witnessed arrest' or '60-min downtime' to ECPR (not in Ref 516)
 `.trim();
