@@ -78,6 +78,8 @@ export type MedicationCalculationRequest = {
   route?: Route;
   isPregnant?: boolean;
   contraindications?: string[];
+  /** Provider level for scope of practice enforcement (default: Paramedic) */
+  providerLevel?: ProviderLevel;
 };
 
 export type MedicationCalculationResult = {
@@ -87,6 +89,10 @@ export type MedicationCalculationResult = {
   warnings: string[];
   citations: string[];
   metadata?: Record<string, unknown>;
+  /** Scope of practice enforcement (LA County Policy 802/803) */
+  scopeWarning?: string;
+  scopeAuthorized?: boolean;
+  policyReference?: string;
 };
 
 export interface MedicationCalculator {

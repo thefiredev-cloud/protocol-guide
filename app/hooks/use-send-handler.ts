@@ -35,9 +35,11 @@ type SendDeps = {
   >;
   setErrorBanner: (message: string | null) => void;
   enableStreaming?: boolean;
+  /** Provider level for scope of practice (default: Paramedic) */
+  providerLevel?: "EMT" | "Paramedic";
 };
 
-export function useSendHandler({ chat, narrative, taRef, appendAssistant, handleCitations, handleOrders, request, setErrorBanner, enableStreaming }: SendDeps) {
+export function useSendHandler({ chat, narrative, taRef, appendAssistant, handleCitations, handleOrders, request, setErrorBanner, enableStreaming, providerLevel = "Paramedic" }: SendDeps) {
   const resetNarrative = narrative.reset;
 
   const manager = useMemo(
@@ -68,7 +70,7 @@ export function useSendHandler({ chat, narrative, taRef, appendAssistant, handle
     setErrorBanner(null);
 
     try {
-      await manager.send({ messages: nextMessages }, enableStreaming ? { stream: true } : undefined);
+      await manager.send({ messages: nextMessages, providerLevel }, enableStreaming ? { stream: true } : undefined);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       appendAssistant(`Sorry, something went wrong: ${message}`);

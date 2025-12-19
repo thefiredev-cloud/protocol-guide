@@ -14,6 +14,8 @@ export const requestSchema = z.object({
     )
     .min(1, "Must include at least one message"),
   mode: z.enum(["chat", "narrative"]).optional(),
+  /** Provider level for scope of practice enforcement (default: Paramedic) */
+  providerLevel: z.enum(["EMT", "Paramedic"]).optional(),
 });
 
 export type PreparedRequest = { payload: z.infer<typeof requestSchema> } | { error: NextResponse };

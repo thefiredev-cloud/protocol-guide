@@ -2,6 +2,8 @@ import type { CarePlan, ChatMessage, Citation } from "@/app/types/chat";
 
 type SendRequestPayload = {
   messages: ChatMessage[];
+  /** Provider level for scope of practice (default: Paramedic) */
+  providerLevel?: "EMT" | "Paramedic";
 };
 
 type SendResponse = {

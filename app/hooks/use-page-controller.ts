@@ -5,6 +5,7 @@ import { useBuildNarrative } from "@/app/hooks/use-build-narrative";
 import { useChatState } from "@/app/hooks/use-chat-state";
 import { useNarrativeState } from "@/app/hooks/use-narrative-state";
 import { useOrdersCitations } from "@/app/hooks/use-orders-citations";
+import { useProviderLevel } from "@/app/hooks/use-provider-level";
 import { useScrollAnchor } from "@/app/hooks/use-scroll-anchor";
 import { useSendHandler } from "@/app/hooks/use-send-handler";
 import { useVoiceInput } from "@/app/hooks/use-voice-input";
@@ -103,8 +104,9 @@ type ControllerDeps = ReturnType<typeof useControllerState> & {
   handlers: ReturnType<typeof useOrdersCitations>;
 };
 
-function useChatHandlersConfig({ chat, narrative, refs, appendAssistant, handlers, setErrorBanner }: ControllerDeps & {
+function useChatHandlersConfig({ chat, narrative, refs, appendAssistant, handlers, setErrorBanner, providerLevel }: ControllerDeps & {
   setErrorBanner: React.Dispatch<React.SetStateAction<string | null>>;
+  providerLevel: "EMT" | "Paramedic";
 }) {
   const send = useSendHandler({
     chat,
@@ -116,6 +118,7 @@ function useChatHandlersConfig({ chat, narrative, refs, appendAssistant, handler
     request: requestChat,
     setErrorBanner,
     enableStreaming: true,
+    providerLevel,
   });
 
   const buildNarrative = useBuildNarrative({
@@ -138,11 +141,13 @@ export function usePageController(initialMessages: ChatMessage[]): PageControlle
   const controllerState = useControllerState(initialMessages);
   const handlers = useOrdersCitations(controllerState.narrative.setRecentOrders, controllerState.narrative.setCitations);
   const appendAssistant = useAppendAssistant(controllerState.chat);
+  const { providerLevel } = useProviderLevel();
   const { send, buildNarrative } = useChatHandlersConfig({
     ...controllerState,
     appendAssistant,
     handlers,
     setErrorBanner: controllerState.setErrorBanner,
+    providerLevel,
   });
 
   const { voice, onToggleVoice } = useVoiceControls(controllerState.chat, controllerState.refs);

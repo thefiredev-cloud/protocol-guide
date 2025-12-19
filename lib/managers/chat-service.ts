@@ -40,6 +40,8 @@ export type ChatRequest = {
   sessionId?: string;
   ipAddress?: string;
   userAgent?: string;
+  /** Provider level for scope of practice (default: Paramedic) */
+  providerLevel?: "EMT" | "Paramedic";
 };
 
 export type ChatResponse = {
@@ -68,6 +70,8 @@ export class ChatService {
   private readonly guardrailService: GuardrailService;
   private readonly protocolRetrievalService = new ProtocolRetrievalService();
   private readonly medicationManager = createDefaultMedicationManager();
+  /** Current provider level for scope enforcement (set per request) */
+  private currentProviderLevel: "EMT" | "Paramedic" = "Paramedic";
 
   constructor(llmClient?: LLMClient | AnthropicClient) {
     // Select client based on provider configuration (default: OpenAI/GPT-4o-mini)
@@ -116,7 +120,10 @@ export class ChatService {
   /**
    * Handle chat request - main entry point
    */
-  public async handle({ messages, mode, userId, sessionId, ipAddress, userAgent }: ChatRequest): Promise<ChatResponse> {
+  public async handle({ messages, mode, userId, sessionId, ipAddress, userAgent, providerLevel }: ChatRequest): Promise<ChatResponse> {
+    // Set provider level for this request (default: Paramedic)
+    this.currentProviderLevel = providerLevel ?? "Paramedic";
+
     const requestStart = Date.now();
     await this.warm();
     metrics.inc("chat.sessions");
@@ -477,6 +484,7 @@ export class ChatService {
 
   /**
    * Handle medication dose calculation for adult and pediatric patients
+   * Includes scope of practice enforcement per LA County Policy 802/803
    */
   private handleMedicationDose(args: unknown): unknown {
     const params = args as {
@@ -492,6 +500,7 @@ export class ChatService {
       patientWeightKg: params.patientWeightKg,
       scenario: params.scenario,
       route: params.route,
+      providerLevel: this.currentProviderLevel,
     });
 
     if (!result) {
@@ -506,6 +515,10 @@ export class ChatService {
       medication: result.medicationName,
       patientType: (params.patientAgeYears ?? 30) >= 15 ? "adult" : "pediatric",
       weightKg: params.patientWeightKg,
+      // Scope of practice enforcement
+      scopeAuthorized: result.scopeAuthorized,
+      scopeWarning: result.scopeWarning,
+      policyReference: result.policyReference,
       recommendations: result.recommendations.map((rec) => ({
         indication: rec.label,
         route: rec.route,
