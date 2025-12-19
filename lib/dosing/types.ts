@@ -1,3 +1,9 @@
+/**
+ * LA County EMS Provider Levels
+ * Per Policy 802 (EMT Scope) and Policy 803 (Paramedic Scope)
+ */
+export type ProviderLevel = "EMT" | "Paramedic";
+
 export type BaseDoseUnit = "mg" | "mcg" | "g" | "mEq" | "units" | "mL" | "L" | "drops" | "puffs";
 
 export type DoseUnit =
@@ -88,7 +94,28 @@ export interface MedicationCalculator {
   name: string;
   aliases?: string[];
   categories?: string[];
+  /** LA County authorized provider levels per Policy 802/803 */
+  authorizedProviders?: ProviderLevel[];
+  /** True if EMTs can administer (subset of Paramedic scope) */
+  emtAuthorized?: boolean;
   calculate(request: MedicationCalculationRequest): MedicationCalculationResult;
 }
+
+// Legacy type aliases for backward compatibility with newer calculators
+export type PatientContext = MedicationCalculationRequest;
+
+export type DosingResult = {
+  medication: string;
+  indication: string;
+  dose: string;
+  route: string;
+  concentration?: string;
+  maxDose?: string;
+  calculatedDose?: string;
+  volume?: string;
+  notes?: string;
+  warnings?: string[];
+  protocolReference?: string;
+};
 
 

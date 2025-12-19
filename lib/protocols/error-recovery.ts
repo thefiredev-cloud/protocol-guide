@@ -577,14 +577,41 @@ export class ProtocolErrorRecovery {
     return searchProtocolFiles(query, limit);
   }
 
-  private getConservativeProtocol(tpCode: string): Protocol | undefined {
-    // Return very conservative guidance when all else fails
-    // This ensures system never returns dangerous info
+  private getConservativeProtocol(tpCode: string): Protocol {
+    // Return conservative guidance when all else fails
+    // NEVER return undefined - always provide safe fallback with base hospital contact
     logger.warn(`Returning conservative protocol for ${tpCode}`);
 
-    // Don't return anything - let the calling code handle the error
-    // This is safer than returning potentially incorrect medical information
-    return undefined;
+    const now = new Date().toISOString();
+
+    // Return a protocol that instructs immediate base hospital contact
+    // This is the safest fallback when protocol data is unavailable
+    return {
+      id: `conservative-fallback-${tpCode}`,
+      tp_code: tpCode,
+      tp_name: 'Protocol Data Temporarily Unavailable',
+      tp_category: 'general_medical',
+      full_text: `IMPORTANT: Protocol ${tpCode} data is temporarily unavailable due to a system error. ` +
+        'Contact Base Hospital immediately for clinical guidance. ' +
+        'Do NOT proceed with treatment until you have received direction from Base Hospital. ' +
+        'Document this system issue in your Patient Care Report.',
+      summary: `Contact Base Hospital immediately - protocol ${tpCode} data unavailable`,
+      keywords: ['base hospital', 'contact', 'unavailable', 'fallback'],
+      chief_complaints: [],
+      base_contact_required: true,
+      base_contact_criteria: 'MANDATORY - Protocol data unavailable, require Base Hospital guidance',
+      warnings: [
+        'Protocol data temporarily unavailable - contact Base Hospital immediately',
+        'Do not proceed without Base Hospital direction',
+        'Document this system issue'
+      ],
+      contraindications: [],
+      version: 0,
+      effective_date: now,
+      is_current: true,
+      created_at: now,
+      updated_at: now,
+    };
   }
 }
 

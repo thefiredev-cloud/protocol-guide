@@ -68,6 +68,14 @@ export class LLMClient {
   private nextAttemptAt = 0;
 
   constructor(config: LLMClientConfig) {
+    // Validate API key is present and non-empty
+    if (!config.apiKey || config.apiKey.trim().length === 0) {
+      throw new Error(
+        "LLMClient requires a valid API key. " +
+        "Ensure LLM_API_KEY is set in environment variables."
+      );
+    }
+
     this.baseUrl = config.baseUrl.replace(/\/$/, "");
     this.apiKey = config.apiKey;
     this.timeoutMs = config.timeoutMs ?? 12_000;
@@ -292,11 +300,23 @@ export class LLMClient {
 
       // Check for function calls
       if (message.tool_calls && message.tool_calls.length > 0) {
-        const functionCalls = message.tool_calls.map((call) => ({
-          id: call.id,
-          name: call.function.name,
-          arguments: JSON.parse(call.function.arguments) as unknown,
-        }));
+        const functionCalls = message.tool_calls.map((call) => {
+          let parsedArgs: unknown;
+          try {
+            parsedArgs = JSON.parse(call.function.arguments);
+          } catch (parseError) {
+            console.error(
+              `[LLM] Failed to parse function arguments for ${call.function.name}:`,
+              call.function.arguments
+            );
+            parsedArgs = {}; // Fallback to empty object
+          }
+          return {
+            id: call.id,
+            name: call.function.name,
+            arguments: parsedArgs,
+          };
+        });
 
         return { type: "function-call", functionCalls };
       }

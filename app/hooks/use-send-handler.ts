@@ -20,7 +20,7 @@ type SendDeps = {
   chat: ChatState;
   narrative: NarrativeState;
   taRef: React.MutableRefObject<HTMLTextAreaElement | null>;
-  appendAssistant: (text: string) => void;
+  appendAssistant: (text: string, citations?: Citation[]) => void;
   handleCitations: (value: unknown) => void;
   handleOrders: (text: string | undefined) => void;
   request: (payload: unknown, options?: { stream?: boolean }) => Promise<

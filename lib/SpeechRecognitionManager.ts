@@ -69,8 +69,9 @@ export class SpeechRecognitionManager {
     };
 
     this.recognition.onerror = (event: unknown) => {
-      const errorEvent = (event as { error?: string } | undefined) ?? {};
+      const errorEvent = (event as { error?: string; message?: string } | undefined) ?? {};
       const message = typeof errorEvent.error === "string" ? errorEvent.error : "unknown_error";
+      console.error("[SpeechRecognition] Error event:", message, errorEvent);
       this.events.onError?.(message);
     };
 
@@ -104,11 +105,21 @@ export class SpeechRecognitionManager {
   }
 
   start() {
-    if (!this.recognition || this.isListeningInternal) return;
+    if (!this.recognition) {
+      console.warn("[SpeechRecognition] Not supported in this browser");
+      this.events.onError?.("not-supported");
+      return;
+    }
+    if (this.isListeningInternal) {
+      console.warn("[SpeechRecognition] Already listening");
+      return;
+    }
     try {
+      console.log("[SpeechRecognition] Starting recognition...");
       this.recognition.start();
     } catch (e) {
-      // Some browsers throw if already started
+      console.error("[SpeechRecognition] Start error:", e);
+      this.events.onError?.(e instanceof Error ? e.message : "start-failed");
     }
   }
 

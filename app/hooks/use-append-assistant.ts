@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import type { ChatMessage } from "@/app/types/chat";
+import type { ChatMessage, Citation } from "@/app/types/chat";
 
 type ChatState = {
   appendMessage: (message: ChatMessage) => void;
@@ -8,8 +8,8 @@ type ChatState = {
 
 export function useAppendAssistant(chat: ChatState) {
   return useCallback(
-    (text: string) => {
-      chat.appendMessage({ role: "assistant", content: text });
+    (text: string, citations?: Citation[]) => {
+      chat.appendMessage({ role: "assistant", content: text, citations });
     },
     [chat],
   );

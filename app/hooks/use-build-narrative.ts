@@ -19,7 +19,7 @@ type BuildDeps = {
   chat: ChatState;
   narrative: NarrativeState;
   taRef: React.RefObject<HTMLTextAreaElement>;
-  appendAssistant: (text: string) => void;
+  appendAssistant: (text: string, citations?: Citation[]) => void;
   handleCitations: (value: unknown) => void;
   handleOrders: (text: string | undefined) => void;
   request: (payload: unknown) => Promise<{ text?: string; citations?: Citation[]; narrative?: Record<string, unknown>; carePlan?: CarePlan } & Record<string, unknown>>;

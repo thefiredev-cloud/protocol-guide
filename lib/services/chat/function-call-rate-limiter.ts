@@ -1,7 +1,7 @@
 /**
  * FunctionCallRateLimiter tracks and limits function calls per chat session.
  * Prevents excessive LLM iterations and controls costs.
- * Limit: Max 3 function calls per chat session
+ * Limit: Max 15 function calls per chat session (increased from 3 for complex clinical scenarios)
  */
 
 import { createLogger } from "@/lib/log";
@@ -16,7 +16,7 @@ type SessionState = {
 export class FunctionCallRateLimiter {
   private readonly sessions = new Map<string, SessionState>();
   private readonly logger = createLogger("FunctionCallRateLimiter");
-  private readonly maxCallsPerSession = 3;
+  private readonly maxCallsPerSession = 15; // Increased from 3 - complex cases need multiple protocol lookups
   private readonly sessionTtlMs = 30 * 60 * 1000; // 30 minutes
 
   /**

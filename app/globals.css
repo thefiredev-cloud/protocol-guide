@@ -551,6 +551,193 @@ body {
   }
 }
 
+/* ========================================
+   MESSAGE ENTRANCE ANIMATIONS
+   Smooth, professional reveal for chat output
+   ======================================== */
+
+/* Base message entrance - slide up and fade in */
+.msg {
+  animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Assistant response container animation */
+.assistant-response {
+  animation: responseReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes responseReveal {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Citations container - slide down from top with bounce */
+.citations-container {
+  animation: citationsSlideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+@keyframes citationsSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Individual citation cards - staggered cascade */
+.citation-card {
+  animation: citationCardReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.citation-card:nth-child(1) { animation-delay: 0.15s; }
+.citation-card:nth-child(2) { animation-delay: 0.25s; }
+.citation-card:nth-child(3) { animation-delay: 0.35s; }
+.citation-card:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes citationCardReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Response content - fade in after citations */
+.response-content {
+  animation: contentFadeIn 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+@keyframes contentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Protocol header highlight pulse on new content */
+.citations-header {
+  animation: headerGlow 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes headerGlow {
+  0% {
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    text-shadow: 0 0 8px var(--medical-blue);
+  }
+  100% {
+    text-shadow: 0 0 0 transparent;
+  }
+}
+
+/* User message - slide in from right */
+.msg.user {
+  animation: userMessageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes userMessageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Skeleton loading state for streaming */
+.streaming-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-elevated) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.streaming-skeleton:nth-child(2) { width: 85%; }
+.streaming-skeleton:nth-child(3) { width: 70%; }
+
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Citation link hover micro-interaction */
+.citation-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.citation-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--medical-blue);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.citation-link:hover::after {
+  transform: translateX(0);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .msg,
+  .assistant-response,
+  .citations-container,
+  .citation-card,
+  .response-content,
+  .citations-header,
+  .streaming-skeleton {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Medication Highlighting */
 .medication-highlight {
   color: var(--text-primary);
@@ -661,6 +848,172 @@ body {
   max-width: 100%;
 }
 
+/* ========================================
+   PROTOCOL-FIRST OUTPUT STRUCTURE
+   Citations/References shown BEFORE response
+   ======================================== */
+
+.assistant-response {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.response-content {
+  /* Main response text styling */
+}
+
+/* Citations Container - Protocol References Section */
+.citations-container {
+  background: var(--surface-elevated);
+  border: 1px solid var(--medical-blue);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.citations-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--medical-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.citations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Individual Citation Card */
+.citation-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.citation-card:hover {
+  border-color: var(--medical-blue);
+  box-shadow: 0 2px 8px rgba(10, 132, 255, 0.15);
+}
+
+.citation-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.citation-icon {
+  color: var(--medical-blue);
+  flex-shrink: 0;
+}
+
+.citation-category {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.citation-subcategory {
+  color: var(--text-tertiary);
+}
+
+.citation-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.citation-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: transparent;
+  border: 1px solid var(--medical-blue);
+  border-radius: 4px;
+  color: var(--medical-blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.citation-link:hover {
+  background: var(--medical-blue);
+  color: white;
+}
+
+/* Light theme adjustments */
+[data-theme='light'] .citations-container {
+  background: #f0f7ff;
+  border-color: var(--medical-blue);
+}
+
+[data-theme='light'] .citation-card {
+  background: white;
+}
+
+/* Reference Number Badge - High visibility for LA County References */
+.citation-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: var(--protocol-critical, #dc2626);
+  color: #ffffff;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  margin-right: 6px;
+  text-transform: uppercase;
+}
+
+/* Protocol Code Badge - LA County TP codes */
+.citation-protocol-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: var(--medical-blue, #0066cc);
+  color: #ffffff;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  margin-right: 6px;
+}
+
+/* Light theme badge variants */
+[data-theme='light'] .citation-ref-badge {
+  background: #c41e3a;
+}
+
+[data-theme='light'] .citation-protocol-badge {
+  background: #0056b3;
+}
+
+/* Sunlight mode - maximum contrast for field use */
+[data-theme='sunlight'] .citation-ref-badge,
+[data-theme='sunlight'] .citation-protocol-badge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 8px;
+}
 
 .inputRow {
   position: fixed;
@@ -1076,6 +1429,63 @@ button[aria-label*="Menu"],
 
 .protocol-response > * + * {
   margin-top: 16px;
+}
+
+/* Protocol Section Header - Bold headers like MEDICATIONS:, TRANSPORT:, etc. */
+.protocol-response .protocol-section-header {
+  margin: 20px 0 8px 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: 1.5;
+}
+
+.protocol-response .protocol-section-header:first-child {
+  margin-top: 0;
+}
+
+.protocol-response .protocol-section-header strong {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+/* Protocol List - Bullet points for list items */
+.protocol-response .protocol-list {
+  margin: 8px 0 16px 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.protocol-response .protocol-list li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.protocol-response .protocol-list li::marker {
+  color: var(--accent);
+}
+
+/* Protocol Paragraph - Regular text */
+.protocol-response .protocol-paragraph {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.protocol-response .protocol-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Medication Name - Bold medication names from whitelist */
+.protocol-response .medication-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Protocol Code - Bold protocol references like TP 1207 */
+.protocol-response .protocol-code {
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .protocol-section {

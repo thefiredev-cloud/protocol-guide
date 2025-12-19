@@ -10,7 +10,7 @@ export interface TraumaTriageInput {
   hasAbnormalRespiration?: boolean;
   isPenetratingTorsoTrauma?: boolean;
   isCardiacArrest?: boolean;
-  
+
   // Anatomic criteria
   hasPenetrationHeadNeckTorso?: boolean;
   hasProximalExtremityPenetration?: boolean;
@@ -24,13 +24,15 @@ export interface TraumaTriageInput {
   hasAmputation?: boolean;
   hasMultipleProximalFractures?: boolean;
   hasHemorrhageControl?: boolean;
-  
-  // Mechanism
+
+  // Mechanism (Ref 506 - Revised 01-01-24)
   fallHeight?: number;
   hasPassengerIntrusion?: boolean;
   isEjection?: boolean;
   isPedestrianStrike?: boolean;
+  pedestrianMechanism?: "thrown" | "runOver" | "highSpeed" | "other"; // thrown, run over, OR >20 mph
   isMotorcycleInjury?: boolean;
+  isUnenclosedTransport?: boolean; // ATV, golf cart, etc.
   vehicleSpeed?: number;
   isPediatric?: boolean;
   isPregnant?: boolean;
@@ -194,31 +196,47 @@ export class TraumaTriageManager {
       criteria.push("Ejection from vehicle");
     }
     
-    // Pedestrian
+    // Pedestrian/Bicyclist/Motorcyclist (Ref 506.N)
     if (input.isPedestrianStrike) {
-      criteria.push("Pedestrian struck by vehicle");
+      const mechanism = input.pedestrianMechanism;
+      const isHighEnergy = mechanism === "thrown" || mechanism === "runOver" ||
+        mechanism === "highSpeed" || (input.vehicleSpeed ?? 0) > 20;
+      if (isHighEnergy) {
+        criteria.push("Auto vs pedestrian/bicyclist/motorcyclist: thrown, run over, OR >20 mph impact");
+      } else {
+        criteria.push("Pedestrian struck by vehicle (mechanism unclear - assess for high-energy criteria)");
+      }
     }
-    
+
+    // Unenclosed transport (Ref 506.O)
+    if (input.isUnenclosedTransport && (input.vehicleSpeed ?? 0) > 20) {
+      criteria.push(`Unenclosed transport crash >20 mph impact (${input.vehicleSpeed} mph)`);
+    }
+
     // Motorcycle
     if (input.isMotorcycleInjury) {
       criteria.push("Motorcycle/motorized bicycle injury");
     }
-    
+
     // Pediatric considerations
     if (input.isPediatric) {
       criteria.push("Pediatric trauma (lower thresholds apply)");
     }
-    
+
     // Pregnancy
     if (input.isPregnant) {
       criteria.push("Pregnant patient (direct trauma bypass considerations)");
     }
-    
-    // Burns
-    if (input.burnPercentage !== undefined && input.burnPercentage > 15) {
-      criteria.push(`Significant burn injury (${input.burnPercentage}% BSA)`);
+
+    // Burns (Ref 506.P) - Age-based TBSA thresholds
+    if (input.burnPercentage !== undefined) {
+      const isAdult = (input.age ?? 15) >= 15;
+      const threshold = isAdult ? 20 : 10;
+      if (input.burnPercentage >= threshold) {
+        criteria.push(`Major burn: ${input.burnPercentage}% TBSA 2nd/3rd degree (threshold: ≥${threshold}% for ${isAdult ? "adult ≥15yrs" : "pediatric ≤14yrs"})`);
+      }
     }
-    
+
     return criteria;
   }
   

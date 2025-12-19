@@ -61,9 +61,10 @@ function useVoiceControls(chat: ReturnType<typeof useChatState>, refs: Controlle
     void refs.sendRef.current?.();
   });
 
+  // toggle() no longer takes arguments - uses internal state machine
   const onToggleVoice = useCallback(() => {
-    voice.toggle(refs.taRef, chat.loading, Boolean(chat.input.trim()));
-  }, [chat.input, chat.loading, voice, refs.taRef]);
+    voice.toggle();
+  }, [voice]);
 
   return { voice, onToggleVoice };
 }

@@ -13,7 +13,7 @@ type SendResponse = {
 } & Record<string, unknown>;
 
 export type StreamHandler = {
-  appendAssistant: (text: string) => void;
+  appendAssistant: (text: string, citations?: Citation[]) => void;
   resetNarrative: () => void;
   handleCitations: (value: unknown) => void;
   handleOrders: (text: string | undefined) => void;
@@ -54,7 +54,8 @@ export class MessageSendManager {
   }
 
   private handleResponseBody(body: SendResponse) {
-    this.streamHandler.appendAssistant(String(body.text ?? ""));
+    // Pass citations directly to appendAssistant so they're attached to the message
+    this.streamHandler.appendAssistant(String(body.text ?? ""), body?.citations);
     this.streamHandler.resetNarrative();
     this.streamHandler.handleCitations(body?.citations);
     this.streamHandler.handleOrders(body?.text);

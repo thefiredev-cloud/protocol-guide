@@ -19,8 +19,13 @@ export class ClaudeConverter {
     const claudeTools = this.convertTools(payload.tools);
     const claudeToolChoice = this.convertToolChoice(payload.tool_choice);
 
+    // Model must be set from environment config - no hardcoded override
+    if (!payload.model) {
+      throw new Error("ClaudeConverter: model must be specified in payload (from environment config)");
+    }
+
     return {
-      model: payload.model || "claude-sonnet-4-5-20250929",
+      model: payload.model,
       messages: alternatingMessages,
       system: systemMessage,
       max_tokens: 4096,

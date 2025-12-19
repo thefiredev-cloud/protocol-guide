@@ -1,6 +1,11 @@
 /* eslint-disable unicorn/filename-case */
 import { createDefaultMedicationManager } from "@/lib/dosing/registry";
 import type { MedicationCalculationResult } from "@/lib/dosing/types";
+import {
+  extractProtocolCodes,
+  isValidProtocol,
+  normalizeProtocolCode,
+} from "@/lib/protocols/la-county-protocol-whitelist";
 
 export type GuardrailDetection = {
   pcmCitationsPresent: boolean;
@@ -34,96 +39,87 @@ export class GuardrailManager {
   public evaluate(text: string): GuardrailCheck {
     const lower = (text || "").toLowerCase();
     const notes: string[] = [];
-    const dosingIssues: string[] = [];
-    const corrections: GuardrailCorrection[] = [];
 
-    // ENHANCED: Validate protocol numbers against actual LA County protocols
     const protocolValidation = this.validateProtocolNumbers(text);
-    const pcmCitationsPresent = protocolValidation.citationsFound;
-    if (!pcmCitationsPresent) {
-      notes.push("Missing explicit PCM citation.");
-    }
-    if (protocolValidation.invalidProtocols.length > 0) {
-      notes.push(`CRITICAL: Invalid protocol numbers detected: ${protocolValidation.invalidProtocols.join(", ")} - these may be hallucinated`);
-    }
-
-    // ENHANCED: Validate medications against LA County formulary
     const medValidation = this.validateMedicationFormulary(text);
-    const unauthorizedMedications = medValidation.unauthorized;
-    const containsUnauthorizedMed = unauthorizedMedications.length > 0;
-    if (containsUnauthorizedMed) {
-      notes.push(`CRITICAL: Contains non-LA County medication: ${unauthorizedMedications.join(", ")} - remove these`);
-    }
-    if (medValidation.brandNames.length > 0) {
-      notes.push(`Use generic names: ${medValidation.brandNames.join(", ")}`);
-    }
+    const dosing = this.evaluateDosing(text);
+
+    this.addProtocolNotes(protocolValidation, notes);
+    this.addMedicationNotes(medValidation, notes);
 
     const outsideScope = /(other counties|general medicine advice|non-ems)/.test(lower);
-    if (outsideScope) notes.push("Potentially outside LA County EMS scope.");
-
     const pediatricMarkerMissing = this.detectPediatricGap(lower);
-    if (pediatricMarkerMissing) {
-      notes.push("Pediatric context detected without PCM pediatric marker (MCG 1309).");
-    }
-
     const sceneSafetyConcern = this.detectSceneSafety(lower);
-    if (sceneSafetyConcern) {
-      notes.push("Scene safety guidance may be unsafe—review PCM Scene Safety flow.");
-    }
 
-    for (const finding of this.evaluateDosing(text)) {
-      dosingIssues.push(finding.issue);
-      corrections.push(finding.correction);
-    }
+    if (outsideScope) notes.push("Potentially outside LA County EMS scope.");
+    if (pediatricMarkerMissing) notes.push("Pediatric context without MCG 1309.");
+    if (sceneSafetyConcern) notes.push("Scene safety concern—review PCM.");
 
     return {
-      pcmCitationsPresent,
-      containsUnauthorizedMed,
+      pcmCitationsPresent: protocolValidation.citationsFound,
+      containsUnauthorizedMed: medValidation.unauthorized.length > 0,
       outsideScope,
       pediatricMarkerMissing,
       sceneSafetyConcern,
-      unauthorizedMedications,
+      unauthorizedMedications: medValidation.unauthorized,
       notes,
-      dosingIssues,
-      corrections,
+      dosingIssues: dosing.map((d) => d.issue),
+      corrections: dosing.map((d) => d.correction),
     };
   }
 
+  private addProtocolNotes(
+    validation: { citationsFound: boolean; invalidProtocols: string[] },
+    notes: string[],
+  ): void {
+    if (!validation.citationsFound) notes.push("Missing explicit PCM citation.");
+    if (validation.invalidProtocols.length > 0) {
+      notes.push(`CRITICAL: Invalid protocols: ${validation.invalidProtocols.join(", ")}`);
+    }
+  }
+
+  private addMedicationNotes(
+    validation: { unauthorized: string[]; brandNames: string[] },
+    notes: string[],
+  ): void {
+    if (validation.unauthorized.length > 0) {
+      notes.push(`CRITICAL: Non-LA County meds: ${validation.unauthorized.join(", ")}`);
+    }
+    if (validation.brandNames.length > 0) {
+      notes.push(`Use generic names: ${validation.brandNames.join(", ")}`);
+    }
+  }
+
   /**
-   * Validate protocol numbers are real LA County protocols
+   * Validate protocol numbers against LA County whitelist.
+   * Uses auto-generated whitelist from official LA County DHS documents.
    */
   private validateProtocolNumbers(text: string): {
     citationsFound: boolean;
     invalidProtocols: string[];
+    validProtocols: string[];
   } {
+    // Extract all protocol codes from text using whitelist utilities
+    const extractedCodes = extractProtocolCodes(text);
+
+    const validProtocols: string[] = [];
     const invalidProtocols: string[] = [];
 
-    // Extract all protocol citations
-    const tpPattern = /\b(?:TP|Protocol)\s+(\d{4}(?:-P)?)\b/gi;
-    const citations: string[] = [];
-    let match;
-    while ((match = tpPattern.exec(text)) !== null) {
-      citations.push(match[1]);
-    }
-
-    // For now, basic validation - could import from protocol-validator.ts
-    // but keeping minimal to avoid circular dependencies
-    const knownInvalidPatterns = [
-      /^[0-9]{5,}$/, // Too many digits
-      /^(0000|9999|1111|2222)/, // Obviously fake
-    ];
-
-    for (const code of citations) {
-      for (const pattern of knownInvalidPatterns) {
-        if (pattern.test(code)) {
-          invalidProtocols.push(code);
-        }
+    for (const code of extractedCodes) {
+      const normalized = normalizeProtocolCode(code);
+      if (isValidProtocol(normalized)) {
+        validProtocols.push(normalized);
+        continue;
       }
+      // Only flag as invalid if it looks like a protocol number
+      const looksLikeProtocol = /^1[0-3]\d{2}/.test(normalized) || /^[2-8]\d{2}/.test(normalized);
+      if (looksLikeProtocol) invalidProtocols.push(code);
     }
 
     return {
-      citationsFound: citations.length > 0,
-      invalidProtocols
+      citationsFound: validProtocols.length > 0,
+      invalidProtocols,
+      validProtocols,
     };
   }
 

@@ -42,6 +42,11 @@ export class ProtocolToolManager {
       this.getSearchProtocolsByChiefComplaintTool(),
       this.getProtocolByCodeTool(),
       this.getProviderImpressionsTool(),
+      this.getCalculateMedicationDoseTool(),
+      this.getTransportRecommendationTool(),
+      this.getBaseHospitalInfoTool(),
+      this.getDiversionStatusTool(),
+      this.getFacilityStatusTool(),
     ];
   }
 
@@ -238,6 +243,223 @@ export class ProtocolToolManager {
             },
           },
           required: ["symptoms"],
+        },
+      },
+    };
+  }
+
+  /**
+   * Calculate medication dosing for adult and pediatric patients
+   */
+  private static getCalculateMedicationDoseTool(): OpenAIFunction {
+    return {
+      type: "function",
+      function: {
+        name: "calculate_medication_dose",
+        description: "Calculate LA County protocol-compliant medication dosing for adults and pediatrics. Provides exact doses based on patient weight and age. Use this when asked about medication dosing, drug calculations, or specific medication administration.",
+        parameters: {
+          type: "object",
+          properties: {
+            medication: {
+              type: "string",
+              description: "Medication name (e.g., 'epinephrine', 'atropine', 'fentanyl', 'midazolam', 'adenosine', 'amiodarone', 'naloxone', 'dextrose', 'diphenhydramine', 'glucagon')",
+            },
+            patientAgeYears: {
+              type: "number",
+              description: "Patient age in years. Used to determine adult vs pediatric dosing (>=15 years = adult)",
+            },
+            patientWeightKg: {
+              type: "number",
+              description: "Patient weight in kilograms. Critical for pediatric weight-based dosing",
+            },
+            scenario: {
+              type: "string",
+              description: "Clinical scenario (e.g., 'anaphylaxis', 'cardiac_arrest', 'bronchospasm', 'bradycardia', 'svt', 'hypoglycemia', 'opioid_overdose')",
+            },
+            route: {
+              type: "string",
+              enum: ["IM", "IV", "IO", "IN", "Neb", "SL", "PO", "SubQ"],
+              description: "Preferred administration route if applicable",
+            },
+          },
+          required: ["medication"],
+        },
+      },
+    };
+  }
+
+  /**
+   * Get transport destination recommendation based on patient condition
+   * Includes diversion awareness for real-time hospital availability
+   */
+  private static getTransportRecommendationTool(): OpenAIFunction {
+    return {
+      type: "function",
+      function: {
+        name: "get_transport_recommendation",
+        description: "Get recommended transport destination based on patient condition and specialty center needs. Includes real-time diversion status awareness. Use this for trauma, STEMI, stroke, burns, pediatric critical, or other specialty transport decisions.",
+        parameters: {
+          type: "object",
+          properties: {
+            condition: {
+              type: "string",
+              enum: [
+                "trauma-major",
+                "trauma-minor",
+                "stemi",
+                "stroke",
+                "cardiac-arrest",
+                "burns-major",
+                "burns-minor",
+                "pediatric-critical",
+                "pediatric-trauma",
+                "obstetric-emergency",
+                "psychiatric",
+                "medical-general",
+                "overdose",
+                "drowning",
+                "hyperbaric",
+              ],
+              description: "Patient condition category for transport destination",
+            },
+            isPediatric: {
+              type: "boolean",
+              description: "Whether the patient is pediatric (age <15)",
+              default: false,
+            },
+            patientAge: {
+              type: "number",
+              description: "Patient age in years for age-specific destination rules",
+            },
+            preferredRegion: {
+              type: "string",
+              enum: ["Central", "North", "South", "East", "West"],
+              description: "Preferred LA County region for transport destination",
+            },
+          },
+          required: ["condition"],
+        },
+      },
+    };
+  }
+
+  /**
+   * Get base hospital information and contact numbers
+   */
+  private static getBaseHospitalInfoTool(): OpenAIFunction {
+    return {
+      type: "function",
+      function: {
+        name: "get_base_hospital_info",
+        description: "Get LA County base hospital contact information, phone numbers, and capabilities. Use this when the user asks about base hospitals, needs contact numbers, or wants to know about hospital capabilities.",
+        parameters: {
+          type: "object",
+          properties: {
+            hospitalName: {
+              type: "string",
+              description: "Hospital name to look up (partial match supported)",
+            },
+            region: {
+              type: "string",
+              enum: ["Central", "North", "South", "East", "West"],
+              description: "LA County region to find hospitals in",
+            },
+            capability: {
+              type: "string",
+              description: "Required capability (e.g., 'Trauma Center', 'Stroke Center', 'STEMI Center', 'Burn Center')",
+            },
+            listAll: {
+              type: "boolean",
+              description: "List all base hospitals with contact information",
+              default: false,
+            },
+          },
+          required: [],
+        },
+      },
+    };
+  }
+
+  /**
+   * Get current hospital diversion status
+   */
+  private static getDiversionStatusTool(): OpenAIFunction {
+    return {
+      type: "function",
+      function: {
+        name: "get_diversion_status",
+        description: "Get current hospital diversion status including ED saturation, trauma bypass, STEMI bypass, and stroke bypass. Use this to check which hospitals are accepting patients.",
+        parameters: {
+          type: "object",
+          properties: {
+            facilityId: {
+              type: "string",
+              description: "Specific facility ID to check (e.g., 'CSM', 'UCL', 'HAR')",
+            },
+            region: {
+              type: "string",
+              enum: ["Central", "North", "South", "East", "West"],
+              description: "LA County region to get diversion status for",
+            },
+            diversionType: {
+              type: "string",
+              enum: [
+                "internal_disaster",
+                "saturation",
+                "trauma_bypass",
+                "stemi_bypass",
+                "stroke_bypass",
+                "pediatric_bypass",
+                "burn_bypass",
+                "psych_bypass",
+              ],
+              description: "Filter by specific diversion type",
+            },
+            summaryOnly: {
+              type: "boolean",
+              description: "Return only a summary of active diversions",
+              default: false,
+            },
+          },
+          required: [],
+        },
+      },
+    };
+  }
+
+  /**
+   * Get facility operational status for MCI or specialty routing
+   */
+  private static getFacilityStatusTool(): OpenAIFunction {
+    return {
+      type: "function",
+      function: {
+        name: "get_facility_status",
+        description: "Get facility operational status including bed availability, APOT times, and current capacity. Use this for MCI patient distribution or checking hospital availability.",
+        parameters: {
+          type: "object",
+          properties: {
+            facilityId: {
+              type: "string",
+              description: "Specific facility ID to check",
+            },
+            region: {
+              type: "string",
+              enum: ["Central", "North", "South", "East", "West"],
+              description: "LA County region to get facility status for",
+            },
+            specialty: {
+              type: "string",
+              enum: ["trauma", "stemi", "stroke", "pediatric", "burn", "psych"],
+              description: "Filter by specialty center type",
+            },
+            includeAPOT: {
+              type: "boolean",
+              description: "Include recent APOT (ambulance patient offload time) data",
+              default: false,
+            },
+          },
+          required: [],
         },
       },
     };

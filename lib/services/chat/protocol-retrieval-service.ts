@@ -364,6 +364,17 @@ export class ProtocolRetrievalService {
 
     // Age-based protocol selection: CRITICAL for correct dosing
     const isPediatric = triage?.age !== undefined && triage.age < 18;
+    const ageUnknown = triage?.age === undefined;
+
+    // SAFETY WARNING: Log when age is unknown - critical for pediatric safety
+    if (ageUnknown) {
+      console.warn(
+        "[ProtocolRetrievalService] WARNING: Patient age unknown - defaulting to adult protocols. " +
+        "Verify patient age before medication administration."
+      );
+      // Add warning to search context so LLM includes it in response
+      parts.push("WARNING: Patient age not specified - using adult protocols. Confirm patient age before treatment.");
+    }
 
     protocols.slice(0, 5).forEach((protocol) => {
       parts.push(protocol.tp_name);

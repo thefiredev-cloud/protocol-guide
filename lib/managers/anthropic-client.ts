@@ -239,7 +239,7 @@ export class AnthropicClient {
       }
 
       if (result.type === "error") {
-        // Could log error here
+        console.error(`[AnthropicClient] Attempt ${attempt + 1}/${this.maxRetries + 1} failed:`, result.message);
       }
 
       await this.waitForBackoff(attempt);
@@ -254,7 +254,7 @@ export class AnthropicClient {
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
 
     try {
-      const response = await this.fetchImpl(`${this.baseUrl}/v1/messages`, {
+      const response = await this.fetchImpl(`${this.baseUrl}/messages`, {
         method: "POST",
         headers: this.buildHeaders(),
         body: JSON.stringify(payload),
@@ -399,7 +399,7 @@ export class AnthropicClient {
   }
 
   private async fetchStreamRequest(payload: ClaudePayload, signal: AbortSignal): Promise<Response> {
-    return this.fetchImpl(`${this.baseUrl}/v1/messages`, {
+    return this.fetchImpl(`${this.baseUrl}/messages`, {
       method: "POST",
       headers: {
         ...this.buildHeaders(),

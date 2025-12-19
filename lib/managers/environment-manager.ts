@@ -5,9 +5,9 @@ const schema = z.object({
   LLM_API_KEY: z
     .string({ required_error: "LLM_API_KEY is required. Please add it to your .env.local file." })
     .min(1, { message: "LLM_API_KEY is required. Please add it to your .env.local file." }),
-  LLM_PROVIDER: z.enum(["anthropic", "openai"]).default("anthropic"),
+  LLM_PROVIDER: z.enum(["anthropic", "openai"]).default("openai"),
   LLM_BASE_URL: z.string().url("LLM_BASE_URL must be a valid URL").optional(),
-  LLM_MODEL: z.string().min(1).default("claude-sonnet-4-5-20250929"),
+  LLM_MODEL: z.string().min(1).default("gpt-4o-mini"),
   KB_SCOPE: z
     .string()
     .default("pcm")
@@ -96,7 +96,7 @@ export class EnvironmentManager {
       EnvironmentManager.cached = {
         ...env,
         llmProvider: env.LLM_PROVIDER,
-        llmBaseUrl: env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
+        llmBaseUrl: env.LLM_BASE_URL ?? "https://api.openai.com/v1",
         llmModel: env.LLM_MODEL,
         kbScope: env.KB_SCOPE,
         kbSource: env.KB_SOURCE,
@@ -126,18 +126,31 @@ export class EnvironmentManager {
         throw error;
       }
 
-      // In production, log error and return minimal fallback
-      // This prevents user-facing errors while maintaining functionality
-      console.error(`[EnvironmentManager] Configuration error (production fallback): ${errorMessage}`);
+      // In production, API key is REQUIRED - cannot function without it
+      // Log error and throw - silent failure with empty API key causes 401s
+      console.error(`[EnvironmentManager] CRITICAL: ${errorMessage}`);
 
-      // Return minimal fallback config for production
-      // This allows the app to function even if some env vars are missing
+      // Check if API key specifically is missing
+      const apiKey = process.env.LLM_API_KEY?.trim();
+      if (!apiKey) {
+        throw new Error(
+          "CRITICAL: LLM_API_KEY is required for production deployment. " +
+          "RAG system cannot function without a valid API key. " +
+          "Set LLM_API_KEY in environment variables."
+        );
+      }
+
+      // If API key exists but other validation failed, try minimal fallback
+      const provider = (process.env.LLM_PROVIDER as "anthropic" | "openai") ?? "openai";
+      const baseUrl = process.env.LLM_BASE_URL ??
+        (provider === "anthropic" ? "https://api.anthropic.com/v1" : "https://api.openai.com/v1");
+
       return {
         NODE_ENV: "production",
-        LLM_API_KEY: "", // Will be caught by LLMClient as unavailable
-        LLM_PROVIDER: (process.env.LLM_PROVIDER as "anthropic" | "openai") ?? "anthropic",
-        LLM_BASE_URL: process.env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
-        LLM_MODEL: process.env.LLM_MODEL ?? "claude-sonnet-4-5-20250929",
+        LLM_API_KEY: apiKey,
+        LLM_PROVIDER: provider,
+        LLM_BASE_URL: baseUrl,
+        LLM_MODEL: process.env.LLM_MODEL ?? "gpt-4o-mini",
         KB_SCOPE: "pcm",
         KB_SOURCE: "clean",
         KB_DATA_PATH: process.env.KB_DATA_PATH,
@@ -146,9 +159,9 @@ export class EnvironmentManager {
         ENABLE_MARKDOWN_PREPROCESSING: false,
         MARKDOWN_CHUNK_SIZE: 2000,
         MARKDOWN_CONTEXT_LIMIT: 12000,
-        llmProvider: (process.env.LLM_PROVIDER as "anthropic" | "openai") ?? "anthropic",
-        llmBaseUrl: process.env.LLM_BASE_URL ?? "https://api.anthropic.com/v1",
-        llmModel: process.env.LLM_MODEL ?? "claude-sonnet-4-5-20250929",
+        llmProvider: provider,
+        llmBaseUrl: baseUrl,
+        llmModel: process.env.LLM_MODEL ?? "gpt-4o-mini",
         kbScope: "pcm",
         kbSource: "clean",
         enableMarkdownPreprocessing: false,

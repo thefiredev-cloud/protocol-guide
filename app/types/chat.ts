@@ -3,6 +3,7 @@ export type ChatRole = "user" | "assistant";
 export type ChatMessage = {
   role: ChatRole;
   content: string;
+  citations?: Citation[];
 };
 
 export type NarrativeSection = {
@@ -52,20 +53,28 @@ export type NemsisNarrative = {
   eSituation?: {
     primaryComplaint?: string;
     providerPrimaryImpression?: string;
+    providerSecondaryImpression?: string;
     mechanismOfInjury?: string;
+    causeOfInjury?: string;
   };
   eVitals?: NarrativeVitalEntry[];
   eMedications?: NarrativeMedicationEntry[];
   eProcedures?: NarrativeProcedureEntry[];
+  eProtocols?: string[]; // LA County TP codes used
   eDisposition?: {
     destination?: string;
+    destinationFacility?: string;
     transportMode?: string;
+    transportPriority?: string; // Code 2, Code 3, etc.
     condition?: string;
+    patientCondition?: string;
   };
   baseContact?: {
     time?: string;
     hospital?: string;
+    hospitalPhone?: string;
     physician?: string;
+    ordersReceived?: string[];
     summary?: string;
   };
 };
@@ -77,6 +86,7 @@ export type CarePlan = {
   baseContact: string;
   basicMedications: string[];
   criticalNotes: string[];
+  protocolReferences?: string[]; // LA County TP codes referenced
   medicationsDetailed?: Array<{
     name: string;
     details: string[];
@@ -95,4 +105,6 @@ export type Citation = {
   title: string;
   category: string;
   subcategory?: string;
+  referenceNumber?: string; // LA County Reference number (e.g., "510", "506")
+  protocolCode?: string; // LA County TP code (e.g., "1211", "1237-P")
 };

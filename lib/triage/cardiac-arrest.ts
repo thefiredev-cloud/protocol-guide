@@ -11,17 +11,17 @@ export interface CardiacArrestInput {
   isWitnessed?: boolean;
   bystanderCPR?: boolean;
   bystanderCPRDuration?: number; // Minutes of bystander CPR before EMS
-  
+
   // Arrest Details
   initialRhythm?: "VF" | "VT" | "PEA" | "Asystole" | "Unknown";
   age?: number;
-  
+
   // Resuscitation Data
   currentRhythm?: "VF" | "VT" | "PEA" | "Asystole" | "Organized" | "Unknown";
   hasROSC?: boolean;
   rosTime?: number; // Minutes from arrest to ROSC
   etco2?: number; // End-tidal CO2 mmHg
-  
+
   // Clinical Status
   isPediatric?: boolean; // Age < 18
   isPregnant?: boolean;
@@ -31,12 +31,24 @@ export interface CardiacArrestInput {
   isTrauma?: boolean;
   isHanging?: boolean;
   isDrug?: "none" | "opioid" | "other";
-  
+
   // Resuscitation Quality
   cprDurationMinutes?: number;
   hasObviousDeath?: boolean;
-  
-  // ECPR Considerations
+
+  // ECPR Considerations (Ref 516 - Revised 07-01-25)
+  hasMechanicalCPR?: boolean; // MCD (LUCAS, AutoPulse) available
+  patientFitsMCD?: boolean; // Patient body habitus accommodates device
+  isRefractoryVFVT?: boolean; // Refractory VF/VT after standard ACLS
+  isRecurrentVFVT?: boolean; // Recurrent VF/VT
+  presumedMassivePE?: boolean; // Presumed massive pulmonary embolism
+  sceneTimeMinutes?: number; // Scene time (must be ≤15 min)
+  hasDNR?: boolean; // DNR order
+  hasTerminalIllness?: boolean; // Known terminal illness
+  hasSevereNeurologicDysfunction?: boolean; // Baseline severe neurologic dysfunction
+  hasECPRCenter?: boolean; // ECPR center accessible
+  transportTimeMinutes?: number; // Transport time to ECPR center (must be ≤30 min)
+  // Legacy fields (kept for backward compatibility)
   hasECMOCenter?: boolean;
   ecmoCenterTransportTimeMinutes?: number;
   preArrestFunctionalStatus?: "independent" | "dependent" | "bedbound";
@@ -297,59 +309,46 @@ export class CardiacArrestManager {
   }
 
   private checkECPRCandidacy(input: CardiacArrestInput) {
-    // MCG 1318 - ECPR Candidate Inclusion Criteria (ALL 10 required)
+    // Ref 516 - ECPR Candidate Criteria (Revised 07-01-25) - ALL must be met
+    // Use new fields if available, fall back to legacy fields
+    const hasECPRCenter = input.hasECPRCenter ?? input.hasECMOCenter ?? false;
+    const transportTime = input.transportTimeMinutes ?? input.ecmoCenterTransportTimeMinutes ?? 999;
+    const hasMCD = input.hasMechanicalCPR ?? false;
+    const fitsMCD = input.patientFitsMCD ?? true;
+    const sceneTime = input.sceneTimeMinutes ?? 999;
+
+    // Check for refractory/recurrent VF/VT or massive PE
+    const hasShockableRefractory = input.isRefractoryVFVT || input.isRecurrentVFVT ||
+      (input.initialRhythm === "VF" || input.initialRhythm === "VT");
+    const hasMassivePE = input.presumedMassivePE ?? false;
+
     const criteria = {
-      ageInRange: (input.age ?? 0) >= 18 && (input.age ?? 0) <= 75,
-      witnessed: input.isWitnessed ?? false,
-      bystanderCPR: input.bystanderCPR ?? false,
-      bystanderCPRTiming: (input.bystanderCPRDuration ?? 999) < 10,
-      initialShockableRhythm: input.initialRhythm === "VF" || input.initialRhythm === "VT",
-      emsArrivalTiming: (input.timeOfCollapse ?? 999) < 20,
-      noROSC: !input.hasROSC,
-      etco2Perfusion: (input.etco2 ?? 0) >= 10,
-      nonCardiacExcluded:
-        !input.isDrowning && !input.isTrauma && !input.isHanging,
-      functionalStatus:
-        input.preArrestFunctionalStatus === "independent" ||
-        input.preArrestFunctionalStatus === "dependent",
-      ecmoCenterAccessible: input.hasECMOCenter &&
-        (input.ecmoCenterTransportTimeMinutes ?? 999) < 30,
+      ageInRange: (input.age ?? 0) >= 15 && (input.age ?? 0) <= 75,
+      mcdAvailable: hasMCD,
+      patientFitsMCD: fitsMCD,
+      shockableOrPE: hasShockableRefractory || hasMassivePE,
+      sceneTimeLimited: sceneTime <= 15,
+      noDNR: !(input.hasDNR ?? false),
+      noTerminalIllness: !(input.hasTerminalIllness ?? false),
+      noSevereNeurologicDysfunction: !(input.hasSevereNeurologicDysfunction ?? false),
+      ecprCenterAccessible: hasECPRCenter && transportTime <= 30,
     };
 
     const criteriaMetCount = Object.values(criteria).filter((v) => v === true).length;
-    const eligible =
-      criteria.ageInRange &&
-      criteria.witnessed &&
-      criteria.bystanderCPR &&
-      criteria.bystanderCPRTiming &&
-      criteria.initialShockableRhythm &&
-      criteria.emsArrivalTiming &&
-      criteria.noROSC &&
-      criteria.etco2Perfusion &&
-      criteria.nonCardiacExcluded &&
-      criteria.functionalStatus &&
-      criteria.ecmoCenterAccessible;
+    const eligible = Object.values(criteria).every((v) => v === true);
 
     const exclusionReasons: string[] = [];
-    if (!criteria.ageInRange) exclusionReasons.push("Age outside 18-75 range");
-    if (!criteria.witnessed) exclusionReasons.push("Arrest not witnessed");
-    if (!criteria.bystanderCPR) exclusionReasons.push("No bystander CPR initiated");
-    if (!criteria.bystanderCPRTiming) exclusionReasons.push("Bystander CPR delayed > 10 min");
-    if (!criteria.initialShockableRhythm) exclusionReasons.push("Initial rhythm not VF/VT");
-    if (!criteria.emsArrivalTiming) exclusionReasons.push("EMS arrival > 20 min from collapse");
-    if (!criteria.noROSC) exclusionReasons.push("ROSC already achieved");
-    if (!criteria.etco2Perfusion) exclusionReasons.push("ETCO2 < 10 mmHg (poor perfusion)");
-    if (!criteria.nonCardiacExcluded)
-      {exclusionReasons.push("Obvious non-cardiac cause (drowning/trauma/hanging)");}
-    if (!criteria.functionalStatus) exclusionReasons.push("Bedbound pre-arrest status");
-    if (!criteria.ecmoCenterAccessible)
-      {exclusionReasons.push("No ECMO center < 30 min transport");}
+    if (!criteria.ageInRange) exclusionReasons.push("Age outside 15-75 range");
+    if (!criteria.mcdAvailable) exclusionReasons.push("MCD (mechanical CPR device) not available");
+    if (!criteria.patientFitsMCD) exclusionReasons.push("Patient body habitus does not accommodate MCD");
+    if (!criteria.shockableOrPE) exclusionReasons.push("No refractory/recurrent VF/VT or presumed massive PE");
+    if (!criteria.sceneTimeLimited) exclusionReasons.push("Scene time cannot be limited to ≤15 minutes");
+    if (!criteria.noDNR) exclusionReasons.push("Patient has DNR order");
+    if (!criteria.noTerminalIllness) exclusionReasons.push("Known terminal illness");
+    if (!criteria.noSevereNeurologicDysfunction) exclusionReasons.push("Baseline severe neurologic dysfunction");
+    if (!criteria.ecprCenterAccessible) exclusionReasons.push("No ECPR center ≤30 min transport");
 
-    return {
-      eligible,
-      criteriaMetCount,
-      exclusionReasons,
-    };
+    return { eligible, criteriaMetCount, exclusionReasons };
   }
 
   private buildECPRResult(
@@ -392,8 +391,8 @@ export class CardiacArrestManager {
         "Document: Witnessed status, bystander CPR timing, initial rhythm, ETCO2 values, transport time",
       ],
       citations: [
-        "MCG 1318 - ECPR Candidate Identification",
-        "Ref 516 - Refractory VF/VT Transport",
+        "Ref 516 - Cardiac Arrest Destination (Revised 07-01-25)",
+        "Ref 516 Section II - ECPR Candidate Criteria",
         "PCM Reference 1210 - Cardiac Arrest Protocol",
       ],
     };

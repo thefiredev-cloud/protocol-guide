@@ -1,21 +1,17 @@
 "use client";
 
-import { Suspense } from "react";
-
 import { ChatList } from "@/app/components/chat/chat-list";
 import { VoiceFirstInput } from "@/app/components/chat/voice-first-input";
-import { NarrativeExportPanel } from "@/app/components/narrative/narrative-export-panel";
 import { usePageController } from "@/app/hooks/use-page-controller";
 
 /**
- * Simplified chatbot page
- * Voice-first input, chat messages, narrative export
+ * LA County Protocol Assistant
+ * Voice-first protocol retrieval for paramedics
  */
 export default function Page() {
   const controller = usePageController([]);
 
   const hasMessages = controller.chat.messages.length > 0;
-  const hasNarrative = controller.narrative.soap || controller.narrative.nemsis;
 
   return (
     <div className="chatbot-container">
@@ -26,29 +22,16 @@ export default function Page() {
             <p className="empty-state-text">
               Tap the microphone and describe your patient scenario.
               <br />
-              I&apos;ll recommend protocols and help build your narrative.
+              I&apos;ll find the relevant protocols for you.
             </p>
           </div>
         ) : (
-          <>
-            <ChatList
-              messages={controller.chat.messages}
-              onProtocolSelect={controller.sendProtocolSelection}
-              errorBanner={controller.errorBanner}
-              loading={controller.chat.loading}
-            />
-
-            {hasNarrative && (
-              <Suspense fallback={<div className="skeleton" />}>
-                <NarrativeExportPanel
-                  soap={controller.narrative.soap}
-                  nemsis={controller.narrative.nemsis}
-                  carePlan={controller.narrative.carePlan}
-                  onBuildNarrative={controller.buildNarrative}
-                />
-              </Suspense>
-            )}
-          </>
+          <ChatList
+            messages={controller.chat.messages}
+            onProtocolSelect={controller.sendProtocolSelection}
+            errorBanner={controller.errorBanner}
+            loading={controller.chat.loading}
+          />
         )}
         <div ref={controller.endRef} />
       </div>
@@ -63,6 +46,7 @@ export default function Page() {
         onToggleVoice={controller.onToggleVoice}
         voiceSupported={controller.voice.voiceSupported}
         listening={controller.voice.listening}
+        voiceState={controller.voice.state}
       />
     </div>
   );

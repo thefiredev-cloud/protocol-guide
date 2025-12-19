@@ -159,14 +159,13 @@ const nextConfig = {
       },
       {
         key: 'Permissions-Policy',
-        value: 'camera=(), microphone=(), geolocation=()',
+        value: 'camera=(), microphone=(self), geolocation=()',
         /**
-         * Disables unnecessary browser features (Feature Policy)
+         * Browser feature permissions (Feature Policy)
          * - camera=(): Prevents unauthorized camera access
-         * - microphone=(): Prevents unauthorized microphone access
+         * - microphone=(self): Allows microphone for voice transcription
          * - geolocation=(): Disables location tracking
          * - Reduces attack surface by disabling unused APIs
-         * - Note: Removed payment=() to allow future payment features if needed
          */
       },
       {
