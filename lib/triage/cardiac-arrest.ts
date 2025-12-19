@@ -225,7 +225,7 @@ export class CardiacArrestManager {
     // Relative contraindications
     const relativeContraindications: string[] = [];
     if (input.suspectedReversibleCause)
-      relativeContraindications.push("Reversible cause identified (H's & T's)");
+      {relativeContraindications.push("Reversible cause identified (H's & T's)");}
     if ((input.etco2 ?? 0) > 20) relativeContraindications.push("ETCO2 > 20 mmHg (good perfusion)");
     if (input.isDrug !== "none") relativeContraindications.push("Suspected drug overdose (potentially reversible)");
     if (input.isPregnant) relativeContraindications.push("Pregnant patient");
@@ -340,10 +340,10 @@ export class CardiacArrestManager {
     if (!criteria.noROSC) exclusionReasons.push("ROSC already achieved");
     if (!criteria.etco2Perfusion) exclusionReasons.push("ETCO2 < 10 mmHg (poor perfusion)");
     if (!criteria.nonCardiacExcluded)
-      exclusionReasons.push("Obvious non-cardiac cause (drowning/trauma/hanging)");
+      {exclusionReasons.push("Obvious non-cardiac cause (drowning/trauma/hanging)");}
     if (!criteria.functionalStatus) exclusionReasons.push("Bedbound pre-arrest status");
     if (!criteria.ecmoCenterAccessible)
-      exclusionReasons.push("No ECMO center < 30 min transport");
+      {exclusionReasons.push("No ECMO center < 30 min transport");}
 
     return {
       eligible,
@@ -379,7 +379,7 @@ export class CardiacArrestManager {
         "Pre-notify receiving ECMO center with ETA",
       ],
       ecprAssessment: {
-        isCandidateEligible: ecprResult.eligible,
+        isCandidateEligible: ecprResult.eligible ?? false,
         criteriaMetCount: ecprResult.criteriaMetCount,
         exclusionReasons: ecprResult.exclusionReasons,
       },

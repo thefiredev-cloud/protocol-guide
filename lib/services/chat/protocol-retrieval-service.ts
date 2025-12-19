@@ -72,8 +72,8 @@ export class ProtocolRetrievalService {
         diastolic: params.vitals.diastolic,
         heartRate: params.vitals.heartRate,
         respiratoryRate: params.vitals.respiratoryRate,
-        oxygenSaturation: params.vitals.oxygenSaturation,
-        temperature: params.vitals.temperature,
+        spo2: params.vitals.oxygenSaturation,
+        temperatureF: params.vitals.temperature,
         glucose: params.vitals.glucose,
       };
     }
@@ -91,7 +91,7 @@ export class ProtocolRetrievalService {
         title: doc.title,
         category: doc.category,
         subcategory: doc.subcategory,
-        content: doc.content.length > 2000 ? doc.content.slice(0, 2000) + "..." : doc.content,
+        content: doc.content.length > 4000 ? doc.content.slice(0, 4000) + "..." : doc.content,
       })),
       summary: this.buildSummary(matchedProtocols, kbChunks),
     };
@@ -142,7 +142,7 @@ export class ProtocolRetrievalService {
         title: doc.title,
         category: doc.category,
         subcategory: doc.subcategory,
-        content: doc.content.length > 2000 ? doc.content.slice(0, 2000) + "..." : doc.content,
+        content: doc.content.length > 4000 ? doc.content.slice(0, 4000) + "..." : doc.content,
       })),
       summary: this.buildSummary(matchedProtocols, kbChunks),
     };
@@ -193,7 +193,7 @@ export class ProtocolRetrievalService {
         title: doc.title,
         category: doc.category,
         subcategory: doc.subcategory,
-        content: doc.content.length > 2000 ? doc.content.slice(0, 2000) + "..." : doc.content,
+        content: doc.content.length > 4000 ? doc.content.slice(0, 4000) + "..." : doc.content,
       })),
       summary: this.buildSummary(matchedProtocols, kbChunks),
     };
@@ -260,7 +260,7 @@ export class ProtocolRetrievalService {
         title: doc.title,
         category: doc.category,
         subcategory: doc.subcategory,
-        content: doc.content.length > 2000 ? doc.content.slice(0, 2000) + "..." : doc.content,
+        content: doc.content.length > 4000 ? doc.content.slice(0, 4000) + "..." : doc.content,
       })),
       summary: this.buildSummary(matchedProtocols, filteredChunks),
     };
@@ -298,7 +298,7 @@ export class ProtocolRetrievalService {
         title: doc.title,
         category: doc.category,
         subcategory: doc.subcategory,
-        content: doc.content.length > 2000 ? doc.content.slice(0, 2000) + "..." : doc.content,
+        content: doc.content.length > 4000 ? doc.content.slice(0, 4000) + "..." : doc.content,
       })),
       summary: this.buildSummary(matchedProtocols, kbChunks),
     };

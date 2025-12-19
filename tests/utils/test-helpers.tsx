@@ -87,16 +87,19 @@ export function triggerKeyboardEvent(key: string, options: KeyboardEventInit = {
  * Mock console methods for testing
  */
 export function suppressConsole(methods: Array<keyof Console> = ['error', 'warn']) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mocks: Record<string, any> = {};
 
   methods.forEach((method) => {
     mocks[method] = console[method];
-    console[method] = () => {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (console as any)[method] = () => {};
   });
 
   return () => {
     methods.forEach((method) => {
-      console[method] = mocks[method];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (console as any)[method] = mocks[method];
     });
   };
 }

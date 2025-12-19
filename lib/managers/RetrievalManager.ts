@@ -57,7 +57,7 @@ export class RetrievalManager {
   private metadataCache: ProtocolMetadata[] | null = null;
 
   constructor(options?: { defaultLimit?: number }) {
-    this.defaultLimit = options?.defaultLimit ?? 6;
+    this.defaultLimit = options?.defaultLimit ?? 10;
     this.markdownPreprocessor = new MarkdownPreprocessor();
     this.env = EnvironmentManager.loadSafe();
   }

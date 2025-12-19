@@ -1165,7 +1165,7 @@ button:active:not(:disabled) {
   color: var(--text-secondary);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   font-size: 14px;
   font-weight: 600;
@@ -1175,6 +1175,7 @@ button:active:not(:disabled) {
   min-height: 72px;
   min-width: 64px;
   padding: 12px 8px;
+  transform: scale(1);
 }
 
 .nav-tab:hover {
@@ -1182,22 +1183,48 @@ button:active:not(:disabled) {
   color: var(--text-primary);
 }
 
+/* Pressed state - visual feedback for touch */
+.nav-tab.pressed {
+  transform: scale(0.92);
+  opacity: 0.8;
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced active state with prominent pill background */
 .nav-tab.active {
   color: #fff;
   background: var(--accent);
-  border-radius: 12px;
-  margin: 4px;
+  border-radius: 14px;
+  margin: 6px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+  animation: tab-activate 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* More prominent active indicator - thicker top border */
 .nav-tab.active::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.3);
+  left: 8px;
+  right: 8px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 4px 4px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle glow effect for active tab */
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%);
+  pointer-events: none;
 }
 
 .nav-tab-icon {
@@ -1205,6 +1232,13 @@ button:active:not(:disabled) {
   align-items: center;
   justify-content: center;
   font-size: 28px;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon scales up slightly when active */
+.nav-tab.active .nav-tab-icon {
+  transform: scale(1.05);
 }
 
 .nav-tab-label {
@@ -1212,6 +1246,62 @@ button:active:not(:disabled) {
   font-size: 13px;
   letter-spacing: 0.3px;
   font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+/* Online/Offline status indicator */
+.nav-status-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.nav-status-indicator.online {
+  background: #22c55e;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1),
+              0 0 8px rgba(34, 197, 94, 0.5);
+  animation: pulse-online 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.nav-status-indicator.offline {
+  background: #ef4444;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Active tab shows white status indicator border */
+.nav-tab.active .nav-status-indicator {
+  border-color: var(--accent);
+}
+
+/* Animation for tab activation */
+@keyframes tab-activate {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+/* Pulse animation for online indicator */
+@keyframes pulse-online {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* ========================================
@@ -2230,11 +2320,25 @@ body.one-handed-mode .quick-actions {
   }
 
   .nav-tab-icon {
-    font-size: 20px;
+    font-size: 24px; /* Increased from 20px for better visibility */
   }
 
   .nav-tab-label {
     font-size: 9px;
+  }
+
+  /* Adjust status indicator for smaller screens */
+  .nav-status-indicator {
+    width: 8px;
+    height: 8px;
+    top: -1px;
+    right: -1px;
+  }
+
+  /* Slightly reduce active tab scaling on small screens */
+  .nav-tab.active {
+    margin: 3px;
+    transform: scale(1.01);
   }
 
   .inputRow {
@@ -3476,4 +3580,464 @@ body.one-handed-mode .quick-actions {
 .opacity-50 {
   opacity: 0.5;
   transition: opacity 0.3s ease;
+}
+
+/* ========================================
+   PROFESSIONAL EMS ENHANCEMENTS
+   LA County Fire Department iPad Optimizations
+   ======================================== */
+
+/* Enhanced Navigation Bar - Optimized for iPad */
+.mobile-nav-bar {
+  height: 80px; /* Increased from 72px for better iPad ergonomics */
+  border-top: 2px solid var(--border);
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.15),
+    0 -1px 0 0 rgba(255, 59, 48, 0.1); /* Subtle top glow */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navigation status indicator dot */
+.nav-status-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+  animation: pulse-status 2s ease-in-out infinite;
+}
+
+.nav-status-dot.offline {
+  background: var(--text-tertiary);
+  box-shadow: none;
+  animation: none;
+}
+
+.nav-status-dot.syncing {
+  background: var(--warning);
+  box-shadow: 0 0 8px var(--warning);
+}
+
+@keyframes pulse-status {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+}
+
+/* Enhanced nav tab with larger touch targets */
+.nav-tab {
+  min-height: 52px; /* Minimum touch target for iPad */
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active state with pill background */
+.nav-tab[data-active="true"] {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 59, 48, 0.15),
+    rgba(255, 59, 48, 0.08)
+  );
+  border-radius: 16px;
+  margin: 8px 4px;
+  animation: tab-switch 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-tab[data-active="true"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+}
+
+/* Professional Header Enhancement */
+.header-enhanced {
+  background: linear-gradient(
+    to bottom,
+    var(--surface),
+    var(--surface-elevated)
+  );
+  border-bottom: 1px solid var(--border);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 1px 0 0 rgba(255, 59, 48, 0.05); /* Subtle accent glow */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* LA County Fire Department branding feel */
+.header-enhanced::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 59, 48, 0.3) 50%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* Status badge styling */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.status-badge.connected {
+  background: var(--success-green-bg);
+  border-color: var(--success-green-border);
+  color: var(--success);
+}
+
+.status-badge.syncing {
+  background: var(--warning-amber-bg);
+  border-color: var(--warning-amber-border);
+  color: var(--warning);
+}
+
+.status-badge.offline {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  color: var(--text-tertiary);
+}
+
+/* Enhanced Button States */
+
+/* Emergency button with pulsing glow */
+.btn-emergency {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 12px;
+  border: none;
+  box-shadow:
+    0 4px 12px rgba(255, 59, 48, 0.3),
+    0 0 0 0 rgba(255, 59, 48, 0.4);
+  animation: pulse-emergency 2s ease-in-out infinite;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-emergency::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-emergency:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-emergency:hover {
+  background: var(--accent-hover);
+  box-shadow:
+    0 6px 16px rgba(255, 59, 48, 0.4),
+    0 0 0 4px rgba(255, 59, 48, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-emergency:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Press state for all buttons */
+.btn-press {
+  transform: scale(0.98);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease;
+}
+
+button:active:not(:disabled),
+.button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Larger touch targets for critical controls */
+.touch-target-large {
+  min-height: 52px;
+  min-width: 52px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.touch-target-large:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* iPad-Specific Optimizations */
+
+/* iPad landscape mode - larger screens */
+@media (min-width: 1024px) and (orientation: landscape) {
+  /* Navigation bar optimizations */
+  .mobile-nav-bar {
+    height: 88px;
+    padding: 0 max(24px, env(safe-area-inset-left))
+             max(8px, env(safe-area-inset-bottom))
+             max(24px, env(safe-area-inset-right));
+  }
+
+  .nav-tab {
+    min-height: 60px;
+    max-width: 160px;
+  }
+
+  .nav-tab[data-active="true"] {
+    margin: 10px 8px;
+  }
+
+  /* Header enhancements for landscape */
+  .header-enhanced {
+    padding: 0 max(24px, env(safe-area-inset-left))
+             0 max(24px, env(safe-area-inset-right));
+  }
+
+  .header-content-enhanced {
+    height: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Split-view friendly layouts */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  /* Larger touch targets in landscape */
+  .touch-target-large {
+    min-height: 56px;
+    min-width: 56px;
+    padding: 14px 24px;
+    font-size: 17px;
+  }
+
+  .btn-emergency {
+    min-height: 56px;
+    padding: 0 32px;
+    font-size: 17px;
+  }
+
+  /* Status badge larger on landscape */
+  .status-badge {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+}
+
+/* iPad portrait mode - optimize for vertical space */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .mobile-nav-bar {
+    height: 76px;
+  }
+
+  .nav-tab {
+    min-height: 54px;
+  }
+
+  .touch-target-large {
+    min-height: 52px;
+    padding: 12px 22px;
+  }
+}
+
+/* Professional Animation Keyframes */
+
+/* Emergency pulse animation */
+@keyframes pulse-emergency {
+  0%, 100% {
+    box-shadow:
+      0 4px 12px rgba(255, 59, 48, 0.3),
+      0 0 0 0 rgba(255, 59, 48, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 6px 16px rgba(255, 59, 48, 0.4),
+      0 0 0 8px rgba(255, 59, 48, 0);
+  }
+}
+
+/* Tab switch animation */
+@keyframes tab-switch {
+  0% {
+    opacity: 0.8;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shimmer effect for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-elevated) 50%,
+    var(--surface) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .btn-emergency,
+  .nav-status-dot,
+  .loading-shimmer,
+  .nav-tab[data-active="true"] {
+    animation: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   THEME-SPECIFIC ENHANCEMENTS
+   ======================================== */
+
+/* Light theme adjustments */
+[data-theme='light'] .mobile-nav-bar {
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.08),
+    0 -1px 0 0 rgba(196, 30, 58, 0.1);
+}
+
+[data-theme='light'] .header-enhanced {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 0 0 rgba(196, 30, 58, 0.08);
+}
+
+[data-theme='light'] .btn-emergency {
+  box-shadow:
+    0 4px 12px rgba(196, 30, 58, 0.25),
+    0 0 0 0 rgba(196, 30, 58, 0.3);
+}
+
+/* Sunlight theme - ultra high contrast */
+[data-theme='sunlight'] .mobile-nav-bar {
+  border-top: 3px solid var(--border);
+  box-shadow:
+    0 -6px 16px rgba(0, 0, 0, 0.12),
+    0 -2px 0 0 rgba(204, 0, 0, 0.15);
+}
+
+[data-theme='sunlight'] .header-enhanced {
+  border-bottom: 2px solid var(--border);
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.1),
+    0 2px 0 0 rgba(204, 0, 0, 0.1);
+}
+
+[data-theme='sunlight'] .btn-emergency {
+  box-shadow:
+    0 5px 15px rgba(204, 0, 0, 0.3),
+    0 0 0 0 rgba(204, 0, 0, 0.4);
+  font-weight: 700;
+}
+
+[data-theme='sunlight'] .status-badge {
+  border-width: 2px;
+  font-weight: 700;
+}
+
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ======================================== */
+
+/* Focus visible for keyboard navigation */
+.mobile-nav-bar .nav-tab:focus-visible,
+.touch-target-large:focus-visible,
+.btn-emergency:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 14px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-nav-bar {
+    border-top-width: 3px;
+  }
+
+  .header-enhanced {
+    border-bottom-width: 2px;
+  }
+
+  .btn-emergency {
+    border: 2px solid currentColor;
+  }
+
+  .status-badge {
+    border-width: 2px;
+  }
+
+  .nav-tab[data-active="true"]::before {
+    height: 4px;
+  }
 }

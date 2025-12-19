@@ -59,6 +59,7 @@ export type EnvironmentConfig = z.infer<typeof schema> & {
 export type EnvironmentDiagnostics = {
   nodeEnv: EnvironmentConfig["NODE_ENV"];
   llm: {
+    provider: "anthropic" | "openai";
     baseUrl: string;
     model: string;
     apiKeyConfigured: boolean;
@@ -166,6 +167,7 @@ export class EnvironmentManager {
     return {
       nodeEnv: env.NODE_ENV,
       llm: {
+        provider: env.llmProvider,
         baseUrl: env.llmBaseUrl,
         model: env.llmModel,
         apiKeyConfigured: Boolean(env.LLM_API_KEY?.length),

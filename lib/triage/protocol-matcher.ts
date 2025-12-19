@@ -156,8 +156,8 @@ export class ProtocolMatcher {
 
         // Hypoxia + respiratory symptoms
         if (
-          vitals.oxygenSaturation &&
-          vitals.oxygenSaturation < 94 &&
+          vitals.spo2 &&
+          vitals.spo2 < 94 &&
           /\brespiratory|sob|breathing|dyspnea\b/.test(symptomText)
         ) {
           if (/\b1231|1233|1237|805\b/.test(pi.tp_code)) {
@@ -347,14 +347,16 @@ export class ProtocolMatcher {
       // Severity considerations
       if (severity === "critical" || severity === "severe") {
         // Critical conditions often need specific protocols
-        // But exclude trauma cases from cardiac protocol matching
+        // Boost cardiac/severe protocols - allow cardiac protocols even with trauma (chest trauma needs cardiac assessment)
         const hasTraumaTerms = /\bimpalement|impaled|penetrating|trauma|injury|stab|gunshot|mvc|accident\b/.test(complaintLower);
+        const isCardiacProtocol = /\bcardiac|stemi\b/.test(pi.pi_name.toLowerCase());
+        const hasChestTrauma = hasTraumaTerms && /\bchest\b/.test(complaintLower);
         if (
           /\bcardiac|arrest|stemi|anaphylaxis|respiratory|distress|severe\b/.test(pi.pi_name.toLowerCase()) &&
           /\bcardiac|arrest|stemi|anaphylaxis|respiratory|distress|severe\b/.test(complaintLower)
         ) {
-          // Only boost cardiac protocols if NO trauma terms present
-          if (!hasTraumaTerms || !/\bcardiac|stemi\b/.test(pi.pi_name.toLowerCase())) {
+          // Boost cardiac protocols if: no trauma, OR it's chest trauma, OR protocol is cardiac-specific
+          if (!hasTraumaTerms || hasChestTrauma || isCardiacProtocol) {
             score += 2;
             matchReasons.push("Severe/critical condition match");
           }

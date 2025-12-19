@@ -314,7 +314,8 @@ export class AuditLogger {
       };
 
       // Insert to database (use admin client to bypass RLS)
-      const { error } = await db.admin.from('audit_logs').insert(dbEvent);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (db.admin.from('audit_logs') as any).insert(dbEvent);
 
       if (error) {
         throw new Error(`Supabase insert failed: ${error.message}`);

@@ -350,7 +350,7 @@ function buildProviderImpressionsSection(ql: string, pcmOnly: boolean): string {
 
 function buildKBChunks(hits: KBDoc[]): string[] {
   return hits.map((d, i) => {
-    const trimmed = d.content.length > 1400 ? d.content.slice(0, 1400) + " …" : d.content;
+    const trimmed = d.content.length > 3000 ? d.content.slice(0, 3000) + " …" : d.content;
     return `#${i + 1} • ${d.title} [${d.category}${d.subcategory ? " / " + d.subcategory : ""}]\n${trimmed}`;
   });
 }

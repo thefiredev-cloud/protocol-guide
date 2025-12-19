@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./styles/modern-ui.css";
+import "./chatbot-widget.css";
 
 import type { Metadata, Viewport } from "next";
 import React from "react";

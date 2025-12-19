@@ -1,10 +1,11 @@
 import type { ChatMessage } from "@/app/types/chat";
 import { auditLogger } from "@/lib/audit/audit-logger";
 import { createLogger } from "@/lib/log";
+import type { FunctionCallHandler } from "@/lib/managers/anthropic-client";
+import { AnthropicClient } from "@/lib/managers/anthropic-client";
 import type { CarePlan } from "@/lib/managers/CarePlanManager";
 import { EnvironmentManager } from "@/lib/managers/environment-manager";
 import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
-import type { FunctionCallHandler } from "@/lib/managers/llm-client";
 import { LLMClient } from "@/lib/managers/llm-client";
 import { metrics } from "@/lib/managers/metrics-manager";
 import { RetrievalManager } from "@/lib/managers/RetrievalManager";
@@ -50,7 +51,7 @@ export class ChatService {
   private readonly env = EnvironmentManager.loadSafe();
   private readonly retrieval = new RetrievalManager();
   private readonly logger = createLogger("ChatService");
-  private readonly llmClient: LLMClient;
+  private readonly llmClient: LLMClient | AnthropicClient;
   private readonly triageService: TriageService;
   private readonly payloadBuilder: PayloadBuilder;
   private readonly citationService: CitationService;
@@ -58,20 +59,43 @@ export class ChatService {
   private readonly narrativeBuilder: NarrativeResponseBuilder;
   private readonly protocolRetrievalService = new ProtocolRetrievalService();
 
-  constructor(llmClient?: LLMClient) {
-    this.llmClient = llmClient ?? new LLMClient({
-      baseUrl: this.env.llmBaseUrl,
-      apiKey: this.env.LLM_API_KEY,
-      maxRetries: 2,
-      timeoutMs: 12_000,
-      // Explicitly inject global fetch so tests can spy on it reliably
-      fetchImpl: (globalThis as unknown as { fetch: typeof fetch }).fetch,
-    });
+  constructor(llmClient?: LLMClient | AnthropicClient) {
+    // Select client based on provider configuration (default: Anthropic/Claude)
+    this.llmClient = llmClient ?? this.createLLMClient();
     this.triageService = new TriageService();
     this.payloadBuilder = new PayloadBuilder(this.env.llmModel, 0.2);
     this.citationService = new CitationService();
     this.guardrailService = new GuardrailService();
     this.narrativeBuilder = new NarrativeResponseBuilder();
+  }
+
+  /**
+   * Create LLM client based on provider configuration
+   * Defaults to Anthropic/Claude for better medical reasoning
+   */
+  private createLLMClient(): LLMClient | AnthropicClient {
+    const isAnthropic = this.env.llmProvider === "anthropic" ||
+      this.env.llmBaseUrl.includes("anthropic.com");
+
+    if (isAnthropic) {
+      this.logger.info("Using Anthropic/Claude API", { model: this.env.llmModel });
+      return new AnthropicClient({
+        baseUrl: this.env.llmBaseUrl,
+        apiKey: this.env.LLM_API_KEY,
+        maxRetries: 2,
+        timeoutMs: 30_000, // Claude needs more time
+        fetchImpl: (globalThis as unknown as { fetch: typeof fetch }).fetch,
+      });
+    }
+
+    this.logger.info("Using OpenAI-compatible API", { model: this.env.llmModel });
+    return new LLMClient({
+      baseUrl: this.env.llmBaseUrl,
+      apiKey: this.env.LLM_API_KEY,
+      maxRetries: 2,
+      timeoutMs: 12_000,
+      fetchImpl: (globalThis as unknown as { fetch: typeof fetch }).fetch,
+    });
   }
 
   public async warm(): Promise<void> {
@@ -449,8 +473,9 @@ export class ChatService {
     if (result && typeof result === "object" && "protocols" in result) {
       const protocols = (result as { protocols: unknown[] }).protocols;
       metrics.observe("protocol.matches.count", protocols.length);
-      if (protocols.length > 0 && "score" in protocols[0]) {
-        metrics.observe("protocol.matches.score", (protocols[0] as { score: number }).score);
+      const firstProtocol = protocols[0] as Record<string, unknown> | undefined;
+      if (protocols.length > 0 && firstProtocol && "score" in firstProtocol) {
+        metrics.observe("protocol.matches.score", (firstProtocol as { score: number }).score);
       }
     }
   }

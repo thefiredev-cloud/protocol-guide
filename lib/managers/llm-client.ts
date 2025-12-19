@@ -1,5 +1,5 @@
 type ChatMessage = {
-  role: "system" | "user" | "assistant";
+  role: "system" | "user" | "assistant" | "tool";
   content: string | null;
   tool_calls?: Array<{
     id: string;
@@ -112,7 +112,7 @@ export class LLMClient {
     sessionId?: string,
     rateLimiter?: FunctionCallRateLimiter,
   ): Promise<LLMClientResult> {
-    let currentMessages = [...payload.messages];
+    const currentMessages = [...payload.messages];
     let iteration = 0;
 
 
@@ -237,6 +237,7 @@ export class LLMClient {
       }
 
       if (result.type === "error") {
+        console.error(`[LLM] Attempt ${attempt} failed:`, result.message);
       }
 
       await this.waitForBackoff(attempt);

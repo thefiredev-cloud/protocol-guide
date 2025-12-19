@@ -1,12 +1,13 @@
 "use client";
 
+import "./chat-input-styles.css";
+
+import { ChevronDown, ChevronUp, FileText,MessageCircle, Mic } from "lucide-react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronUp, MessageCircle, Mic, FileText } from "lucide-react";
 
 import { ProtocolAutocomplete } from "@/app/components/chat/protocol-autocomplete";
 import { TextAreaAutoResizer } from "@/app/tools/text-area-auto-resizer";
-import "./chat-input-styles.css";
 
 export type ChatInputRowProps = {
   input: string;
@@ -37,32 +38,13 @@ export function ChatInputRow({
   const resizer = useMemo(() => new TextAreaAutoResizer({ minHeight: 100, maxHeight: 160 }), []);
   const [showAutocomplete, setShowAutocomplete] = useState(true);
   const [showControls, setShowControls] = useState(true);
-  const [showChatDropdown, setShowChatDropdown] = useState(false);
-  const [showNarrativeDropdown, setShowNarrativeDropdown] = useState(false);
   const autocompleteContainerRef = useRef<HTMLDivElement>(null);
-  const chatDropdownRef = useRef<HTMLDivElement>(null);
-  const narrativeDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (taRef.current) {
       resizer.adjust(taRef.current);
     }
   }, [input, resizer, taRef]);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (chatDropdownRef.current && !chatDropdownRef.current.contains(event.target as Node)) {
-        setShowChatDropdown(false);
-      }
-      if (narrativeDropdownRef.current && !narrativeDropdownRef.current.contains(event.target as Node)) {
-        setShowNarrativeDropdown(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -101,19 +83,7 @@ export function ChatInputRow({
     setShowControls((prev) => !prev);
   }, []);
 
-  const handleChatClick = useCallback(() => {
-    setShowChatDropdown((prev) => !prev);
-    setShowNarrativeDropdown(false);
-  }, []);
-
-  const handleNarrativeClick = useCallback(() => {
-    setShowNarrativeDropdown((prev) => !prev);
-    setShowChatDropdown(false);
-  }, []);
-
   const handleVoiceClick = useCallback(() => {
-    setShowChatDropdown(false);
-    setShowNarrativeDropdown(false);
     onToggleVoice();
   }, [onToggleVoice]);
 

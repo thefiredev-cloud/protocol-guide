@@ -315,6 +315,7 @@ export class ProtocolErrorRecovery {
       });
       return {
         ...dbResult,
+        data: dbResult.data ?? undefined,
         recoveryTimeMs: Date.now() - startTime,
       };
     }

@@ -1,8 +1,8 @@
 'use client';
 
-import { ClipboardList, type LucideIcon, MessageCircle, Phone,Pill, Timer } from 'lucide-react';
+import { ClipboardList, type LucideIcon, MessageCircle, Phone, Pill, Timer } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname,useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
@@ -26,7 +26,7 @@ function NavTab({ href, icon: Icon, label, active, isOnline }: NavTabProps) {
       className={`nav-tab ${active ? 'active' : ''} ${isPressed ? 'pressed' : ''}`}
       aria-label={label}
       aria-current={active ? 'page' : undefined}
-      onPointerDown={(e) => {
+      onPointerDown={() => {
         tap();
         setIsPressed(true);
       }}
@@ -52,17 +52,53 @@ function NavTab({ href, icon: Icon, label, active, isOnline }: NavTabProps) {
 export function MobileNavBar() {
   const pathname = usePathname();
   const router = useRouter();
+  const navRef = useRef<HTMLElement>(null);
+  const [isOnline, setIsOnline] = useState(true);
 
-  // Define navigation order for swipe
+  // Define navigation order for swipe and keyboard navigation
   const navItems = [
-    { href: '/', label: 'Chat' },
-    { href: '/dosing', label: 'Dosing' },
-    { href: '/protocols', label: 'Protocols' },
-    { href: '/base-hospitals', label: 'Base Hospitals' },
-    { href: '/scene', label: 'Scene' },
+    { href: '/', label: 'Chat', icon: MessageCircle },
+    { href: '/dosing', label: 'Dosing', icon: Pill },
+    { href: '/protocols', label: 'Protocols', icon: ClipboardList },
+    { href: '/base-hospitals', label: 'Base', icon: Phone },
+    { href: '/scene', label: 'Scene', icon: Timer },
   ];
 
   const currentIndex = navItems.findIndex(item => item.href === pathname);
+
+  // Monitor online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    setIsOnline(navigator.onLine);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (currentIndex === -1) return;
+
+      if (e.key === 'ArrowLeft' && currentIndex > 0) {
+        e.preventDefault();
+        router.push(navItems[currentIndex - 1].href);
+      } else if (e.key === 'ArrowRight' && currentIndex < navItems.length - 1) {
+        e.preventDefault();
+        router.push(navItems[currentIndex + 1].href);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, router, navItems]);
 
   const handleSwipeLeft = useCallback(() => {
     // Swipe left = next tab
@@ -83,17 +119,23 @@ export function MobileNavBar() {
 
   return (
     <nav
+      ref={navRef}
       className="mobile-nav-bar"
       role="navigation"
       aria-label="Primary navigation"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <NavTab href="/" icon={MessageCircle} label="Chat" active={pathname === '/'} />
-      <NavTab href="/dosing" icon={Pill} label="Dosing" active={pathname === '/dosing'} />
-      <NavTab href="/protocols" icon={ClipboardList} label="Protocols" active={pathname === '/protocols'} />
-      <NavTab href="/base-hospitals" icon={Phone} label="Base" active={pathname === '/base-hospitals'} />
-      <NavTab href="/scene" icon={Timer} label="Scene" active={pathname === '/scene'} />
+      {navItems.map((item) => (
+        <NavTab
+          key={item.href}
+          href={item.href}
+          icon={item.icon}
+          label={item.label}
+          active={pathname === item.href}
+          isOnline={isOnline}
+        />
+      ))}
     </nav>
   );
 }
