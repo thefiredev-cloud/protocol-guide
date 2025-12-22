@@ -52,7 +52,8 @@ class AuthService {
    */
   async login(
     credentials: LoginCredentials,
-    ctx: AuthRequestContext
+    ctx: AuthRequestContext,
+    captchaToken?: string
   ): Promise<AuthSession> {
     const supabase = this.getClient();
 
@@ -60,6 +61,9 @@ class AuthService {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: credentials.email,
       password: credentials.password,
+      options: {
+        captchaToken,
+      },
     });
 
     if (error || !data.session) {

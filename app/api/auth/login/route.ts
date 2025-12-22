@@ -32,22 +32,13 @@ export const POST = withApiHandler<LoginInput>(
   async (input, req) => {
     const ipAddress = req.headers.get('x-forwarded-for') ?? undefined;
 
-    // Verify CAPTCHA token in production
-    if (process.env.NODE_ENV === 'production' || process.env.TURNSTILE_SECRET_KEY) {
-      if (!input.captchaToken) {
-        return NextResponse.json(
-          { error: { code: 'CAPTCHA_REQUIRED', message: 'CAPTCHA verification required' } },
-          { status: 400 }
-        );
-      }
-
-      const captchaValid = await verifyCaptcha(input.captchaToken, ipAddress);
-      if (!captchaValid) {
-        return NextResponse.json(
-          { error: { code: 'CAPTCHA_FAILED', message: 'CAPTCHA verification failed' } },
-          { status: 400 }
-        );
-      }
+    // hCaptcha verification is handled built-in by Supabase Auth
+    // via authService.login which passes the token to signInWithPassword
+    if (process.env.NODE_ENV === 'production' && !input.captchaToken) {
+      return NextResponse.json(
+        { error: { code: 'CAPTCHA_REQUIRED', message: 'CAPTCHA verification required' } },
+        { status: 400 }
+      );
     }
 
     const ctx = {
@@ -55,7 +46,7 @@ export const POST = withApiHandler<LoginInput>(
       userAgent: req.headers.get('user-agent') ?? undefined,
     };
 
-    const session = await authService.login(input, ctx);
+    const session = await authService.login(input, ctx, input.captchaToken);
 
     const response = NextResponse.json({
       user: session.user,

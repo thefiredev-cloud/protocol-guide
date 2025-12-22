@@ -1,17 +1,18 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Turnstile } from '@marsidev/react-turnstile';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useAuth } from '@/app/contexts/auth-context';
 import Aurora from '@/app/components/ui/Aurora';
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
+const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY ?? '10000000-ffff-ffff-ffff-000000000001';
 
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, loading, error } = useAuth();
+  const captchaRef = useRef<HCaptcha>(null);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +26,7 @@ function LoginFormContent() {
     setLocalError(null);
 
     if (!captchaToken) {
-      setLocalError('Please complete the CAPTCHA verification');
+      setLocalError('Please complete the hCaptcha verification');
       return;
     }
 
@@ -34,6 +35,9 @@ function LoginFormContent() {
       router.push(redirect);
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : 'Login failed');
+      // Reset hCaptcha on failure
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     }
   }
 
@@ -90,11 +94,12 @@ function LoginFormContent() {
           </div>
 
           <div className="captcha-container">
-            <Turnstile
-              siteKey={TURNSTILE_SITE_KEY}
-              onSuccess={(token) => setCaptchaToken(token)}
-              onError={() => setCaptchaToken(null)}
+            <HCaptcha
+              sitekey={HCAPTCHA_SITE_KEY}
+              onVerify={(token) => setCaptchaToken(token)}
               onExpire={() => setCaptchaToken(null)}
+              ref={captchaRef}
+              theme="light"
             />
           </div>
 
