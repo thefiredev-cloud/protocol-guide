@@ -207,7 +207,7 @@ export async function batchInsert<T extends Record<string, unknown>>(
     
     const response = await queryWithRetry(async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (db.admin.from(tableName) as any).insert(batch).select('*', { count: 'exact', head: true });
+      return (db.admin.from(tableName as any) as any).insert(batch).select('*', { count: 'exact', head: true });
     }).catch((error) => {
       const originalError = error instanceof Error ? error : new Error(String(error));
       throw new Error(
@@ -251,7 +251,7 @@ export async function upsert<T extends Record<string, unknown>>(
 ): Promise<T[]> {
   const response = await queryWithRetry(async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (db.admin.from(tableName) as any)
+    return (db.admin.from(tableName as any) as any)
       .upsert(records, {
         onConflict: conflictColumns.join(','),
       })
@@ -296,7 +296,7 @@ export async function count(
   tableName: string,
   filters?: Record<string, unknown>
 ): Promise<number> {
-  let query = db.admin.from(tableName).select('*', { count: 'exact', head: true }) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  let query = db.admin.from(tableName as any).select('*', { count: 'exact', head: true }) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   // Apply filters
   if (filters) {
@@ -361,7 +361,7 @@ async function testDatabaseHealth(): Promise<boolean> {
  */
 async function testDatabaseQuery(): Promise<boolean> {
   try {
-    const auditCount = await count('audit_logs');
+    const auditCount = await count('audit_logs' as any);
     console.log(`   PASSED: Found ${auditCount} audit logs\n`);
     return true;
   } catch (error) {
@@ -384,7 +384,7 @@ async function testDatabaseInsert(): Promise<boolean> {
 
   const response = await queryWithRetry(async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (db.admin.from('audit_logs') as any).insert(testEvent).select();
+    return (db.admin.from('audit_logs' as any) as any).insert(testEvent).select();
   }).catch((error) => {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`   FAILED: ${message}`);
