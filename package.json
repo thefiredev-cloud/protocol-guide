@@ -21,7 +21,7 @@
     "profile:chat": "node scripts/profile.mjs chat",
     "profile:dosing": "node scripts/profile.mjs dosing",
     "kb:merge": "node scripts/merge-kb.mjs",
-    "prepare": "husky install",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi",
     "build:netlify": "npx -y netlify-cli link --id $NETLIFY_SITE_ID && npx -y netlify-cli env:pull --environment=production --yes && npx -y netlify-cli build --context production",
     "db:test": "tsx scripts/test-db.ts",
     "db:migrate": "tsx scripts/run-migrations.ts",

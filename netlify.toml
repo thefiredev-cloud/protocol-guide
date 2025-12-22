@@ -13,7 +13,7 @@
 
 [build.environment]
   # Node.js version (must match package.json engines)
-  NODE_VERSION = "20"
+  NODE_VERSION = "20.19.6"
 
   # Disable Yarn (use npm)
   NETLIFY_USE_YARN = "false"
