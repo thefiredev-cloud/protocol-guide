@@ -3,7 +3,7 @@
 import { Phone } from 'lucide-react';
 import { useState } from 'react';
 
-import { BASE_HOSPITALS, BaseHospital, MEDICAL_ALERT_CENTER } from '@/lib/clinical/base-hospitals';
+import { BASE_HOSPITALS, BaseHospital, MEDICAL_ALERT_CENTER } from '../../../lib/clinical/base-hospitals';
 
 type Division = 'All' | 'Central' | 'North' | 'South' | 'East' | 'West';
 

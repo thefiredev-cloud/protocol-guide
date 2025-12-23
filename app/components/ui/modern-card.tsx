@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { fadeInOnScroll } from '@/lib/ui/modern-features';
+import { fadeInOnScroll } from '../../../lib/ui/modern-features';
 
 interface ModernCardProps {
   children: React.ReactNode;

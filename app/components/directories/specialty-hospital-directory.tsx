@@ -1,6 +1,6 @@
 'use client';
 
-import { BASE_HOSPITALS, MEDICAL_ALERT_CENTER, BaseHospital } from '@/lib/clinical/base-hospitals';
+import { BASE_HOSPITALS, MEDICAL_ALERT_CENTER, BaseHospital } from '../../../lib/clinical/base-hospitals';
 import { Phone, Heart, Zap, Brain, Activity, Flame, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
