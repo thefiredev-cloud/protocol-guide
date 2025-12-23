@@ -1,8 +1,8 @@
 "use client";
 
-import { ChatList } from "@/app/components/chat/chat-message-list";
-import { VoiceFirstInput } from "@/app/components/chat/voice-input-control";
-import { usePageController } from "@/app/hooks/use-page-controller";
+import { ChatList } from "./components/chat/chat-message-list";
+import { VoiceFirstInput } from "./components/chat/voice-input-control";
+import { usePageController } from "./hooks/use-page-controller";
 
 /**
  * LA County Protocol Assistant
