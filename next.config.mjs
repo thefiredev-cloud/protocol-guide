@@ -45,11 +45,12 @@ const devCSP = [
  */
 const productionCSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval'", // Next.js requires unsafe-eval and unsafe-inline for optimization
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // CSS-in-JS and Google Fonts
+  "script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval' https://js.hcaptcha.com https://newassets.hcaptcha.com", // Next.js + hCaptcha
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://newassets.hcaptcha.com", // CSS-in-JS + Google Fonts + hCaptcha
   "img-src 'self' data: https:",
-  "connect-src 'self' https://api.openai.com https://*.supabase.co https://login.microsoftonline.com https://fonts.googleapis.com", // Azure AD SSO + Google Fonts
+  "connect-src 'self' https://api.openai.com https://*.supabase.co https://login.microsoftonline.com https://fonts.googleapis.com https://hcaptcha.com https://*.hcaptcha.com", // Azure AD SSO + Google Fonts + hCaptcha
   "font-src 'self' data: https://fonts.gstatic.com",
+  "frame-src https://newassets.hcaptcha.com", // hCaptcha iframe
   isNetlifyPreview ? "frame-ancestors 'self' https://app.netlify.com" : "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

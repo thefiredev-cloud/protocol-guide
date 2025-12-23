@@ -14,8 +14,8 @@ The application currently has **281 protocols** in the whitelist. After comprehe
 |---------|-------|--------|
 | Treatment Protocols (1200 series) | 84/84 | COMPLETE |
 | MCG (1300 series) | 30/30 | COMPLETE |
-| Drug References (1317.x) | 23/24 | 1 MISSING |
-| Destination Protocols (500 series) | 28/29 | 1 MISSING |
+| Drug References (1317.x) | 24/24 | COMPLETE |
+| Destination Protocols (500 series) | 29/29 | COMPLETE |
 | Scope of Practice (800 series) | 15/21 | 6 MISSING |
 | Protocols with metadata issues | 62 | NEEDS FIX |
 
@@ -25,27 +25,12 @@ The application currently has **281 protocols** in the whitelist. After comprehe
 
 ### Missing Protocols
 
-#### 1. Drug Reference - 1317.37 (Pralidoxime Chloride)
-- **Impact:** Adult dosing for nerve agent antidote not available
-- **Current State:** Only pediatric version (1317.37-P) exists
-- **Priority:** HIGH (HAZMAT/nerve agent treatment)
-
-#### 2. Destination Protocol - 506 (Trauma Triage Decision Scheme)
-- **Impact:** Core trauma patient routing criteria missing
-- **Current State:** Only 506.2 and 506.29 (subprotocols) exist
-- **Priority:** HIGH (trauma triage is fundamental)
-
-#### 3. Scope of Practice - 802 (EMT Scope of Practice)
-- **Impact:** EMT medication/procedure authorization incomplete
-- **Current State:** Only 802.1 (Field Reference) exists
-- **Priority:** HIGH (already implemented scope-registry.ts uses this)
-
-#### 4. Scope of Practice - 815 (DNR/POLST Honoring)
+#### 1. Scope of Practice - 815 (DNR/POLST Honoring)
 - **Impact:** End-of-life care guidance incomplete
 - **Current State:** Malformed codes 815.12, 815.209 exist
 - **Priority:** MEDIUM
 
-#### 5. Scope of Practice - 834 (Patient Refusal of Treatment)
+#### 2. Scope of Practice - 834 (Patient Refusal of Treatment)
 - **Impact:** AMA/refusal documentation guidance incomplete
 - **Current State:** Only 834.1 (Quick Reference Guide) exists
 - **Priority:** MEDIUM
@@ -119,10 +104,7 @@ Notable orphaned protocols:
 
 ### Immediate Actions (HIGH Priority)
 
-1. **Add missing protocol 506** - Trauma Triage Decision Scheme
-2. **Add missing protocol 802** - EMT Scope of Practice
-3. **Add missing protocol 1317.37** - Pralidoxime (adult)
-4. **Fix treatment protocol names** (1221, 1233, 1241) - names exist in source files
+1. **Fix treatment protocol names** (1221, 1233, 1241) - names exist in source files
 
 ### Short-term Actions (MEDIUM Priority)
 
@@ -146,9 +128,9 @@ Notable orphaned protocols:
 |---------|--------|
 | 1200 (Treatment) | VERIFIED COMPLETE |
 | 1300 (MCG) | VERIFIED COMPLETE |
-| 1317.x (Drugs) | 1 MISSING (1317.37) |
-| 500 (Destination) | 1 MISSING (506) |
-| 800 (Scope) | 6 MISSING |
+| 1317.x (Drugs) | VERIFIED COMPLETE (including 1317.37) |
+| 500 (Destination) | VERIFIED COMPLETE (including 506) |
+| 800 (Scope) | 6 MISSING (802, 815, 834, 802.1 subprotocols only) |
 | 200-400 (Admin) | NOT AUDITED (low priority) |
 | 600-700 (Doc/Equip) | NOT AUDITED (low priority) |
 
@@ -164,10 +146,11 @@ This report recommends changes to:
 
 ## Conclusion
 
-The application has **comprehensive treatment protocol coverage** (1200 series) and **complete MCG coverage** (1300 series). The critical gaps are in:
+The application has **comprehensive treatment protocol coverage** (1200 series), **complete MCG coverage** (1300 series), **complete drug reference coverage** (1317.x series), and **complete destination protocol coverage** (500 series). 
 
-1. One drug reference (1317.37)
-2. One destination protocol (506)
-3. Core scope of practice policies (802, 815, 834)
+The only remaining critical gaps are in the Scope of Practice policies (800 series), specifically:
+1. Main protocol 815 (DNR/POLST Honoring) - only subprotocols exist
+2. Main protocol 834 (Patient Refusal of Treatment) - only subprotocol 834.1 exists
+3. Additional scope policies (approximately 6 missing protocols in 800 series)
 
 For a LA County Fire Department paramedic app, the treatment protocols and MCG are the most critical - and these are **100% complete**.
