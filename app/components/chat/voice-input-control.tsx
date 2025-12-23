@@ -4,7 +4,7 @@ import { Loader2, Mic, Send } from "lucide-react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useMemo } from "react";
 
-import { ProtocolAutocomplete } from "@/app/components/chat/protocol-autocomplete";
+import { ProtocolAutocomplete } from "./protocol-autocomplete";
 import { TextAreaAutoResizer } from "@/app/tools/text-area-auto-resizer";
 import type { RecorderState } from "@/lib/AudioRecorderManager";
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { MessageSendManager } from "@/app/managers/message-send-manager";
-import type { CarePlan, ChatMessage, Citation } from "@/app/types/chat";
+import type { CarePlan, ChatMessage, Citation } from "../types/chat";
 
 type ChatState = {
   messages: ChatMessage[];
