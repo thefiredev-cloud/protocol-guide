@@ -24,8 +24,9 @@
 # =============================================================================
 # Next.js Plugin
 # =============================================================================
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# REMOVED: @netlify/plugin-nextjs@4.41.3 was causing module resolution issues
+# with Next.js 14. Netlify now auto-detects Next.js and uses its modern runtime.
+# If needed, install the latest version (5.x) via Netlify's plugins UI instead.
 
 # =============================================================================
 # Serverless Functions Configuration
