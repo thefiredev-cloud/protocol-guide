@@ -22,11 +22,10 @@
   HUSKY = "0"
 
 # =============================================================================
-# Next.js Plugin
+# Next.js Plugin (Forced v5)
 # =============================================================================
-# REMOVED: @netlify/plugin-nextjs@4.41.3 was causing module resolution issues
-# with Next.js 14. Netlify now auto-detects Next.js and uses its modern runtime.
-# If needed, install the latest version (5.x) via Netlify's plugins UI instead.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # =============================================================================
 # Serverless Functions Configuration

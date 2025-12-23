@@ -1,5 +1,4 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
 # Block committing obvious secrets
 if git diff --cached -U0 -a | grep -E '(^|\+)\s*LLM_API_KEY=' >/dev/null; then
