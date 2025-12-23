@@ -7,7 +7,7 @@
 
 import { NextResponse } from "next/server";
 
-import { rateLimiter } from "@/lib/security/rate-limit";
+import { rateLimiter } from "../../../../lib/security/rate-limit";
 
 export const runtime = "nodejs";
 

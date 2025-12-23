@@ -5,8 +5,8 @@ import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { ProtocolAutocomplete } from "./protocol-autocomplete";
-import { TextAreaAutoResizer } from "@/app/tools/text-area-auto-resizer";
-import type { RecorderState } from "@/lib/AudioRecorderManager";
+import { TextAreaAutoResizer } from "../../tools/text-area-auto-resizer";
+import type { RecorderState } from "../../../lib/AudioRecorderManager";
 
 export interface VoiceFirstInputProps {
   input: string;

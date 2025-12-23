@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { AudioRecorderManager, RecorderState } from "@/lib/AudioRecorderManager";
+import { AudioRecorderManager, RecorderState } from "../../lib/AudioRecorderManager";
 
 export type VoiceInputController = {
   /** Current state: idle, recording, or transcribing */

@@ -5,9 +5,9 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { withApiHandler } from "@/lib/api/handler";
-import type { AuditEvent, AuditLogResponse, AuditQuery } from "@/lib/audit/types";
-import { createLogger } from "@/lib/log";
+import { withApiHandler } from "../../../lib/api/handler";
+import type { AuditEvent, AuditLogResponse, AuditQuery } from "../../../lib/audit/types";
+import { createLogger } from "../../../lib/log";
 
 export const runtime = "nodejs";
 
