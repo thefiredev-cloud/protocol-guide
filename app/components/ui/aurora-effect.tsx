@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
 
-import './aurora.css';
+import './aurora-effect.css';
 
 const VERT = `#version 300 es
 in vec2 position;

@@ -1,7 +1,7 @@
 "use client";
 
-import { ChatList } from "@/app/components/chat/chat-list";
-import { VoiceFirstInput } from "@/app/components/chat/voice-first-input";
+import { ChatList } from "@/app/components/chat/chat-message-list";
+import { VoiceFirstInput } from "@/app/components/chat/voice-input-control";
 import { usePageController } from "@/app/hooks/use-page-controller";
 
 /**

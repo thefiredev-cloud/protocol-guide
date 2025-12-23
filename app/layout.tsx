@@ -9,7 +9,7 @@ import { ErrorBoundary } from "./components/layout/error-boundary";
 import { RootLayoutContent } from "./components/layout/root-layout-content";
 import { ToastProvider } from "./components/layout/toast-notification";
 import { WebVitals } from "./components/layout/web-vitals";
-import { AuthProvider } from "./contexts/auth-context";
+import { AuthProvider } from "./contexts/authentication-context";
 
 // Using system font stack for offline build compatibility
 const fontClass = "";
