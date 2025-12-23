@@ -78,16 +78,5 @@
     "ask": []
   },
   "disabledMcpjsonServers": [
-    "github",
-    "memory",
-    "sequential-thinking",
-    "netlify",
-    "stripe",
-    "supabase",
-    "octagon",
-    "filesystem",
-    "brave-search",
-    "puppeteer",
-    "chrome-devtools"
   ]
 }
