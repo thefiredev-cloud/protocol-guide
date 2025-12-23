@@ -1,15 +1,15 @@
 import { useCallback, useRef, useState } from "react";
 
-import { useAppendAssistant } from "@/app/hooks/use-append-assistant";
-import { useBuildNarrative } from "@/app/hooks/use-build-narrative";
-import { useChatState } from "@/app/hooks/use-chat-state";
-import { useNarrativeState } from "@/app/hooks/use-narrative-state";
-import { useOrdersCitations } from "@/app/hooks/use-orders-citations";
-import { useProviderLevel } from "@/app/hooks/use-provider-level";
-import { useScrollAnchor } from "@/app/hooks/use-scroll-anchor";
-import { useSendHandler } from "@/app/hooks/use-send-handler";
-import { useVoiceInput } from "@/app/hooks/use-voice-input";
-import type { ChatMessage } from "@/app/types/chat";
+import { useAppendAssistant } from "./use-append-assistant";
+import { useBuildNarrative } from "./use-build-narrative";
+import { useChatState } from "./use-chat-state";
+import { useNarrativeState } from "./use-narrative-state";
+import { useOrdersCitations } from "./use-orders-citations";
+import { useProviderLevel } from "./use-provider-level";
+import { useScrollAnchor } from "./use-scroll-anchor";
+import { useSendHandler } from "./use-send-handler";
+import { useVoiceInput } from "./use-voice-input";
+import type { ChatMessage } from "../types/chat";
 
 async function requestChat(payload: unknown, options?: { stream?: boolean }) {
   const endpoint = options?.stream ? "/api/chat/stream" : "/api/chat";

@@ -3,7 +3,7 @@
 import { ChevronDown, ChevronRight, FileText } from "lucide-react";
 import { memo, useState } from "react";
 
-import type { ChatMessage, Citation } from "@/app/types/chat";
+import type { ChatMessage, Citation } from "../../types/chat";
 
 import { ProtocolFormatter } from "./protocol-formatter";
 

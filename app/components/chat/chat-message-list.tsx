@@ -1,8 +1,8 @@
 import { memo } from "react";
 
-import { HealthStatusBanner } from "@/app/components/chat/health-status-banner";
-import { MessageItem } from "@/app/components/chat/sob-protocols";
-import type { ChatMessage } from "@/app/types/chat";
+import { HealthStatusBanner } from "./health-status-banner";
+import { MessageItem } from "./sob-protocols";
+import type { ChatMessage } from "../../types/chat";
 
 type ChatListProps = {
   messages: ChatMessage[];
