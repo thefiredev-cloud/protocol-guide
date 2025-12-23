@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createLogger } from "@/lib/log";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { createLogger } from "../../../../lib/log";
+import { metrics } from "../../../../lib/managers/metrics-manager";
 
 export const runtime = "nodejs";
 

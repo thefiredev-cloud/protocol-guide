@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import type { ChatMessage } from "@/app/types/chat";
+import type { ChatMessage } from "../types/chat";
 
 type ChatState = {
   messages: ChatMessage[];

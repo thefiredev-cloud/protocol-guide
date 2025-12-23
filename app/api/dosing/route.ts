@@ -2,12 +2,12 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { withApiHandler } from "@/lib/api/handler";
-import { auditLogger } from "@/lib/audit/audit-logger";
-import { createDefaultMedicationManager } from "@/lib/dosing/registry";
-import type { MedicationCalculationRequest } from "@/lib/dosing/types";
-import { createLogger } from "@/lib/log";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { withApiHandler } from "../../../lib/api/handler";
+import { auditLogger } from "../../../lib/audit/audit-logger";
+import { createDefaultMedicationManager } from "../../../lib/dosing/registry";
+import type { MedicationCalculationRequest } from "../../../lib/dosing/types";
+import { createLogger } from "../../../lib/log";
+import { metrics } from "../../../lib/managers/metrics-manager";
 
 export const runtime = "nodejs";
 

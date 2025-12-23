@@ -7,9 +7,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { withApiHandler } from "@/lib/api/handler";
-import { protocolUpdateManager } from "@/lib/protocols/updates";
-import type { ChangeType, ClinicalImpact } from "@/lib/protocols/updates";
+import { withApiHandler } from "../../../lib/api/handler";
+import { protocolUpdateManager } from "../../../lib/protocols/updates";
+import type { ChangeType, ClinicalImpact } from "../../../lib/protocols/updates";
 
 export const runtime = "nodejs";
 

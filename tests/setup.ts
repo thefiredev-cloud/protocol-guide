@@ -2,6 +2,14 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
+// Set test environment variables
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test-project.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key-for-testing-purposes-only';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key-for-testing';
+process.env.LLM_API_KEY = 'test-llm-api-key-for-testing';
+process.env.LLM_PROVIDER = 'anthropic';
+process.env.LLM_MODEL = 'claude-sonnet-4-20250514';
+
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};

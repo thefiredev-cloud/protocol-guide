@@ -3,8 +3,8 @@
  * Manages chat session and message persistence
  */
 
-import { db } from '@/lib/db/client';
-import { createLogger } from '@/lib/log';
+import { db } from '../../../lib/db/client';
+import { createLogger } from '../../../lib/log';
 
 import { sanitizeMessage } from './phi-sanitizer';
 

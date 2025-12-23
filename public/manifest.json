@@ -1,6 +1,6 @@
 {
-  "name": "LA County Fire Medic Bot",
-  "short_name": "Medic Bot",
+  "name": "County Medic",
+  "short_name": "County Medic",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

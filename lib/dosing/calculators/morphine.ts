@@ -1,10 +1,10 @@
-import { mgPerKgPerDose } from "@/lib/dosing/math";
+import { mgPerKgPerDose } from "../../../lib/dosing/math";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   MedicationDoseRecommendation,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 export class MorphineCalculator implements MedicationCalculator {
   public readonly id = "morphine";

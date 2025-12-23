@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-import { EnvironmentManager } from "@/lib/managers/environment-manager";
+import { EnvironmentManager } from "../../lib/managers/environment-manager";
 
 export type KnowledgeBaseAsset = {
   id: string;

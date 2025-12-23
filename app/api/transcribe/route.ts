@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Whisper API limits
+const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024; // 25MB
+const ALLOWED_AUDIO_TYPES = [
+  "audio/webm",
+  "audio/mp3",
+  "audio/mpeg",
+  "audio/mp4",
+  "audio/m4a",
+  "audio/wav",
+  "audio/ogg",
+  "audio/flac",
+];
+
 /**
  * POST /api/transcribe
  * Transcribes audio using OpenAI Whisper API
@@ -11,6 +24,22 @@ export async function POST(request: NextRequest) {
 
     if (!audioFile) {
       return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
+    }
+
+    // Validate file size (Whisper limit: 25MB)
+    if (audioFile.size > MAX_FILE_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: `File too large. Maximum size is 25MB, received ${(audioFile.size / 1024 / 1024).toFixed(1)}MB` },
+        { status: 413 }
+      );
+    }
+
+    // Validate file type
+    if (!ALLOWED_AUDIO_TYPES.includes(audioFile.type)) {
+      return NextResponse.json(
+        { error: `Invalid file type: ${audioFile.type}. Allowed: ${ALLOWED_AUDIO_TYPES.join(", ")}` },
+        { status: 415 }
+      );
     }
 
     const apiKey = process.env.LLM_API_KEY;

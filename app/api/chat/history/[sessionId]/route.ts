@@ -7,8 +7,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { withApiHandler } from '@/lib/api/handler';
-import { chatHistoryService } from '@/lib/services/chat/chat-history-service';
+import { withApiHandler } from '../../../../../lib/api/handler';
+import { chatHistoryService } from '../../../../../lib/services/chat/chat-history-service';
 
 /**
  * GET /api/chat/history/[sessionId]

@@ -19,7 +19,7 @@
  * Per MCG 1317 Drug Reference List (23 approved medications)
  */
 
-import type { ProviderLevel } from "@/lib/dosing/types";
+import type { ProviderLevel } from "../../lib/dosing/types";
 
 export type ScopeEntry = {
   medicationId: string;

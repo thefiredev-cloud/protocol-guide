@@ -1,4 +1,4 @@
-import type { TriageResult } from "@/lib/triage";
+import type { TriageResult } from "../../lib/triage";
 
 export function formatDemographics(result: TriageResult): string[] {
   const demo: string[] = [];

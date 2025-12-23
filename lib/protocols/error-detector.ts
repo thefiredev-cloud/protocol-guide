@@ -8,7 +8,7 @@
  * - Performance anomaly detection
  */
 
-import { type Protocol,ProtocolContentValidator } from '@/lib/validators/protocol-content-validator';
+import { type Protocol,ProtocolContentValidator } from '../../lib/validators/protocol-content-validator';
 
 export interface CheckReport {
   timestamp: string;

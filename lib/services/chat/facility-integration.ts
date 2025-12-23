@@ -5,13 +5,13 @@
  * into the chat service for clinical decision support.
  */
 
-import { facilityManager } from "@/lib/clinical/FacilityManager";
+import { facilityManager } from "../../../lib/clinical/FacilityManager";
 import {
   getTransportRecommendation,
   type PatientCondition,
   type TransportRecommendation,
-} from "@/lib/clinical/transport-destinations";
-import type { Facility, Region } from "@/lib/clinical/facilities";
+} from "../../../lib/clinical/transport-destinations";
+import type { Facility, Region } from "../../../lib/clinical/facilities";
 
 /**
  * Enhanced transport recommendation.

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { createLogger } from "@/lib/log";
-import { EnvironmentManager } from "@/lib/managers/environment-manager";
-import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { createLogger } from "../../../lib/log";
+import { EnvironmentManager } from "../../../lib/managers/environment-manager";
+import { knowledgeBaseInitializer } from "../../../lib/managers/knowledge-base-initializer";
+import { metrics } from "../../../lib/managers/metrics-manager";
 
 export const runtime = "nodejs";
 

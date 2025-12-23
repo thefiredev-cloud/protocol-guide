@@ -1,4 +1,4 @@
-import { createLogger } from "@/lib/log";
+import { createLogger } from "../../../lib/log";
 
 /**
  * JsonToMarkdownConverter provides deep conversion of protocol JSON structures

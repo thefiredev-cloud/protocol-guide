@@ -1,5 +1,5 @@
-import { mgPerKgPerDose } from "@/lib/dosing/math";
-import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "@/lib/dosing/types";
+import { mgPerKgPerDose } from "../../../lib/dosing/math";
+import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "../../../lib/dosing/types";
 
 export class AcetaminophenCalculator implements MedicationCalculator {
   public readonly id = "acetaminophen";

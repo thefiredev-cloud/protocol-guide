@@ -6,15 +6,15 @@
  * Key error patterns: wrong dose by weight, route confusion (IN vs IV), respiratory depression.
  */
 
-import { mcgPerKgPerDose, roundTo } from "@/lib/dosing/math";
-import { boundsValidator, PediatricBoundsValidator } from "@/lib/dosing/safety/pediatric-bounds-validator";
+import { mcgPerKgPerDose, roundTo } from "../../../lib/dosing/math";
+import { boundsValidator, PediatricBoundsValidator } from "../../../lib/dosing/safety/pediatric-bounds-validator";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   MedicationDoseRecommendation,
   SolutionConcentration,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 const FENTANYL_CONCENTRATION: SolutionConcentration = {
   amount: 50, amountUnit: "mcg", volume: 1, volumeUnit: "mL", label: "50mcg/mL",

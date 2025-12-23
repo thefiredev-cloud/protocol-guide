@@ -1,4 +1,4 @@
-import { GuardrailManager } from "@/lib/managers/GuardrailManager";
+import { GuardrailManager } from "../../../lib/managers/GuardrailManager";
 
 export type GuardrailCheckOutcome =
   | { type: "fallback"; notes?: string[]; dosingIssues?: string[] }

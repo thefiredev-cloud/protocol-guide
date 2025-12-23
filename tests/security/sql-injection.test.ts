@@ -3,11 +3,14 @@
  * Validates input sanitization and query parameterization
  */
 
-import { describe, expect,test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 
-import { searchKB } from '@/lib/retrieval';
+import { initializeKnowledgeBase, searchKB } from '@/lib/retrieval';
 
 describe('SQL Injection Protection', () => {
+  beforeAll(async () => {
+    await initializeKnowledgeBase();
+  });
   describe('Input Sanitization', () => {
     test('should sanitize single quote injection attempts', async () => {
       const maliciousInput = "'; DROP TABLE protocols; --";

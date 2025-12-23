@@ -2,6 +2,8 @@
 
 import { ExternalLink, MessageSquare } from "lucide-react";
 
+import SpotlightCard from "../ui/react-bits/spotlight-card";
+
 export interface ProtocolMatch {
   tp_code: string;
   tp_code_pediatric?: string;
@@ -46,7 +48,7 @@ export function ProtocolCard({
   };
 
   return (
-    <div className={`protocol-card ${recommended ? "recommended" : ""}`}>
+    <SpotlightCard className={`protocol-card ${recommended ? "recommended" : ""}`} spotlightColor="rgba(255, 59, 48, 0.15)">
       <div className="protocol-card-header">
         <span className="protocol-code">TP {effectiveCode}</span>
       </div>
@@ -84,7 +86,7 @@ export function ProtocolCard({
           </button>
         )}
       </div>
-    </div>
+    </SpotlightCard>
   );
 }
 

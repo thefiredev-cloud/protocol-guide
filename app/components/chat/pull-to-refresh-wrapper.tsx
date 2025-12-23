@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 
-import { usePullToRefresh } from '@/app/hooks/use-pull-to-refresh';
+import { usePullToRefresh } from '../../hooks/use-pull-to-refresh';
 
 interface PullToRefreshWrapperProps {
   children: React.ReactNode;

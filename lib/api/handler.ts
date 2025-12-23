@@ -3,13 +3,13 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { ZodSchema } from "zod";
 
-import { createLogger } from "@/lib/log";
+import { createLogger } from "../log";
 import {
   generateFingerprint,
   getRateLimitHeaders,
   RATE_LIMITS,
   rateLimiter,
-} from "@/lib/security/rate-limit";
+} from "../security/rate-limit";
 
 export type ErrorEnvelope = {
   error: { code: string; message: string };

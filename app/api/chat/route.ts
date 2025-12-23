@@ -3,11 +3,11 @@ import { randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { withApiHandler } from "@/lib/api/handler";
-import { RequestContext } from "@/lib/api/types";
-import { createLogger } from "@/lib/log";
-import { ChatService } from "@/lib/managers/chat-service";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { withApiHandler } from "../../../lib/api/handler";
+import { RequestContext } from "../../../lib/api/types";
+import { createLogger } from "../../../lib/log";
+import { ChatService } from "../../../lib/managers/chat-service";
+import { metrics } from "../../../lib/managers/metrics-manager";
 
 import { prepareChatRequest } from "./shared";
 

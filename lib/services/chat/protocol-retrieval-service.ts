@@ -3,11 +3,11 @@
  * Executes searches using existing RetrievalManager and TriageService.
  */
 
-import { RetrievalManager } from "@/lib/managers/RetrievalManager";
-import type { KBDoc } from "@/lib/retrieval";
-import { searchKB } from "@/lib/retrieval";
-import { triageInput } from "@/lib/triage";
-import { ProtocolMatcher } from "@/lib/triage/protocol-matcher";
+import { RetrievalManager } from "../../../lib/managers/RetrievalManager";
+import type { KBDoc } from "../../../lib/retrieval";
+import { searchKB } from "../../../lib/retrieval";
+import { triageInput } from "../../../lib/triage";
+import { ProtocolMatcher } from "../../../lib/triage/protocol-matcher";
 
 import { protocolCache } from "./protocol-cache-service";
 
@@ -235,7 +235,7 @@ export class ProtocolRetrievalService {
 
     // If no matches, try to find by direct TP code lookup
     if (matchedProtocols.length === 0) {
-      const allProtocols = (await import("@/data/provider_impressions.json")).default;
+      const allProtocols = (await import("../../../data/provider_impressions.json")).default;
       const pi = allProtocols.find(
         (p: { tp_code: string; tp_code_pediatric?: string }) =>
           p.tp_code === params.tpCode || p.tp_code_pediatric === params.tpCode,

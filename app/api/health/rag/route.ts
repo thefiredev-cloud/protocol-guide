@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import * as fs from "fs";
 import * as path from "path";
 
-import { createLogger } from "@/lib/log";
-import { EnvironmentManager } from "@/lib/managers/environment-manager";
-import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
+import { createLogger } from "../../../../lib/log";
+import { EnvironmentManager } from "../../../../lib/managers/environment-manager";
+import { knowledgeBaseInitializer } from "../../../../lib/managers/knowledge-base-initializer";
 
 export const runtime = "nodejs";
 

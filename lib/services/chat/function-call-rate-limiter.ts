@@ -4,8 +4,8 @@
  * Limit: Max 15 function calls per chat session (increased from 3 for complex clinical scenarios)
  */
 
-import { createLogger } from "@/lib/log";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { createLogger } from "../../../lib/log";
+import { metrics } from "../../../lib/managers/metrics-manager";
 
 type SessionState = {
   callCount: number;

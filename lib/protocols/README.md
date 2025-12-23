@@ -82,7 +82,7 @@ getProtocolStats(): Promise<stats>
 #### Usage Examples
 
 ```typescript
-import { getProtocolRepository } from '@/lib/db/protocol-repository';
+import { getProtocolRepository } from '../../lib/db/protocol-repository';
 
 const repo = getProtocolRepository();
 
@@ -115,7 +115,7 @@ await repo.recordUsage(protocol.id, '1210', 'view', {
 Provides backward-compatible interface for integrating with existing `RetrievalManager`.
 
 ```typescript
-import { getDatabaseRetrievalAdapter } from '@/lib/managers/database-retrieval-adapter';
+import { getDatabaseRetrievalAdapter } from '../../lib/managers/database-retrieval-adapter';
 
 const adapter = getDatabaseRetrievalAdapter();
 
@@ -227,7 +227,7 @@ The `DatabaseRetrievalAdapter` provides a drop-in replacement for file-based ret
 
 ```typescript
 // In your RetrievalManager
-import { getDatabaseRetrievalAdapter } from '@/lib/managers/database-retrieval-adapter';
+import { getDatabaseRetrievalAdapter } from '../../lib/managers/database-retrieval-adapter';
 
 const dbAdapter = getDatabaseRetrievalAdapter();
 
@@ -345,13 +345,13 @@ EMBEDDING_BATCH_SIZE=50 node scripts/generate-embeddings.mjs
 
 ### TypeScript errors about missing modules
 
-The path aliases (`@/...`) require proper `tsconfig.json` configuration:
+The path aliases (`../../...`) require proper `tsconfig.json` configuration:
 ```json
 {
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "../../*": ["*"]
     }
   }
 }

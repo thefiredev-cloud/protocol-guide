@@ -1,5 +1,5 @@
-import { mgPerKgPerDose } from "@/lib/dosing/math";
-import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "@/lib/dosing/types";
+import { mgPerKgPerDose } from "../../../lib/dosing/math";
+import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "../../../lib/dosing/types";
 
 export class AtropineCalculator implements MedicationCalculator {
   public readonly id = "atropine";

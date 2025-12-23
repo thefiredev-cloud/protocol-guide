@@ -1,4 +1,4 @@
-import { metrics } from "@/lib/managers/metrics-manager";
+import { metrics } from "../../../lib/managers/metrics-manager";
 
 export type ProfiledSection = "triage" | "retrieval" | "payload" | "llm" | "guardrail" | "narrative";
 

@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case, max-depth */
-import { createDefaultMedicationManager } from "@/lib/dosing/registry";
-import type { MedicationCalculationResult } from "@/lib/dosing/types";
-import type { TriageResult } from "@/lib/triage";
+import { createDefaultMedicationManager } from "../../lib/dosing/registry";
+import type { MedicationCalculationResult } from "../../lib/dosing/types";
+import type { TriageResult } from "../../lib/triage";
 
 export type CarePlan = {
   protocolCode: string;          // e.g., "1211"

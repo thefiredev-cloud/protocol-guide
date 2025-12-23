@@ -1,5 +1,5 @@
-import type { KBDoc } from "@/lib/retrieval";
-import { createLogger } from "@/lib/log";
+import type { KBDoc } from "../../../lib/retrieval";
+import { createLogger } from "../../../lib/log";
 
 /**
  * MarkdownPreprocessor converts JSON knowledge base chunks into structured markdown

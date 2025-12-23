@@ -4,11 +4,14 @@
  * Target: 99%+ success rate (from 91% baseline)
  */
 
-import { describe, expect,test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 
-import { augmentQueryWithSynonyms,searchKB } from '@/lib/retrieval';
+import { augmentQueryWithSynonyms, initializeKnowledgeBase, searchKB } from '@/lib/retrieval';
 
 describe('Field Testing Scenarios (91% → 99%+ Pass Rate)', () => {
+  beforeAll(async () => {
+    await initializeKnowledgeBase();
+  });
   describe('Previously Failing Cases - Typos & Missing Punctuation', () => {
     test('should handle "cant breathe" (missing apostrophe)', async () => {
       const results = await searchKB('cant breathe', 5);

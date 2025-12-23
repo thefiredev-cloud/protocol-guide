@@ -11,7 +11,7 @@
  * - Protocols → eProtocols (LA County TP codes)
  */
 
-import type { CarePlan, NarrativeDraft, NemsisNarrative } from "@/app/types/chat";
+import type { CarePlan, NarrativeDraft, NemsisNarrative } from "../../app/types/chat";
 
 export interface ExportData {
   patientInfo: string;

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { createScrollProgressIndicator, supportsScrollTimeline } from '@/lib/ui/modern-features';
+import { createScrollProgressIndicator, supportsScrollTimeline } from '../../../lib/ui/modern-features';
 
 /**
  * Scroll progress indicator component

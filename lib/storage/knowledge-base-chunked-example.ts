@@ -103,14 +103,14 @@ export async function clearKBCache() {
  *
  * BEFORE:
  * ```typescript
- * import { KnowledgeBaseManager } from '@/lib/storage/knowledge-base-manager';
+ * import { KnowledgeBaseManager } from '../../lib/storage/knowledge-base-manager';
  * const kb = await KnowledgeBaseManager.initialize(); // Loads 10.62 MB
  * const results = await kb.search(query);
  * ```
  *
  * AFTER:
  * ```typescript
- * import { getChunkedKB } from '@/lib/storage/knowledge-base-chunked';
+ * import { getChunkedKB } from '../../lib/storage/knowledge-base-chunked';
  * const kb = await getChunkedKB(); // Loads only manifest + essential (~117 KB)
  * await kb.preloadEssentialChunks();
  * const results = await kb.search(query, ['Medication', 'Protocol']); // Loads only needed chunks
@@ -122,7 +122,7 @@ export async function clearKBCache() {
  *
  * ```typescript
  * import { useEffect, useState } from 'react';
- * import { getChunkedKB } from '@/lib/storage/knowledge-base-chunked';
+ * import { getChunkedKB } from '../../lib/storage/knowledge-base-chunked';
  *
  * export function ProtocolSearch() {
  *   const [results, setResults] = useState([]);
@@ -152,8 +152,8 @@ export async function clearKBCache() {
  * Migration Guide:
  *
  * 1. Replace imports:
- *    - FROM: '@/lib/storage/knowledge-base-manager'
- *    - TO: '@/lib/storage/knowledge-base-chunked'
+ *    - FROM: '../../lib/storage/knowledge-base-manager'
+ *    - TO: '../../lib/storage/knowledge-base-chunked'
  *
  * 2. Update initialization:
  *    - FROM: `const kb = await KnowledgeBaseManager.initialize()`

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getProtocolHealthCheck } from '@/lib/protocols/health-check';
+import { getProtocolHealthCheck } from '../../../../lib/protocols/health-check';
 
 export const runtime = 'nodejs';
 

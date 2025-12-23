@@ -1,5 +1,5 @@
-import type { ChatMessage } from "@/app/types/chat";
-import { SYSTEM_PROMPT } from "@/lib/prompt";
+import type { ChatMessage } from "../../../app/types/chat";
+import { SYSTEM_PROMPT } from "../../../lib/prompt";
 import type { OpenAIFunction } from "./protocol-tool-manager";
 
 export type ChatPayload = {

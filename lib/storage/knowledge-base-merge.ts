@@ -1,4 +1,4 @@
-import type { KnowledgeBaseAsset } from "@/lib/storage/knowledge-base-manager";
+import type { KnowledgeBaseAsset } from "../../lib/storage/knowledge-base-manager";
 
 export function mergeKnowledgeBases(primary: KnowledgeBaseAsset[], supplemental: KnowledgeBaseAsset[]): KnowledgeBaseAsset[] {
   const byId = new Map<string, KnowledgeBaseAsset>();

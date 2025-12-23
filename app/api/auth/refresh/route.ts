@@ -6,9 +6,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { withApiHandler } from '@/lib/api/handler';
-import { authService } from '@/lib/auth/auth-service';
-import { SESSION_TIMEOUT_MS } from '@/lib/auth/types';
+import { withApiHandler } from '../../../../lib/api/handler';
+import { authService } from '../../../../lib/auth/auth-service';
+import { SESSION_TIMEOUT_MS } from '../../../../lib/auth/types';
 
 /**
  * POST /api/auth/refresh

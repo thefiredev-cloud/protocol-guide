@@ -1,74 +1,110 @@
-import type { NextRequest } from "next/server";
+/**
+ * Role-Based Access Control (RBAC) for API Routes
+ * Validates JWT tokens and checks permissions against user roles
+ */
 
+import type { NextRequest } from 'next/server';
+
+import { auditLogger } from '../../lib/audit/audit-logger';
+import { extractAuthUser } from '../../lib/auth/jwt';
+import { hasPermission } from '../../lib/auth/types';
+import type { UserRole } from '../../lib/db/types';
+
+/**
+ * Permission check result
+ */
 type PermissionResult =
-  | { ok: true }
+  | { ok: true; user: { id: string; role: UserRole; email: string } }
   | { ok: false; error: Response };
 
 /**
- * RBAC permission check middleware stub for testing.
- * In production, this would verify JWT claims against role permissions.
+ * Check if request has required permission
+ * Validates JWT and verifies user role has the requested permission
  *
- * ⚠️ CRITICAL SECURITY ISSUE - PRODUCTION BLOCKER ⚠️
- * TODO(WEEK2-AUTH): Implement real RBAC authentication
- *
- * This stub currently returns { ok: true } for ALL requests in non-test environments.
- * This is a MAJOR SECURITY VULNERABILITY that allows unauthorized access to protected routes.
- *
- * Required implementation (Week 2):
- * 1. Extract JWT from Authorization header (Bearer token)
- * 2. Verify JWT signature using public key/secret from environment
- * 3. Parse JWT claims to extract user role (paramedic, emt, admin, etc.)
- * 4. Check if user's role has the required permission
- * 5. Return { ok: false, error: Response } with 401/403 status if unauthorized
- * 6. Implement token expiry and refresh logic
- * 7. Add audit logging for failed auth attempts
- *
- * Environment variables needed:
- * - JWT_SECRET or JWT_PUBLIC_KEY
- * - JWT_EXPIRY (default: 1h)
- *
- * Example JWT payload:
- * {
- *   sub: "user-id-123",
- *   role: "paramedic",
- *   permissions: ["chat:read", "chat:write", "audit:read"],
- *   exp: 1234567890
- * }
+ * @param req - Next.js request object
+ * @param permission - Required permission (e.g., 'chat:write', 'audit:read')
+ * @returns Permission result with user info or error response
  */
 export async function requirePermission(
   req: NextRequest,
   permission: string
 ): Promise<PermissionResult> {
-  const env = process.env.NODE_ENV ?? "development";
-  const allowInsecure = (process.env.ALLOW_INSECURE_RBAC ?? "").toLowerCase() === "true";
+  const env = process.env.NODE_ENV ?? 'development';
 
-  // In test environment, allow all permissions
-  if (env === "test") {
-    return { ok: true };
+  // In test environment, return mock user
+  if (env === 'test') {
+    return {
+      ok: true,
+      user: { id: 'test-user', role: 'admin', email: 'test@test.com' },
+    };
   }
 
-  // Permit local development unless explicitly disabled
-  if (env === "development" || allowInsecure) {
-    console.warn(
-      "[SECURITY] RBAC stub called - allow listed due to development/override. " +
-      "Implement JWT authentication before production deployment."
-    );
-    void req;
-    void permission;
-    return { ok: true };
+  // Extract authenticated user from JWT
+  const user = await extractAuthUser(req);
+
+  // No valid token
+  if (!user) {
+    // Allow in development if ALLOW_INSECURE_RBAC is set
+    const allowInsecure =
+      (process.env.ALLOW_INSECURE_RBAC ?? '').toLowerCase() === 'true';
+
+    if (env === 'development' && allowInsecure) {
+      console.warn(
+        '[SECURITY] RBAC bypassed in development mode. Set ALLOW_INSECURE_RBAC=false to enforce authentication.'
+      );
+      return {
+        ok: true,
+        user: { id: 'dev-user', role: 'admin', email: 'dev@localhost' },
+      };
+    }
+
+    await auditLogger.logAuth({
+      action: 'auth.unauthorized',
+      outcome: 'failure',
+      errorMessage: 'No valid token provided',
+      ipAddress: req.headers.get('x-forwarded-for') ?? undefined,
+      userAgent: req.headers.get('user-agent') ?? undefined,
+    });
+
+    return {
+      ok: false,
+      error: new Response(
+        JSON.stringify({
+          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+        }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      ),
+    };
   }
 
-  // Block in production-like environments until real authentication lands
-  const message = JSON.stringify({
-    error: "UNAUTHORIZED",
-    message: "RBAC not implemented. Access requires authenticated permissions.",
-  });
+  // Check if user has required permission
+  if (!hasPermission(user.role, permission)) {
+    await auditLogger.logAuth({
+      userId: user.id,
+      userRole: user.role,
+      action: 'auth.unauthorized',
+      outcome: 'failure',
+      errorMessage: `Missing permission: ${permission}`,
+      ipAddress: req.headers.get('x-forwarded-for') ?? undefined,
+      userAgent: req.headers.get('user-agent') ?? undefined,
+    });
+
+    return {
+      ok: false,
+      error: new Response(
+        JSON.stringify({
+          error: {
+            code: 'FORBIDDEN',
+            message: `Insufficient permissions for this action`,
+          },
+        }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      ),
+    };
+  }
 
   return {
-    ok: false,
-    error: new Response(message, {
-      status: 403,
-      headers: { "Content-Type": "application/json" },
-    }),
+    ok: true,
+    user: { id: user.id, role: user.role, email: user.email },
   };
 }

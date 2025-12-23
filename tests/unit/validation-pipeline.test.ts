@@ -82,7 +82,7 @@ describe('ValidationPipeline - Stage 2: During-Retrieval', () => {
         tp_code: '1210',
         tp_name: 'Cardiac Arrest',
         tp_category: 'Treatment',
-        full_text: 'Full protocol text here',
+        full_text: 'Full protocol text here with adequate length for validation to pass completeness check',
         keywords: ['cardiac', 'arrest'],
         chief_complaints: ['unconscious'],
         base_contact_required: true,

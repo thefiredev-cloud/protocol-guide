@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import type { Vitals } from "@/lib/triage/parsers/vitals";
+import type { Vitals } from "../../lib/triage/parsers/vitals";
 
 export type TransportDestination = {
   destinationType: string;

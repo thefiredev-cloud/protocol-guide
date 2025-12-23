@@ -111,6 +111,37 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Drug database: cache-first strategy with background update (same as KB)
+  if (url.pathname.startsWith("/drugs/")) {
+    event.respondWith(
+      caches.match(event.request, { ignoreSearch: true }).then((cached) => {
+        // Return cached version immediately if available
+        if (cached) {
+          // Background update: fetch fresh version and update cache
+          fetch(event.request).then((res) => {
+            if (res && res.status === 200) {
+              const resClone = res.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+            }
+          }).catch(() => {
+            // Ignore background update errors
+          });
+          return cached;
+        }
+
+        // Not cached: fetch and cache
+        return fetch(event.request).then((res) => {
+          if (res && res.status === 200) {
+            const resClone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+          }
+          return res;
+        });
+      }),
+    );
+    return;
+  }
+
   // Default: try cache, then network
   event.respondWith(
     caches.match(event.request, { ignoreSearch: true }).then((cached) => cached || fetch(event.request)),

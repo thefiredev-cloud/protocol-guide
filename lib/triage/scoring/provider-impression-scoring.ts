@@ -1,7 +1,7 @@
-import providerImpressions from "@/data/provider_impressions.json";
+import providerImpressions from "../../../data/provider_impressions.json";
 import { getKeywordWeight } from "./keyword-weights";
 import { AdvancedScoringEngine, type AdvancedScoringContext } from "./advanced-scoring-engine";
-import type { TriageResult } from "@/lib/triage";
+import type { TriageResult } from "../../../lib/triage";
 
 type ProviderImpression = {
   pi_name: string;

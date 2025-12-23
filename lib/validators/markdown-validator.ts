@@ -1,4 +1,4 @@
-import { createLogger } from "@/lib/log";
+import { createLogger } from "../../lib/log";
 
 export type ValidationResult = {
   valid: boolean;

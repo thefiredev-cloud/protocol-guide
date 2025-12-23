@@ -6,8 +6,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { withApiHandler } from '@/lib/api/handler';
-import { authService } from '@/lib/auth/auth-service';
+import { withApiHandler } from '../../../../lib/api/handler';
+import { authService } from '../../../../lib/auth/auth-service';
 
 /**
  * POST /api/auth/logout

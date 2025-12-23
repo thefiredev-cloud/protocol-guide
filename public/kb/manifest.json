@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "generatedAt": "2025-10-09T03:19:09.356Z",
+  "version": "2.1",
+  "generatedAt": "2025-12-21T01:21:40.652Z",
   "chunks": [
     {
       "category": "Medication",
@@ -21,16 +21,130 @@
       "sizeKB": 229.85
     },
     {
-      "category": "Markdown",
-      "filename": "markdown.json",
-      "count": 6418,
-      "sizeKB": 10532.29
+      "category": "Airway",
+      "filename": "airway.json",
+      "count": 97,
+      "sizeKB": 146.57
     },
     {
-      "category": "Clinical Decision Support",
-      "filename": "clinical-decision-support.json",
-      "count": 1,
-      "sizeKB": 14.87
+      "category": "Cardiac",
+      "filename": "cardiac.json",
+      "count": 421,
+      "sizeKB": 682.87
+    },
+    {
+      "category": "Trauma",
+      "filename": "trauma.json",
+      "count": 484,
+      "sizeKB": 786.72
+    },
+    {
+      "category": "Medications",
+      "filename": "medications.json",
+      "count": 109,
+      "sizeKB": 154.29
+    },
+    {
+      "category": "Pediatrics",
+      "filename": "pediatrics.json",
+      "count": 86,
+      "sizeKB": 142.4
+    },
+    {
+      "category": "Respiratory",
+      "filename": "respiratory.json",
+      "count": 88,
+      "sizeKB": 148.76
+    },
+    {
+      "category": "Environmental",
+      "filename": "environmental.json",
+      "count": 96,
+      "sizeKB": 160.15
+    },
+    {
+      "category": "Obstetric",
+      "filename": "obstetric.json",
+      "count": 220,
+      "sizeKB": 369.15
+    },
+    {
+      "category": "Toxicology",
+      "filename": "toxicology.json",
+      "count": 81,
+      "sizeKB": 130.65
+    },
+    {
+      "category": "Equipment",
+      "filename": "equipment.json",
+      "count": 46,
+      "sizeKB": 70.1
+    },
+    {
+      "category": "General-protocols",
+      "filename": "general-protocols.json",
+      "count": 56,
+      "sizeKB": 89.58
+    },
+    {
+      "category": "Admin-facilities",
+      "filename": "admin-facilities.json",
+      "count": 154,
+      "sizeKB": 252.25
+    },
+    {
+      "category": "Admin-provider",
+      "filename": "admin-provider.json",
+      "count": 171,
+      "sizeKB": 277.29
+    },
+    {
+      "category": "Admin-training",
+      "filename": "admin-training.json",
+      "count": 173,
+      "sizeKB": 266.17
+    },
+    {
+      "category": "Admin-quality",
+      "filename": "admin-quality.json",
+      "count": 1081,
+      "sizeKB": 1879.41
+    },
+    {
+      "category": "Admin-operations",
+      "filename": "admin-operations.json",
+      "count": 73,
+      "sizeKB": 111.27
+    },
+    {
+      "category": "Admin-events",
+      "filename": "admin-events.json",
+      "count": 162,
+      "sizeKB": 252.21
+    },
+    {
+      "category": "Admin-policy",
+      "filename": "admin-policy.json",
+      "count": 55,
+      "sizeKB": 86.85
+    },
+    {
+      "category": "Admin-general",
+      "filename": "admin-general.json",
+      "count": 781,
+      "sizeKB": 1263.12
+    },
+    {
+      "category": "Reference",
+      "filename": "reference.json",
+      "count": 1171,
+      "sizeKB": 1924.34
+    },
+    {
+      "category": "General",
+      "filename": "general.json",
+      "count": 813,
+      "sizeKB": 1338.17
     }
   ]
 }

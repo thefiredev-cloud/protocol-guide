@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import type { ChatMessage, Citation } from "@/app/types/chat";
+import type { ChatMessage, Citation } from "../types/chat";
 
 type ChatState = {
   appendMessage: (message: ChatMessage) => void;

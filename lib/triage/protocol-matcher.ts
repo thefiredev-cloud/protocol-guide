@@ -3,8 +3,8 @@
  * Improves matching accuracy for patient descriptions, call types, and chief complaints.
  */
 
-import providerImpressions from "@/data/provider_impressions.json";
-import type { TriageResult } from "@/lib/triage";
+import providerImpressions from "../../data/provider_impressions.json";
+import type { TriageResult } from "../../lib/triage";
 
 type ProviderImpression = {
   pi_name: string;
@@ -234,15 +234,16 @@ export class ProtocolMatcher {
     const matches: ProtocolMatchResult[] = [];
 
     // Dispatch code mapping (extended from CAD integration)
+    // VERIFIED 2025-12-19 against LA County provider_impressions.json
     const dispatchCodeMap: Record<string, { tpCodes: string[]; name: string }> = {
-      "32B1": { tpCodes: ["1231", "1233", "1237"], name: "Respiratory Distress" },
-      "9E1": { tpCodes: ["827", "1211", "1210"], name: "Cardiac Arrest" },
-      "17A1": { tpCodes: ["1305", "1242"], name: "Trauma" },
+      "32B1": { tpCodes: ["1237"], name: "Respiratory Distress" }, // 1237 = Respiratory Distress
+      "9E1": { tpCodes: ["1210"], name: "Cardiac Arrest" }, // 1210 = Cardiac Arrest Non-traumatic
+      "17A1": { tpCodes: ["1244"], name: "Trauma" }, // 1244 = Traumatic Injury
       "12D1": { tpCodes: ["1309"], name: "Pediatric Respiratory" },
-      "26B1": { tpCodes: ["1232"], name: "Stroke/CVA" },
-      "26C1": { tpCodes: ["1239"], name: "Seizure" },
+      "26B1": { tpCodes: ["1232"], name: "Stroke/CVA" }, // 1232 = Stroke/CVA/TIA
+      "26C1": { tpCodes: ["1231"], name: "Seizure" }, // 1231 = Seizure (NOT 1239 Dystonic)
       "15B1": { tpCodes: ["1205"], name: "Abdominal Pain" },
-      "10E1": { tpCodes: ["1219"], name: "Allergic Reaction" },
+      "10E1": { tpCodes: ["1219"], name: "Allergic Reaction" }, // 1219 = Allergy
     };
 
     if (dispatchCode) {
@@ -262,21 +263,30 @@ export class ProtocolMatcher {
     }
 
     // Natural language call type matching
+    // VERIFIED 2025-12-19 against LA County provider_impressions.json
     if (callType) {
       const callTypeLower = callType.toLowerCase();
       const callTypeKeywords: Record<string, string[]> = {
-        "cardiac arrest": ["827", "1211"],
-        "respiratory distress": ["1231", "1233", "1237"],
-        "chest pain": ["1211", "1210"],
-        "stroke": ["1232"],
-        "seizure": ["1239"],
-        "trauma": ["1305", "1242"],
-        "abdominal pain": ["1205"],
-        "allergic reaction": ["1219"],
-        "anaphylaxis": ["1219"],
-        "overdose": ["1229", "1235", "1241"],
-        "diabetic": ["1203"],
-        "behavioral": ["1209"],
+        "cardiac arrest": ["1210"], // 1210 = Cardiac Arrest Non-traumatic
+        "respiratory distress": ["1237"], // 1237 = Respiratory Distress
+        "chest pain": ["1211"], // 1211 = Chest Pain/ACS
+        "stroke": ["1232"], // 1232 = Stroke/CVA/TIA
+        "seizure": ["1231"], // 1231 = Seizure (NOT 1239 Dystonic)
+        "trauma": ["1244"], // 1244 = Traumatic Injury
+        "abdominal pain": ["1205"], // 1205 = Abdominal Pain
+        "allergic reaction": ["1219"], // 1219 = Allergy
+        "anaphylaxis": ["1219"], // 1219 = Allergy (includes anaphylaxis)
+        "overdose": ["1241"], // 1241 = Overdose/Poisoning/Ingestion
+        "diabetic": ["1203"], // 1203 = Diabetic Emergencies
+        "behavioral": ["1209"], // 1209 = Behavioral/Psychiatric
+        "altered mental status": ["1229"], // 1229 = ALOC
+        "difficulty breathing": ["1237"], // 1237 = Respiratory Distress
+        "asthma": ["1237"], // 1237 = Respiratory Distress
+        "fast heart rate": ["1213"], // 1213 = Dysrhythmia Tachycardia
+        "slow heart rate": ["1212"], // 1212 = Dysrhythmia Bradycardia
+        "syncope": ["1233"], // 1233 = Syncope/Near Syncope
+        "chf": ["1214"], // 1214 = CHF/Pulmonary Edema
+        "pulmonary edema": ["1214"], // 1214 = CHF/Pulmonary Edema
       };
 
       for (const [keyword, tpCodes] of Object.entries(callTypeKeywords)) {

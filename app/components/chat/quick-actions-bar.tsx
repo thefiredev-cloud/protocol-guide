@@ -3,7 +3,7 @@
 import { ChevronUp, Pause, Phone, Pill, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-import type { CarePlan } from "@/app/types/chat";
+import type { CarePlan } from "../../types/chat";
 
 type QuickActionsBarProps = {
   carePlan?: CarePlan | null;

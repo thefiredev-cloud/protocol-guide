@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { CarePlan, Citation, NarrativeDraft, NemsisNarrative } from "@/app/types/chat";
+import type { CarePlan, Citation, NarrativeDraft, NemsisNarrative } from "../types/chat";
 
 export function useNarrativeState() {
   const [soap, setSoap] = useState<NarrativeDraft | undefined>(undefined);

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { createLogger } from "@/lib/log";
-import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
+import { createLogger } from "../../../lib/log";
+import { knowledgeBaseInitializer } from "../../../lib/managers/knowledge-base-initializer";
 
 export const requestSchema = z.object({
   messages: z

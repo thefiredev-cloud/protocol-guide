@@ -128,7 +128,7 @@ describe("LA County EMS Validation", () => {
       const ivRecommendation = result?.recommendations.find(r => r.route === "IV");
       expect(ivRecommendation).toBeDefined();
       expect(ivRecommendation?.dose.quantity).toBe(50); // Adult dose 50 mcg
-      expect(ivRecommendation?.maxTotalDose?.quantity).toBe(150); // Max before Base contact
+      expect(ivRecommendation?.maxTotalDose?.quantity).toBe(250); // Max with Base contact approval (field limit 150 mcg)
       
       expect(result?.citations).toContain("MCG 1309");
       expect(result?.citations).toContain("1317.19");
@@ -451,6 +451,10 @@ describe("LA County EMS Validation", () => {
         "push-dose-epi", // Push-dose epinephrine for hypotension
         "push-dose-epinephrine", // Push-dose epinephrine (alternate ID)
         "ketamine",
+        "dextrose", // D50/D25/D10 for hypoglycemia
+        "diphenhydramine", // Benadryl for allergic reactions
+        "naloxone", // Narcan for opioid overdose
+        "glucagon", // For hypoglycemia when IV access unavailable
       ];
 
       // Verify all registered medications are authorized

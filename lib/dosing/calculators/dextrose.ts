@@ -6,15 +6,15 @@
  * Key error patterns: wrong concentration, wrong volume, wrong patient population.
  */
 
-import { roundTo } from "@/lib/dosing/math";
-import { boundsValidator, PediatricBoundsValidator } from "@/lib/dosing/safety/pediatric-bounds-validator";
+import { roundTo } from "../../../lib/dosing/math";
+import { boundsValidator, PediatricBoundsValidator } from "../../../lib/dosing/safety/pediatric-bounds-validator";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   MedicationDoseRecommendation,
   SolutionConcentration,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 const DEXTROSE_CONCENTRATIONS: Record<"d50" | "d25" | "d10", SolutionConcentration> = {
   d50: { amount: 0.5, amountUnit: "g", volume: 1, volumeUnit: "mL", label: "D50W (50% = 0.5g/mL)" },

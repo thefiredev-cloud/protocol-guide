@@ -1,7 +1,7 @@
 import MiniSearch from "minisearch";
 
-import provider_impressions from "@/data/provider_impressions.json"; // Provider Impressions mapping
-import { KnowledgeBaseManager } from "@/lib/storage/knowledge-base-manager";
+import provider_impressions from "../data/provider_impressions.json"; // Provider Impressions mapping
+import { KnowledgeBaseManager } from "../lib/storage/knowledge-base-manager";
 
 export type KBDoc = {
   id: string;

@@ -6,9 +6,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { withApiHandler } from '@/lib/api/handler';
-import { chatHistoryService } from '@/lib/services/chat/chat-history-service';
-import { generateDeviceFingerprint } from '@/lib/utils/device-fingerprint';
+import { withApiHandler } from '../../../../lib/api/handler';
+import { chatHistoryService } from '../../../../lib/services/chat/chat-history-service';
+import { generateDeviceFingerprint } from '../../../../lib/utils/device-fingerprint';
 
 /**
  * GET /api/chat/history

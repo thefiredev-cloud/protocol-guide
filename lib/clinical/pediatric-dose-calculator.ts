@@ -7,7 +7,7 @@
   to the MED_CALCULATORS registry below.
 */
 
-import { colorForWeight } from "@/lib/clinical/peds-color";
+import { colorForWeight } from "../../lib/clinical/peds-color";
 
 export type PediatricDoseInput = {
   medicationKey: string; // canonical key, e.g., "atropine"

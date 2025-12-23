@@ -115,8 +115,8 @@ export function validateMedications(text: string): MedicationValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Extract potential medication names (common patterns)
-  const medicationPattern = /\b([A-Z][a-z]{3,}(?:ine|ol|lam|ide|cin|pine|xone|amine|cillin|mycin|azole))\b/g;
+  // Extract potential medication names (common patterns) - case insensitive
+  const medicationPattern = /\b([a-z]{4,}(?:ine|ol|lam|ide|cin|pine|xone|amine|cillin|mycin|azole))\b/gi;
   const matches = Array.from(text.matchAll(medicationPattern));
 
   const mentionedMeds = new Set(matches.map(m => m[1].toLowerCase()));

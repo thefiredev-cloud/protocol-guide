@@ -1,11 +1,11 @@
-import { mcgPerKgPerDose } from "@/lib/dosing/math";
+import { mcgPerKgPerDose } from "../../../lib/dosing/math";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   MedicationDoseRecommendation,
   SolutionConcentration,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 const EPINEPHRINE_CONCENTRATIONS: Record<"im" | "iv", SolutionConcentration> = {
   im: { amount: 1, amountUnit: "mg", volume: 1, volumeUnit: "mL", label: "1 mg/mL (1:1,000)" },

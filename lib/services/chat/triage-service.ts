@@ -1,5 +1,5 @@
-import type { TriageResult } from "@/lib/triage";
-import { buildSearchAugmentation, buildTriageContext, triageInput } from "@/lib/triage";
+import type { TriageResult } from "../../../lib/triage";
+import { buildSearchAugmentation, buildTriageContext, triageInput } from "../../../lib/triage";
 
 /**
  * Service for patient triage and protocol matching

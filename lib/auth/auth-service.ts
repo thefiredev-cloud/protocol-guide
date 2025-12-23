@@ -5,8 +5,8 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-import { auditLogger } from '@/lib/audit/audit-logger';
-import type { Database } from '@/lib/db/types';
+import { auditLogger } from '../audit/audit-logger';
+import type { Database } from '../db/types';
 
 import type {
   AuthRequestContext,

@@ -5,8 +5,8 @@
  */
 
 import crypto from "crypto";
-import { createLogger } from "@/lib/log";
-import { metrics } from "@/lib/managers/metrics-manager";
+import { createLogger } from "../../../lib/log";
+import { metrics } from "../../../lib/managers/metrics-manager";
 import type { ProtocolSearchResult } from "./protocol-retrieval-service";
 
 type CacheEntry = {

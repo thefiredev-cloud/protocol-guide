@@ -1,35 +1,49 @@
-import type { ChatMessage } from "@/app/types/chat";
-import { auditLogger } from "@/lib/audit/audit-logger";
+import type { ChatMessage } from "../../app/types/chat";
+import { auditLogger } from "../../lib/audit/audit-logger";
+import { chatHistoryService } from "../../lib/services/chat/chat-history-service";
 import {
   BASE_HOSPITALS,
   getAllBaseHospitalsByCapability,
   getBaseHospitalsByRegion,
   MEDICAL_ALERT_CENTER,
   SPECIALIZED_CONTACTS,
-} from "@/lib/clinical/base-hospitals";
-import type { PatientCondition } from "@/lib/clinical/transport-destinations";
-import { facilityIntegration } from "@/lib/services/chat/facility-integration";
-import type { Region } from "@/lib/clinical/facilities";
-import { createDefaultMedicationManager } from "@/lib/dosing/registry";
-import { createLogger } from "@/lib/log";
-import type { FunctionCallHandler } from "@/lib/managers/anthropic-client";
-import { AnthropicClient } from "@/lib/managers/anthropic-client";
-import type { CarePlan } from "@/lib/managers/CarePlanManager";
-import { EnvironmentManager } from "@/lib/managers/environment-manager";
-import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
-import { LLMClient } from "@/lib/managers/llm-client";
-import { metrics } from "@/lib/managers/metrics-manager";
-import { RetrievalManager } from "@/lib/managers/RetrievalManager";
-import { initializeKnowledgeBase } from "@/lib/retrieval";
-import { ChatProfiler } from "@/lib/services/chat/chat-profiler";
-import { CitationService } from "@/lib/services/chat/citation-service";
-import { functionCallRateLimiter } from "@/lib/services/chat/function-call-rate-limiter";
-import { GuardrailService } from "@/lib/services/chat/guardrail-service";
-import { PayloadBuilder } from "@/lib/services/chat/payload-builder";
-import { ProtocolRetrievalService } from "@/lib/services/chat/protocol-retrieval-service";
-import { ProtocolToolManager } from "@/lib/services/chat/protocol-tool-manager";
-import { TriageService } from "@/lib/services/chat/triage-service";
-import type { TriageResult } from "@/lib/triage";
+} from "../../lib/clinical/base-hospitals";
+import type { PatientCondition } from "../../lib/clinical/transport-destinations";
+import { facilityIntegration } from "../../lib/services/chat/facility-integration";
+import type { Region } from "../../lib/clinical/facilities";
+import { createDefaultMedicationManager } from "../../lib/dosing/registry";
+import { createLogger } from "../../lib/log";
+import type { FunctionCallHandler } from "../../lib/managers/anthropic-client";
+import { AnthropicClient } from "../../lib/managers/anthropic-client";
+import type { CarePlan } from "../../lib/managers/CarePlanManager";
+import { EnvironmentManager } from "../../lib/managers/environment-manager";
+import { knowledgeBaseInitializer } from "../../lib/managers/knowledge-base-initializer";
+import { LLMClient } from "../../lib/managers/llm-client";
+import { metrics } from "../../lib/managers/metrics-manager";
+import { RetrievalManager } from "../../lib/managers/RetrievalManager";
+import { initializeKnowledgeBase } from "../../lib/retrieval";
+import { ChatProfiler } from "../../lib/services/chat/chat-profiler";
+import { CitationService } from "../../lib/services/chat/citation-service";
+import { functionCallRateLimiter } from "../../lib/services/chat/function-call-rate-limiter";
+import { GuardrailService } from "../../lib/services/chat/guardrail-service";
+import { PayloadBuilder } from "../../lib/services/chat/payload-builder";
+import { ProtocolRetrievalService } from "../../lib/services/chat/protocol-retrieval-service";
+import { ProtocolToolManager } from "../../lib/services/chat/protocol-tool-manager";
+import { DrugToolManager } from "../../lib/services/chat/drug-tool-manager";
+import { TriageService } from "../../lib/services/chat/triage-service";
+import {
+  getDrugLookupService,
+  formatDrugLookupForFunction,
+} from "../../lib/drugs/services/drug-lookup-service";
+import {
+  getDrugInteractionChecker,
+  formatInteractionsForFunction,
+} from "../../lib/drugs/services/drug-interaction-checker";
+import {
+  getDrugIdentificationService,
+  formatIdentificationForFunction,
+} from "../../lib/drugs/services/drug-identification-service";
+import type { TriageResult } from "../../lib/triage";
 
 type ChatMode = "chat" | "narrative" | undefined;
 
@@ -38,6 +52,10 @@ export type ChatRequest = {
   mode?: ChatMode;
   userId?: string;
   sessionId?: string;
+  /** Chat session ID for persistence (different from request sessionId) */
+  chatSessionId?: string;
+  /** Device fingerprint for anonymous users */
+  deviceFingerprint?: string;
   ipAddress?: string;
   userAgent?: string;
   /** Provider level for scope of practice (default: Paramedic) */
@@ -120,7 +138,7 @@ export class ChatService {
   /**
    * Handle chat request - main entry point
    */
-  public async handle({ messages, mode, userId, sessionId, ipAddress, userAgent, providerLevel }: ChatRequest): Promise<ChatResponse> {
+  public async handle({ messages, mode, userId, sessionId, chatSessionId, deviceFingerprint, ipAddress, userAgent, providerLevel }: ChatRequest): Promise<ChatResponse> {
     // Set provider level for this request (default: Paramedic)
     this.currentProviderLevel = providerLevel ?? "Paramedic";
 
@@ -148,6 +166,9 @@ export class ChatService {
       mode,
       userId,
       sessionId,
+      chatSessionId,
+      deviceFingerprint,
+      providerLevel: this.currentProviderLevel,
       ipAddress,
       userAgent,
       durationMs,
@@ -185,7 +206,7 @@ export class ChatService {
     const { messages, triage, retrieval, sessionId, profiler, requestStart } = args;
     profiler.markStart("payload");
     const intake = this.triageService.buildIntake(triage);
-    const tools = ProtocolToolManager.getTools();
+    const tools = [...ProtocolToolManager.getTools(), ...DrugToolManager.getTools()];
     const payload = this.payloadBuilder.build(retrieval.context, intake, messages, tools);
     profiler.markEnd("payload");
 
@@ -215,12 +236,15 @@ export class ChatService {
     mode?: ChatMode;
     userId?: string;
     sessionId?: string;
+    chatSessionId?: string;
+    deviceFingerprint?: string;
+    providerLevel?: "EMT" | "Paramedic";
     ipAddress?: string;
     userAgent?: string;
     durationMs: number;
     profiler: ChatProfiler;
   }): Promise<ChatResponse> {
-    const { llmResult, triage, citations, latestUser, mode, userId, sessionId, ipAddress, userAgent, durationMs, profiler } = args;
+    const { llmResult, triage, citations, latestUser, mode, userId, sessionId, chatSessionId, deviceFingerprint, providerLevel, ipAddress, userAgent, durationMs, profiler } = args;
 
     profiler.markStart("guardrail");
     const guardrailOutcome = this.guardrailManagerCheck(llmResult, triage, citations);
@@ -239,7 +263,7 @@ export class ChatService {
       return this.buildFallbackAndAudit({ latestUser, triage, citations, userId, sessionId, ipAddress, userAgent, durationMs, notes: evaluated.notes });
     }
 
-    return this.buildSuccessResponse({ evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, profiler });
+    return this.buildSuccessResponse({ evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, chatSessionId, deviceFingerprint, providerLevel, ipAddress, userAgent, durationMs, profiler });
   }
 
   /**
@@ -281,7 +305,7 @@ export class ChatService {
   }
 
   /**
-   * Build success response with audit logging
+   * Build success response with audit logging and chat persistence
    */
   private async buildSuccessResponse(args: {
     evaluated: { text: string; notes: string[]; dosingIssues?: string[] };
@@ -292,12 +316,15 @@ export class ChatService {
     protocolsReferenced: string[];
     userId?: string;
     sessionId?: string;
+    chatSessionId?: string;
+    deviceFingerprint?: string;
+    providerLevel?: "EMT" | "Paramedic";
     ipAddress?: string;
     userAgent?: string;
     durationMs: number;
     profiler: ChatProfiler;
   }): Promise<ChatResponse> {
-    const { evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, ipAddress, userAgent, durationMs, profiler } = args;
+    const { evaluated, triage, citations, mode, latestUser, protocolsReferenced, userId, sessionId, chatSessionId, deviceFingerprint, providerLevel, ipAddress, userAgent, durationMs, profiler } = args;
 
     const text = evaluated.text;
     const notes = [...evaluated.notes, ...(evaluated.dosingIssues ?? [])];
@@ -313,6 +340,20 @@ export class ChatService {
       durationMs,
     });
 
+    // Persist chat messages (non-blocking)
+    this.persistChatMessages({
+      chatSessionId,
+      userId,
+      deviceFingerprint,
+      providerLevel,
+      userMessage: latestUser,
+      assistantResponse: text,
+      citations,
+      durationMs,
+    }).catch((error) => {
+      this.logger.error("Failed to persist chat messages", { error });
+    });
+
     this.logger.info("Chat succeeded", {
       citationCount: citations.length,
       protocols: triage.matchedProtocols.map((protocol) => protocol.tp_code).slice(0, 3),
@@ -325,6 +366,52 @@ export class ChatService {
       triage,
       guardrailNotes: notes,
     };
+  }
+
+  /**
+   * Persist chat messages to database (non-blocking)
+   */
+  private async persistChatMessages(params: {
+    chatSessionId?: string;
+    userId?: string;
+    deviceFingerprint?: string;
+    providerLevel?: "EMT" | "Paramedic";
+    userMessage: string;
+    assistantResponse: string;
+    citations: ChatResponse["citations"];
+    durationMs: number;
+  }): Promise<void> {
+    let sessionId = params.chatSessionId;
+
+    // Create session if not exists
+    if (!sessionId) {
+      sessionId = await chatHistoryService.createSession({
+        userId: params.userId,
+        deviceFingerprint: params.deviceFingerprint,
+        providerLevel: params.providerLevel,
+      }) ?? undefined;
+    }
+
+    if (!sessionId) {
+      // Database not available
+      return;
+    }
+
+    // Save user message
+    await chatHistoryService.saveMessage({
+      sessionId,
+      role: "user",
+      content: params.userMessage,
+    });
+
+    // Save assistant response
+    await chatHistoryService.saveMessage({
+      sessionId,
+      role: "assistant",
+      content: params.assistantResponse,
+      citations: params.citations,
+      responseTimeMs: params.durationMs,
+    });
   }
 
   private guardrailManagerCheck(
@@ -423,6 +510,13 @@ export class ChatService {
         return this.handleDiversionStatus(args);
       case "get_facility_status":
         return this.handleFacilityStatus(args);
+      // Drug intelligence functions
+      case "lookup_drug_info":
+        return this.handleDrugLookup(args);
+      case "check_drug_interactions":
+        return this.handleDrugInteractions(args);
+      case "identify_medication":
+        return this.handleDrugIdentification(args);
       default:
         metrics.inc("protocol.tool.calls.errors");
         return { error: `Unknown function: ${name}` };
@@ -714,6 +808,101 @@ export class ChatService {
     return {
       note: "Provide facilityId or specialty to get facility status",
     };
+  }
+
+  // ===========================================================================
+  // DRUG INTELLIGENCE HANDLERS
+  // ===========================================================================
+
+  /**
+   * Handle drug lookup by name (brand or generic)
+   */
+  private async handleDrugLookup(args: unknown): Promise<unknown> {
+    const params = args as {
+      drugName: string;
+      includeInteractions?: boolean;
+    };
+
+    try {
+      const service = getDrugLookupService();
+      const result = await service.lookupDrug(params.drugName);
+      return formatDrugLookupForFunction(result);
+    } catch (error) {
+      this.logger.error("Drug lookup error", { error, drugName: params.drugName });
+      return {
+        found: false,
+        error: "Drug database unavailable. Recommend Base Hospital consult.",
+      };
+    }
+  }
+
+  /**
+   * Handle drug interaction check for multiple medications
+   */
+  private async handleDrugInteractions(args: unknown): Promise<unknown> {
+    const params = args as {
+      medications: string[];
+      includeMinor?: boolean;
+    };
+
+    if (!params.medications || params.medications.length < 2) {
+      return {
+        hasInteractions: false,
+        error: "Need at least 2 medications to check for interactions",
+      };
+    }
+
+    try {
+      const checker = getDrugInteractionChecker();
+      const result = await checker.checkInteractions(
+        params.medications,
+        params.includeMinor ?? false
+      );
+      return formatInteractionsForFunction(result);
+    } catch (error) {
+      this.logger.error("Drug interaction check error", { error, medications: params.medications });
+      return {
+        hasInteractions: false,
+        error: "Drug interaction database unavailable. Recommend Base Hospital consult for polypharmacy assessment.",
+      };
+    }
+  }
+
+  /**
+   * Handle drug identification by appearance/description
+   */
+  private async handleDrugIdentification(args: unknown): Promise<unknown> {
+    const params = args as {
+      imprint?: string;
+      color?: string;
+      shape?: string;
+      patientDescription?: string;
+    };
+
+    // Need at least one identifying characteristic
+    if (!params.imprint && !params.color && !params.shape && !params.patientDescription) {
+      return {
+        confidence: "none",
+        error: "Provide at least one: imprint, color, shape, or patient description of medication use",
+      };
+    }
+
+    try {
+      const service = getDrugIdentificationService();
+      const result = await service.identifyDrug({
+        imprint: params.imprint,
+        color: params.color,
+        shape: params.shape,
+        patientDescription: params.patientDescription,
+      });
+      return formatIdentificationForFunction(result);
+    } catch (error) {
+      this.logger.error("Drug identification error", { error, params });
+      return {
+        confidence: "none",
+        error: "Drug identification unavailable. Consider photo documentation and Base Hospital consult.",
+      };
+    }
   }
 
   /**

@@ -3,7 +3,7 @@
  * Defines user, session, and permission structures
  */
 
-import type { UserRole } from '@/lib/db/types';
+import type { UserRole } from '../db/types';
 
 /**
  * Authenticated user information

@@ -7,7 +7,7 @@
  * This validator enforces strict weight/age bounds to prevent calculation errors.
  */
 
-import type { MedicationCalculationRequest, MedicationCalculationResult } from "@/lib/dosing/types";
+import type { MedicationCalculationRequest, MedicationCalculationResult } from "../../../lib/dosing/types";
 
 export type WeightBounds = {
   minKg: number;

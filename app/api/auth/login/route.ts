@@ -8,10 +8,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
 
-import { withApiHandler } from '@/lib/api/handler';
-import { authService } from '@/lib/auth/auth-service';
-import { verifyCaptcha } from '@/lib/auth/captcha';
-import { SESSION_TIMEOUT_MS } from '@/lib/auth/types';
+import { withApiHandler } from '../../../../lib/api/handler';
+import { authService } from '../../../../lib/auth/auth-service';
+import { verifyCaptcha } from '../../../../lib/auth/captcha';
+import { SESSION_TIMEOUT_MS } from '../../../../lib/auth/types';
 
 /**
  * Login request schema

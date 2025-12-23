@@ -1,10 +1,10 @@
-import { isAuthorizedForProvider } from "@/lib/dosing/scope-registry";
+import { isAuthorizedForProvider } from "../../lib/dosing/scope-registry";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   ProviderLevel,
-} from "@/lib/dosing/types";
+} from "../../lib/dosing/types";
 
 export class MedicationDosingManager {
   private readonly calculators = new Map<string, MedicationCalculator>();

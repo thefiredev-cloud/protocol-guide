@@ -142,8 +142,107 @@ export class ChunkedKnowledgeBaseManager {
   }
 
   /**
-   * Search the knowledge base
-   * Lazy-loads chunks as needed based on categories filter
+   * Determine which chunks to load based on query content
+   * Returns array of category names that are relevant to the query
+   */
+  private determineRelevantChunks(query: string): string[] {
+    const lowerQuery = query.toLowerCase();
+    const relevantCategories: string[] = [];
+
+    // Always load medications for drug-related queries
+    if (
+      lowerQuery.match(/\b(drug|medication|dose|dosage|epinephrine|adenosine|atropine|amiodarone|aspirin|fentanyl|morphine|naloxone|versed|ketamine)\b/)
+    ) {
+      relevantCategories.push('Medications');
+    }
+
+    // Cardiac-related queries
+    if (
+      lowerQuery.match(/\b(cardiac|heart|chest pain|mi|stemi|stroke|cva|arrest|cpr|acls|defibrillat|pacing|arrhythmia|vtach|vfib|asystole)\b/)
+    ) {
+      relevantCategories.push('Cardiac');
+    }
+
+    // Airway management
+    if (
+      lowerQuery.match(/\b(airway|intubat|ventilat|breathing|respiratory|bvm|cpap|supraglottic|cricothyrotomy)\b/)
+    ) {
+      relevantCategories.push('Airway');
+      relevantCategories.push('Respiratory');
+    }
+
+    // Trauma
+    if (
+      lowerQuery.match(/\b(trauma|injury|bleed|hemorrhage|wound|burn|fracture|head injury|tbi|penetrating|blunt)\b/)
+    ) {
+      relevantCategories.push('Trauma');
+    }
+
+    // Pediatric
+    if (
+      lowerQuery.match(/\b(pediatric|child|infant|baby|neonatal|newborn|pedi)\b/)
+    ) {
+      relevantCategories.push('Pediatrics');
+      relevantCategories.push('Pediatric Dosing');
+    }
+
+    // Environmental
+    if (
+      lowerQuery.match(/\b(hypothermia|hyperthermia|heat stroke|drowning|environmental|cold|heat)\b/)
+    ) {
+      relevantCategories.push('Environmental');
+    }
+
+    // Obstetric
+    if (
+      lowerQuery.match(/\b(pregnan|delivery|obstetric|ob|labor|birth|gynecolog)\b/)
+    ) {
+      relevantCategories.push('Obstetric');
+    }
+
+    // Toxicology
+    if (
+      lowerQuery.match(/\b(poison|toxic|overdose|ingestion|exposure|antidote)\b/)
+    ) {
+      relevantCategories.push('Toxicology');
+    }
+
+    // Equipment
+    if (
+      lowerQuery.match(/\b(equipment|device|monitor|defibrillator|scope|iv pump)\b/)
+    ) {
+      relevantCategories.push('Equipment');
+    }
+
+    // Protocol references (look for protocol numbers)
+    if (lowerQuery.match(/\b\d{4}\b/)) {
+      relevantCategories.push('General-protocols');
+    }
+
+    // Administrative/operational queries
+    if (
+      lowerQuery.match(/\b(policy|procedure|training|certification|approval|facility|hospital|base|communication|radio)\b/)
+    ) {
+      relevantCategories.push('Admin-training', 'Admin-provider', 'Admin-operations', 'Admin-general');
+    }
+
+    // If no specific categories matched, return essential chunks for broad search
+    if (relevantCategories.length === 0) {
+      return [
+        'Medications',
+        'Cardiac',
+        'Trauma',
+        'Airway',
+        'General-protocols'
+      ];
+    }
+
+    return relevantCategories;
+  }
+
+  /**
+   * Search the knowledge base with intelligent chunk loading
+   * Analyzes query to determine which chunks to load
    */
   async search(query: string, categories?: string[]): Promise<Array<{
     id: string;
@@ -156,15 +255,19 @@ export class ChunkedKnowledgeBaseManager {
       throw new Error('Search index not initialized');
     }
 
-    // Load relevant chunks if not loaded
+    // Determine which chunks to load
+    let chunksToLoad: string[];
     if (categories && categories.length > 0) {
-      await Promise.all(categories.map(cat => this.loadChunk(cat)));
+      // Use provided categories
+      chunksToLoad = categories;
     } else {
-      // Load all chunks (fallback for broad queries)
-      await Promise.all(
-        this.manifest!.chunks.map(chunk => this.loadChunk(chunk.category))
-      );
+      // Intelligently determine based on query
+      chunksToLoad = this.determineRelevantChunks(query);
+      console.log('[ChunkedKB] Auto-detected relevant chunks for query:', chunksToLoad);
     }
+
+    // Load relevant chunks
+    await Promise.all(chunksToLoad.map(cat => this.loadChunk(cat)));
 
     const results = this.searchIndex.search(query);
     return results.map(result => ({
@@ -224,7 +327,14 @@ export class ChunkedKnowledgeBaseManager {
    */
   async preloadEssentialChunks(): Promise<void> {
     // Preload smaller, frequently accessed chunks
-    const essentialCategories = ['Medication', 'Protocol', 'Clinical Decision Support'];
+    const essentialCategories = [
+      'Medication',
+      'Medications',
+      'Cardiac',
+      'Airway',
+      'Pediatric Dosing',
+      'Protocol'
+    ];
 
     const toLoad = essentialCategories.filter(cat =>
       this.manifest?.chunks.some(chunk => chunk.category === cat)
@@ -234,6 +344,34 @@ export class ChunkedKnowledgeBaseManager {
       console.log('[ChunkedKB] Preloading essential chunks:', toLoad);
       await this.loadChunks(toLoad);
     }
+  }
+
+  /**
+   * Search with automatic expansion to related chunks if initial results are sparse
+   */
+  async smartSearch(query: string, minResults = 5): Promise<Array<{
+    id: string;
+    title: string;
+    category: string;
+    score: number;
+    match: Record<string, string[]>;
+  }>> {
+    // First search with relevant chunks
+    let results = await this.search(query);
+
+    // If we don't have enough results, expand to more chunks
+    if (results.length < minResults && this.loadedChunks.size < this.manifest!.chunks.length) {
+      console.log('[ChunkedKB] Expanding search to additional chunks');
+
+      // Load general-protocols and reference materials
+      const expandedCategories = ['General-protocols', 'Reference', 'General'];
+      await this.loadChunks(expandedCategories);
+
+      // Search again
+      results = await this.search(query);
+    }
+
+    return results;
   }
 }
 

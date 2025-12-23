@@ -12,7 +12,7 @@
 import { getKeywordWeight } from "./keyword-weights";
 import { detectProtocolSignature } from "./protocol-signatures";
 import { getDemographicModifier, type DemographicProfile } from "./demographic-modifiers";
-import type { Vitals } from "@/lib/triage/parsers/vitals";
+import type { Vitals } from "../../../lib/triage/parsers/vitals";
 
 export interface AdvancedScoringContext {
   lowerText: string;

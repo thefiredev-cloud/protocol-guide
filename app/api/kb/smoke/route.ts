@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { knowledgeBaseInitializer } from "@/lib/managers/knowledge-base-initializer";
-import { initializeKnowledgeBase, searchKB } from "@/lib/retrieval";
+import { knowledgeBaseInitializer } from "../../../../lib/managers/knowledge-base-initializer";
+import { initializeKnowledgeBase, searchKB } from "../../../../lib/retrieval";
 
 const CHECKS = [
   { query: "MCG 1309", description: "Medication dosing guideline" },

@@ -1,11 +1,11 @@
 /* eslint-disable unicorn/filename-case */
-import { createDefaultMedicationManager } from "@/lib/dosing/registry";
-import type { MedicationCalculationResult } from "@/lib/dosing/types";
+import { createDefaultMedicationManager } from "../../lib/dosing/registry";
+import type { MedicationCalculationResult } from "../../lib/dosing/types";
 import {
   extractProtocolCodes,
   isValidProtocol,
   normalizeProtocolCode,
-} from "@/lib/protocols/la-county-protocol-whitelist";
+} from "../../lib/protocols/la-county-protocol-whitelist";
 
 export type GuardrailDetection = {
   pcmCitationsPresent: boolean;

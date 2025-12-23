@@ -1,4 +1,4 @@
-import type { DoseUnit, MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator } from "@/lib/dosing/types";
+import type { DoseUnit, MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator } from "../../../lib/dosing/types";
 
 export class PralidoximeCalculator implements MedicationCalculator {
   public readonly id = "pralidoxime";

@@ -1,4 +1,4 @@
-import type { CarePlan, ChatMessage, Citation } from "@/app/types/chat";
+import type { CarePlan, ChatMessage, Citation } from "../../app/types/chat";
 
 type SendRequestPayload = {
   messages: ChatMessage[];

@@ -1,9 +1,9 @@
-import { mgPerKgPerDose } from "@/lib/dosing/math";
+import { mgPerKgPerDose } from "../../../lib/dosing/math";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 export class MagnesiumSulfateCalculator implements MedicationCalculator {
   public readonly id = "magnesium-sulfate";

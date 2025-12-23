@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import type { Citation } from "@/app/types/chat";
+import type { Citation } from "../types/chat";
 
 export type OrdersCitationsController = {
   handleOrders: (text: string | undefined) => void;

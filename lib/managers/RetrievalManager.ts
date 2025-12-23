@@ -1,14 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { PediatricDoseCalculator } from "@/lib/clinical/pediatric-dose-calculator";
-import { createLogger } from "@/lib/log";
-import { EnvironmentManager } from "@/lib/managers/environment-manager";
-import { extractPediatricWeightMedQueries } from "@/lib/parsers/pediatric-weight-med";
-import type { KBDoc } from "@/lib/retrieval";
-import { buildContext, searchKB } from "@/lib/retrieval";
-import { MarkdownPreprocessor } from "@/lib/services/chat/markdown-preprocessor";
-import type { TriageResult } from "@/lib/triage";
+import { PediatricDoseCalculator } from "../../lib/clinical/pediatric-dose-calculator";
+import { createLogger } from "../../lib/log";
+import { EnvironmentManager } from "../../lib/managers/environment-manager";
+import { extractPediatricWeightMedQueries } from "../../lib/parsers/pediatric-weight-med";
+import type { KBDoc } from "../../lib/retrieval";
+import { buildContext, searchKB } from "../../lib/retrieval";
+import { MarkdownPreprocessor } from "../../lib/services/chat/markdown-preprocessor";
+import type { TriageResult } from "../../lib/triage";
 
 export type RetrievalQuery = {
   rawText: string;

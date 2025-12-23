@@ -1,4 +1,4 @@
-import { KnowledgeBaseManager } from "@/lib/storage/knowledge-base-manager";
+import { KnowledgeBaseManager } from "../../lib/storage/knowledge-base-manager";
 
 export type MedicationReference = {
   id: string;

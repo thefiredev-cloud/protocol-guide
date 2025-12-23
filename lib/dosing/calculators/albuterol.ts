@@ -1,4 +1,4 @@
-import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "@/lib/dosing/types";
+import type { MedicationCalculationRequest, MedicationCalculationResult, MedicationCalculator, MedicationDoseRecommendation } from "../../../lib/dosing/types";
 
 export class AlbuterolCalculator implements MedicationCalculator {
   public readonly id = "albuterol";

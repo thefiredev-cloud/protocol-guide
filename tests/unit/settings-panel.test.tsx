@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -82,8 +82,9 @@ describe('SettingsPanel', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Close settings
-      const closeButton = screen.getByRole('button', { name: /close settings/i });
+      // Close settings using the button inside the dialog
+      const dialog = screen.getByRole('dialog');
+      const closeButton = within(dialog).getByRole('button', { name: /close settings/i });
       await user.click(closeButton);
 
       await waitFor(() => {
@@ -217,15 +218,16 @@ describe('SettingsPanel', () => {
   });
 
   describe('Theme Settings', () => {
-    it('loads default theme (dark) on mount', async () => {
+    it('loads default theme (light) on mount', async () => {
       const user = userEvent.setup();
       renderWithProvider();
 
       await user.click(screen.getByRole('button', { name: /open settings/i }));
 
       await waitFor(() => {
-        const darkButton = screen.getByRole('button', { name: /dark/i });
-        expect(darkButton).toHaveClass('active');
+        const dialog = screen.getByRole('dialog');
+        const lightButton = within(dialog).getByRole('button', { name: /^light$/i });
+        expect(lightButton).toHaveClass('active');
       });
     });
 
@@ -237,7 +239,8 @@ describe('SettingsPanel', () => {
       await user.click(screen.getByRole('button', { name: /open settings/i }));
 
       await waitFor(() => {
-        const lightButton = screen.getByRole('button', { name: /light/i });
+        const dialog = screen.getByRole('dialog');
+        const lightButton = within(dialog).getByRole('button', { name: /^light$/i });
         expect(lightButton).toHaveClass('active');
       });
     });
@@ -248,7 +251,8 @@ describe('SettingsPanel', () => {
 
       await user.click(screen.getByRole('button', { name: /open settings/i }));
 
-      const lightButton = screen.getByRole('button', { name: /light/i });
+      const dialog = screen.getByRole('dialog');
+      const lightButton = within(dialog).getByRole('button', { name: /^light$/i });
       await user.click(lightButton);
 
       await waitFor(() => {
@@ -263,7 +267,8 @@ describe('SettingsPanel', () => {
 
       await user.click(screen.getByRole('button', { name: /open settings/i }));
 
-      const lightButton = screen.getByRole('button', { name: /light/i });
+      const dialog = screen.getByRole('dialog');
+      const lightButton = within(dialog).getByRole('button', { name: /^light$/i });
       await user.click(lightButton);
 
       await waitFor(() => {
@@ -420,7 +425,8 @@ describe('SettingsPanel', () => {
       await user.click(screen.getByRole('button', { name: /open settings/i }));
 
       await waitFor(() => {
-        const closeButton = screen.getByRole('button', { name: /close settings/i });
+        const dialog = screen.getByRole('dialog');
+        const closeButton = within(dialog).getByRole('button', { name: /close settings/i });
         expect(closeButton).toHaveAttribute('aria-label', 'Close settings');
       });
     });

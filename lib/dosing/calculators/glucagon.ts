@@ -6,15 +6,15 @@
  * Key error patterns: wrong dose by weight, wrong route selection.
  */
 
-import { roundTo } from "@/lib/dosing/math";
-import { boundsValidator, PediatricBoundsValidator } from "@/lib/dosing/safety/pediatric-bounds-validator";
+import { roundTo } from "../../../lib/dosing/math";
+import { boundsValidator, PediatricBoundsValidator } from "../../../lib/dosing/safety/pediatric-bounds-validator";
 import type {
   MedicationCalculationRequest,
   MedicationCalculationResult,
   MedicationCalculator,
   MedicationDoseRecommendation,
   SolutionConcentration,
-} from "@/lib/dosing/types";
+} from "../../../lib/dosing/types";
 
 const GLUCAGON_CONCENTRATION: SolutionConcentration = {
   amount: 1, amountUnit: "mg", volume: 1, volumeUnit: "mL",

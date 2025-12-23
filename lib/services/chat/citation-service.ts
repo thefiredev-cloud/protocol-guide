@@ -1,6 +1,6 @@
-import type { Citation } from "@/app/types/chat";
-import type { KBDoc } from "@/lib/retrieval";
-import type { TriageResult } from "@/lib/triage";
+import type { Citation } from "../../../app/types/chat";
+import type { KBDoc } from "../../../lib/retrieval";
+import type { TriageResult } from "../../../lib/triage";
 
 export class CitationService {
   public build(hits: KBDoc[], triage: TriageResult): Citation[] {

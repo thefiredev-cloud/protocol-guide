@@ -68,6 +68,7 @@ interface DosingCalcParams {
  */
 interface AuthParams {
   userId?: string;
+  userRole?: UserRole;
   action: Extract<AuditAction, "user.login" | "user.logout" | "auth.failure" | "auth.unauthorized">;
   outcome: AuditOutcome;
   ipAddress?: string;
@@ -223,6 +224,7 @@ export class AuditLogger {
       eventId: crypto.randomUUID(),
       timestamp: new Date().toISOString(),
       userId: params.userId,
+      userRole: params.userRole,
       action: params.action,
       resource: "authentication",
       outcome: params.outcome,

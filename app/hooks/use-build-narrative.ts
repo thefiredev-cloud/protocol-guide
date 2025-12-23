@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import type { CarePlan, ChatMessage, Citation, NarrativeDraft, NemsisNarrative } from "@/app/types/chat";
+import type { CarePlan, ChatMessage, Citation, NarrativeDraft, NemsisNarrative } from "../types/chat";
 
 type ChatState = {
   messages: ChatMessage[];

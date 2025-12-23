@@ -1,8 +1,8 @@
 /* eslint-disable simple-import-sort/imports */
-import { createLogger } from "@/lib/log";
-import { EnvironmentManager, type EnvironmentDiagnostics } from "@/lib/managers/environment-manager";
-import { KnowledgeBaseManager, type KnowledgeBaseResolutionAttempt, type KnowledgeBaseResolvedSource } from "@/lib/storage/knowledge-base-manager";
-import { initializeKnowledgeBase } from "@/lib/retrieval";
+import { createLogger } from "../../lib/log";
+import { EnvironmentManager, type EnvironmentDiagnostics } from "../../lib/managers/environment-manager";
+import { KnowledgeBaseManager, type KnowledgeBaseResolutionAttempt, type KnowledgeBaseResolvedSource } from "../../lib/storage/knowledge-base-manager";
+import { initializeKnowledgeBase } from "../../lib/retrieval";
 
 type KnowledgeBaseStatus = {
   loaded: boolean;

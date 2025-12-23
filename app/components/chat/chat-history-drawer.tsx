@@ -8,7 +8,7 @@
 import {
   useChatHistory,
   type ChatSessionSummary,
-} from '@/app/hooks/use-chat-history';
+} from "../../hooks/use-chat-history";
 
 interface ChatHistoryDrawerProps {
   isOpen: boolean;
