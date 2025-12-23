@@ -3,7 +3,7 @@
 import { Suspense, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { useAuth } from '@/app/contexts/auth-context';
+import { useAuth } from '@/app/contexts/AuthContext';
 import Aurora from '@/app/components/ui/Aurora';
 
 const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY ?? '10000000-ffff-ffff-ffff-000000000001';
