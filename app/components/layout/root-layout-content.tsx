@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 
-import { SettingsPanel } from '@/app/components/settings/SettingsPanel';
+import { SettingsPanel } from '@/app/components/settings/settings-panel';
 
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
 import { ChatbotLayout } from './chatbot-layout';
