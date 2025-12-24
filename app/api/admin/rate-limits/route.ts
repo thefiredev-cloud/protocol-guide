@@ -2,11 +2,12 @@
  * Rate Limit Monitoring Endpoint
  *
  * Provides statistics about current rate limiting state for monitoring and debugging.
- * Only accessible in development mode for security.
+ * Only accessible in development mode for security with IP allowlist.
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+import { isIpAllowed } from "../../../../lib/security/ip-allowlist";
 import { rateLimiter } from "../../../../lib/security/rate-limit";
 
 export const runtime = "nodejs";
@@ -15,11 +16,19 @@ export const runtime = "nodejs";
  * GET /api/admin/rate-limits
  * Returns current rate limiting statistics
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   // Only allow from localhost in development
   if (process.env.NODE_ENV !== "development") {
     return NextResponse.json(
       { error: "Not available in production" },
+      { status: 403 }
+    );
+  }
+
+  // Additional IP allowlist check for admin endpoints
+  if (!isIpAllowed(request)) {
+    return NextResponse.json(
+      { error: "Access denied" },
       { status: 403 }
     );
   }
