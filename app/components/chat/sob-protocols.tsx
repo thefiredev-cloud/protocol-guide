@@ -218,9 +218,8 @@ const CitationCard = memo(function CitationCard({ citation }: { citation: Citati
   const referenceNumber = citation.referenceNumber || refMatch?.[1];
 
   const handleViewProtocol = () => {
-    // Use protocol code or reference number for PDF search
-    const searchTerm = protocolCode || referenceNumber || citation.title.split(" ")[0];
-    const url = `https://file.lacounty.gov/SDSInter/dhs/1143706_2024PCMPublic.pdf#search=${encodeURIComponent(searchTerm)}`;
+    // Open LA County PCM landing page
+    const url = "https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/";
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
