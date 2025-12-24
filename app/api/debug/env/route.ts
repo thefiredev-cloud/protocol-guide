@@ -6,12 +6,12 @@ export async function GET() {
     return NextResponse.json({ error: "Not available in production" }, { status: 403 });
   }
 
+  // Only return existence booleans - never expose key content
   return NextResponse.json({
     NODE_ENV: process.env.NODE_ENV,
     LLM_API_KEY_EXISTS: !!process.env.LLM_API_KEY,
-    LLM_API_KEY_LENGTH: process.env.LLM_API_KEY?.length || 0,
-    LLM_API_KEY_PREVIEW: process.env.LLM_API_KEY?.substring(0, 20) || "NOT SET",
-    ALL_ENV_KEYS: Object.keys(process.env).filter(k => k.startsWith("LLM_") || k.startsWith("KB_") || k.startsWith("NEXT_")),
+    KB_CONFIGURED: !!process.env.KB_API_URL,
+    SUPABASE_CONFIGURED: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
   });
 }
 
