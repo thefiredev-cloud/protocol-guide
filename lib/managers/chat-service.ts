@@ -449,7 +449,7 @@ export class ChatService {
       userId,
       sessionId,
       query: latestUser,
-      protocolsReferenced: triage.matchedProtocols.slice(0, 3).map((p) => `${p.tp_code} - ${p.tp_name}`),
+      protocolsReferenced: (triage.matchedProtocols ?? []).slice(0, 3).map((p) => `${p.tp_code} - ${p.tp_name}`),
       outcome: "failure",
       ipAddress,
       userAgent,
