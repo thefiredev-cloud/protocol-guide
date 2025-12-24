@@ -217,13 +217,6 @@ class AuthService {
       .single();
 
     if (error || !data) {
-      console.error('[AUTH] getUserProfile failed:', {
-        userId,
-        error: error?.message,
-        errorCode: error?.code,
-        errorDetails: error?.details,
-        hasData: !!data,
-      });
       throw new Error('User profile not found');
     }
 
