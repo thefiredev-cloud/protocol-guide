@@ -64,13 +64,13 @@ export class AudioRecorderManager {
       return;
     }
 
-    this.setState("recording");
+    // Set pending state before async operation
     this.pendingStop = false;
 
     try {
       console.log("[AudioRecorder] Requesting microphone...");
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
+
       // Check if stop was requested during mic permission wait
       if (this.pendingStop) {
         console.log("[AudioRecorder] Stop was requested during permission, cleaning up");
@@ -81,8 +81,11 @@ export class AudioRecorderManager {
       const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
         ? "audio/webm;codecs=opus"
         : "audio/webm";
-      
+
       this.mediaRecorder = new MediaRecorder(this.stream, { mimeType });
+
+      // Only set state to recording AFTER permission granted and recorder created
+      this.setState("recording");
       this.audioChunks = [];
 
       this.mediaRecorder.ondataavailable = (event) => {
