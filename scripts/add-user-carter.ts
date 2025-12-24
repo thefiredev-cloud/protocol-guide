@@ -55,7 +55,7 @@ async function addUser() {
     throw listError;
   }
 
-  const existingUser = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
+  const existingUser = users?.find((u: { email?: string }) => u.email?.toLowerCase() === email.toLowerCase());
 
   if (existingUser) {
     console.log(`User ${email} already exists in Auth (ID: ${existingUser.id}). Syncing profile...`);
