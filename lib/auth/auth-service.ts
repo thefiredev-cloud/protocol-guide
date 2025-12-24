@@ -30,13 +30,6 @@ class AuthService {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-      console.log('[AUTH] getClient - env check:', {
-        hasUrl: !!url,
-        hasServiceKey: !!serviceKey,
-        serviceKeyLength: serviceKey?.length,
-        serviceKeyPrefix: serviceKey?.substring(0, 20),
-      });
-
       if (!url || !serviceKey) {
         throw new Error('Supabase credentials not configured for auth');
       }
