@@ -97,11 +97,17 @@ export class AuditLogger {
   private logDir: string;
 
   constructor(config?: AuditLoggerConfig) {
+    // Use /tmp on serverless (Netlify) since filesystem is read-only
+    const isServerless = process.env.NETLIFY === 'true' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+    const defaultLogDir = isServerless
+      ? '/tmp/logs'
+      : path.join(process.cwd(), "logs");
+
     this.config = {
       consoleEnabled: config?.consoleEnabled ?? process.env.NODE_ENV === "development",
-      fileEnabled: config?.fileEnabled ?? true,
+      fileEnabled: config?.fileEnabled ?? !isServerless, // Disable file logging on serverless by default
       fileSink: config?.fileSink ?? {
-        logDir: path.join(process.cwd(), "logs"),
+        logDir: defaultLogDir,
         filePattern: "audit-{date}.jsonl",
         rotation: "daily",
         maxFiles: 2190, // 6 years of daily logs
@@ -109,7 +115,11 @@ export class AuditLogger {
     };
 
     this.logDir = this.config.fileSink.logDir;
-    this.ensureLogDirectory();
+
+    // Only try to create log directory if file logging is enabled
+    if (this.config.fileEnabled) {
+      this.ensureLogDirectory();
+    }
   }
 
   /**
