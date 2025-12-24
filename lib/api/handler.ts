@@ -142,9 +142,14 @@ export function withApiHandler<TInput = unknown>(
     } catch (error: unknown) {
       ok = false;
       status = 500;
-      const message = error instanceof Error ? error.message : String(error);
-      logger.error("Unhandled API error", { message });
-      const res = NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status });
+      const rawMessage = error instanceof Error ? error.message : String(error);
+      // Log full error details server-side
+      logger.error("Unhandled API error", { message: rawMessage, stack: error instanceof Error ? error.stack : undefined });
+      // Return sanitized message to client - never expose internal details
+      const clientMessage = process.env.NODE_ENV === "production"
+        ? "An unexpected error occurred"
+        : rawMessage;
+      const res = NextResponse.json({ error: { code: "INTERNAL_ERROR", message: clientMessage } }, { status });
       await onAudit?.({ req, input: input as TInput, ok, status, durationMs: Date.now() - start });
       return res;
     } finally {
