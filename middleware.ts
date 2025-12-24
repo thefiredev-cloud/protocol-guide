@@ -24,7 +24,6 @@ const PUBLIC_ROUTES = [
   '/api/auth/login',
   '/api/auth/refresh',
   '/api/health',
-  '/api/debug', // TEMPORARY - remove after debugging
   '/login',
   '/_next',
   '/static',
