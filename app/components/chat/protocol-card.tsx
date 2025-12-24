@@ -36,8 +36,8 @@ export function ProtocolCard({
       : protocol.tp_code;
 
   const handleViewProtocol = () => {
-    // Open LA County PCM protocol page (or fallback to search)
-    const url = `https://file.lacounty.gov/SDSInter/dhs/1143706_2024PCMPublic.pdf#search=${effectiveCode}`;
+    // Open LA County PCM landing page
+    const url = "https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/";
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
