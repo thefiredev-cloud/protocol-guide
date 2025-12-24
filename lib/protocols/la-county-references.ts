@@ -117,7 +117,15 @@ export const LA_COUNTY_REFERENCES: Record<string, ReferenceInfo> = {
 };
 
 /**
- * Get LA County PCM PDF URL with search anchor
+ * Get LA County PCM landing page URL
+ */
+export function getReferencePCMUrl(): string {
+  return "https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/";
+}
+
+/**
+ * @deprecated Use getReferencePCMUrl() instead
+ * Get LA County PCM PDF URL with search anchor (legacy)
  */
 export function getReferencePDFUrl(refNumber: string): string {
   const ref = LA_COUNTY_REFERENCES[refNumber];
