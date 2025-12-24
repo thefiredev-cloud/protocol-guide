@@ -65,10 +65,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
 };
 
 /**
- * Session timeout in milliseconds (60 minutes)
+ * Session timeout in milliseconds (30 minutes default - HIPAA compliant)
+ * Medical applications should use shorter timeouts for security
  */
 export const SESSION_TIMEOUT_MS =
-  (Number(process.env.SESSION_TIMEOUT_MINUTES) || 60) * 60 * 1000;
+  (Number(process.env.SESSION_TIMEOUT_MINUTES) || 30) * 60 * 1000;
 
 /**
  * Request context with optional user info
