@@ -86,8 +86,15 @@ class AuthService {
     // Fetch user profile from public.users table (acts as a whitelist)
     let authUser: AuthUser;
     try {
+      console.log('[AUTH] About to call getUserProfile with userId:', data.user.id);
       authUser = await this.getUserProfile(data.user.id);
+      console.log('[AUTH] getUserProfile succeeded:', authUser);
     } catch (error) {
+      console.error('[AUTH] getUserProfile threw error:', {
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        userId: data.user.id,
+      });
       // If user exists in Auth but not in public.users, deny access
       await auditLogger.logAuth({
         action: 'auth.unauthorized',
