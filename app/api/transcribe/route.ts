@@ -18,9 +18,31 @@ const ALLOWED_AUDIO_TYPES = [
 /**
  * POST /api/transcribe
  * Transcribes audio using OpenAI Whisper API
+ * Requires authentication and rate limiting
  */
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication - require logged in user
+    const userId = request.headers.get("x-user-id");
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    // Rate limiting
+    const fingerprint = generateFingerprint(request);
+    const limitCfg = RATE_LIMITS.API;
+    const check = rateLimiter.check(fingerprint, "API");
+
+    if (!check.allowed) {
+      return NextResponse.json(
+        { error: limitCfg.message },
+        { status: 429, headers: { "Retry-After": String(Math.ceil((check.reset - Date.now()) / 1000)) } }
+      );
+    }
+
     const formData = await request.formData();
     const audioFile = formData.get("audio") as File | null;
 
