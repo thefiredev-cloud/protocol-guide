@@ -44,19 +44,8 @@ export async function requirePermission(
 
   // No valid token
   if (!user) {
-    // Allow in development if ALLOW_INSECURE_RBAC is set
-    const allowInsecure =
-      (process.env.ALLOW_INSECURE_RBAC ?? '').toLowerCase() === 'true';
-
-    if (env === 'development' && allowInsecure) {
-      console.warn(
-        '[SECURITY] RBAC bypassed in development mode. Set ALLOW_INSECURE_RBAC=false to enforce authentication.'
-      );
-      return {
-        ok: true,
-        user: { id: 'dev-user', role: 'admin', email: 'dev@localhost' },
-      };
-    }
+    // SECURITY: Development bypass removed - authentication always required
+    // If you need to test without auth, use the test environment which returns a mock user
 
     await auditLogger.logAuth({
       action: 'auth.unauthorized',
