@@ -279,14 +279,14 @@ export const MessageItem = memo(function MessageItem({ m, onProtocolSelect }: { 
     if (m.role === "assistant") {
       return (
         <div className="assistant-response">
-          {/* Citations/Protocol References FIRST */}
-          {m.citations && m.citations.length > 0 && (
-            <CitationsList citations={m.citations} />
-          )}
-          {/* Then the response content */}
+          {/* Response content first */}
           <div className="response-content">
             <ProtocolFormatter content={m.content} />
           </div>
+          {/* Citations/Protocol References at bottom */}
+          {m.citations && m.citations.length > 0 && (
+            <CitationsList citations={m.citations} />
+          )}
         </div>
       );
     }
