@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { generateFingerprint, rateLimiter, RATE_LIMITS } from "../../../lib/security/rate-limit";
+
 // Whisper API limits
 const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024; // 25MB
 const ALLOWED_AUDIO_TYPES = [
