@@ -204,15 +204,27 @@ class AuthService {
 
   /**
    * Fetch user profile from database
+   * Uses a fresh client to ensure service role key is used (not user JWT)
    *
    * @param userId - Supabase auth user ID
    * @returns User profile
    * @throws Error if user not found
    */
   private async getUserProfile(userId: string): Promise<AuthUser> {
-    const supabase = this.getClient();
+    // Create a fresh client to ensure we use the service role key
+    // The main client may have user JWT after signInWithPassword
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    const { data, error } = await supabase
+    if (!url || !serviceKey) {
+      throw new Error('Supabase credentials not configured');
+    }
+
+    const adminClient = createClient<Database>(url, serviceKey, {
+      auth: { persistSession: false },
+    });
+
+    const { data, error } = await adminClient
       .from('users')
       .select('id, email, full_name, role, station_id')
       .eq('id', userId)
