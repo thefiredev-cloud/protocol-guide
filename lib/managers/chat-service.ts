@@ -356,7 +356,7 @@ export class ChatService {
 
     this.logger.info("Chat succeeded", {
       citationCount: citations.length,
-      protocols: triage.matchedProtocols.map((protocol) => protocol.tp_code).slice(0, 3),
+      protocols: (triage.matchedProtocols ?? []).map((protocol) => protocol.tp_code).slice(0, 3),
     });
     metrics.inc("chat.success");
 
