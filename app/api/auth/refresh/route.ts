@@ -49,7 +49,7 @@ export const POST = withApiHandler(
     response.cookies.set('sb-access-token', session.accessToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'lax',
+      sameSite: 'strict', // Strict to prevent CSRF
       maxAge: maxAgeSeconds,
       path: '/',
     });
@@ -57,8 +57,8 @@ export const POST = withApiHandler(
     response.cookies.set('sb-refresh-token', session.refreshToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      sameSite: 'strict', // Strict to prevent CSRF
+      maxAge: 24 * 60 * 60, // 24 hours (reduced from 7 days)
       path: '/',
     });
 
