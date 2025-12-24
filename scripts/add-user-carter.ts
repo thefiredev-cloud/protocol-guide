@@ -4,8 +4,8 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // Manual environment variable loading from .env.local
 try {
