@@ -7,7 +7,6 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 import { auditLogger } from '../audit/audit-logger';
 import type { Database } from '../db/types';
-
 import type {
   AuthRequestContext,
   AuthSession,
@@ -220,7 +219,7 @@ class AuthService {
       id: data.id,
       email: data.email,
       fullName: data.full_name,
-      role: data.role as any, // Cast role if necessary but try without first
+      role: data.role as AuthUser['role'],
       stationId: data.station_id,
     };
   }
