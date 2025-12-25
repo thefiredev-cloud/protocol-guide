@@ -233,11 +233,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (res.ok) {
         setUser(data.user);
+        // Reset session expiry on successful refresh
+        setSessionExpiresAt(Date.now() + SESSION_DURATION_MS);
+        setWarningDismissed(false);
+        setSessionWarning('none');
       } else {
         setUser(null);
+        setSessionExpiresAt(null);
       }
     } catch {
       setUser(null);
+      setSessionExpiresAt(null);
     }
   }, []);
 
