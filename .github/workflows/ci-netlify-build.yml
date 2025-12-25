@@ -14,7 +14,7 @@ env:
   NEXT_PUBLIC_SUPABASE_URL: https://test-project.supabase.co
   NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key-for-testing-purposes-only
   LLM_PROVIDER: anthropic
-  LLM_MODEL: claude-sonnet-4-20250514
+  LLM_MODEL: claude-3-5-haiku-20241022
 
 jobs:
   # ============================================
