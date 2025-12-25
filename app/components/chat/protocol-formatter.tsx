@@ -1,26 +1,30 @@
 "use client";
 
 import { memo, useMemo } from "react";
+import { sanitizeProtocolContent } from "@/lib/security/content-sanitizer";
 
 /**
- * Whitelist of actual medication names - only these get bold highlighting
+ * Whitelist of LA County authorized medication names - only these get bold highlighting
+ * NOTE: Unauthorized medications (ketamine, etomidate, propofol, etc.) removed
  */
 const MEDICATION_NAMES = [
-  // Cardiac/Emergency
-  "Epinephrine", "Norepinephrine", "Dopamine", "Dobutamine", "Atropine",
-  "Amiodarone", "Lidocaine", "Adenosine", "Vasopressin", "Calcium Chloride",
-  "Calcium Gluconate", "Sodium Bicarbonate", "Magnesium Sulfate",
-  // Sedation/Analgesia
-  "Fentanyl", "Morphine", "Ketamine", "Midazolam", "Etomidate", "Propofol",
-  "Versed", "Dilaudid", "Hydromorphone",
-  // Paralytic
-  "Rocuronium", "Vecuronium", "Succinylcholine",
+  // Cardiac/Emergency - LA County authorized
+  "Epinephrine", "Atropine", "Amiodarone", "Lidocaine", "Adenosine",
+  "Calcium Chloride", "Sodium Bicarbonate", "Magnesium Sulfate",
+  // Sedation/Analgesia - LA County authorized
+  "Fentanyl", "Morphine", "Midazolam", "Versed", "Ketorolac", "Toradol",
+  "Acetaminophen", "Tylenol",
+  // NOTE: Ketamine, Etomidate, Propofol NOT authorized in LA County
   // Respiratory
-  "Albuterol", "Ipratropium", "Duoneb", "Oxygen",
-  // Fluids/Other
-  "Normal Saline", "Lactated Ringers", "Dextrose", "D10", "D50",
+  "Albuterol", "Oxygen",
+  // Fluids/Other - LA County authorized
+  "Normal Saline", "Dextrose", "D10", "D50",
   "Nitroglycerin", "Aspirin", "Ondansetron", "Zofran", "Diphenhydramine",
-  "Benadryl", "Glucagon", "Naloxone", "Narcan", "Thiamine",
+  "Benadryl", "Glucagon", "Naloxone", "Narcan",
+  // Behavioral - LA County authorized
+  "Olanzapine",
+  // Other LA County authorized
+  "Pralidoxime", "Tranexamic Acid",
   // Push-dose
   "Push-dose Epinephrine", "Push-dose Epi",
 ];
