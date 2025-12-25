@@ -79,6 +79,7 @@ export class MessageSendManager {
     let accumulatedText = "";
     let citations: SendResponse["citations"] | undefined;
     let fallback = false;
+    let streamStarted = false;
 
     const flushBlock = (raw: string) => {
       if (!raw.trim()) return;
@@ -95,6 +96,15 @@ export class MessageSendManager {
         } else if (event === "delta") {
           const delta = typeof data?.text === "string" ? (data.text as string) : "";
           accumulatedText += delta;
+          // Signal streaming start on first delta
+          if (!streamStarted) {
+            streamStarted = true;
+            this.streamHandler.onStreamStart?.();
+            // Add empty assistant message to update
+            this.streamHandler.appendAssistant("");
+          }
+          // Update UI with current text
+          this.streamHandler.onStreamUpdate?.(accumulatedText);
         } else if (event === "final") {
           const finalText = typeof data?.text === "string" ? (data.text as string) : undefined;
           if (finalText !== undefined) accumulatedText = finalText;
@@ -111,19 +121,28 @@ export class MessageSendManager {
       }
     };
 
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      let idx = buffer.indexOf("\n\n");
-      while (idx !== -1) {
-        const block = buffer.slice(0, idx);
-        buffer = buffer.slice(idx + 2);
-        flushBlock(block);
-        idx = buffer.indexOf("\n\n");
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let idx = buffer.indexOf("\n\n");
+        while (idx !== -1) {
+          const block = buffer.slice(0, idx);
+          buffer = buffer.slice(idx + 2);
+          flushBlock(block);
+          idx = buffer.indexOf("\n\n");
+        }
       }
+    } finally {
+      this.streamHandler.onStreamEnd?.();
     }
 
+    // Final update with citations
+    if (streamStarted) {
+      // Update the existing message with final text and citations
+      this.streamHandler.onStreamUpdate?.(accumulatedText);
+    }
     this.handleResponseBody({ text: accumulatedText, citations, fallback });
   }
 }
