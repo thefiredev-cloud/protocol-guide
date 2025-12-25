@@ -213,6 +213,10 @@ export interface OpenFDALabelResponse {
 /**
  * LA County EMS formulary medications
  * From Policy 803.1 and MCG references
+ *
+ * NOTE: The authoritative source is lib/formulary/la-county-formulary.ts
+ * This list is kept for backwards compatibility but should use
+ * isLACountyAuthorized() from the formulary module instead.
  */
 export const LA_COUNTY_FORMULARY: string[] = [
   'acetaminophen',
@@ -225,13 +229,13 @@ export const LA_COUNTY_FORMULARY: string[] = [
   'dextrose',
   'diphenhydramine',
   'epinephrine',
-  'fentanyl',
+  'fentanyl', // MCG 1317.19 - AUTHORIZED
   'glucagon',
-  'ketamine',
+  // 'ketamine' - REMOVED: NOT authorized in LA County EMS protocols
   'ketorolac',
   'lidocaine',
   'magnesium sulfate',
-  'midazolam',
+  'midazolam', // MCG 1317.25 - LA County authorized sedation
   'morphine',
   'naloxone',
   'nitroglycerin',
@@ -242,16 +246,16 @@ export const LA_COUNTY_FORMULARY: string[] = [
   'tranexamic acid'
 ];
 
+// Import from single source of truth
+import { isLACountyAuthorized as checkLACountyAuth } from '../formulary/la-county-formulary';
+
 /**
  * Check if a drug is in LA County formulary
+ * @deprecated Use isLACountyAuthorized from lib/formulary/la-county-formulary.ts
  */
 export function isInLACountyFormulary(drugName: string): boolean {
-  const normalized = drugName.toLowerCase().trim();
-  return LA_COUNTY_FORMULARY.some(
-    formularyDrug =>
-      normalized.includes(formularyDrug) ||
-      formularyDrug.includes(normalized)
-  );
+  // Use the single source of truth
+  return checkLACountyAuth(drugName);
 }
 
 // ============================================================================
