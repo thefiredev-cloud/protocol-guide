@@ -15,33 +15,33 @@ import { AuthProvider } from "./contexts/authentication-context";
 const fontClass = "";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fanciful-pithivier-308482.netlify.app"),
+  metadataBase: new URL("https://protocolguide.com"),
   title: {
-    default: "County Medic",
-    template: "%s • County Medic",
+    default: "ProtocolGuide",
+    template: "%s • ProtocolGuide",
   },
   description:
-    "Enterprise-grade EMS protocol assistant powered by Next.js and the Los Angeles County Prehospital Care Manual.",
+    "AI-powered EMS protocol assistant for the Los Angeles County Prehospital Care Manual.",
   openGraph: {
     type: "website",
-    title: "County Medic",
+    title: "ProtocolGuide",
     description:
-      "Reference the LA County Prehospital Care Manual anywhere. Built on Next.js with MCP-powered retrieval.",
-    url: "https://fanciful-pithivier-308482.netlify.app",
-    siteName: "County Medic",
+      "Reference the LA County Prehospital Care Manual anywhere. AI-powered protocol retrieval.",
+    url: "https://protocolguide.com",
+    siteName: "ProtocolGuide",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "County Medic interface",
+        alt: "ProtocolGuide interface",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "County Medic",
-    description: "Next.js-powered medic assistant for LA County protocols.",
+    title: "ProtocolGuide",
+    description: "AI-powered EMS protocol assistant for LA County protocols.",
     images: ["/og-image.png"],
   },
   icons: {
