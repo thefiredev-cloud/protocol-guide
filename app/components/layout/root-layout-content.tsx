@@ -37,6 +37,7 @@ function RootLayoutInner({ children }: RootLayoutContentProps) {
 
   return (
     <>
+      <SessionExpiryWarning />
       <KeyboardShortcuts />
       <SettingsPanel />
       <OfflineIndicator />
