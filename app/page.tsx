@@ -5,7 +5,7 @@ import { VoiceFirstInput } from "./components/chat/voice-input-control";
 import { usePageController } from "./hooks/use-page-controller";
 
 /**
- * LA County Protocol Assistant
+ * ProtocolGuide - LA County Protocol Assistant
  * Voice-first protocol retrieval for paramedics
  */
 export default function Page() {
