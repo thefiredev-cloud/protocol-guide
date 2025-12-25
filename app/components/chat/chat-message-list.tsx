@@ -59,11 +59,9 @@ export const ChatList = memo(function ChatList({
   messages,
   onProtocolSelect,
   errorBanner,
-  loading = false
-}: Omit<ChatListProps, 'onExampleSelect'> & { errorBanner?: string | null; loading?: boolean }) {
-  // REMOVED: WelcomeCard is redundant - WelcomeHero in page.tsx handles initial welcome
-  // const onlyIntroMessage = messages.length === 1 && messages[0]?.role === "assistant";
-
+  loading = false,
+  streaming = false
+}: Omit<ChatListProps, 'onExampleSelect'> & { errorBanner?: string | null; loading?: boolean; streaming?: boolean }) {
   return (
     <div>
       <HealthStatusBanner hidden={Boolean(errorBanner)} />
@@ -73,14 +71,17 @@ export const ChatList = memo(function ChatList({
         </div>
       ) : null}
       <div className="chat">
-        {messages.map((message, index) => (
-          <MemoizedMessageWrapper
-            key={`${message.role}-${index}`}
-            message={message}
-            onProtocolSelect={onProtocolSelect}
-          />
-        ))}
-        {loading && <ThinkingIndicator />}
+        {messages.map((message, index) => {
+          const isLastMessage = index === messages.length - 1;
+          const isStreamingMessage = streaming && isLastMessage && message.role === "assistant";
+          return (
+            <div key={`${message.role}-${index}`} className={`msg ${message.role} scroll-animate-fade ${isStreamingMessage ? 'streaming' : ''}`}>
+              <MessageItem m={message} onProtocolSelect={onProtocolSelect} />
+              {isStreamingMessage && <StreamingCursor />}
+            </div>
+          );
+        })}
+        {loading && !streaming && <ThinkingIndicator />}
       </div>
     </div>
   );
