@@ -1,6 +1,7 @@
 "use client";
 
 import { ChatList } from "./components/chat/chat-message-list";
+import { CriticalLookupBar } from "./components/chat/critical-lookup-bar";
 import { VoiceFirstInput } from "./components/chat/voice-input-control";
 import { usePageController } from "./hooks/use-page-controller";
 
@@ -35,6 +36,11 @@ export default function Page() {
         )}
         <div ref={controller.endRef} />
       </div>
+
+      <CriticalLookupBar
+        onQuerySubmit={controller.sendProtocolSelection}
+        disabled={controller.chat.loading}
+      />
 
       <VoiceFirstInput
         input={controller.chat.input}
