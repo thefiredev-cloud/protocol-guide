@@ -28,17 +28,31 @@ import {
 export class DrugLookupService {
   /**
    * Look up a drug by name (brand or generic)
+   * Applies LA County scope enforcement - unauthorized medications are blocked
    */
-  async lookupDrug(query: string): Promise<DrugLookupResult> {
+  async lookupDrug(query: string, enforceScope = true): Promise<DrugLookupResult> {
     const db = await getDrugDB();
     const normalizedQuery = query.toLowerCase().trim();
+
+    // SCOPE CHECK: Block unauthorized medications early
+    if (enforceScope && isLACountyUnauthorized(normalizedQuery)) {
+      const replacement = getUnauthorizedReplacement(normalizedQuery);
+      return {
+        found: false,
+        scopeBlocked: true,
+        scopeMessage: `${query.toUpperCase()} is NOT authorized in LA County EMS protocols.${
+          replacement ? ` Use ${replacement} instead.` : ''
+        }`,
+        suggestions: replacement ? [replacement.split(' ')[0]] : [],
+      };
+    }
 
     // Try exact match by generic name first
     let drug = await db.getDrugByName(normalizedQuery);
     let normalizedFrom: string | undefined;
 
     if (drug) {
-      return this.buildResult(drug);
+      return this.buildResult(drug, undefined, enforceScope);
     }
 
     // Search for matches
