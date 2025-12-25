@@ -9,7 +9,8 @@ import { DiphenhydramineCalculator } from "../../lib/dosing/calculators/diphenhy
 import { EpinephrineCalculator } from "../../lib/dosing/calculators/epinephrine";
 import { FentanylCalculator } from "../../lib/dosing/calculators/fentanyl";
 import { GlucagonCalculator } from "../../lib/dosing/calculators/glucagon";
-import { KetamineCalculator } from "../../lib/dosing/calculators/ketamine";
+// KetamineCalculator REMOVED - ketamine NOT authorized in LA County EMS protocols
+// Use midazolam for sedation (MCG 1317.25)
 import { KetorolacCalculator } from "../../lib/dosing/calculators/ketorolac";
 import { MagnesiumSulfateCalculator } from "../../lib/dosing/calculators/magnesium-sulfate";
 import { MidazolamCalculator } from "../../lib/dosing/calculators/midazolam";
