@@ -7,9 +7,12 @@ type ChatState = {
   messages: ChatMessage[];
   input: string;
   loading: boolean;
+  streaming: boolean;
   replaceMessages: (messages: ChatMessage[]) => void;
   setInput: (value: string) => void;
   setLoading: (value: boolean) => void;
+  setStreaming: (value: boolean) => void;
+  updateLastMessage: (content: string) => void;
 };
 
 type NarrativeState = {
