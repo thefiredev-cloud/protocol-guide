@@ -249,7 +249,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, login, logout, refreshSession }}
+      value={{
+        user,
+        loading,
+        error,
+        login,
+        logout,
+        refreshSession,
+        sessionWarning,
+        sessionExpiresAt,
+        dismissSessionWarning,
+      }}
     >
       {children}
     </AuthContext.Provider>
