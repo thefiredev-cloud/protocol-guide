@@ -20,6 +20,12 @@ export type StreamHandler = {
   handleCitations: (value: unknown) => void;
   handleOrders: (text: string | undefined) => void;
   setErrorBanner: (message: string | null) => void;
+  /** Called when streaming starts */
+  onStreamStart?: () => void;
+  /** Called with partial text during streaming */
+  onStreamUpdate?: (text: string) => void;
+  /** Called when streaming ends */
+  onStreamEnd?: () => void;
 };
 
 type SendDependencies = {
