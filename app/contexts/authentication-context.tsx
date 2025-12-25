@@ -198,6 +198,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       setUser(data.user);
+      // Set session expiry on successful login
+      setSessionExpiresAt(Date.now() + SESSION_DURATION_MS);
+      setWarningDismissed(false);
+      setSessionWarning('none');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Login failed';
       setError(message);
