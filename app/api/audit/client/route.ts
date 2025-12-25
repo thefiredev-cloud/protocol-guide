@@ -26,6 +26,13 @@ const CLIENT_AUDIT_ACTIONS: AuditAction[] = [
   'protocol.search',
 ];
 
+// PHI fields to strip from metadata
+const PHI_FIELDS = [
+  'name', 'firstName', 'lastName', 'dob', 'dateOfBirth',
+  'ssn', 'address', 'phone', 'email', 'mrn',
+  'medicalRecordNumber', 'patientName', 'patientId',
+];
+
 // Zod schema for client audit events
 const clientEventSchema = z.object({
   eventId: z.string().uuid(),
@@ -33,33 +40,7 @@ const clientEventSchema = z.object({
   action: z.enum(CLIENT_AUDIT_ACTIONS as [AuditAction, ...AuditAction[]]),
   resource: z.string().max(500),
   outcome: z.enum(['success', 'failure', 'partial'] as const),
-  metadata: z
-    .record(z.unknown())
-    .optional()
-    .transform((meta) => {
-      // Strip any potential PHI fields from metadata
-      if (!meta) return undefined;
-      const sanitized = { ...meta };
-      const phiFields = [
-        'name',
-        'firstName',
-        'lastName',
-        'dob',
-        'dateOfBirth',
-        'ssn',
-        'address',
-        'phone',
-        'email',
-        'mrn',
-        'medicalRecordNumber',
-        'patientName',
-        'patientId',
-      ];
-      for (const field of phiFields) {
-        delete sanitized[field];
-      }
-      return sanitized;
-    }),
+  metadata: z.record(z.unknown()).optional().transform(sanitizeMetadata),
   sessionId: z.string().max(100).optional(),
   durationMs: z.number().int().min(0).max(3600000).optional(),
   errorMessage: z.string().max(1000).optional(),
@@ -69,136 +50,100 @@ const batchSchema = z.object({
   events: z.array(clientEventSchema).min(1).max(100),
 });
 
+type ClientEvent = z.infer<typeof clientEventSchema>;
+
+/** Sanitize metadata by removing PHI fields */
+function sanitizeMetadata(meta: Record<string, unknown> | undefined) {
+  if (!meta) return undefined;
+  const sanitized = { ...meta };
+  for (const field of PHI_FIELDS) {
+    delete sanitized[field];
+  }
+  return sanitized;
+}
+
+/** Convert client event to full audit event */
+function toAuditEvent(
+  clientEvent: ClientEvent,
+  ipAddress: string | undefined,
+  userAgent: string | undefined
+): AuditEvent {
+  return {
+    eventId: clientEvent.eventId,
+    timestamp: clientEvent.timestamp,
+    action: clientEvent.action,
+    resource: clientEvent.resource,
+    outcome: clientEvent.outcome as AuditOutcome,
+    metadata: { ...clientEvent.metadata, source: 'client', syncedAt: new Date().toISOString() },
+    sessionId: clientEvent.sessionId,
+    durationMs: clientEvent.durationMs,
+    errorMessage: clientEvent.errorMessage,
+    ipAddress,
+    userAgent,
+  };
+}
+
+/** Process batch of events and return sync results */
+async function processBatch(
+  events: ClientEvent[],
+  ipAddress: string | undefined,
+  userAgent: string | undefined
+): Promise<{ synced: number; errors: string[] }> {
+  let synced = 0;
+  const errors: string[] = [];
+
+  for (const clientEvent of events) {
+    try {
+      const auditEvent = toAuditEvent(clientEvent, ipAddress, userAgent);
+      await auditLogger.writeRawEvent(auditEvent);
+      synced++;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`${clientEvent.eventId}: ${message}`);
+    }
+  }
+
+  return { synced, errors };
+}
+
+/** Get client IP address from request headers */
+function getClientIP(req: NextRequest): string | undefined {
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.headers.get('x-real-ip') || undefined;
+}
+
 /**
  * POST /api/audit/client - Sync client audit events
- *
- * Body:
- * - events: Array of client audit events (max 100)
- *
- * Returns: { synced: number }
  */
 export const POST = withApiHandler(
   async (input: unknown, req: NextRequest) => {
     const logger = createLogger('api.audit.client');
     const startTime = Date.now();
 
-    try {
-      // Parse request body
-      const body = await req.json();
-      const parsed = batchSchema.safeParse(body);
+    const body = await req.json();
+    const parsed = batchSchema.safeParse(body);
 
-      if (!parsed.success) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VALIDATION_ERROR',
-              message: parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; '),
-            },
-          },
-          { status: 400 }
-        );
-      }
-
-      const { events } = parsed.data;
-
-      // Get client info from request
-      const ipAddress = getClientIP(req);
-      const userAgent = req.headers.get('user-agent') || undefined;
-
-      // Process each event
-      let synced = 0;
-      const errors: string[] = [];
-
-      for (const clientEvent of events) {
-        try {
-          // Convert client event to full audit event
-          const auditEvent: AuditEvent = {
-            eventId: clientEvent.eventId,
-            timestamp: clientEvent.timestamp,
-            action: clientEvent.action,
-            resource: clientEvent.resource,
-            outcome: clientEvent.outcome as AuditOutcome,
-            metadata: {
-              ...clientEvent.metadata,
-              source: 'client',
-              syncedAt: new Date().toISOString(),
-            },
-            sessionId: clientEvent.sessionId,
-            durationMs: clientEvent.durationMs,
-            errorMessage: clientEvent.errorMessage,
-            ipAddress,
-            userAgent,
-          };
-
-          // Write to audit log using existing logger
-          await writeClientEvent(auditEvent);
-          synced++;
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
-          errors.push(`${clientEvent.eventId}: ${message}`);
-        }
-      }
-
-      const durationMs = Date.now() - startTime;
-
-      logger.info('Client audit events synced', {
-        synced,
-        total: events.length,
-        errors: errors.length,
-        durationMs,
-      });
-
-      // Return success even if some events failed
-      if (errors.length > 0 && synced === 0) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'SYNC_FAILED',
-              message: 'All events failed to sync',
-              details: errors.slice(0, 5), // Limit error details
-            },
-          },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({
-        synced,
-        failed: errors.length,
-      });
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : String(error);
-      logger.error('Failed to sync client audit events', { message });
-      return NextResponse.json({ error: { code: 'SYNC_ERROR', message } }, { status: 500 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: { code: 'VALIDATION_ERROR', message: parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ') } },
+        { status: 400 }
+      );
     }
+
+    const { synced, errors } = await processBatch(
+      parsed.data.events,
+      getClientIP(req),
+      req.headers.get('user-agent') || undefined
+    );
+
+    logger.info('Client audit events synced', { synced, total: parsed.data.events.length, errors: errors.length, durationMs: Date.now() - startTime });
+
+    if (errors.length > 0 && synced === 0) {
+      return NextResponse.json({ error: { code: 'SYNC_FAILED', message: 'All events failed to sync', details: errors.slice(0, 5) } }, { status: 500 });
+    }
+
+    return NextResponse.json({ synced, failed: errors.length });
   },
-  {
-    rateLimit: 'API',
-    loggerName: 'api.audit.client',
-  }
+  { rateLimit: 'API', loggerName: 'api.audit.client' }
 );
-
-/**
- * Write a client audit event using the server-side audit logger
- */
-async function writeClientEvent(event: AuditEvent): Promise<void> {
-  await auditLogger.writeRawEvent(event);
-}
-
-/**
- * Get client IP address from request
- */
-function getClientIP(req: NextRequest): string | undefined {
-  // Check various headers for proxied requests
-  const forwarded = req.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
-  }
-
-  const realIP = req.headers.get('x-real-ip');
-  if (realIP) {
-    return realIP;
-  }
-
-  return undefined;
-}
