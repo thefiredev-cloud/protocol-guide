@@ -74,7 +74,7 @@ export function useSendHandler({ chat, narrative, taRef, appendAssistant, handle
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       appendAssistant(`Sorry, something went wrong: ${message}`);
-      setErrorBanner("Unable to reach Medic Bot. Please retry shortly.");
+      setErrorBanner("Unable to reach ProtocolGuide. Please retry shortly.");
     } finally {
       chat.setLoading(false);
       taRef.current?.focus();
