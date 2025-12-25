@@ -1,4 +1,4 @@
-const CACHE_NAME = "medic-bot-v2-chunked";
+const CACHE_NAME = "protocol-guide-v2-chunked";
 const CORE_ASSETS = [
   "/",
   "/icon.svg",
