@@ -1,6 +1,6 @@
 {
-  "name": "EMS Bot",
-  "description": "Medical AI assistant for LA County Fire Department paramedics with offline PWA capabilities, comprehensive protocol support, and accessibility features",
+  "name": "ProtocolGuide",
+  "description": "EMS protocol assistant powered by AI with offline PWA capabilities, comprehensive LA County protocol support, and accessibility features",
   "version": "2.0.0",
   "private": true,
   "scripts": {
