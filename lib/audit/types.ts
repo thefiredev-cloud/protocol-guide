@@ -22,7 +22,13 @@ export type AuditAction =
   | "api.error"
   | "api.validation_error"
   | "system.startup"
-  | "system.shutdown";
+  | "system.shutdown"
+  // Client-side audit actions
+  | "client.kb.search"
+  | "client.voice.start"
+  | "client.voice.transcribe"
+  | "client.offline.query"
+  | "client.protocol.expand";
 
 /**
  * Outcome status for audit events
