@@ -8,6 +8,7 @@ import { SettingsProvider, useSettings } from '../../contexts/settings-context';
 import { ChatbotLayout } from './chatbot-layout';
 import { KeyboardShortcuts } from './keyboard-shortcuts';
 import { OfflineIndicator } from './offline-indicator';
+import { SessionExpiryWarning } from './session-expiry-warning';
 
 interface RootLayoutContentProps {
   children: React.ReactNode;
