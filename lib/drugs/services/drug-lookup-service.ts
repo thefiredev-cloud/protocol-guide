@@ -3,6 +3,9 @@
  *
  * Provides drug information lookup by name (brand or generic).
  * Returns compact, field-friendly summaries for paramedic use.
+ *
+ * IMPORTANT: LA County scope enforcement is applied at lookup level.
+ * Unauthorized medications (ketamine, etc.) are blocked and alternatives suggested.
  */
 
 import type {
@@ -12,6 +15,11 @@ import type {
 } from '../types';
 import { isInLACountyFormulary } from '../types';
 import { getDrugDB } from '../storage/drug-database';
+import {
+  isLACountyUnauthorized,
+  getUnauthorizedReplacement,
+  isLACountyAuthorized,
+} from '../../formulary/la-county-formulary';
 
 // ============================================================================
 // SERVICE
