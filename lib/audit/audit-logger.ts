@@ -464,9 +464,8 @@ export class AuditLogger {
       }
     }
   }
-}
 
-/**
+  /**
    * Write a raw audit event (for client-synced events)
    */
   public async writeRawEvent(event: AuditEvent): Promise<void> {
