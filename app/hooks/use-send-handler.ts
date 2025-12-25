@@ -55,9 +55,12 @@ export function useSendHandler({ chat, narrative, taRef, appendAssistant, handle
           handleCitations,
           handleOrders,
           setErrorBanner,
+          onStreamStart: () => chat.setStreaming(true),
+          onStreamUpdate: (text: string) => chat.updateLastMessage(text),
+          onStreamEnd: () => chat.setStreaming(false),
         },
       }),
-    [appendAssistant, handleCitations, handleOrders, request, resetNarrative, setErrorBanner],
+    [appendAssistant, chat, handleCitations, handleOrders, request, resetNarrative, setErrorBanner],
   );
 
   return useCallback(async () => {
