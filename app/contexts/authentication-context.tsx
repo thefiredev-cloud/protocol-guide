@@ -25,6 +25,11 @@ interface AuthUser {
 }
 
 /**
+ * Session warning level
+ */
+export type SessionWarningLevel = 'none' | 'warning' | 'critical';
+
+/**
  * Auth context value
  */
 interface AuthContextType {
@@ -34,6 +39,10 @@ interface AuthContextType {
   login: (email: string, password: string, captchaToken?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
+  // Session expiry tracking
+  sessionWarning: SessionWarningLevel;
+  sessionExpiresAt: number | null;
+  dismissSessionWarning: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
