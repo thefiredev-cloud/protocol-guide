@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 /**
  * Storage keys for recent and favorite protocols
  */
-const STORAGE_KEY_RECENT = "medic-bot-recent-protocols";
-const STORAGE_KEY_FAVORITES = "medic-bot-favorite-protocols";
+const STORAGE_KEY_RECENT = "protocol-guide-recent-protocols";
+const STORAGE_KEY_FAVORITES = "protocol-guide-favorite-protocols";
 
 /**
  * Maximum number of recent protocols to store
