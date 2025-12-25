@@ -74,7 +74,7 @@ export function PWAInstallPrompt() {
       <div className="pwa-install-content">
         <Download size={24} className="pwa-install-icon" />
         <div className="pwa-install-text">
-          <h3 className="pwa-install-title">Install County Medic</h3>
+          <h3 className="pwa-install-title">Install ProtocolGuide</h3>
           <p className="pwa-install-description">
             Install for offline access and faster load times
           </p>
