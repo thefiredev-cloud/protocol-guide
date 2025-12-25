@@ -7,6 +7,9 @@
  * Data sources: RxNorm API, DDInter, OpenFDA
  */
 
+// Import from single source of truth for LA County formulary
+import { isLACountyAuthorized as checkLACountyAuth } from '../formulary/la-county-formulary';
+
 /**
  * Field summary bullet types for compact drug information
  */
