@@ -67,10 +67,18 @@ interface AuthProviderProps {
  * Auth provider component
  * Wraps application to provide authentication state
  */
+// Session duration constants (in milliseconds)
+const SESSION_DURATION_MS = 60 * 60 * 1000; // 60 minutes
+const WARNING_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes before expiry
+const CRITICAL_THRESHOLD_MS = 2 * 60 * 1000; // 2 minutes before expiry
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState<number | null>(null);
+  const [sessionWarning, setSessionWarning] = useState<SessionWarningLevel>('none');
+  const [warningDismissed, setWarningDismissed] = useState(false);
 
   /**
    * Check current session on mount
