@@ -77,8 +77,11 @@ export const ProtocolFormatter = memo(function ProtocolFormatter({
  * Main formatting function - parses protocol text into structured React elements
  */
 function formatProtocolText(text: string): React.ReactNode {
+  // SECURITY: Sanitize content first to prevent XSS
+  const sanitizedText = sanitizeProtocolContent(text);
+
   // Clean up the text
-  const cleanText = text
+  const cleanText = sanitizedText
     .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
     .replace(/\*\*(.+?)\*\*/g, "$1")
     .replace(/\*(.+?)\*/g, "$1")
