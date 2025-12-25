@@ -184,20 +184,7 @@ export const POST = withApiHandler(
  * Write a client audit event using the server-side audit logger
  */
 async function writeClientEvent(event: AuditEvent): Promise<void> {
-  // Use the audit logger's internal write mechanism
-  // We need to access it through the logger methods or directly write to file
-
-  // For now, use the error logging method which can handle arbitrary events
-  // In a more robust implementation, we'd add a writeRawEvent method to AuditLogger
-  await auditLogger.logError({
-    userId: event.userId,
-    sessionId: event.sessionId,
-    action: event.action,
-    resource: event.resource,
-    errorMessage: event.errorMessage || `Client event: ${event.action}`,
-    ipAddress: event.ipAddress,
-    userAgent: event.userAgent,
-  });
+  await auditLogger.writeRawEvent(event);
 }
 
 /**
