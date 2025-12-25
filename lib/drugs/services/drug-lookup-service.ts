@@ -151,6 +151,11 @@ export class DrugLookupService {
  * Format drug lookup result for chat response
  */
 export function formatDrugLookupForChat(result: DrugLookupResult): string {
+  // Handle scope-blocked medications first
+  if (result.scopeBlocked && result.scopeMessage) {
+    return `⚠️ ${result.scopeMessage}`;
+  }
+
   if (!result.found || !result.drug) {
     if (result.suggestions && result.suggestions.length > 0) {
       return `Drug not found. Did you mean: ${result.suggestions.join(', ')}?`;
