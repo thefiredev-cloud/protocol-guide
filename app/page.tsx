@@ -18,7 +18,7 @@ export default function Page() {
       <div className="chatbot-content">
         {!hasMessages ? (
           <div className="empty-state">
-            <div className="empty-state-title">LA County Protocol Assistant</div>
+            <div className="empty-state-title">ProtocolGuide</div>
             <p className="empty-state-text">
               Tap the microphone and describe your patient scenario.
               <br />
