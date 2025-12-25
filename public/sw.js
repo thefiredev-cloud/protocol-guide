@@ -201,7 +201,7 @@ async function syncPendingMessages() {
  */
 function openDatabase() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('medic-bot-offline', 1);
+    const request = indexedDB.open('protocol-guide-offline', 1);
 
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
