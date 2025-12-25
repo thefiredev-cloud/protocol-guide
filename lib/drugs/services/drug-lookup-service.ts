@@ -206,6 +206,16 @@ export function formatDrugLookupForChat(result: DrugLookupResult): string {
  * Format drug lookup result for function call response
  */
 export function formatDrugLookupForFunction(result: DrugLookupResult): Record<string, unknown> {
+  // Handle scope-blocked medications
+  if (result.scopeBlocked) {
+    return {
+      found: false,
+      scopeBlocked: true,
+      error: result.scopeMessage || 'Medication not authorized in LA County EMS',
+      suggestions: result.suggestions || [],
+    };
+  }
+
   if (!result.found || !result.drug) {
     return {
       found: false,
