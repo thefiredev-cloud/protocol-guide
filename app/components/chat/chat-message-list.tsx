@@ -33,7 +33,7 @@ const MemoizedMessageWrapper = memo(function MessageWrapper({
   );
 });
 
-// Thinking animation component
+// Thinking animation component (shown before streaming starts)
 const ThinkingIndicator = memo(function ThinkingIndicator() {
   return (
     <div className="msg assistant thinking-indicator" role="status" aria-label="AI is thinking">
@@ -47,6 +47,11 @@ const ThinkingIndicator = memo(function ThinkingIndicator() {
       </div>
     </div>
   );
+});
+
+// Streaming cursor component (shown at end of streaming message)
+const StreamingCursor = memo(function StreamingCursor() {
+  return <span className="streaming-cursor" aria-hidden="true" />;
 });
 
 // Memoize entire chat list
