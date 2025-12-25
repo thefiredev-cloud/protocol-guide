@@ -56,6 +56,8 @@ export function useVoiceInput(
           alert("Microphone access denied.\n\nTo fix:\n1. Click the lock icon in your browser's address bar\n2. Set Microphone to 'Allow'\n3. Refresh the page");
         } else if (error === "no-microphone") {
           alert("No microphone detected. Please connect a microphone and try again.");
+        } else if (error === "transcription-timeout") {
+          alert("Transcription timed out.\n\nThe server took too long to respond. Please try again with a shorter recording, or check your connection.");
         }
       },
     });
