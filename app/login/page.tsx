@@ -55,7 +55,7 @@ function LoginFormContent() {
 
       <div className="login-card">
         <div className="login-header">
-          <h1>County Medic</h1>
+          <h1>ProtocolGuide</h1>
           <h2>LA County Protocol Assistant</h2>
         </div>
 
