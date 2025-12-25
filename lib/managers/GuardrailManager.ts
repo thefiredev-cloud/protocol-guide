@@ -28,7 +28,21 @@ export type GuardrailCheck = GuardrailDetection & {
   corrections: GuardrailCorrection[];
 };
 
-const UNAUTHORIZED_MEDICATIONS = ["lorazepam", "diazepam", "ativan", "valium"] as const;
+// Medications NOT authorized in LA County EMS protocols
+// See lib/formulary/la-county-formulary.ts for authoritative source
+const UNAUTHORIZED_MEDICATIONS = [
+  // Benzodiazepines (except midazolam which IS authorized)
+  "lorazepam", "ativan",      // Use midazolam instead
+  "diazepam", "valium",       // Use midazolam instead
+  "alprazolam", "xanax",      // Use midazolam instead
+  "clonazepam", "klonopin",   // Use midazolam instead
+  // Ketamine - NOT in LA County protocols
+  "ketamine", "ketalar",      // Use midazolam for sedation
+  // Other unauthorized
+  "haloperidol", "haldol",    // Use olanzapine or midazolam
+  "etomidate",                // Not in LA County protocols
+  "propofol",                 // Not in LA County protocols
+] as const;
 const SCENE_SAFETY_TERMS = ["scene unsafe", "leave patient", "exit immediately", "retreat"] as const;
 // TODO: Use PEDIATRIC_TERMS for enhanced pediatric-specific guardrails in future
 // const PEDIATRIC_TERMS = ["pediatric", "child", "infant", "neonate", "mcg 1309", "color code"] as const;
