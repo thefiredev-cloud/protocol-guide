@@ -52,7 +52,7 @@ export class DrugLookupService {
     let normalizedFrom: string | undefined;
 
     if (drug) {
-      return this.buildResult(drug, undefined, enforceScope);
+      return this.buildResult(drug);
     }
 
     // Search for matches
