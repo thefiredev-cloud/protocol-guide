@@ -105,6 +105,58 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [user]);
 
   /**
+   * Check session expiry and update warning level
+   */
+  useEffect(() => {
+    if (!user || !sessionExpiresAt) {
+      setSessionWarning('none');
+      return;
+    }
+
+    const checkExpiry = () => {
+      const now = Date.now();
+      const timeUntilExpiry = sessionExpiresAt - now;
+
+      if (timeUntilExpiry <= 0) {
+        // Session expired - logout
+        logout();
+        return;
+      }
+
+      if (warningDismissed) {
+        // User dismissed warning, don't show again until critical
+        if (timeUntilExpiry <= CRITICAL_THRESHOLD_MS) {
+          setSessionWarning('critical');
+          setWarningDismissed(false); // Reset for critical
+        }
+        return;
+      }
+
+      if (timeUntilExpiry <= CRITICAL_THRESHOLD_MS) {
+        setSessionWarning('critical');
+      } else if (timeUntilExpiry <= WARNING_THRESHOLD_MS) {
+        setSessionWarning('warning');
+      } else {
+        setSessionWarning('none');
+      }
+    };
+
+    // Check immediately and every 30 seconds
+    checkExpiry();
+    const interval = setInterval(checkExpiry, 30 * 1000);
+
+    return () => clearInterval(interval);
+  }, [user, sessionExpiresAt, warningDismissed, logout]);
+
+  /**
+   * Dismiss session warning (until critical)
+   */
+  const dismissSessionWarning = useCallback(() => {
+    setWarningDismissed(true);
+    setSessionWarning('none');
+  }, []);
+
+  /**
    * Check if user has active session
    */
   async function checkSession() {
