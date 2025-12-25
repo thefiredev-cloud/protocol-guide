@@ -34,9 +34,13 @@
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.17.1",
     "@supabase/supabase-js": "^2.76.1",
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "idb": "^8.0.3",
+    "isomorphic-dompurify": "^2.34.0",
     "lucide-react": "^0.545.0",
     "minisearch": "^7.1.0",
     "next": "14.2.5",
@@ -47,10 +51,7 @@
     "tailwind-merge": "^3.4.0",
     "typescript": "^5.4.5",
     "web-vitals": "^5.1.0",
-    "zod": "^3.23.8",
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@axe-core/react": "^4.11.0",
