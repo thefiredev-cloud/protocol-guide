@@ -114,6 +114,11 @@ export interface DrugLookupResult {
   fieldBullets?: string[];          // Formatted bullet points
   suggestions?: string[];           // If not found, suggest similar drugs
   normalizedFrom?: string;          // If brand name was converted to generic
+  // LA County scope enforcement fields
+  scopeBlocked?: boolean;           // True if medication blocked due to LA County scope
+  scopeMessage?: string;            // Message explaining scope restriction
+  scopeWarning?: string;            // Warning if medication is not in formulary
+  laCountyAuthorized?: boolean;     // Whether medication is LA County authorized
 }
 
 /**
