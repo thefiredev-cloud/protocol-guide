@@ -164,8 +164,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const res = await fetch('/api/auth/me');
       const data = await res.json();
       setUser(data.user);
+      if (data.user) {
+        // Set session expiry to 60 minutes from now
+        setSessionExpiresAt(Date.now() + SESSION_DURATION_MS);
+        setWarningDismissed(false);
+      }
     } catch {
       setUser(null);
+      setSessionExpiresAt(null);
     } finally {
       setLoading(false);
     }
