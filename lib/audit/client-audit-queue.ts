@@ -429,9 +429,9 @@ export async function initClientAuditQueue(): Promise<void> {
 
     // Sync before page unload (best effort)
     window.addEventListener('beforeunload', () => {
-      // Use sendBeacon for reliable delivery
+      // Attempt sync if pending events exist
       queue.getPendingCount().then((count) => {
-        if (count > 0 && navigator.sendBeacon) {
+        if (count > 0) {
           queue.syncEvents().catch(() => {});
         }
       });
