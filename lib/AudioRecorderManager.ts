@@ -178,16 +178,25 @@ export class AudioRecorderManager {
   }
 
   private async transcribe(audioBlob: Blob): Promise<void> {
+    const TRANSCRIPTION_TIMEOUT_MS = 30000; // 30 seconds
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, TRANSCRIPTION_TIMEOUT_MS);
+
     try {
       console.log("[AudioRecorder] Sending to Whisper API...");
-      
+
       const formData = new FormData();
       formData.append("audio", audioBlob, "audio.webm");
 
       const response = await fetch("/api/transcribe", {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -196,7 +205,7 @@ export class AudioRecorderManager {
 
       const result = await response.json();
       const text = result.text?.trim();
-      
+
       if (text) {
         console.log("[AudioRecorder] Transcription:", text);
         this.events.onResult?.(text);
@@ -204,6 +213,15 @@ export class AudioRecorderManager {
         console.log("[AudioRecorder] No speech detected");
       }
     } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Check if aborted due to timeout
+      if (error instanceof Error && error.name === "AbortError") {
+        console.error("[AudioRecorder] Transcription timed out after 30s");
+        this.events.onError?.("transcription-timeout");
+        return;
+      }
+
       console.error("[AudioRecorder] Transcription failed:", error);
       this.events.onError?.(error instanceof Error ? error.message : "transcription-failed");
     }
