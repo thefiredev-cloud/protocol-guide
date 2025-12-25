@@ -86,12 +86,51 @@ export class RetrievalManager {
       context = pedLines + context;
     }
 
+    // Filter unauthorized medications from context before LLM injection
+    context = this.filterUnauthorizedMedications(context);
+
     // Convert to markdown if enabled
     if (useMarkdown) {
       context = this.convertToMarkdown(context, hits);
     }
 
     return { context, hits };
+  }
+
+  /**
+   * Filter unauthorized medications from context to prevent LLM hallucination.
+   * Replaces mentions with LA County authorized alternatives.
+   */
+  private filterUnauthorizedMedications(context: string): string {
+    let filtered = context;
+
+    // Build replacement patterns for unauthorized medications
+    const replacements: Array<{ pattern: RegExp; replacement: string }> = [];
+
+    for (const med of LA_COUNTY_UNAUTHORIZED_MEDICATIONS) {
+      const alternative = getUnauthorizedReplacement(med);
+      const replacement = alternative
+        ? `[NOT LA COUNTY - use ${alternative}]`
+        : `[NOT authorized in LA County EMS]`;
+
+      // Case-insensitive word boundary match
+      replacements.push({
+        pattern: new RegExp(`\\b${med}\\b`, "gi"),
+        replacement,
+      });
+    }
+
+    // Apply all replacements
+    for (const { pattern, replacement } of replacements) {
+      if (pattern.test(filtered)) {
+        this.logger.warn("Filtering unauthorized medication from context", {
+          pattern: pattern.source,
+        });
+        filtered = filtered.replace(pattern, replacement);
+      }
+    }
+
+    return filtered;
   }
 
   /**
