@@ -467,6 +467,14 @@ export class AuditLogger {
 }
 
 /**
+   * Write a raw audit event (for client-synced events)
+   */
+  public async writeRawEvent(event: AuditEvent): Promise<void> {
+    await this.writeEvent(event);
+  }
+}
+
+/**
  * Singleton instance (default configuration)
  */
 export const auditLogger = new AuditLogger();
