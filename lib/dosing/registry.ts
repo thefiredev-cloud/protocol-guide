@@ -44,12 +44,12 @@ export function createDefaultMedicationManager(): MedicationDosingManager {
   manager.register(new GlucagonCalculator());
   
   // Pain management
-  manager.register(new FentanylCalculator());
-  manager.register(new MorphineCalculator());
-  manager.register(new KetorolacCalculator());
+  manager.register(new FentanylCalculator()); // MCG 1317.19 - AUTHORIZED
+  manager.register(new MorphineCalculator()); // MCG 1317.27 - AUTHORIZED
+  manager.register(new KetorolacCalculator()); // MCG 1317.22 - AUTHORIZED
   manager.register(new AcetaminophenCalculator());
-  manager.register(new KetamineCalculator());
-  
+  // KetamineCalculator REMOVED - NOT authorized in LA County EMS
+
   // Seizure/Sedation
   manager.register(new MidazolamCalculator());
   
