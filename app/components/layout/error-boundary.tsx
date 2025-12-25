@@ -40,8 +40,12 @@ export class ErrorBoundary extends Component<Props, State> {
       errorInfo,
     });
 
-    // In production, send to error tracking service
-    // Example: Sentry, LogRocket, etc.
+    // Send to Sentry in production
+    Sentry.captureException(error, {
+      extra: {
+        componentStack: errorInfo.componentStack,
+      },
+    });
   }
 
   handleReset = (): void => {
