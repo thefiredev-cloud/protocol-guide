@@ -28,7 +28,7 @@ export function HealthStatusBanner({ hidden }: HealthStatusBannerProps) {
           setMessage(data.error?.message ?? fallbackMessage);
         }
       } catch (error: unknown) {
-        if (!cancelled) setMessage("Unable to reach Medic Bot health endpoint.");
+        if (!cancelled) setMessage("Unable to reach ProtocolGuide health endpoint.");
       }
     }
     void fetchHealth();
