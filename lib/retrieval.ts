@@ -203,7 +203,8 @@ const SYNONYM_RULES: readonly SynonymRule[] = [
   // ======== BEHAVIORAL/PSYCH ========
   {
     patterns: [/\bbehavioral\b/, /\bagitation\b/, /\bpsych\b/, /\bagitated\b/, /\bviolent\b/, /\bgoing crazy\b/, /\bout of control\b/, /\bpsychotic\b/, /\b5150\b/],
-    expansions: ["protocol 1209", "behavioral crisis", "psychiatric", "midazolam", "ketamine"],
+    // ketamine REMOVED - NOT authorized in LA County; use midazolam or olanzapine
+    expansions: ["protocol 1209", "behavioral crisis", "psychiatric", "midazolam", "olanzapine"],
   },
   {
     patterns: [/\bsuicidal\b/, /\bsuicide\b/, /\bwants to die\b/, /\bhurt themselves\b/, /\bself harm\b/],
