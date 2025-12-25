@@ -9,6 +9,7 @@ type ChatListProps = {
   onProtocolSelect: (key: string) => void;
   onExampleSelect?: (value: string) => void;
   loading?: boolean;
+  streaming?: boolean;
 };
 
 // Memoize individual message wrapper to prevent unnecessary re-renders
