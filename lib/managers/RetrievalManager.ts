@@ -9,6 +9,10 @@ import type { KBDoc } from "../../lib/retrieval";
 import { buildContext, searchKB } from "../../lib/retrieval";
 import { MarkdownPreprocessor } from "../../lib/services/chat/markdown-preprocessor";
 import type { TriageResult } from "../../lib/triage";
+import {
+  LA_COUNTY_UNAUTHORIZED_MEDICATIONS,
+  getUnauthorizedReplacement,
+} from "../../lib/formulary/la-county-formulary";
 
 export type RetrievalQuery = {
   rawText: string;
