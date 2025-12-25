@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from '@sentry/nextjs';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 
