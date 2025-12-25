@@ -249,15 +249,12 @@ export const LA_COUNTY_FORMULARY: string[] = [
   'tranexamic acid'
 ];
 
-// Import from single source of truth
-import { isLACountyAuthorized as checkLACountyAuth } from '../formulary/la-county-formulary';
-
 /**
  * Check if a drug is in LA County formulary
  * @deprecated Use isLACountyAuthorized from lib/formulary/la-county-formulary.ts
  */
 export function isInLACountyFormulary(drugName: string): boolean {
-  // Use the single source of truth
+  // Use the single source of truth (imported at top of file)
   return checkLACountyAuth(drugName);
 }
 
