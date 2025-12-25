@@ -4,8 +4,6 @@
  * HIPAA-compliant: validates and sanitizes before logging
  */
 
-import * as crypto from 'node:crypto';
-
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
