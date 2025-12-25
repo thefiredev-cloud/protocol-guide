@@ -32,6 +32,7 @@ export default function Page() {
             onProtocolSelect={controller.sendProtocolSelection}
             errorBanner={controller.errorBanner}
             loading={controller.chat.loading}
+            streaming={controller.chat.streaming}
           />
         )}
         <div ref={controller.endRef} />
