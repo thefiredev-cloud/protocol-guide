@@ -327,8 +327,9 @@ const SYNONYM_RULES: readonly SynonymRule[] = [
     expansions: ["fentanyl", "pain management", "protocol 1245"],
   },
   {
+    // Ketamine NOT authorized in LA County - redirect to authorized alternatives
     patterns: [/\bketamine\b/, /\bketalar\b/],
-    expansions: ["ketamine", "pain management", "sedation", "protocol 1245", "protocol 1209"],
+    expansions: ["midazolam", "sedation", "protocol 1209", "NOT authorized LA County"],
   },
   {
     patterns: [/\balbuterol\b/, /\bproventil\b/, /\bventolin\b/],
