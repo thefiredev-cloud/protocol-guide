@@ -42,7 +42,7 @@ const ThinkingIndicator = memo(function ThinkingIndicator() {
           <span className="thinking-dot"></span>
           <span className="thinking-dot"></span>
         </div>
-        <span className="thinking-text">Medic-Bot is analyzing...</span>
+        <span className="thinking-text">Analyzing...</span>
       </div>
     </div>
   );
