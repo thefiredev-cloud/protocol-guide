@@ -118,8 +118,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const timeUntilExpiry = sessionExpiresAt - now;
 
       if (timeUntilExpiry <= 0) {
-        // Session expired - logout
-        logout();
+        // Session expired - clear state and redirect
+        setUser(null);
+        setSessionExpiresAt(null);
+        window.location.href = '/login?expired=true';
         return;
       }
 
@@ -146,7 +148,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const interval = setInterval(checkExpiry, 30 * 1000);
 
     return () => clearInterval(interval);
-  }, [user, sessionExpiresAt, warningDismissed, logout]);
+  }, [user, sessionExpiresAt, warningDismissed]);
 
   /**
    * Dismiss session warning (until critical)
