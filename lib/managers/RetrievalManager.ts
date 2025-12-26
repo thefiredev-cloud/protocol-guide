@@ -22,6 +22,7 @@ export type RetrievalQuery = {
   triage?: TriageResult;
   maxChunks?: number;
   useMarkdown?: boolean; // Optional flag to enable markdown preprocessing
+  useEnhancedRetrieval?: boolean; // Use hybrid search + Haiku re-ranking
 };
 
 export type RetrievalResult = {
