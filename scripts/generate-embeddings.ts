@@ -393,22 +393,19 @@ async function validateEmbeddings(supabase: SupabaseClient): Promise<void> {
   log('Validating embeddings...');
 
   try {
-    const { data, error } = await supabase
+    const { count, error } = await supabase
       .from('protocol_embeddings')
-      .select('embedding_model, embedding_version, count:doc_id.count()', { count: 'exact' })
+      .select('*', { count: 'exact', head: true })
       .eq('embedding_model', EMBEDDING_MODEL)
-      .eq('embedding_version', EMBEDDING_VERSION)
-      .single();
+      .eq('embedding_version', EMBEDDING_VERSION);
 
     if (error) {
       log(`Validation query failed: ${error.message}`);
       return;
     }
 
-    if (data) {
-      log(`Total embeddings in database: ${data.count || 0}`);
-      log(`Model: ${data.embedding_model}, Version: ${data.embedding_version}`);
-    }
+    log(`Total embeddings in database: ${count || 0}`);
+    log(`Model: ${EMBEDDING_MODEL}, Version: ${EMBEDDING_VERSION}`);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     log(`Validation failed: ${errorMessage}`);
