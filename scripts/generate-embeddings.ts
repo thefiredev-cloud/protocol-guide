@@ -43,17 +43,18 @@ type KBDoc = {
 };
 
 type EmbeddingRecord = {
-  doc_id: string;
-  embedding: number[];
+  protocol_id: string;
+  doc_id: string; // Same as protocol_id for backward compatibility
+  title: string;
+  category: string;
+  subcategory?: string;
+  content: string;
   content_hash: string;
   content_preview: string;
+  embedding: number[];
   embedding_model: string;
   embedding_version: number;
-  metadata?: {
-    title: string;
-    category: string;
-    subcategory?: string;
-  };
+  metadata?: Record<string, unknown>;
 };
 
 type ProcessingStats = {
