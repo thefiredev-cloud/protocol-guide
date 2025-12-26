@@ -348,8 +348,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
-COMMENT ON FUNCTION get_embedding_stats IS
- Get comprehensive statistics about protocol embeddings including model breakdown.';
+COMMENT ON FUNCTION get_embedding_stats IS 'Get comprehensive statistics about protocol embeddings including model breakdown.';
 
 -- =============================================================================
 -- PERFORMANCE OPTIMIZATION
