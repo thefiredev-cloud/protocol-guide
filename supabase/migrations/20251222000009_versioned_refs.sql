@@ -5,25 +5,31 @@
 -- REFERENCE DOCUMENTS
 -- =============================================================================
 
--- Reference document categories
-CREATE TYPE ref_category AS ENUM (
-  'destination',      -- 500 series (Destination Policies)
-  'treatment',        -- 1200 series (Treatment Protocols)
-  'mcg',              -- 1300 series (Medication Cross-Reference)
-  'operational',      -- 800 series (Operational Policies)
-  'education',        -- 900 series (Education/Training)
-  'administrative'    -- 100-400 series
-);
+-- Reference document categories (idempotent)
+DO $$ BEGIN
+  CREATE TYPE ref_category AS ENUM (
+    'destination',      -- 500 series (Destination Policies)
+    'treatment',        -- 1200 series (Treatment Protocols)
+    'mcg',              -- 1300 series (Medication Cross-Reference)
+    'operational',      -- 800 series (Operational Policies)
+    'education',        -- 900 series (Education/Training)
+    'administrative'    -- 100-400 series
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
--- Reference document status
-CREATE TYPE ref_status AS ENUM (
-  'draft',
-  'pending_review',
-  'approved',
-  'effective',
-  'superseded',
-  'retired'
-);
+-- Reference document status (idempotent)
+DO $$ BEGIN
+  CREATE TYPE ref_status AS ENUM (
+    'draft',
+    'pending_review',
+    'approved',
+    'effective',
+    'superseded',
+    'retired'
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
 -- Main reference documents table
 CREATE TABLE IF NOT EXISTS reference_documents (
