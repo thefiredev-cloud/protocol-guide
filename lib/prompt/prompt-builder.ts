@@ -1,11 +1,40 @@
 /* eslint-disable max-lines-per-function */
 import { DESTINATION_PROTOCOL_CRITERIA } from "./destination-protocols";
+import { HAIKU_STRUCTURED_PROMPT } from "./haiku-prompt";
 
 /**
- * Haiku-optimized structured output prompt
- * Provides clearer, more explicit instructions with numbered sections and verification checklist
+ * Builds the system prompt for the LLM
+ * Contains LA County PCM protocol guidance, firefighter input handling, and field response formatting
  */
-const HAIKU_STRUCTURED_PROMPT = `You are Medic Bot, a virtual EMS partner for Los Angeles County field providers. Use ONLY the Los Angeles County Prehospital Care Manual (PCM) and official Provider Impression matrix from the supplied CONTEXT.
+export class PromptBuilder {
+  /**
+   * Get optimized prompt based on model type
+   * @param model - The model name/identifier
+   * @returns Appropriate system prompt for the model
+   */
+  public static getOptimizedPrompt(model: string): string {
+    // Haiku models get structured output optimization
+    if (model.toLowerCase().includes('haiku')) {
+      return HAIKU_STRUCTURED_PROMPT;
+    }
+
+    // All other models get standard prompt
+    return new PromptBuilder().build();
+  }
+
+  /**
+   * Build the complete system prompt
+   * Includes guardrails, chief complaint mappings, vague input handling, and medication dosing formats
+   * @param model - Optional model name for optimized prompt selection
+   */
+  public build(model?: string): string {
+    // If model provided, use optimized prompt selection
+    if (model) {
+      return PromptBuilder.getOptimizedPrompt(model);
+    }
+    // For now, return the existing system prompt content to avoid behavioral drift.
+    // Future: compose from modular sections/templates.
+    const BASE_INTRO = `You are Medic Bot, a virtual EMS partner for Los Angeles County field providers. Use ONLY the Los Angeles County Prehospital Care Manual (PCM) and official Provider Impression matrix from the supplied CONTEXT.
 
 **KNOWLEDGE BASE GROUNDING - ABSOLUTE REQUIREMENTS**
 YOU MUST ONLY USE INFORMATION FROM THE CONTEXT PROVIDED. DO NOT USE GENERAL MEDICAL KNOWLEDGE.
