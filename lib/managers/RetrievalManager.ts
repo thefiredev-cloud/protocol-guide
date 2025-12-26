@@ -2,20 +2,20 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { PediatricDoseCalculator } from "../../lib/clinical/pediatric-dose-calculator";
+import {
+  getUnauthorizedReplacement,
+  LA_COUNTY_UNAUTHORIZED_MEDICATIONS,
+} from "../../lib/formulary/la-county-formulary";
 import { createLogger } from "../../lib/log";
 import { EnvironmentManager } from "../../lib/managers/environment-manager";
 import { extractPediatricWeightMedQueries } from "../../lib/parsers/pediatric-weight-med";
 import type { KBDoc } from "../../lib/retrieval";
 import { buildContext, searchKB } from "../../lib/retrieval";
 import { MarkdownPreprocessor } from "../../lib/services/chat/markdown-preprocessor";
-import { HybridSearchService, type SearchResult } from "../../lib/services/retrieval/hybrid-search";
 import { HaikuReranker } from "../../lib/services/retrieval/haiku-reranker";
+import { HybridSearchService, type SearchResult } from "../../lib/services/retrieval/hybrid-search";
 import { QueryExpander } from "../../lib/services/retrieval/query-expander";
 import type { TriageResult } from "../../lib/triage";
-import {
-  LA_COUNTY_UNAUTHORIZED_MEDICATIONS,
-  getUnauthorizedReplacement,
-} from "../../lib/formulary/la-county-formulary";
 
 export type RetrievalQuery = {
   rawText: string;
@@ -108,7 +108,7 @@ export class RetrievalManager {
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {
     const limit = query.maxChunks ?? this.defaultLimit;
     const useMarkdown = query.useMarkdown ?? this.env.enableMarkdownPreprocessing;
-    const useEnhanced = query.useEnhancedRetrieval ?? this.env.useEnhancedRetrieval ?? false;
+    const useEnhanced = query.useEnhancedRetrieval ?? false;
 
     // Use enhanced retrieval if enabled
     if (useEnhanced) {
