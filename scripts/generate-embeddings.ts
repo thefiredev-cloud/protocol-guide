@@ -162,7 +162,7 @@ async function getExistingEmbeddings(supabase: SupabaseClient): Promise<Map<stri
 
   const { data, error } = await supabase
     .from('protocol_embeddings')
-    .select('doc_id, content_hash')
+    .select('protocol_id, content_hash')
     .eq('embedding_model', EMBEDDING_MODEL)
     .eq('embedding_version', EMBEDDING_VERSION);
 
@@ -173,7 +173,7 @@ async function getExistingEmbeddings(supabase: SupabaseClient): Promise<Map<stri
   const existingMap = new Map<string, string>();
   if (data) {
     for (const record of data) {
-      existingMap.set(record.doc_id, record.content_hash);
+      existingMap.set(record.protocol_id, record.content_hash);
     }
   }
 
