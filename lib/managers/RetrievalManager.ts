@@ -108,6 +108,12 @@ export class RetrievalManager {
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {
     const limit = query.maxChunks ?? this.defaultLimit;
     const useMarkdown = query.useMarkdown ?? this.env.enableMarkdownPreprocessing;
+    const useEnhanced = query.useEnhancedRetrieval ?? this.env.useEnhancedRetrieval ?? false;
+
+    // Use enhanced retrieval if enabled
+    if (useEnhanced) {
+      return this.enhancedSearch(query);
+    }
 
     let context = await buildContext(query.rawText, limit);
     const hits = await searchKB(query.rawText, limit);
