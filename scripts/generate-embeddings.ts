@@ -12,6 +12,18 @@
  * - Rate limiting and retry logic
  * - Progress tracking with console output
  *
+ * Database Schema (protocol_embeddings table):
+ * - protocol_id: Primary document identifier (mapped from doc.id)
+ * - doc_id: Same as protocol_id (for backward compatibility)
+ * - title, category, subcategory: Document metadata
+ * - content: Full document content
+ * - content_hash: SHA256 hash for change detection
+ * - content_preview: First 200 chars of content
+ * - embedding: 1536-dimensional vector
+ * - embedding_model: 'text-embedding-3-small'
+ * - embedding_version: Version number (currently 1)
+ * - metadata: JSONB field for additional data (keywords, etc.)
+ *
  * Usage:
  *   npx tsx scripts/generate-embeddings.ts
  *   npx tsx scripts/generate-embeddings.ts --limit=500
