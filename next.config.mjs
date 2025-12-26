@@ -214,6 +214,28 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Suppress Sentry CLI logs during build
+  silent: true,
+
+  // Upload source maps for better stack traces (requires SENTRY_AUTH_TOKEN)
+  org: "apex-u9",
+  project: "protocol-guide",
+
+  // Hide source maps from clients
+  hideSourceMaps: true,
+
+  // Disable telemetry
+  telemetry: false,
+
+  // Automatically instrument API routes
+  autoInstrumentServerFunctions: true,
+
+  // Automatically instrument middleware
+  autoInstrumentMiddleware: true,
+
+  // Tunnel through Next.js to avoid ad blockers
+  tunnelRoute: "/monitoring-tunnel",
+});
 
 
