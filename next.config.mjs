@@ -49,7 +49,7 @@ const productionCSP = [
   "script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval' https://js.hcaptcha.com https://newassets.hcaptcha.com", // Next.js + hCaptcha
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://newassets.hcaptcha.com", // CSS-in-JS + Google Fonts + hCaptcha
   "img-src 'self' data: https:",
-  "connect-src 'self' https://api.openai.com https://*.supabase.co https://login.microsoftonline.com https://fonts.googleapis.com https://hcaptcha.com https://*.hcaptcha.com", // Azure AD SSO + Google Fonts + hCaptcha
+  "connect-src 'self' https://api.openai.com https://*.supabase.co https://login.microsoftonline.com https://fonts.googleapis.com https://hcaptcha.com https://*.hcaptcha.com https://*.sentry.io https://*.ingest.us.sentry.io", // Azure AD SSO + Google Fonts + hCaptcha + Sentry
   "font-src 'self' data: https://fonts.gstatic.com",
   "frame-src https://newassets.hcaptcha.com", // hCaptcha iframe
   isNetlifyPreview ? "frame-ancestors 'self' https://app.netlify.com" : "frame-ancestors 'none'",
