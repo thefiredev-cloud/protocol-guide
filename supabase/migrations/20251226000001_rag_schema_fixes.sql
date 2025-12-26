@@ -239,7 +239,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION upsert_protocol_embedding IS 'Insert or update embedding if content hash changed. Now supports embedding_model and embedding_version for multi-model support.';
+COMMENT ON FUNCTION upsert_protocol_embedding(TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, vector, JSONB, TEXT, INTEGER) IS 'Insert or update embedding if content hash changed. Now supports embedding_model and embedding_version for multi-model support.';
 
 -- =============================================================================
 -- ADDITIONAL HELPER FUNCTIONS
