@@ -307,7 +307,7 @@ Example: ["myocardial infarction STEMI", "protocol 1211 cardiac chest pain", "ni
   private parseVariations(text: string): string[] {
     try {
       // Extract JSON array from response
-      const match = text.match(/\[(.*?)\]/s);
+      const match = text.match(/\[([\s\S]*?)\]/);
       if (!match) {
         throw new Error("No JSON array found in response");
       }
