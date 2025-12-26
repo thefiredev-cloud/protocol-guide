@@ -310,9 +310,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION delete_outdated_embeddings IS
- Delete embeddings with outdated model versions. 
- Returns count of deleted rows.';
+COMMENT ON FUNCTION delete_outdated_embeddings IS 'Delete embeddings with outdated model versions. Returns count of deleted rows.';
 
 -- Enhanced stats function including new columns
 CREATE OR REPLACE FUNCTION get_embedding_stats()
