@@ -137,8 +137,16 @@ export class HybridSearchService {
    * Perform semantic search using Supabase pgvector
    *
    * Uses cosine similarity to find semantically similar documents
+   *
+   * @param query - Search query string
+   * @param limit - Maximum number of results to return
+   * @param threshold - Minimum similarity threshold (0-1)
    */
-  async semanticSearch(query: string, limit = 20): Promise<SearchResult[]> {
+  async semanticSearch(
+    query: string,
+    limit = 20,
+    threshold = 0.7
+  ): Promise<SearchResult[]> {
     try {
       // Generate embedding for query
       const embedding = await this.generateEmbedding(query);
@@ -148,7 +156,7 @@ export class HybridSearchService {
 
       const { data, error } = await supabase.rpc('match_protocol_chunks', {
         query_embedding: embedding,
-        match_threshold: 0.7,
+        match_threshold: threshold,
         match_count: limit,
       });
 
@@ -162,25 +170,26 @@ export class HybridSearchService {
         return [];
       }
 
+      // Type definition for RPC response
+      type MatchProtocolChunk = {
+        chunk_id: string;
+        title: string;
+        content: string;
+        category: string;
+        subcategory?: string;
+        similarity: number;
+      };
+
       // Map results to SearchResult format
-      return data.map(
-        (item: {
-          chunk_id: string;
-          title: string;
-          content: string;
-          category: string;
-          subcategory?: string;
-          similarity: number;
-        }) => ({
-          id: item.chunk_id,
-          title: item.title,
-          category: item.category,
-          subcategory: item.subcategory,
-          content: item.content,
-          score: item.similarity,
-          source: 'semantic' as const,
-        })
-      );
+      return (data as MatchProtocolChunk[]).map((item) => ({
+        id: item.chunk_id,
+        title: item.title,
+        category: item.category,
+        subcategory: item.subcategory,
+        content: item.content,
+        score: item.similarity,
+        source: 'semantic' as const,
+      }));
     } catch (error) {
       this.logger.error('Semantic search error', { error });
       // Return empty array on error - hybrid search will fall back to lexical only
