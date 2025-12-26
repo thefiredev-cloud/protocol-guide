@@ -143,6 +143,125 @@ export class RetrievalManager {
   }
 
   /**
+   * Enhanced search using hybrid search (lexical + semantic) and Haiku re-ranking.
+   * Provides better semantic understanding of medical queries.
+   */
+  private async enhancedSearch(query: RetrievalQuery): Promise<RetrievalResult> {
+    const limit = query.maxChunks ?? this.defaultLimit;
+    const useMarkdown = query.useMarkdown ?? this.env.enableMarkdownPreprocessing;
+
+    this.logger.debug("Using enhanced retrieval pipeline", { query: query.rawText });
+
+    try {
+      // Step 1: Expand query with medical terminology variations
+      const expander = this.getQueryExpander();
+      const expandedQueries = await expander.expand(query.rawText);
+      this.logger.debug("Query expanded", { original: query.rawText, expanded: expandedQueries });
+
+      // Step 2: Run hybrid search (combines lexical + semantic)
+      const hybridService = this.getHybridSearch();
+      const searchResults = await hybridService.hybridSearch(expandedQueries.join(" "), {
+        limit: limit * 2, // Get more candidates for re-ranking
+        lexicalWeight: 0.4,
+        semanticWeight: 0.6,
+        similarityThreshold: 0.65,
+      });
+
+      // Convert SearchResult to KBDoc format
+      const candidateDocs: KBDoc[] = searchResults.map((r: SearchResult) => ({
+        id: r.id,
+        title: r.title,
+        category: r.category,
+        subcategory: r.subcategory,
+        content: r.content,
+      }));
+
+      // Step 3: Re-rank with Haiku for final selection
+      const reranker = this.getReranker();
+      const hits = await reranker.rerank(query.rawText, candidateDocs, limit);
+
+      this.logger.debug("Enhanced retrieval complete", {
+        candidateCount: candidateDocs.length,
+        finalCount: hits.length,
+      });
+
+      // Build context from re-ranked hits
+      let context = this.buildContextFromHits(hits);
+
+      // Inject critical protocol metadata
+      const criticalMetadata = this.extractCriticalMetadata(hits);
+      if (criticalMetadata) {
+        context = criticalMetadata + "\n\n" + context;
+      }
+
+      // Inject pediatric dosing if applicable
+      const extracted = extractPediatricWeightMedQueries(query.rawText);
+      if (extracted.length) {
+        const pedLines = buildPediatricLines(extracted);
+        context = pedLines + context;
+      }
+
+      // Filter unauthorized medications
+      context = this.filterUnauthorizedMedications(context);
+
+      // Convert to markdown if enabled
+      if (useMarkdown) {
+        context = this.convertToMarkdown(context, hits);
+      }
+
+      return { context, hits };
+    } catch (error) {
+      // Fallback to standard search on error
+      this.logger.error("Enhanced retrieval failed, falling back to standard search", { error });
+      return this.standardSearch(query);
+    }
+  }
+
+  /**
+   * Standard search without enhanced features (used as fallback)
+   */
+  private async standardSearch(query: RetrievalQuery): Promise<RetrievalResult> {
+    const limit = query.maxChunks ?? this.defaultLimit;
+    const useMarkdown = query.useMarkdown ?? this.env.enableMarkdownPreprocessing;
+
+    let context = await buildContext(query.rawText, limit);
+    const hits = await searchKB(query.rawText, limit);
+
+    const criticalMetadata = this.extractCriticalMetadata(hits);
+    if (criticalMetadata) {
+      context = criticalMetadata + "\n\n" + context;
+    }
+
+    const extracted = extractPediatricWeightMedQueries(query.rawText);
+    if (extracted.length) {
+      const pedLines = buildPediatricLines(extracted);
+      context = pedLines + context;
+    }
+
+    context = this.filterUnauthorizedMedications(context);
+
+    if (useMarkdown) {
+      context = this.convertToMarkdown(context, hits);
+    }
+
+    return { context, hits };
+  }
+
+  /**
+   * Build context string from KBDoc hits
+   */
+  private buildContextFromHits(hits: KBDoc[]): string {
+    if (!hits.length) return "No direct matches in knowledge base.";
+
+    const chunks = hits.map((d, i) => {
+      const trimmed = d.content.length > 3000 ? d.content.slice(0, 3000) + " …" : d.content;
+      return `#${i + 1} • ${d.title} [${d.category}${d.subcategory ? " / " + d.subcategory : ""}]\n${trimmed}`;
+    });
+
+    return chunks.join("\n\n---\n\n");
+  }
+
+  /**
    * Filter unauthorized medications from context to prevent LLM hallucination.
    * Replaces mentions with LA County authorized alternatives.
    */
