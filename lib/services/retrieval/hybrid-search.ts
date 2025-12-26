@@ -1,9 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import MiniSearch from 'minisearch';
 import OpenAI from 'openai';
 
 import { createLogger } from '../../log';
-import type { KBDoc } from '../../retrieval';
 import { searchKB } from '../../retrieval';
 
 // =============================================================================

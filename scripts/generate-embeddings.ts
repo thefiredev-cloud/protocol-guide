@@ -26,8 +26,8 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
-import * as path from 'path';
 import OpenAI from 'openai';
+import * as path from 'path';
 
 // =============================================================================
 // TYPES
