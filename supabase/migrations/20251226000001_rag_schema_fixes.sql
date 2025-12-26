@@ -161,10 +161,10 @@ BEGIN
 END;
 $$;
 
-COMMENT ON FUNCTION match_protocol_chunks IS
-  'Semantic search for protocol chunks using cosine similarity. ' ||
-  'Used by hybrid-search.ts for RAG retrieval. ' ||
-  'Returns chunk_id (doc_id), title, content, category, subcategory, and similarity score.';
+COMMENT ON FUNCTION match_protocol_chunks IS 'Semantic search for protocol chunks using cosine similarity. Used by hybrid-search.ts for RAG retrieval.';
+ Semantic search for protocol chunks using cosine similarity. 
+ Used by hybrid-search.ts for RAG retrieval. 
+ Returns chunk_id (doc_id), title, content, category, subcategory, and similarity score.';
 
 -- =============================================================================
 -- UPDATE EXISTING FUNCTIONS TO SUPPORT NEW COLUMNS
@@ -242,9 +242,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION upsert_protocol_embedding IS
-  'Insert or update embedding if content hash changed. ' ||
-  'Now supports embedding_model and embedding_version for multi-model support.';
+COMMENT ON FUNCTION upsert_protocol_embedding IS 'Insert or update embedding if content hash changed. Now supports embedding_model and embedding_version for multi-model support.';
 
 -- =============================================================================
 -- ADDITIONAL HELPER FUNCTIONS
@@ -291,8 +289,8 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 COMMENT ON FUNCTION get_embeddings_by_doc_id IS
-  'Get all embeddings for a document ID, optionally filtered by model. ' ||
-  'Returns metadata without heavy content field.';
+ Get all embeddings for a document ID, optionally filtered by model. 
+ Returns metadata without heavy content field.';
 
 -- Function to delete outdated embeddings
 CREATE OR REPLACE FUNCTION delete_outdated_embeddings(
@@ -315,8 +313,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION delete_outdated_embeddings IS
-  'Delete embeddings with outdated model versions. ' ||
-  'Returns count of deleted rows.';
+ Delete embeddings with outdated model versions. 
+ Returns count of deleted rows.';
 
 -- Enhanced stats function including new columns
 CREATE OR REPLACE FUNCTION get_embedding_stats()
@@ -355,7 +353,7 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 COMMENT ON FUNCTION get_embedding_stats IS
-  'Get comprehensive statistics about protocol embeddings including model breakdown.';
+ Get comprehensive statistics about protocol embeddings including model breakdown.';
 
 -- =============================================================================
 -- PERFORMANCE OPTIMIZATION
