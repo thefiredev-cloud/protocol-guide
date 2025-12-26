@@ -405,9 +405,13 @@ export class HybridSearchService {
   /**
    * Search using only semantic (vector) search
    * Useful for testing or when lexical search is not needed
+   *
+   * @param query - Search query string
+   * @param limit - Maximum number of results to return
+   * @param threshold - Minimum similarity threshold (0-1)
    */
-  async searchSemantic(query: string, limit = 20): Promise<SearchResult[]> {
-    return await this.semanticSearch(query, limit);
+  async searchSemantic(query: string, limit = 20, threshold = 0.7): Promise<SearchResult[]> {
+    return await this.semanticSearch(query, limit, threshold);
   }
 
   /**
