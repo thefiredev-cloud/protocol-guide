@@ -354,7 +354,7 @@ export class HybridSearchService {
       // Run both searches in parallel
       const [lexicalResults, semanticResults] = await Promise.all([
         this.lexicalSearch(query, limit * 2), // Get more candidates for better fusion
-        this.semanticSearch(query, limit * 2),
+        this.semanticSearch(query, limit * 2, similarityThreshold),
       ]);
 
       this.logger.debug('Search results retrieved', {
@@ -362,10 +362,8 @@ export class HybridSearchService {
         semanticCount: semanticResults.length,
       });
 
-      // Filter semantic results by similarity threshold
-      const filteredSemanticResults = semanticResults.filter(
-        (r) => r.score >= similarityThreshold
-      );
+      // Results are already filtered by threshold in semanticSearch
+      const filteredSemanticResults = semanticResults;
 
       // If both searches returned no results, return empty
       if (lexicalResults.length === 0 && filteredSemanticResults.length === 0) {
