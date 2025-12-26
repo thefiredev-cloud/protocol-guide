@@ -161,10 +161,7 @@ BEGIN
 END;
 $$;
 
-COMMENT ON FUNCTION match_protocol_chunks IS 'Semantic search for protocol chunks using cosine similarity. Used by hybrid-search.ts for RAG retrieval.';
- Semantic search for protocol chunks using cosine similarity. 
- Used by hybrid-search.ts for RAG retrieval. 
- Returns chunk_id (doc_id), title, content, category, subcategory, and similarity score.';
+COMMENT ON FUNCTION match_protocol_chunks IS 'Semantic search for protocol chunks using cosine similarity. Used by hybrid-search.ts for RAG retrieval. Returns chunk_id (doc_id), title, content, category, subcategory, and similarity score.';
 
 -- =============================================================================
 -- UPDATE EXISTING FUNCTIONS TO SUPPORT NEW COLUMNS
