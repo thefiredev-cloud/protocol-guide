@@ -5,9 +5,9 @@
  * retrieval enhancement into your search pipeline.
  */
 
-import { HaikuReranker, QueryExpander } from "./haiku-enhancer";
-import { searchKB } from "../../retrieval";
 import type { KBDoc } from "../../retrieval";
+import { searchKB } from "../../retrieval";
+import { HaikuReranker, QueryExpander } from "./haiku-enhancer";
 
 /**
  * Example 1: Basic Query Expansion

@@ -8,6 +8,9 @@ import { extractPediatricWeightMedQueries } from "../../lib/parsers/pediatric-we
 import type { KBDoc } from "../../lib/retrieval";
 import { buildContext, searchKB } from "../../lib/retrieval";
 import { MarkdownPreprocessor } from "../../lib/services/chat/markdown-preprocessor";
+import { HybridSearchService, type SearchResult } from "../../lib/services/retrieval/hybrid-search";
+import { HaikuReranker } from "../../lib/services/retrieval/haiku-reranker";
+import { QueryExpander } from "../../lib/services/retrieval/query-expander";
 import type { TriageResult } from "../../lib/triage";
 import {
   LA_COUNTY_UNAUTHORIZED_MEDICATIONS,
