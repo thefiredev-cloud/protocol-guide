@@ -6,6 +6,7 @@
  * healthcare industry standards for protecting PHI (Protected Health Information).
  */
 
+import { withSentryConfig } from "@sentry/nextjs";
 import crypto from 'crypto';
 
 const isNetlifyPreview = process.env.CONTEXT === "deploy-preview";
