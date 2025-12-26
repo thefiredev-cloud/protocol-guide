@@ -5,21 +5,27 @@
 -- MCI EVENT TRACKING
 -- =============================================================================
 
--- MCI level enum per Ref 519
-CREATE TYPE mci_level AS ENUM (
-  'level_1',   -- 5-10 patients
-  'level_2',   -- 11-25 patients
-  'level_3',   -- 26-100 patients
-  'level_4'    -- 100+ patients (catastrophic)
-);
+-- MCI level enum per Ref 519 (idempotent)
+DO $$ BEGIN
+  CREATE TYPE mci_level AS ENUM (
+    'level_1',   -- 5-10 patients
+    'level_2',   -- 11-25 patients
+    'level_3',   -- 26-100 patients
+    'level_4'    -- 100+ patients (catastrophic)
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
--- Triage category per START/JumpSTART
-CREATE TYPE triage_category AS ENUM (
-  'immediate',   -- Red - life threatening, immediate care needed
-  'delayed',     -- Yellow - serious but can wait
-  'minor',       -- Green - walking wounded
-  'deceased'     -- Black - dead or expectant
-);
+-- Triage category per START/JumpSTART (idempotent)
+DO $$ BEGIN
+  CREATE TYPE triage_category AS ENUM (
+    'immediate',   -- Red - life threatening, immediate care needed
+    'delayed',     -- Yellow - serious but can wait
+    'minor',       -- Green - walking wounded
+    'deceased'     -- Black - dead or expectant
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
 -- MCI events table
 CREATE TABLE IF NOT EXISTS mci_events (
