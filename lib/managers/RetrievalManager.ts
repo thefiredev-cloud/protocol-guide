@@ -64,10 +64,45 @@ export class RetrievalManager {
   private readonly logger = createLogger("RetrievalManager");
   private metadataCache: ProtocolMetadata[] | null = null;
 
+  // Enhanced retrieval components (lazy initialized)
+  private hybridSearch: HybridSearchService | null = null;
+  private reranker: HaikuReranker | null = null;
+  private queryExpander: QueryExpander | null = null;
+
   constructor(options?: { defaultLimit?: number }) {
     this.defaultLimit = options?.defaultLimit ?? 10;
     this.markdownPreprocessor = new MarkdownPreprocessor();
     this.env = EnvironmentManager.loadSafe();
+  }
+
+  /**
+   * Get or create hybrid search service
+   */
+  private getHybridSearch(): HybridSearchService {
+    if (!this.hybridSearch) {
+      this.hybridSearch = new HybridSearchService();
+    }
+    return this.hybridSearch;
+  }
+
+  /**
+   * Get or create Haiku re-ranker
+   */
+  private getReranker(): HaikuReranker {
+    if (!this.reranker) {
+      this.reranker = new HaikuReranker();
+    }
+    return this.reranker;
+  }
+
+  /**
+   * Get or create query expander
+   */
+  private getQueryExpander(): QueryExpander {
+    if (!this.queryExpander) {
+      this.queryExpander = new QueryExpander();
+    }
+    return this.queryExpander;
   }
 
   public async search(query: RetrievalQuery): Promise<RetrievalResult> {
