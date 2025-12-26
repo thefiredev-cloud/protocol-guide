@@ -70,7 +70,6 @@ type ProcessingStats = {
 
 const EMBEDDING_MODEL = 'text-embedding-3-small';
 const EMBEDDING_VERSION = 1;
-const EMBEDDING_DIMENSIONS = 1536;
 const MAX_INPUT_LENGTH = 8191; // OpenAI's max input length
 
 // Parse CLI arguments
