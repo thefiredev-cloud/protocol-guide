@@ -6,7 +6,7 @@
 -- USERS TABLE
 -- =============================================================================
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   -- Primary key
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
@@ -54,7 +54,7 @@ COMMENT ON COLUMN users.deleted_at IS 'Soft delete timestamp (preserve audit tra
 -- SESSIONS TABLE
 -- =============================================================================
 
-CREATE TABLE sessions (
+CREATE TABLE IF NOT EXISTS sessions (
   -- Primary key
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 

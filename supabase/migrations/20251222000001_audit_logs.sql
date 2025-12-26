@@ -50,7 +50,7 @@ EXCEPTION WHEN duplicate_object THEN null;
 END $$;
 
 -- Create the main audit_logs table
-CREATE TABLE audit_logs (
+CREATE TABLE IF NOT EXISTS audit_logs (
   -- Primary key and timestamp (immutable)
   event_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),

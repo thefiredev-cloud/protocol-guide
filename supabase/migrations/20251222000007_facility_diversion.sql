@@ -5,18 +5,21 @@
 -- DIVERSION STATUS TRACKING
 -- =============================================================================
 
--- Diversion type enum
-CREATE TYPE diversion_type AS ENUM (
-  'internal_disaster',    -- Complete ED closure
-  'saturation',           -- ED at capacity
-  'trauma_bypass',        -- Trauma center bypass
-  'stemi_bypass',         -- STEMI center bypass
-  'stroke_bypass',        -- Stroke center bypass
-  'pediatric_bypass',     -- Pediatric ED bypass
-  'burn_bypass',          -- Burn center bypass
-  'psych_bypass',         -- Psychiatric services bypass
-  'none'                  -- Normal operations
-);
+-- Diversion type enum (idempotent)
+DO $$ BEGIN
+  CREATE TYPE diversion_type AS ENUM (
+    'internal_disaster',    -- Complete ED closure
+    'saturation',           -- ED at capacity
+    'trauma_bypass',        -- Trauma center bypass
+    'stemi_bypass',         -- STEMI center bypass
+    'stroke_bypass',        -- Stroke center bypass
+    'pediatric_bypass',     -- Pediatric ED bypass
+    'burn_bypass',          -- Burn center bypass
+    'psych_bypass',         -- Psychiatric services bypass
+    'none'                  -- Normal operations
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
 -- Diversion status for each hospital
 CREATE TABLE IF NOT EXISTS facility_diversion_status (
