@@ -288,9 +288,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
-COMMENT ON FUNCTION get_embeddings_by_doc_id IS
- Get all embeddings for a document ID, optionally filtered by model. 
- Returns metadata without heavy content field.';
+COMMENT ON FUNCTION get_embeddings_by_doc_id IS 'Get all embeddings for a document ID, optionally filtered by model. Returns metadata without heavy content field.';
 
 -- Function to delete outdated embeddings
 CREATE OR REPLACE FUNCTION delete_outdated_embeddings(
