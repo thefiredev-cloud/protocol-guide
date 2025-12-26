@@ -6,39 +6,48 @@
 -- Enable UUID extension if not already enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Create enum types for audit actions and outcomes
-CREATE TYPE audit_action AS ENUM (
-  'user.login',
-  'user.logout',
-  'user.session.start',
-  'user.session.end',
-  'chat.query',
-  'chat.stream',
-  'dosing.calculate',
-  'dosing.list',
-  'protocol.view',
-  'protocol.search',
-  'auth.failure',
-  'auth.unauthorized',
-  'api.error',
-  'api.validation_error',
-  'system.startup',
-  'system.shutdown'
-);
+-- Create enum types for audit actions and outcomes (idempotent)
+DO $$ BEGIN
+  CREATE TYPE audit_action AS ENUM (
+    'user.login',
+    'user.logout',
+    'user.session.start',
+    'user.session.end',
+    'chat.query',
+    'chat.stream',
+    'dosing.calculate',
+    'dosing.list',
+    'protocol.view',
+    'protocol.search',
+    'auth.failure',
+    'auth.unauthorized',
+    'api.error',
+    'api.validation_error',
+    'system.startup',
+    'system.shutdown'
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
-CREATE TYPE audit_outcome AS ENUM (
-  'success',
-  'failure',
-  'partial'
-);
+DO $$ BEGIN
+  CREATE TYPE audit_outcome AS ENUM (
+    'success',
+    'failure',
+    'partial'
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
-CREATE TYPE user_role AS ENUM (
-  'paramedic',
-  'emt',
-  'medical_director',
-  'admin',
-  'guest'
-);
+DO $$ BEGIN
+  CREATE TYPE user_role AS ENUM (
+    'paramedic',
+    'emt',
+    'medical_director',
+    'admin',
+    'guest'
+  );
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
 -- Create the main audit_logs table
 CREATE TABLE audit_logs (
