@@ -293,17 +293,18 @@ async function upsertEmbeddings(
     }
 
     records.push({
-      doc_id: doc.id,
-      embedding,
+      protocol_id: doc.id,
+      doc_id: doc.id, // Same as protocol_id
+      title: doc.title,
+      category: doc.category,
+      subcategory: doc.subcategory || null,
+      content: doc.content,
       content_hash: generateContentHash(doc.content),
       content_preview: doc.content.substring(0, 200),
+      embedding,
       embedding_model: EMBEDDING_MODEL,
       embedding_version: EMBEDDING_VERSION,
-      metadata: {
-        title: doc.title,
-        category: doc.category,
-        subcategory: doc.subcategory,
-      },
+      metadata: doc.keywords ? { keywords: doc.keywords } : {},
     });
   }
 
@@ -314,7 +315,7 @@ async function upsertEmbeddings(
   const { error } = await supabase
     .from('protocol_embeddings')
     .upsert(records, {
-      onConflict: 'doc_id,embedding_model,embedding_version',
+      onConflict: 'protocol_id',
       ignoreDuplicates: false,
     });
 
