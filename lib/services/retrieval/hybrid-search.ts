@@ -293,8 +293,8 @@ export class HybridSearchService {
     options: HybridSearchOptions
   ): SearchResult[] {
     const {
-      lexicalWeight = 0.5,
-      semanticWeight = 0.5,
+      lexicalWeight = 0.4,   // Tuned: semantic slightly favored for medical context
+      semanticWeight = 0.6,
       limit = 20,
       rrfK = 60,
     } = options;
