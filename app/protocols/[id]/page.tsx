@@ -33,7 +33,7 @@ const MOCK_PROTOCOL = {
       id: 'assessment',
       title: 'Initial Assessment',
       subtitle: 'CPR, Defibrillation, Airway',
-      icon: MonitorHeart,
+      icon: HeartPulse,
       colorClass: 'text-blue-600 dark:text-blue-400',
       bgClass: 'bg-blue-100 dark:bg-blue-900/30',
       content: [
