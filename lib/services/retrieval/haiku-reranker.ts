@@ -1,13 +1,27 @@
 /**
  * Haiku-based Re-ranker for Medic-Bot
  * Uses Claude 3.5 Haiku for fast, cost-effective document re-ranking
+ * Includes LRU caching to reduce API calls
  */
+
+import { createRerankCache, LRUCache } from "@/lib/cache/CacheManager";
+import { createCacheKey } from "@/lib/cache/hash-utils";
 
 import type { KBDoc } from "../../retrieval";
 
 const ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1";
 const HAIKU_MODEL = "claude-3-5-haiku-20241022";
 const TIMEOUT_MS = 5000;
+
+// Module-level cache for reranked results (500 entries, 2h TTL)
+let rerankCache: LRUCache<string[]> | null = null;
+
+function getRerankCache(): LRUCache<string[]> {
+  if (!rerankCache) {
+    rerankCache = createRerankCache();
+  }
+  return rerankCache;
+}
 
 type HaikuResponse = {
   content: Array<{ type: string; text?: string }>;
