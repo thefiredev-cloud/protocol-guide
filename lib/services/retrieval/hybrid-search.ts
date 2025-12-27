@@ -125,9 +125,18 @@ export class HybridSearchService {
   }
 
   /**
-   * Generate query embedding using OpenAI
+   * Generate query embedding using OpenAI (with caching)
    */
   private async generateEmbedding(query: string): Promise<number[]> {
+    // Check cache first
+    const cache = getEmbeddingCache();
+    const cacheKey = createQueryCacheKey(query, this.embeddingModel);
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      this.logger.debug('Embedding cache hit', { query: query.substring(0, 50) });
+      return cached;
+    }
+
     try {
       const openai = this.getOpenAIClient();
 
@@ -137,7 +146,12 @@ export class HybridSearchService {
         encoding_format: 'float',
       });
 
-      return response.data[0].embedding;
+      const embedding = response.data[0].embedding;
+
+      // Cache successful embedding
+      cache.set(cacheKey, embedding);
+
+      return embedding;
     } catch (error) {
       this.logger.error('Failed to generate embedding', { error });
       throw new Error(
