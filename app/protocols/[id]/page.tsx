@@ -9,7 +9,7 @@ import {
   Droplets,
   Globe,
   Heart,
-  MonitorHeart,
+  HeartPulse,
   Pill,
 } from 'lucide-react';
 import Link from 'next/link';
