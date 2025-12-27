@@ -89,23 +89,21 @@ function MenuItem({
 
 export default function AccountPage() {
   const router = useRouter();
-  const authContext = useContext(AuthContext);
+  const { user: authUser, logout } = useAuth();
 
   const handleLogout = useCallback(async () => {
-    if (authContext?.signOut) {
-      await authContext.signOut();
-      router.push('/login');
-    }
-  }, [authContext, router]);
+    await logout();
+    router.push('/login');
+  }, [logout, router]);
 
-  // Mock user data (will be replaced with real auth data)
+  // User data from auth context with fallbacks
   const user = {
-    name: authContext?.user?.email?.split('@')[0] || 'Paramedic',
+    name: authUser?.fullName || authUser?.email?.split('@')[0] || 'Paramedic',
     department: 'LA County Fire Dept.',
     status: 'Active Duty',
     employeeId: 'LAC-FD-8942',
-    station: 'Station 12',
-    email: authContext?.user?.email || 'user@fire.lacounty.gov',
+    station: authUser?.stationId || 'Station 12',
+    email: authUser?.email || 'user@fire.lacounty.gov',
   };
 
   return (
