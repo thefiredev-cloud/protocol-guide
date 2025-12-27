@@ -121,16 +121,59 @@ export function MobileNavBar({ onMicClick }: MobileNavBarProps) {
     onSwipeRight: handleSwipeRight,
   });
 
+  const { tap } = useHapticFeedback();
+  const [micPressed, setMicPressed] = useState(false);
+
+  const handleMicPress = () => {
+    tap();
+    onMicClick?.();
+  };
+
+  // Split nav items: first 2 on left, last 2 on right (mic button in center)
+  const leftItems = navItems.slice(0, 2);
+  const rightItems = navItems.slice(2);
+
   return (
     <nav
       ref={navRef}
-      className="mobile-nav-bar"
+      className="mobile-nav-bar mobile-nav-bar-with-mic"
       role="navigation"
       aria-label="Primary navigation"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {navItems.map((item) => (
+      {/* Left side tabs: Assistant, Protocols */}
+      {leftItems.map((item) => (
+        <NavTab
+          key={item.href}
+          href={item.href}
+          icon={item.icon}
+          label={item.label}
+          active={pathname === item.href}
+          isOnline={isOnline}
+        />
+      ))}
+
+      {/* Central elevated mic button */}
+      <div className="nav-mic-container">
+        <button
+          type="button"
+          className={`nav-mic-button ${micPressed ? 'pressed' : ''}`}
+          aria-label="Voice input"
+          onPointerDown={() => {
+            setMicPressed(true);
+            handleMicPress();
+          }}
+          onPointerUp={() => setMicPressed(false)}
+          onPointerLeave={() => setMicPressed(false)}
+          onPointerCancel={() => setMicPressed(false)}
+        >
+          <Mic size={28} strokeWidth={2} aria-hidden={true} />
+        </button>
+      </div>
+
+      {/* Right side tabs: History, Account */}
+      {rightItems.map((item) => (
         <NavTab
           key={item.href}
           href={item.href}
