@@ -1637,6 +1637,59 @@ button:active:not(:disabled) {
   pointer-events: none;
 }
 
+/* Central Mic Button - Elevated Design */
+.mobile-nav-bar-with-mic {
+  justify-content: space-between;
+}
+
+.nav-mic-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+  position: relative;
+}
+
+.nav-mic-button {
+  position: absolute;
+  bottom: 16px;
+  width: 56px;
+  height: 56px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    0 4px 12px rgba(220, 38, 38, 0.4),
+    0 0 0 4px rgba(220, 38, 38, 0.15);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+}
+
+.nav-mic-button:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 16px rgba(220, 38, 38, 0.5),
+    0 0 0 6px rgba(220, 38, 38, 0.2);
+}
+
+.nav-mic-button:active,
+.nav-mic-button.pressed {
+  transform: scale(0.95);
+  box-shadow:
+    0 2px 8px rgba(220, 38, 38, 0.3),
+    0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+.nav-mic-button svg {
+  width: 28px;
+  height: 28px;
+}
+
 .nav-tab-icon {
   display: flex;
   align-items: center;
