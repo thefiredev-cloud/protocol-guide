@@ -1,0 +1,1771 @@
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Peds Destination</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'glow': '0 10px 15px -3px rgba(220, 38, 38, 0.1), 0 4px 6px -2px rgba(220, 38, 38, 0.05)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased selection:bg-red-100 selection:text-red-900">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="pt-16 pb-28 px-5 max-w-md mx-auto relative">
+<header class="mb-6 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 -ml-2 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ref. No. 510</h1>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm text-primary dark:text-red-400">
+<span class="material-symbols-outlined filled">bookmark</span>
+</button>
+</header>
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-soft border border-gray-200 dark:border-gray-700 mb-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-red-50 dark:bg-red-900/10 rounded-bl-full -mr-4 -mt-4 z-0"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="mb-4 relative">
+<div class="w-20 h-20 rounded-full bg-red-50 dark:bg-red-900/20 border-4 border-white dark:border-gray-700 shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[36px] filled">child_care</span>
+</div>
+<div class="absolute bottom-0 right-0 w-6 h-6 bg-blue-500 border-2 border-white dark:border-gray-700 rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-white text-[14px]">local_shipping</span>
+</div>
+</div>
+<h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Pediatric Patient Destination</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">Reference No. 510 • Administrative</p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">
+                    Protocol
+                </span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                    Pediatric
+                </span>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 mb-8 overflow-hidden">
+<div class="p-4 border-b border-gray-100 dark:border-gray-700">
+<h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Purpose</h3>
+<p class="text-sm text-gray-700 dark:text-gray-300 leading-normal">
+                To establish criteria for the destination of pediatric patients transported by EMS personnel.
+            </p>
+</div>
+<div class="p-4 bg-gray-50 dark:bg-gray-800/50">
+<h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Authority</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400 italic leading-normal">
+                Health and Safety Code, Division 2.5, Section 1798.
+            </p>
+</div>
+</div>
+<div class="bg-blue-50 dark:bg-blue-900/10 rounded-2xl p-4 border border-blue-100 dark:border-blue-900/30 mb-8">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400 shrink-0">verified</span>
+<div>
+<h3 class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1">Principle</h3>
+<p class="text-sm text-blue-900 dark:text-blue-200 leading-normal">
+                    The destination for pediatric patients shall be determined by the patient's condition and the specific capabilities of the receiving facility.
+                </p>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-base font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3 ml-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">menu_book</span> Definitions
+        </h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<details class="group">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 text-xs font-bold">
+                            B
+                        </div>
+<span class="text-sm font-semibold text-gray-900 dark:text-white">BRUE</span>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-900/20">
+<p class="mb-3 leading-normal"><strong class="text-gray-800 dark:text-gray-200">Brief Resolved Unexplained Event:</strong> An event occurring in an infant &lt;1 year of age when the observer reports a sudden, brief, and now resolved episode of one or more of the following:</p>
+<ul class="list-disc pl-5 space-y-1.5 text-xs leading-normal">
+<li>Cyanosis or pallor</li>
+<li>Absent, decreased, or irregular breathing</li>
+<li>Marked change in tone (hyper- or hypotonia)</li>
+<li>Altered level of responsiveness</li>
+</ul>
+</div>
+</details>
+<details class="group">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xs font-bold">
+                            E
+                        </div>
+<span class="text-sm font-semibold text-gray-900 dark:text-white">EDAP</span>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-900/20">
+<p class="leading-normal"><strong class="text-gray-800 dark:text-gray-200">Emergency Department Approved for Pediatrics:</strong> A hospital with an emergency department that has been approved by the EMS Agency to provide emergency care to pediatric patients.</p>
+</div>
+</details>
+<details class="group">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 text-xs font-bold">
+                            P
+                        </div>
+<span class="text-sm font-semibold text-gray-900 dark:text-white">PMC</span>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-900/20">
+<p class="leading-normal"><strong class="text-gray-800 dark:text-gray-200">Pediatric Medical Center:</strong> A hospital that has been designated by the EMS Agency to provide pediatric critical care.</p>
+</div>
+</details>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-base font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3 ml-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">policy</span> Policy Guidelines
+        </h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<details class="group" open="">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer bg-red-50/50 dark:bg-red-900/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-red-600 dark:text-red-400">local_hospital</span>
+<div>
+<p class="text-sm font-semibold text-gray-900 dark:text-white">Transport to PMC</p>
+<p class="text-[10px] text-red-600 dark:text-red-400 uppercase font-semibold mt-0.5">Critical Criteria</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+<p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-normal">Pediatric patients shall be transported to the most accessible PMC if they present with:</p>
+<ul class="space-y-3.5">
+<li class="flex gap-3 items-start">
+<span class="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+<span class="text-sm text-gray-600 dark:text-gray-400 leading-normal"><strong>Cardiopulmonary Arrest:</strong> Post-resuscitation return of spontaneous circulation (ROSC).</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+<span class="text-sm text-gray-600 dark:text-gray-400 leading-normal"><strong>Respiratory Failure:</strong> Require BVM ventilation or intubation.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+<span class="text-sm text-gray-600 dark:text-gray-400 leading-normal"><strong>Shock:</strong> Poor perfusion requiring fluid bolus.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+<span class="text-sm text-gray-600 dark:text-gray-400 leading-normal"><strong>Status Epilepticus:</strong> Continuous seizure activity.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+<span class="text-sm text-gray-600 dark:text-gray-400 leading-normal"><strong>BRUE:</strong> In infants &lt;12 months.</span>
+</li>
+</ul>
+</div>
+</details>
+<details class="group">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-400">emergency</span>
+<div>
+<p class="text-sm font-semibold text-gray-900 dark:text-white">Transport to Trauma Center</p>
+<p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-semibold mt-0.5">Trauma Criteria</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+<p class="text-sm text-gray-700 dark:text-gray-300 leading-normal">Pediatric patients meeting trauma center criteria and guidelines shall be transported to the designated Pediatric Trauma Center (PTC) per Reference No. 506.</p>
+</div>
+</details>
+<details class="group">
+<summary class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400">medical_services</span>
+<div>
+<p class="text-sm font-semibold text-gray-900 dark:text-white">Transport to EDAP</p>
+<p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-semibold mt-0.5">General Criteria</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+<p class="text-sm text-gray-700 dark:text-gray-300 leading-normal">All other pediatric patients not meeting PMC or Trauma criteria shall be transported to the most accessible EDAP.</p>
+</div>
+</details>
+</div>
+</div>
+<div class="mt-6 mb-8">
+<h3 class="text-base font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 text-center">Cross References</h3>
+<div class="flex flex-wrap gap-2 justify-center">
+<button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 shadow-sm flex items-center gap-1.5 hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                Ref. No. 502
+            </button>
+<button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 shadow-sm flex items-center gap-1.5 hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                Ref. No. 506
+            </button>
+<button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 shadow-sm flex items-center gap-1.5 hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                Ref. No. 808
+            </button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px] filled">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center">
+<button class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-glow hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+    // Check system preference
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+</body></html>
+
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Protocol Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="pt-16 pb-28 px-5 max-w-md mx-auto relative">
+<header class="mb-8 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 -ml-2 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">TP-1244</h1>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm text-primary dark:text-red-400">
+<span class="material-symbols-outlined filled">bookmark</span>
+</button>
+</header>
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-soft border border-gray-200 dark:border-gray-700 mb-8">
+<div class="flex flex-col items-center text-center">
+<div class="relative mb-4">
+<div class="w-24 h-24 rounded-full bg-red-50 dark:bg-red-900/20 border-4 border-white dark:border-gray-600 shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[40px] filled">cardiology</span>
+</div>
+<div class="absolute bottom-1 right-1 w-6 h-6 bg-blue-500 border-2 border-white dark:border-gray-800 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[14px]">info</span>
+</div>
+</div>
+<h2 class="text-xl font-bold text-gray-900 dark:text-white">Cardiac Arrest</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Adult Medical • Standing Order</p>
+<div class="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">
+                ALS Priority
+            </div>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 grid grid-cols-2 gap-4">
+<div class="text-center p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+<p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-400 font-semibold mb-1">Effective Date</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200">Jan 1, 2024</p>
+</div>
+<div class="text-center p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+<p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-400 font-semibold mb-1">Scope</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200">County-Wide</p>
+</div>
+</div>
+<div class="mt-4 text-center p-3 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-900/30">
+<p class="text-[10px] uppercase tracking-wider text-yellow-600 dark:text-yellow-500 font-semibold mb-1">Critical Consideration</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200">Minimize interruptions in chest compressions</p>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">Treatment Sequence</h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">monitor_heart</span>
+</div>
+<div class="flex-1">
+<p class="text-base font-medium text-gray-900 dark:text-white">Initial Assessment</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">CPR, Defibrillation, Airway</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">expand_more</span>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="flex-1">
+<p class="text-base font-medium text-gray-900 dark:text-white">Vascular Access</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">IV/IO Establishment</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">expand_more</span>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">medication</span>
+</div>
+<div class="flex-1">
+<p class="text-base font-medium text-gray-900 dark:text-white">Medication Administration</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Epinephrine, Amiodarone details</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">expand_more</span>
+</button>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">Pharmacology</h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-base font-medium text-gray-900 dark:text-white">Epinephrine (1:10,000)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-mono bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">1mg</span>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-orange-500"></span>
+<span class="text-base font-medium text-gray-900 dark:text-white">Amiodarone</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-mono bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">300mg</span>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+</button>
+</div>
+</div>
+<div class="mt-8 flex flex-col items-center">
+<button class="text-white font-semibold text-sm py-3 px-6 rounded-xl hover:bg-red-700 transition-colors w-full bg-primary shadow-lg shadow-red-500/30 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">timer</span>
+            Start Resuscitation Timer
+        </button>
+<p class="mt-6 text-[11px] text-gray-400 text-center leading-relaxed">
+            Reference: LA County Prehospital Care Manual<br/>
+            Always defer to base hospital for deviation.
+        </p>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px] filled">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center">
+<button class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-red-600/30 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+    // Check system preference
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+</body></html>
+
+<!-- Protocol Categories Browse -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Protocol Categories Browse</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#dc2626",
+                        "primary-dark": "#b91c1c",
+                        "secondary": "#64748b",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "surface-input-light": "#f1f5f9",
+                        "surface-input-dark": "#334155",
+                        "text-primary-light": "#0f172a",
+                        "text-primary-dark": "#f8fafc",
+                        "text-secondary-light": "#64748b",
+                        "text-secondary-dark": "#94a3b8",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#334155",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }.snap-x {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark font-sans min-h-screen pb-24 selection:bg-primary selection:text-white antialiased">
+<header class="sticky top-0 z-40 bg-surface-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-border-light dark:border-border-dark transition-colors duration-200">
+<div class="flex items-center justify-between px-5 pt-12 pb-4">
+<div>
+<h1 class="text-2xl font-bold tracking-tight text-text-primary-light dark:text-text-primary-dark">Protocol Library</h1>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<p class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">LA County DHS • Online</p>
+</div>
+</div>
+<button class="p-2 -mr-2 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<div class="px-5 pb-4">
+<div class="flex items-center gap-3">
+<div class="relative flex-1 group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-[20px] group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-input-light dark:bg-surface-input-dark border-transparent focus:border-primary focus:ring-1 focus:ring-primary text-sm font-medium placeholder:text-text-secondary-light/70 dark:placeholder:text-text-secondary-dark/70 text-text-primary-light dark:text-text-primary-dark transition-all shadow-sm" placeholder="Search protocols..." type="text"/>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-xl bg-surface-input-light dark:bg-surface-input-dark text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary active:bg-slate-200 dark:active:bg-slate-700 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+</header>
+<main class="w-full max-w-2xl mx-auto">
+<div class="pt-6">
+<div class="flex items-center justify-between px-5 pb-3">
+<h3 class="text-xs font-semibold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">Recently Viewed</h3>
+</div>
+<div class="flex gap-4 overflow-x-auto px-5 pb-6 no-scrollbar snap-x snap-mandatory">
+<button class="snap-start shrink-0 w-64 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:scale-[0.98] transition-transform text-left group hover:border-primary/30">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined text-[18px]">personal_injury</span>
+</div>
+<span class="text-[11px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wide">Trauma</span>
+</div>
+<span class="text-[10px] font-medium text-text-secondary-light dark:text-text-secondary-dark bg-surface-input-light dark:bg-surface-input-dark px-2 py-0.5 rounded-full">TP 1244</span>
+</div>
+<h4 class="font-bold text-base leading-snug mb-1 text-text-primary-light dark:text-text-primary-dark group-hover:text-primary transition-colors">Traumatic Cardiac Arrest</h4>
+<div class="flex items-center gap-1 text-xs text-text-secondary-light dark:text-text-secondary-dark mt-2">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>2m ago</span>
+</div>
+</button>
+<button class="snap-start shrink-0 w-64 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:scale-[0.98] transition-transform text-left group hover:border-primary/30">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-[18px]">ecg_heart</span>
+</div>
+<span class="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wide">Cardiac</span>
+</div>
+<span class="text-[10px] font-medium text-text-secondary-light dark:text-text-secondary-dark bg-surface-input-light dark:bg-surface-input-dark px-2 py-0.5 rounded-full">TP 1210</span>
+</div>
+<h4 class="font-bold text-base leading-snug mb-1 text-text-primary-light dark:text-text-primary-dark group-hover:text-primary transition-colors">STEMI (ST-Elevation MI)</h4>
+<div class="flex items-center gap-1 text-xs text-text-secondary-light dark:text-text-secondary-dark mt-2">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>1h ago</span>
+</div>
+</button>
+<button class="snap-start shrink-0 w-64 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:scale-[0.98] transition-transform text-left group hover:border-primary/30">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-[18px]">pill</span>
+</div>
+<span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Meds</span>
+</div>
+<span class="text-[10px] font-medium text-text-secondary-light dark:text-text-secondary-dark bg-surface-input-light dark:bg-surface-input-dark px-2 py-0.5 rounded-full">Rx</span>
+</div>
+<h4 class="font-bold text-base leading-snug mb-1 text-text-primary-light dark:text-text-primary-dark group-hover:text-primary transition-colors">Epinephrine (Adrenaline)</h4>
+<div class="flex items-center gap-1 text-xs text-text-secondary-light dark:text-text-secondary-dark mt-2">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>4h ago</span>
+</div>
+</button>
+</div>
+</div>
+<div class="w-full px-5">
+<div class="h-px bg-border-light dark:bg-border-dark w-full"></div>
+</div>
+<div class="pt-6 px-5 pb-8">
+<h3 class="text-xs font-semibold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-4">All Categories</h3>
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">cardiology</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Cardiac</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">15 Protocols</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">personal_injury</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Trauma / Burns</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">8 Protocols</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">child_care</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Pediatrics</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">12 Protocols</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">medical_services</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">General Medical</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">24 Protocols</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">pill</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Pharmacology</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">50+ Medications</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">vaccines</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Procedures</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">18 Guidelines</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+<button class="flex items-center w-full p-3.5 rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400 shrink-0 transition-transform duration-300">
+<span class="material-symbols-outlined text-[24px]">policy</span>
+</div>
+<div class="ml-4 flex-1 text-left">
+<h4 class="text-[15px] font-semibold text-text-primary-light dark:text-text-primary-dark">Admin Policies</h4>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-0.5">Department Standards</p>
+</div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+</div>
+</button>
+</div>
+</div>
+<div class="pt-2 pb-6 flex justify-center opacity-40">
+<div class="text-[10px] text-text-secondary-light dark:text-text-secondary-dark font-semibold uppercase tracking-widest flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+             Powered by ImageTrend Elite
+        </div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full bg-surface-light/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-border-light dark:border-border-dark pb-safe-area flex justify-around z-50 h-[84px] items-center pb-2">
+<a class="flex flex-col items-center justify-center gap-1 w-20 h-full text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[26px] group-hover:-translate-y-0.5 transition-transform duration-200">chat_bubble</span>
+<span class="text-[10px] font-medium">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-20 h-full text-primary hover:text-primary-dark transition-colors group" href="#">
+<span class="material-symbols-outlined text-[26px] group-hover:-translate-y-0.5 transition-transform duration-200" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[10px] font-medium">Browse</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-20 h-full text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[26px] group-hover:-translate-y-0.5 transition-transform duration-200">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</a>
+</nav>
+</body></html>
+
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Chat Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'glow': '0 0 15px rgba(220, 38, 38, 0.3)',
+                    },
+                    padding: {
+                        'safe': 'env(safe-area-inset-bottom)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            min-height: max(884px, 100dvh);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased overflow-hidden flex flex-col">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="fixed top-12 left-0 right-0 z-40 px-5 pt-4 pb-2 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<header class="flex justify-between items-center max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-primary border border-red-200 dark:border-red-900/50">
+<span class="material-symbols-outlined filled text-[20px]">local_hospital</span>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">Protocol Assistant</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Online • AI Support Active</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+</div>
+<div class="flex-1 overflow-y-auto pt-32 pb-44 px-5 max-w-md mx-auto w-full">
+<div class="flex justify-center mb-6">
+<span class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Today, 9:41 AM</span>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[85%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+                    Hello Paramedic Doe. I'm ready to assist with LA County PCM protocols. What's the patient's status?
+                </p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-6 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    Adult male, 55yo. Presenting with crushing chest pain and shortness of breath. BP 145/90.
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1 flex items-center gap-1">
+                9:42 AM <span class="material-symbols-outlined text-[12px]">done_all</span>
+</span>
+</div>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[90%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                    Reference <strong class="text-primary font-bold">TP 1244: Cardiac Chest Pain</strong>.
+                </p>
+<ul class="space-y-2 mb-3">
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">1.</span>
+<span>Administer Oxygen to maintain O2 sat ≥ 94%.</span>
+</li>
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">2.</span>
+<span>Aspirin 324mg PO (chewable), if not taken.</span>
+</li>
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">3.</span>
+<span>Nitroglycerin 0.4mg SL q 5 min (max 3 doses) assuming SBP &gt; 100.</span>
+</li>
+</ul>
+<div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+<button class="flex items-center gap-2 text-primary dark:text-red-400 text-xs font-semibold hover:underline">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                        View Full Protocol 1244
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-2 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    Are there contraindications for Nitro?
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1">Delivered</span>
+</div>
+</div>
+<div class="flex gap-3 mb-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-soft">
+<div class="flex space-x-1">
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-[85px] left-0 w-full px-5 z-40">
+<div class="max-w-md mx-auto">
+<div class="relative flex items-end gap-2">
+<div class="flex-1 bg-white dark:bg-gray-800 rounded-3xl shadow-lg border border-gray-200 dark:border-gray-700 flex items-center p-1.5 pl-4 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+<input class="w-full bg-transparent border-none p-0 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0" placeholder="Ask about a protocol..." type="text"/>
+<button class="p-2 rounded-full text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+</div>
+<button class="w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-red-600/20 flex items-center justify-center hover:bg-red-700 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px] ml-0.5">send</span>
+</button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined filled text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center group">
+<div class="absolute inset-0 bg-red-500/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform"></div>
+<button class="relative w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-red-600/40 hover:scale-105 transition-transform active:scale-95 border-2 border-white dark:border-gray-900">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+    // Check system preference
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+</body></html>
+
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Chat Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'glow': '0 0 15px rgba(220, 38, 38, 0.3)',
+                    },
+                    padding: {
+                        'safe': 'env(safe-area-inset-bottom)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased overflow-hidden flex flex-col">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="fixed top-12 left-0 right-0 z-40 px-5 pt-4 pb-2 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<header class="flex justify-between items-center max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-primary border border-red-200 dark:border-red-900/50">
+<span class="material-symbols-outlined filled text-[20px]">local_hospital</span>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">Protocol Assistant</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Online • AI Support Active</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+</div>
+<div class="flex-1 overflow-y-auto pt-32 pb-44 px-5 max-w-md mx-auto w-full">
+<div class="flex justify-center mb-6">
+<span class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Today, 9:41 AM</span>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[85%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+                    Hello Paramedic Doe. I'm ready to assist with LA County PCM protocols. What's the patient's status?
+                </p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-6 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    Patient in cardiac arrest. What are the inclusion criteria for ECPR?
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1 flex items-center gap-1">
+                9:42 AM <span class="material-symbols-outlined text-[12px]">done_all</span>
+</span>
+</div>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[90%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                    Reference <strong class="text-primary font-bold">TP 1318: ECPR Patient Algorithm</strong>.
+                </p>
+<ul class="space-y-2 mb-3">
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">1.</span>
+<span>Age 18-60 years.</span>
+</li>
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">2.</span>
+<span>Witnessed arrest with bystander CPR.</span>
+</li>
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">3.</span>
+<span>Persistent VF or Pulseless VT.</span>
+</li>
+<li class="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+<span class="text-primary font-bold">4.</span>
+<span>ETA to ECPR Receiving Center ≤ 30 min.</span>
+</li>
+</ul>
+<div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+<button class="flex items-center gap-2 text-primary dark:text-red-400 text-xs font-semibold hover:underline">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                        View Full Protocol 1318
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-2 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    What are the exclusion criteria?
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1">Delivered</span>
+</div>
+</div>
+<div class="flex gap-3 mb-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-soft">
+<div class="flex space-x-1">
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+<div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-[85px] left-0 w-full px-5 z-40">
+<div class="max-w-md mx-auto">
+<div class="relative flex items-end gap-2">
+<div class="flex-1 bg-white dark:bg-gray-800 rounded-3xl shadow-lg border border-gray-200 dark:border-gray-700 flex items-center p-1.5 pl-4 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+<input class="w-full bg-transparent border-none p-0 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0" placeholder="Ask about a protocol..." type="text"/>
+<button class="p-2 rounded-full text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+</div>
+<button class="w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-red-600/20 flex items-center justify-center hover:bg-red-700 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px] ml-0.5">send</span>
+</button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined filled text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center group">
+<div class="absolute inset-0 bg-red-500/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform"></div>
+<button class="relative w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-red-600/40 hover:scale-105 transition-transform active:scale-95 border-2 border-white dark:border-gray-900">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+    // Check system preference
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+</body></html>
+
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Chat Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'glow': '0 0 15px rgba(220, 38, 38, 0.3)',
+                    },
+                    padding: {
+                        'safe': 'env(safe-area-inset-bottom)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased overflow-hidden flex flex-col">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="fixed top-12 left-0 right-0 z-40 px-5 pt-4 pb-2 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<header class="flex justify-between items-center max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-primary border border-red-200 dark:border-red-900/50">
+<span class="material-symbols-outlined filled text-[20px]">local_hospital</span>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">Protocol Assistant</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Online • AI Support Active</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+</div>
+<div class="flex-1 overflow-y-auto pt-32 pb-44 px-5 max-w-md mx-auto w-full">
+<div class="flex justify-center mb-6">
+<span class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Today, 9:41 AM</span>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[85%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+                    Hello Paramedic Doe. I'm ready to assist with LA County PCM protocols. What's the patient's status?
+                </p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-6 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    Patient in cardiac arrest. What are the ECPR guidelines?
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1 flex items-center gap-1">
+                9:42 AM <span class="material-symbols-outlined text-[12px]">done_all</span>
+</span>
+</div>
+</div>
+<div class="flex gap-3 mb-6">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[90%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                    Reference <strong class="text-primary font-bold">TP 1318: ECPR Patient Algorithm</strong>.
+                </p>
+<div class="space-y-4 mb-3">
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Scene Time</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+            Limit scene time to <span class="font-semibold text-gray-800 dark:text-gray-200">≤ 10 minutes</span> if ROSC is not achieved.
+        </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Epinephrine Doses</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+            Administer a maximum of <span class="font-semibold text-gray-800 dark:text-gray-200">3 doses</span> (1mg each) prior to transport.
+        </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Advanced Airway</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+            Insert <span class="font-semibold text-gray-800 dark:text-gray-200">iGel or King Airway</span>. Do not delay transport for intubation.
+        </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Communication</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+            Early notification to <span class="font-semibold text-gray-800 dark:text-gray-200">ECPR Receiving Center</span> is critical. Provide ETA.
+        </p>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+<button class="flex items-center gap-2 text-primary dark:text-red-400 text-xs font-semibold hover:underline">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                        View Full Protocol 1318
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mb-2 flex-row-reverse">
+<div class="flex flex-col gap-1 max-w-[85%] items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+<p class="text-sm leading-relaxed">
+                    What are the criteria for prehospital blood transfusion?
+                </p>
+</div>
+<span class="text-[10px] text-gray-400 mr-1">Delivered</span>
+</div>
+</div>
+<div class="flex gap-3 mb-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
+<span class="material-symbols-outlined text-primary text-[16px] filled">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[90%]">
+<span class="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+<p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                        Reference <strong class="text-primary font-bold">Prehospital Blood Transfusion Protocol</strong>.
+                    </p>
+<div class="space-y-4 mb-3">
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Hemorrhagic Shock</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+                Patient must have Hemorrhagic Shock due to <span class="font-semibold text-gray-800 dark:text-gray-200">Severe Traumatic Injury</span> or <span class="font-semibold text-gray-800 dark:text-gray-200">Post-partum Hemorrhage</span>.
+            </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Physiological Criteria</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+<span class="font-semibold text-gray-800 dark:text-gray-200">SBP &lt; 90 AND HR ≥ 110</span> OR SBP &lt; 70 mmHg or unable to obtain.
+            </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Traumatic Arrest</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+                Criteria is met if traumatic arrest is <span class="font-semibold text-gray-800 dark:text-gray-200">witnessed by EMS</span>.
+            </p>
+</div>
+<div class="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50">
+<h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">Exclusions</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+<span class="font-semibold text-gray-800 dark:text-gray-200">Pediatric patient (≤14 years)</span> or isolated head injury / ground level fall / patient refusal.
+            </p>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+<button class="flex items-center gap-2 text-primary dark:text-red-400 text-xs font-semibold hover:underline">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                            View Full Protocol
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-[85px] left-0 w-full px-5 z-40">
+<div class="max-w-md mx-auto">
+<div class="relative flex items-end gap-2">
+<div class="flex-1 bg-white dark:bg-gray-800 rounded-3xl shadow-lg border border-gray-200 dark:border-gray-700 flex items-center p-1.5 pl-4 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+<input class="w-full bg-transparent border-none p-0 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0" placeholder="Ask about a protocol..." type="text"/>
+<button class="p-2 rounded-full text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+</div>
+<button class="w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-red-600/20 flex items-center justify-center hover:bg-red-700 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px] ml-0.5">send</span>
+</button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined filled text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center group">
+<div class="absolute inset-0 bg-red-500/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform"></div>
+<button class="relative w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-red-600/40 hover:scale-105 transition-transform active:scale-95 border-2 border-white dark:border-gray-900">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+    // Check system preference
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+</body></html>
+
+<!-- Account Information Dashboard -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProtocolGuide - Account Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#dc2626", 
+                        "background-light": "#f9fafb", 
+                        "background-dark": "#111827", 
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#111827",
+                        "text-subtle": "#6b7280",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-sans min-h-screen text-text-light dark:text-gray-100 transition-colors duration-200 antialiased">
+<div class="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<span class="dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center dark:text-white">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<div class="pt-16 pb-28 px-5 max-w-md mx-auto relative">
+<header class="mb-8 flex justify-between items-center">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Account</h1>
+</div>
+<button class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-gray-600 dark:text-gray-300">notifications</span>
+</button>
+</header>
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-soft border border-gray-200 dark:border-gray-700 mb-8">
+<div class="flex flex-col items-center text-center">
+<div class="relative mb-4">
+<div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-700 border-4 border-white dark:border-gray-600 shadow-sm overflow-hidden">
+<img alt="Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzyfnYRcQLP10IWsc2979ssqIiAjYNvkKmdJgkxm0bjbm7WgGYIhOe3npIa_Z-yE8XF_X6znfwCfJ01FgPVU2DfAE1PZnXBCil1EJAgz3D7veShqEuFju-3O8l1fm8ybrhWc-EscTco7IowqD2ExmY4FWATRgOJp-vVvXbcIWN7Y7TWhcwGB7lsTdQj9TynTgAGnqxfiS00Mv-bRwMKb1Ay7YhzHhRadeo3v9CxpNKf35XQqR1qk83ICBLFGjZOYs7Ykxi0lroEp4"/>
+</div>
+<div class="absolute bottom-1 right-1 w-6 h-6 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[14px]">check</span>
+</div>
+</div>
+<h2 class="text-xl font-bold text-gray-900 dark:text-white">Paramedic Doe</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">LA County Fire Dept.</p>
+<div class="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                    Active Duty
+                </div>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 grid grid-cols-2 gap-4">
+<div class="text-center p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+<p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-400 font-semibold mb-1">Employee ID</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200">LAC-FD-8942</p>
+</div>
+<div class="text-center p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+<p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-400 font-semibold mb-1">Station</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200">Station 12</p>
+</div>
+</div>
+<div class="mt-4 text-center p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+<p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-400 font-semibold mb-1">Department Email</p>
+<p class="text-sm font-bold text-gray-800 dark:text-gray-200 break-all">j.doe@fire.lacounty.gov</p>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">Workplace</h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">chat</span>
+</div>
+<div class="flex-1">
+<p class="text-base font-medium text-gray-900 dark:text-white">Chat History</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Review past protocol queries</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+<span class="material-symbols-outlined">folder_shared</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<p class="text-base font-medium text-gray-900 dark:text-white">ImageTrend Elite</p>
+<span class="text-[10px] font-bold text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">CONNECTED</span>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Last sync: 10 mins ago</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">sync</span>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined">bookmark</span>
+</div>
+<div class="flex-1">
+<p class="text-base font-medium text-gray-900 dark:text-white">Saved Protocols</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">12 items saved offline</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">Preferences</h3>
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group">
+<span class="text-base font-medium text-gray-900 dark:text-white">Appearance</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-gray-500 dark:text-gray-400">System</span>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group">
+<span class="text-base font-medium text-gray-900 dark:text-white">Notifications</span>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</button>
+<button class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group">
+<span class="text-base font-medium text-gray-900 dark:text-white">Support &amp; Feedback</span>
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="mt-8 flex flex-col items-center">
+<button class="text-red-600 dark:text-red-400 font-semibold text-sm py-3 px-6 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full bg-white dark:bg-gray-800 border border-red-100 dark:border-red-900/30 shadow-sm">
+                Log Out
+            </button>
+<p class="mt-6 text-[11px] text-gray-400 text-center leading-relaxed">
+                ProtocolGuide for iOS v2.4.1 (Build 89)<br/>
+                Authorized Personnel Only
+            </p>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50">
+<div class="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Assistant</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">menu_book</span>
+<span class="text-[10px] font-medium">Protocols</span>
+</button>
+<div class="relative -top-5 flex-1 flex justify-center">
+<button class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-red-600/30 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[28px]">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[26px]">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-red-400 transition-colors gap-1">
+<span class="material-symbols-outlined filled text-[26px]">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</button>
+</div>
+</nav>
+<script>
+        // Check system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+</body></html>
