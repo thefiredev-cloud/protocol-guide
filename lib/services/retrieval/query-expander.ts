@@ -54,16 +54,29 @@ export class QueryExpander {
       return [query];
     }
 
+    // Check cache first
+    const cache = getExpansionCache();
+    const cacheKey = createQueryCacheKey(query, "expansion");
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     try {
       const variations = await this.generateVariations(query);
 
       // Return original query + variations (max 4 total)
-      return [query, ...variations].slice(0, 4);
+      const result = [query, ...variations].slice(0, 4);
+
+      // Cache successful expansions
+      cache.set(cacheKey, result);
+
+      return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("[QueryExpander] Expansion failed, falling back to original query:", errorMessage);
 
-      // Fallback to original query on error
+      // Fallback to original query on error (don't cache errors)
       return [query];
     }
   }
