@@ -56,12 +56,12 @@ export function MobileNavBar() {
   const [isOnline, setIsOnline] = useState(true);
 
   // Define navigation order for swipe and keyboard navigation
+  // Updated to match new frontend mockup design
   const navItems = [
-    { href: '/', label: 'Chat', icon: MessageCircle },
-    { href: '/dosing', label: 'Dosing', icon: Pill },
-    { href: '/protocols', label: 'Protocols', icon: ClipboardList },
-    { href: '/base-hospitals', label: 'Base', icon: Phone },
-    { href: '/scene', label: 'Scene', icon: Timer },
+    { href: '/', label: 'Assistant', icon: MessageCircle },
+    { href: '/protocols', label: 'Protocols', icon: BookOpen },
+    { href: '/history', label: 'History', icon: History },
+    { href: '/account', label: 'Account', icon: User },
   ];
 
   const currentIndex = navItems.findIndex(item => item.href === pathname);
