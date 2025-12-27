@@ -1,8 +1,21 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 
+import { createEmbeddingCache, LRUCache } from '@/lib/cache/CacheManager';
+import { createQueryCacheKey } from '@/lib/cache/hash-utils';
+
 import { createLogger } from '../../log';
 import { searchKB } from '../../retrieval';
+
+// Module-level cache for query embeddings (500 entries, 4h TTL)
+let embeddingCache: LRUCache<number[]> | null = null;
+
+function getEmbeddingCache(): LRUCache<number[]> {
+  if (!embeddingCache) {
+    embeddingCache = createEmbeddingCache();
+  }
+  return embeddingCache;
+}
 
 // =============================================================================
 // TYPES
