@@ -63,6 +63,21 @@ export class HaikuReranker {
       return docs;
     }
 
+    // Check cache - key is query + sorted doc IDs
+    const cache = getRerankCache();
+    const docIds = docs.map((d) => d.id).sort().join(",");
+    const cacheKey = createCacheKey(query.toLowerCase().trim(), docIds, topK);
+    const cachedOrder = cache.get(cacheKey);
+
+    if (cachedOrder) {
+      // Reorder docs based on cached order
+      const docMap = new Map(docs.map((d) => [d.id, d]));
+      const reorderedDocs = cachedOrder
+        .map((id) => docMap.get(id))
+        .filter((d): d is KBDoc => d !== undefined);
+      return reorderedDocs.slice(0, topK);
+    }
+
     try {
       const scores = await this.scoreDocuments(query, docs);
 
@@ -73,12 +88,15 @@ export class HaikuReranker {
         .slice(0, topK)
         .map((item) => item.doc);
 
+      // Cache the ranked order (doc IDs only)
+      cache.set(cacheKey, rankedDocs.map((d) => d.id));
+
       return rankedDocs;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("[HaikuReranker] Reranking failed, falling back to original order:", errorMessage);
 
-      // Fallback to original order on error
+      // Fallback to original order on error (don't cache errors)
       return docs.slice(0, topK);
     }
   }
