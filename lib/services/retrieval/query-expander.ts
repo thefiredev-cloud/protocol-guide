@@ -1,11 +1,25 @@
 /**
  * Haiku-based Query Expander for Medic-Bot
  * Uses Claude 3.5 Haiku to expand queries with medical variations
+ * Includes LRU caching to reduce API calls
  */
+
+import { createExpansionCache, LRUCache } from "@/lib/cache/CacheManager";
+import { createQueryCacheKey } from "@/lib/cache/hash-utils";
 
 const ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1";
 const HAIKU_MODEL = "claude-3-5-haiku-20241022";
 const TIMEOUT_MS = 5000;
+
+// Module-level cache for query expansions (1000 entries, 24h TTL)
+let expansionCache: LRUCache<string[]> | null = null;
+
+function getExpansionCache(): LRUCache<string[]> {
+  if (!expansionCache) {
+    expansionCache = createExpansionCache();
+  }
+  return expansionCache;
+}
 
 type HaikuResponse = {
   content: Array<{ type: string; text?: string }>;
