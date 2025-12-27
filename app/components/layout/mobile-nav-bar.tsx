@@ -1,5 +1,5 @@
 'use client';
-
+// v2.1 - New frontend navigation (Dec 27, 2025)
 import { BookOpen, History, type LucideIcon, MessageCircle, Mic, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
