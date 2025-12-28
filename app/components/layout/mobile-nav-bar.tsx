@@ -106,68 +106,17 @@ export function MobileNavBar() {
     onSwipeRight: handleSwipeRight,
   });
 
-  const { tap } = useHapticFeedback();
-  const [micPressed, setMicPressed] = useState(false);
-
-  const handleMicPress = () => {
-    tap();
-    onMicClick?.();
-  };
-
-  // Split nav items: first 2 on left, last 2 on right (mic button in center)
-  const leftItems = navItems.slice(0, 2);
-  const rightItems = navItems.slice(2);
-
   return (
     <nav
       ref={navRef}
-      className="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50"
+      className="fixed bottom-0 left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe z-50"
       role="navigation"
       aria-label="Primary navigation"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
-        {/* Left side tabs: Assistant, Protocols */}
-        {leftItems.map((item) => (
-          <NavTab
-            key={item.href}
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            active={pathname === item.href}
-          />
-        ))}
-
-        {/* Central elevated mic button */}
-        <div className="relative -top-5 flex-1 flex justify-center group">
-          {/* Glow effect */}
-          <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform" />
-          <button
-            type="button"
-            className={`
-              relative w-14 h-14 bg-primary rounded-full
-              flex items-center justify-center text-white
-              shadow-lg shadow-red-600/40
-              hover:scale-105 transition-transform active:scale-95
-              border-2 border-white dark:border-gray-900
-              ${micPressed ? 'scale-95' : ''}
-            `}
-            aria-label="Voice input"
-            onPointerDown={() => {
-              setMicPressed(true);
-              handleMicPress();
-            }}
-            onPointerUp={() => setMicPressed(false)}
-            onPointerLeave={() => setMicPressed(false)}
-            onPointerCancel={() => setMicPressed(false)}
-          >
-            <MaterialIcon name="mic" size={28} />
-          </button>
-        </div>
-
-        {/* Right side tabs: History, Account */}
-        {rightItems.map((item) => (
+      <div className="flex justify-around items-center max-w-md mx-auto h-16">
+        {navItems.map((item) => (
           <NavTab
             key={item.href}
             href={item.href}
