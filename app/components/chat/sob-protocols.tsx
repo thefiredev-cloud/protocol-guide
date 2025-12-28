@@ -165,7 +165,7 @@ const ProtocolCard = memo(function ProtocolCard({ k, protocol, expanded, onToggl
           </div>
         </div>
         <div style={{ fontSize: '20px' }}>
-          {expanded ? <ChevronDown size={20} strokeWidth={2} /> : <ChevronRight size={20} strokeWidth={2} />}
+          {expanded ? <MaterialIcon name="expand_more" size={20} /> : <MaterialIcon name="chevron_right" size={20} />}
         </div>
       </button>
       {expanded && <ProtocolDetails protocol={protocol} />}
