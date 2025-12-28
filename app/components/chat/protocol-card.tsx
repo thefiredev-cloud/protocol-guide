@@ -1,7 +1,6 @@
 "use client";
 
 import { MaterialIcon } from "../ui/material-icon";
-
 import SpotlightCard from "../ui/react-bits/spotlight-card";
 
 export interface ProtocolMatch {
