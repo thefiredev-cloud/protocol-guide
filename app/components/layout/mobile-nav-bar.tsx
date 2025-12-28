@@ -62,15 +62,15 @@ interface MobileNavBarProps {
   onMicClick?: () => void;
 }
 
-export function MobileNavBar({ onMicClick }: MobileNavBarProps) {
+export function MobileNavBar() {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
 
-  // Define navigation order for swipe and keyboard navigation
+  // Define navigation order for swipe and keyboard navigation - 4 tabs matching sketch design
   const navItems: NavItem[] = [
-    { href: '/', label: 'Assistant', icon: 'chat_bubble' },
-    { href: '/protocols', label: 'Protocols', icon: 'menu_book' },
+    { href: '/', label: 'Chat', icon: 'home' },
+    { href: '/protocols', label: 'Protocols', icon: 'list' },
     { href: '/history', label: 'History', icon: 'history' },
     { href: '/account', label: 'Account', icon: 'person' },
   ];
