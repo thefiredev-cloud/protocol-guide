@@ -172,7 +172,7 @@ const MOCK_PROTOCOL_DEFAULT = {
 function CollapsibleSection({
   section,
 }: {
-  section: (typeof MOCK_PROTOCOL.treatmentSequence)[number];
+  section: (typeof MOCK_PROTOCOL_DEFAULT.treatmentSequence)[number];
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
