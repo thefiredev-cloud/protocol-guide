@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronUp, Pause, Phone, Pill, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { MaterialIcon } from "../ui/material-icon";
 import { useCallback, useEffect, useState } from "react";
 
 import type { CarePlan } from "../../types/chat";
