@@ -63,7 +63,7 @@ export function BaseHospitalDirectory() {
           <div className="contact-item">
             <strong>{SPECIALIZED_CONTACTS.catalinaHyperbaric.name}</strong>
             <a href={`tel:${SPECIALIZED_CONTACTS.catalinaHyperbaric.phone}`} className="phone-link">
-              <Phone size={18} />
+              <MaterialIcon name="phone" size={18} />
               {SPECIALIZED_CONTACTS.catalinaHyperbaric.phone}
             </a>
             <span className="usage-note">{SPECIALIZED_CONTACTS.catalinaHyperbaric.usage}</span>
@@ -71,7 +71,7 @@ export function BaseHospitalDirectory() {
           <div className="contact-item">
             <strong>{SPECIALIZED_CONTACTS.emsAgency.name}</strong>
             <a href={`tel:${SPECIALIZED_CONTACTS.emsAgency.phone}`} className="phone-link">
-              <Phone size={18} />
+              <MaterialIcon name="phone" size={18} />
               {SPECIALIZED_CONTACTS.emsAgency.phone}
             </a>
             <span className="usage-note">{SPECIALIZED_CONTACTS.emsAgency.usage}</span>
