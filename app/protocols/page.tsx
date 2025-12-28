@@ -1,27 +1,16 @@
 'use client';
 
-import {
-  AlertTriangle,
-  Baby,
-  ChevronRight,
-  Clock,
-  FileText,
-  Heart,
-  Pill,
-  Search,
-  SlidersHorizontal,
-  Stethoscope,
-  Syringe,
-} from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+
+import { MaterialIcon } from '../components/ui/material-icon';
 
 // Protocol category definitions with icons and colors
 const CATEGORIES = [
   {
     id: 'cardiac',
     name: 'Cardiac',
-    icon: Heart,
+    icon: 'cardiology',
     count: 15,
     colorClass: 'text-red-600 dark:text-red-400',
     bgClass: 'bg-red-50 dark:bg-red-500/10',
@@ -29,7 +18,7 @@ const CATEGORIES = [
   {
     id: 'trauma',
     name: 'Trauma / Burns',
-    icon: AlertTriangle,
+    icon: 'personal_injury',
     count: 8,
     colorClass: 'text-orange-600 dark:text-orange-400',
     bgClass: 'bg-orange-50 dark:bg-orange-500/10',
@@ -37,7 +26,7 @@ const CATEGORIES = [
   {
     id: 'pediatrics',
     name: 'Pediatrics',
-    icon: Baby,
+    icon: 'child_care',
     count: 12,
     colorClass: 'text-purple-600 dark:text-purple-400',
     bgClass: 'bg-purple-50 dark:bg-purple-500/10',
@@ -45,7 +34,7 @@ const CATEGORIES = [
   {
     id: 'medical',
     name: 'General Medical',
-    icon: Stethoscope,
+    icon: 'medical_services',
     count: 24,
     colorClass: 'text-blue-600 dark:text-blue-400',
     bgClass: 'bg-blue-50 dark:bg-blue-500/10',
@@ -53,7 +42,7 @@ const CATEGORIES = [
   {
     id: 'pharmacology',
     name: 'Pharmacology',
-    icon: Pill,
+    icon: 'pill',
     count: 50,
     colorClass: 'text-emerald-600 dark:text-emerald-400',
     bgClass: 'bg-emerald-50 dark:bg-emerald-500/10',
@@ -61,7 +50,7 @@ const CATEGORIES = [
   {
     id: 'procedures',
     name: 'Procedures',
-    icon: Syringe,
+    icon: 'vaccines',
     count: 18,
     colorClass: 'text-indigo-600 dark:text-indigo-400',
     bgClass: 'bg-indigo-50 dark:bg-indigo-500/10',
@@ -69,7 +58,7 @@ const CATEGORIES = [
   {
     id: 'admin',
     name: 'Admin Policies',
-    icon: FileText,
+    icon: 'policy',
     count: 0,
     colorClass: 'text-slate-600 dark:text-slate-400',
     bgClass: 'bg-slate-100 dark:bg-slate-700/50',
@@ -85,7 +74,7 @@ const RECENT_PROTOCOLS = [
     category: 'Trauma',
     categoryColor: 'text-orange-600 dark:text-orange-400',
     categoryBg: 'bg-orange-100 dark:bg-orange-500/20',
-    icon: AlertTriangle,
+    icon: 'personal_injury',
     viewedAt: '2m ago',
   },
   {
@@ -95,7 +84,7 @@ const RECENT_PROTOCOLS = [
     category: 'Cardiac',
     categoryColor: 'text-red-600 dark:text-red-400',
     categoryBg: 'bg-red-100 dark:bg-red-500/20',
-    icon: Heart,
+    icon: 'ecg_heart',
     viewedAt: '1h ago',
   },
   {
@@ -105,7 +94,7 @@ const RECENT_PROTOCOLS = [
     category: 'Meds',
     categoryColor: 'text-emerald-600 dark:text-emerald-400',
     categoryBg: 'bg-emerald-100 dark:bg-emerald-500/20',
-    icon: Pill,
+    icon: 'pill',
     viewedAt: '4h ago',
   },
 ];
@@ -115,32 +104,31 @@ function CategoryTile({
 }: {
   category: (typeof CATEGORIES)[number];
 }) {
-  const Icon = category.icon;
-
   return (
     <Link
       href={`/protocols?category=${category.id}`}
-      className="flex items-center w-full p-3.5 rounded-xl bg-[var(--surface)] shadow-sm border border-[var(--border)] active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-[var(--accent)]/20 group"
+      className="flex items-center w-full p-3.5 rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 active:bg-slate-50 dark:active:bg-slate-800 transition-all hover:shadow-md hover:border-primary/20 group"
     >
       <div
         className={`flex items-center justify-center w-11 h-11 rounded-lg ${category.bgClass} ${category.colorClass} shrink-0 transition-transform duration-300`}
       >
-        <Icon size={24} strokeWidth={2} />
+        <MaterialIcon name={category.icon} size={24} />
       </div>
       <div className="ml-4 flex-1 text-left">
-        <h4 className="text-[15px] font-semibold text-[var(--text-primary)]">
+        <h4 className="text-[15px] font-semibold text-gray-900 dark:text-white">
           {category.name}
         </h4>
-        <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
           {category.count > 0
             ? `${category.count} ${category.id === 'pharmacology' ? 'Medications' : 'Protocols'}`
             : 'Department Standards'}
         </p>
       </div>
       <div className="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
-        <ChevronRight
+        <MaterialIcon
+          name="chevron_right"
           size={20}
-          className="text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors"
+          className="text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors"
         />
       </div>
     </Link>
@@ -152,19 +140,17 @@ function RecentProtocolCard({
 }: {
   protocol: (typeof RECENT_PROTOCOLS)[number];
 }) {
-  const Icon = protocol.icon;
-
   return (
     <Link
       href={`/protocols/${protocol.id}`}
-      className="snap-start shrink-0 w-64 p-4 rounded-2xl bg-[var(--surface)] shadow-sm border border-[var(--border)] active:scale-[0.98] transition-transform text-left group hover:border-[var(--accent)]/30"
+      className="snap-start shrink-0 w-64 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 active:scale-[0.98] transition-transform text-left group hover:border-primary/30"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-lg ${protocol.categoryBg} ${protocol.categoryColor}`}
           >
-            <Icon size={18} strokeWidth={2} />
+            <MaterialIcon name={protocol.icon} size={18} />
           </div>
           <span
             className={`text-[11px] font-bold ${protocol.categoryColor} uppercase tracking-wide`}
@@ -172,15 +158,15 @@ function RecentProtocolCard({
             {protocol.category}
           </span>
         </div>
-        <span className="text-[10px] font-medium text-[var(--text-secondary)] bg-[var(--surface-input)] px-2 py-0.5 rounded-full">
+        <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
           {protocol.tpCode}
         </span>
       </div>
-      <h4 className="font-bold text-base leading-snug mb-1 text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+      <h4 className="font-bold text-base leading-snug mb-1 text-gray-900 dark:text-white group-hover:text-primary transition-colors">
         {protocol.title}
       </h4>
-      <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mt-2">
-        <Clock size={14} />
+      <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-2">
+        <MaterialIcon name="schedule" size={14} />
         <span>{protocol.viewedAt}</span>
       </div>
     </Link>
@@ -191,21 +177,28 @@ export default function ProtocolsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--background)] pb-24">
+    <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[var(--surface)]/95 backdrop-blur-md border-b border-[var(--border)] transition-colors duration-200">
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div className="flex items-center justify-between px-5 pt-12 pb-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               Protocol Library
             </h1>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-xs font-medium text-[var(--text-secondary)]">
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
                 LA County DHS • Online
               </p>
             </div>
           </div>
+          <button
+            type="button"
+            className="p-2 -mr-2 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+            aria-label="Notifications"
+          >
+            <MaterialIcon name="notifications" size={24} />
+          </button>
         </div>
 
         {/* Search Bar */}
@@ -213,9 +206,10 @@ export default function ProtocolsPage() {
           <div className="flex items-center gap-3">
             <div className="relative flex-1 group">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search
+                <MaterialIcon
+                  name="search"
                   size={20}
-                  className="text-[var(--text-secondary)] group-focus-within:text-[var(--accent)] transition-colors"
+                  className="text-gray-400 dark:text-gray-500 group-focus-within:text-primary transition-colors"
                 />
               </div>
               <input
@@ -223,15 +217,15 @@ export default function ProtocolsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search protocols..."
-                className="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--surface-input)] border-transparent focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] text-sm font-medium placeholder:text-[var(--text-secondary)]/70 text-[var(--text-primary)] transition-all shadow-sm"
+                className="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 border-transparent focus:border-primary focus:ring-1 focus:ring-primary text-sm font-medium placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 text-gray-900 dark:text-white transition-all shadow-sm"
               />
             </div>
             <button
               type="button"
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--surface-input)] text-[var(--text-secondary)] hover:text-[var(--accent)] active:bg-slate-200 dark:active:bg-slate-700 transition-colors shadow-sm"
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary active:bg-slate-200 dark:active:bg-slate-700 transition-colors shadow-sm"
               aria-label="Filter options"
             >
-              <SlidersHorizontal size={20} />
+              <MaterialIcon name="tune" size={20} />
             </button>
           </div>
         </div>
@@ -241,7 +235,7 @@ export default function ProtocolsPage() {
         {/* Recently Viewed Section */}
         <div className="pt-6">
           <div className="flex items-center justify-between px-5 pb-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
               Recently Viewed
             </h3>
           </div>
@@ -254,12 +248,12 @@ export default function ProtocolsPage() {
 
         {/* Divider */}
         <div className="w-full px-5">
-          <div className="h-px bg-[var(--border)] w-full" />
+          <div className="h-px bg-gray-200 dark:bg-gray-700 w-full" />
         </div>
 
         {/* All Categories Section */}
         <div className="pt-6 px-5 pb-8">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
             All Categories
           </h3>
           <div className="grid grid-cols-1 gap-3">
@@ -271,7 +265,7 @@ export default function ProtocolsPage() {
 
         {/* Footer */}
         <div className="pt-2 pb-6 flex justify-center opacity-40">
-          <div className="text-[10px] text-[var(--text-secondary)] font-semibold uppercase tracking-widest flex items-center gap-1.5">
+          <div className="text-[10px] text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600" />
             LA County EMS Protocols
           </div>
