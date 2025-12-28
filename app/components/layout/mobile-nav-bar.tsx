@@ -1,29 +1,42 @@
 'use client';
-// v2.1 - New frontend navigation (Dec 27, 2025)
-import { BookOpen, History, type LucideIcon, MessageCircle, Mic, User } from 'lucide-react';
+// v3.0 - New frontend navigation with Material Symbols (Dec 28, 2025)
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { MaterialIcon } from '../ui/material-icon';
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
 
-interface NavTabProps {
+interface NavItem {
   href: string;
-  icon: LucideIcon;
+  icon: string;
   label: string;
-  active: boolean;
-  isOnline: boolean;
 }
 
-function NavTab({ href, icon: Icon, label, active, isOnline }: NavTabProps) {
+interface NavTabProps {
+  href: string;
+  icon: string;
+  label: string;
+  active: boolean;
+}
+
+function NavTab({ href, icon, label, active }: NavTabProps) {
   const { tap } = useHapticFeedback();
   const [isPressed, setIsPressed] = useState(false);
 
   return (
     <Link
       href={href}
-      className={`nav-tab ${active ? 'active' : ''} ${isPressed ? 'pressed' : ''}`}
+      className={`
+        flex flex-col items-center justify-center flex-1 h-full gap-1
+        transition-colors
+        ${active
+          ? 'text-primary dark:text-red-400'
+          : 'text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary'
+        }
+        ${isPressed ? 'scale-95' : ''}
+      `}
       aria-label={label}
       aria-current={active ? 'page' : undefined}
       onPointerDown={() => {
@@ -34,17 +47,13 @@ function NavTab({ href, icon: Icon, label, active, isOnline }: NavTabProps) {
       onPointerLeave={() => setIsPressed(false)}
       onPointerCancel={() => setIsPressed(false)}
     >
-      <span className="nav-tab-icon">
-        <Icon size={28} strokeWidth={2} aria-hidden={true} />
-        {/* Online/Offline status indicator - only show on first tab (Chat) */}
-        {href === '/' && (
-          <span
-            className={`nav-status-indicator ${isOnline ? 'online' : 'offline'}`}
-            aria-label={isOnline ? 'Online' : 'Offline'}
-          />
-        )}
-      </span>
-      <span className="nav-tab-label">{label}</span>
+      <MaterialIcon
+        name={icon}
+        filled={active}
+        size={26}
+        className="transition-transform duration-200 group-hover:-translate-y-0.5"
+      />
+      <span className="text-[10px] font-medium">{label}</span>
     </Link>
   );
 }
@@ -57,34 +66,16 @@ export function MobileNavBar({ onMicClick }: MobileNavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
-  const [isOnline, setIsOnline] = useState(true);
 
   // Define navigation order for swipe and keyboard navigation
-  // Updated to match new frontend mockup design
-  const navItems = [
-    { href: '/', label: 'Assistant', icon: MessageCircle },
-    { href: '/protocols', label: 'Protocols', icon: BookOpen },
-    { href: '/history', label: 'History', icon: History },
-    { href: '/account', label: 'Account', icon: User },
+  const navItems: NavItem[] = [
+    { href: '/', label: 'Assistant', icon: 'chat_bubble' },
+    { href: '/protocols', label: 'Protocols', icon: 'menu_book' },
+    { href: '/history', label: 'History', icon: 'history' },
+    { href: '/account', label: 'Account', icon: 'person' },
   ];
 
   const currentIndex = navItems.findIndex(item => item.href === pathname);
-
-  // Monitor online/offline status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    setIsOnline(navigator.onLine);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
 
   // Keyboard navigation support
   useEffect(() => {
@@ -105,13 +96,11 @@ export function MobileNavBar({ onMicClick }: MobileNavBarProps) {
   }, [currentIndex, router, navItems]);
 
   const handleSwipeLeft = useCallback(() => {
-    // Swipe left = next tab
     const nextIndex = (currentIndex + 1) % navItems.length;
     router.push(navItems[nextIndex].href);
   }, [currentIndex, router, navItems]);
 
   const handleSwipeRight = useCallback(() => {
-    // Swipe right = previous tab
     const prevIndex = currentIndex === 0 ? navItems.length - 1 : currentIndex - 1;
     router.push(navItems[prevIndex].href);
   }, [currentIndex, router, navItems]);
@@ -136,53 +125,62 @@ export function MobileNavBar({ onMicClick }: MobileNavBarProps) {
   return (
     <nav
       ref={navRef}
-      className="mobile-nav-bar mobile-nav-bar-with-mic"
+      className="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50"
       role="navigation"
       aria-label="Primary navigation"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Left side tabs: Assistant, Protocols */}
-      {leftItems.map((item) => (
-        <NavTab
-          key={item.href}
-          href={item.href}
-          icon={item.icon}
-          label={item.label}
-          active={pathname === item.href}
-          isOnline={isOnline}
-        />
-      ))}
+      <div className="flex justify-between items-end max-w-md mx-auto h-[60px] pb-2">
+        {/* Left side tabs: Assistant, Protocols */}
+        {leftItems.map((item) => (
+          <NavTab
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={pathname === item.href}
+          />
+        ))}
 
-      {/* Central elevated mic button */}
-      <div className="nav-mic-container">
-        <button
-          type="button"
-          className={`nav-mic-button ${micPressed ? 'pressed' : ''}`}
-          aria-label="Voice input"
-          onPointerDown={() => {
-            setMicPressed(true);
-            handleMicPress();
-          }}
-          onPointerUp={() => setMicPressed(false)}
-          onPointerLeave={() => setMicPressed(false)}
-          onPointerCancel={() => setMicPressed(false)}
-        >
-          <Mic size={28} strokeWidth={2} aria-hidden={true} />
-        </button>
+        {/* Central elevated mic button */}
+        <div className="relative -top-5 flex-1 flex justify-center group">
+          {/* Glow effect */}
+          <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform" />
+          <button
+            type="button"
+            className={`
+              relative w-14 h-14 bg-primary rounded-full
+              flex items-center justify-center text-white
+              shadow-lg shadow-red-600/40
+              hover:scale-105 transition-transform active:scale-95
+              border-2 border-white dark:border-gray-900
+              ${micPressed ? 'scale-95' : ''}
+            `}
+            aria-label="Voice input"
+            onPointerDown={() => {
+              setMicPressed(true);
+              handleMicPress();
+            }}
+            onPointerUp={() => setMicPressed(false)}
+            onPointerLeave={() => setMicPressed(false)}
+            onPointerCancel={() => setMicPressed(false)}
+          >
+            <MaterialIcon name="mic" size={28} />
+          </button>
+        </div>
+
+        {/* Right side tabs: History, Account */}
+        {rightItems.map((item) => (
+          <NavTab
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={pathname === item.href}
+          />
+        ))}
       </div>
-
-      {/* Right side tabs: History, Account */}
-      {rightItems.map((item) => (
-        <NavTab
-          key={item.href}
-          href={item.href}
-          icon={item.icon}
-          label={item.label}
-          active={pathname === item.href}
-          isOnline={isOnline}
-        />
-      ))}
     </nav>
   );
 }
