@@ -13,15 +13,15 @@ import React, {
   useState,
 } from 'react';
 
-import { useOffline } from './offline-context';
-
 import type {
   ActiveIncident,
-  PatientContext,
-  NarrativeUpdate,
   ImageTrendState,
+  NarrativeUpdate,
   OperationType,
+  PatientContext,
 } from '@/lib/offline/storage/types';
+
+import { useOffline } from './offline-context';
 
 // ============================================================================
 // TYPE DEFINITIONS
