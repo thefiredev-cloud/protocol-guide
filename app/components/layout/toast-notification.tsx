@@ -103,14 +103,12 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     setTimeout(() => setIsExiting(false), 10);
   }, []);
 
-  const icons = {
-    success: CheckCircle,
-    error: XCircle,
-    warning: AlertCircle,
-    info: Info,
+  const iconNames: Record<ToastType, string> = {
+    success: 'check_circle',
+    error: 'cancel',
+    warning: 'warning',
+    info: 'info',
   };
-
-  const Icon = icons[toast.type];
 
   return (
     <div
@@ -118,7 +116,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
       role="alert"
       aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
     >
-      <Icon size={20} className="toast-icon" />
+      <MaterialIcon name={iconNames[toast.type]} size={20} className="toast-icon" />
       <p className="toast-message">{toast.message}</p>
       <button
         onClick={handleClose}
@@ -126,7 +124,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
         aria-label="Close notification"
         type="button"
       >
-        <X size={16} />
+        <MaterialIcon name="close" size={16} />
       </button>
     </div>
   );
