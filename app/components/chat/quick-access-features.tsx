@@ -290,7 +290,7 @@ export function QuickAccessFeatures({
                           aria-label={`Remove ${protocol.name} from favorites`}
                           aria-pressed={true}
                         >
-                          <Star size={16} fill="currentColor" />
+                          <MaterialIcon name="star" size={16} filled />
                         </button>
                       </li>
                     ))}
