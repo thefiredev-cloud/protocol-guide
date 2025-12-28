@@ -71,7 +71,7 @@ export function ProtocolCard({
           className="protocol-action-btn primary"
           onClick={handleViewProtocol}
         >
-          <ExternalLink size={16} />
+          <MaterialIcon name="open_in_new" size={16} />
           View Protocol
         </button>
         {onUseInChat && (
@@ -80,7 +80,7 @@ export function ProtocolCard({
             className="protocol-action-btn secondary"
             onClick={handleUseInChat}
           >
-            <MessageSquare size={16} />
+            <MaterialIcon name="chat_bubble" size={16} />
             Ask About
           </button>
         )}
