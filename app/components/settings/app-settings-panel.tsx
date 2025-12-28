@@ -75,7 +75,7 @@ export function SettingsPanel() {
           {/* Theme */}
           <div className="setting-group">
             <label className="setting-label">
-              {settings.theme === 'dark' ? <Moon size={18} /> : settings.theme === 'sunlight' ? <Sun size={18} /> : <Sun size={18} />}
+              {settings.theme === 'dark' ? <MaterialIcon name="dark_mode" size={18} /> : <MaterialIcon name="light_mode" size={18} />}
               Theme
             </label>
             <div className="setting-options">
@@ -84,7 +84,7 @@ export function SettingsPanel() {
                 className={`setting-option ${settings.theme === 'dark' ? 'active' : ''}`}
                 type="button"
               >
-                <Moon size={16} />
+                <MaterialIcon name="dark_mode" size={16} />
                 Dark
               </button>
               <button
@@ -92,7 +92,7 @@ export function SettingsPanel() {
                 className={`setting-option ${settings.theme === 'light' ? 'active' : ''}`}
                 type="button"
               >
-                <Sun size={16} />
+                <MaterialIcon name="light_mode" size={16} />
                 Light
               </button>
               <button
@@ -101,7 +101,7 @@ export function SettingsPanel() {
                 type="button"
                 title="Ultra-high contrast for bright outdoor conditions and reduced blue light for night operations"
               >
-                <Sun size={16} />
+                <MaterialIcon name="wb_sunny" size={16} />
                 Sunlight
               </button>
             </div>
