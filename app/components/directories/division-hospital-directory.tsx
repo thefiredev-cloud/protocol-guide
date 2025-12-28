@@ -1,7 +1,8 @@
 'use client';
 
-import { Phone } from 'lucide-react';
 import { useState } from 'react';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 import { BASE_HOSPITALS, BaseHospital, MEDICAL_ALERT_CENTER } from '../../../lib/clinical/base-hospitals';
 
