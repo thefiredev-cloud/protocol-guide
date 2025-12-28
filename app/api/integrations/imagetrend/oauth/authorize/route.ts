@@ -20,6 +20,7 @@ const logger = createLogger('api.integrations.imagetrend.oauth.authorize');
  * Redirect to ImageTrend authorization URL with PKCE
  */
 export const GET = withApiHandler(
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   async (_input: unknown, req: NextRequest) => {
     // Validate environment configuration
     const clientId = process.env.IMAGETREND_CLIENT_ID;
