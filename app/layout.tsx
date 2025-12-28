@@ -10,6 +10,7 @@ import { RootLayoutContent } from "./components/layout/root-layout-content";
 import { ToastProvider } from "./components/layout/toast-notification";
 import { WebVitals } from "./components/layout/web-vitals";
 import { AuthProvider } from "./contexts/authentication-context";
+import { OfflineProvider } from "./contexts/offline-context";
 
 // Using system font stack for offline build compatibility
 const fontClass = "";
