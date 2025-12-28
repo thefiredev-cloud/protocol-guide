@@ -114,11 +114,11 @@ export function KeyboardShortcuts() {
       <div className="shortcuts-panel" onClick={(e) => e.stopPropagation()}>
         <div className="shortcuts-header">
           <div className="shortcuts-title-row">
-            <Command size={24} />
+            <MaterialIcon name="keyboard_command_key" size={24} />
             <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
           </div>
           <button onClick={() => setIsOpen(false)} className="shortcuts-close" aria-label="Close shortcuts" type="button">
-            <X size={24} />
+            <MaterialIcon name="close" size={24} />
           </button>
         </div>
 
