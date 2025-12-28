@@ -224,13 +224,23 @@ function CollapsibleSection({
 export default function ProtocolDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [isSaved, setIsSaved] = useState(MOCK_PROTOCOL.isSaved);
+  const protocolId = typeof params.id === 'string' ? params.id : 'tp-1244';
 
-  // In real implementation, fetch protocol by params.id
-  const protocol = MOCK_PROTOCOL;
+  // Fetch protocol by params.id - fallback to default
+  const protocol = MOCK_PROTOCOLS[protocolId] || MOCK_PROTOCOLS['tp-1244'];
+  const [isSaved, setIsSaved] = useState(protocol.isSaved);
+  const [isOffline] = useState(false); // TODO: Hook into actual offline status
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark pb-28">
+      {/* Offline Mode Banner */}
+      {isOffline && (
+        <div className="flex items-center justify-center gap-2 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 text-sm font-medium border-b border-amber-200 dark:border-amber-800">
+          <MaterialIcon name="storage" size={16} />
+          <span>OFFLINE MODE + LOCAL DATABASE</span>
+        </div>
+      )}
+
       {/* Header */}
       <div className="pt-16 pb-4 px-5 max-w-md mx-auto w-full">
         <header className="flex justify-between items-center">
