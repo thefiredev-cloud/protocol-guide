@@ -24,6 +24,9 @@
   # Force Next.js Runtime v5
   NEXT_FORCE_V5 = "true"
 
+  # Include devDependencies in production (needed for build tools like @tailwindcss/postcss)
+  NPM_FLAGS = "--include=dev"
+
 # =============================================================================
 # Next.js Plugin (Forced v5)
 # =============================================================================
