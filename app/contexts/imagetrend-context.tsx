@@ -15,7 +15,6 @@ import React, {
 
 import type {
   ActiveIncident,
-  ImageTrendState,
   NarrativeUpdate,
   OperationType,
   PatientContext,

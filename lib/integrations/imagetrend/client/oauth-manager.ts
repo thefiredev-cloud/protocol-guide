@@ -6,16 +6,16 @@
  */
 
 import {
-  type ImageTrendTokens,
-  type ConnectionInfo,
-  type PKCEChallenge,
-  type TokenRefreshResult,
   type AuthorizationUrlParams,
+  type ConnectionInfo,
+  type ImageTrendTokens,
+  type OAuthError,
+  type PKCEChallenge,
+  type StoredTokenMetadata,
   type TokenExchangeParams,
   type TokenRefreshParams,
+  type TokenRefreshResult,
   type TokenRevocationParams,
-  type OAuthError,
-  type StoredTokenMetadata,
 } from './types';
 
 /**
