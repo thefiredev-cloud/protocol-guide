@@ -131,7 +131,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
         aria-label="Show quick actions"
         title="Show Actions"
       >
-        <ChevronUp size={20} />
+        <MaterialIcon name="expand_less" size={20} />
       </button>
     );
   }
@@ -147,7 +147,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
         aria-label="Hide quick actions"
         title="Hide Actions"
       >
-        <ChevronUp size={20} className="rotate-180" />
+        <MaterialIcon name="expand_more" size={20} />
       </button>
 
       {/* Quick Actions Content */}
@@ -164,7 +164,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label={isTimerRunning ? "Pause scene timer" : "Start scene timer"}
             title={isTimerRunning ? "Pause Timer" : "Start Timer"}
           >
-            {isTimerRunning ? <Pause size={18} /> : <Play size={18} />}
+            {isTimerRunning ? <MaterialIcon name="pause" size={18} /> : <MaterialIcon name="play_arrow" size={18} />}
           </button>
           <button
             type="button"
@@ -173,7 +173,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label="Reset scene timer"
             title="Reset Timer"
           >
-            <Square size={18} />
+            <MaterialIcon name="stop" size={18} />
           </button>
         </div>
 
@@ -188,7 +188,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
               aria-label="Call base hospital"
               title="Call Base - Contact Required"
             >
-              <Phone size={20} /> Call Base
+              <MaterialIcon name="phone" size={20} /> Call Base
             </button>
           )}
 
@@ -200,7 +200,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label="Open dosing calculator"
             title="Dosing Calculator"
           >
-            <Pill size={20} /> Dosing
+            <MaterialIcon name="medication" size={20} /> Dosing
           </button>
 
           {/* Read Aloud */}
@@ -212,7 +212,7 @@ export function QuickActionsBar({ carePlan, onCallBase }: QuickActionsBarProps) 
             aria-label={isSpeaking ? "Stop reading aloud" : "Read narrative aloud"}
             title={isSpeaking ? "Stop Reading" : "Read Aloud"}
           >
-            {isSpeaking ? <VolumeX size={20} /> : <Volume2 size={20} />} {isSpeaking ? "Stop" : "Read"}
+            {isSpeaking ? <MaterialIcon name="volume_off" size={20} /> : <MaterialIcon name="volume_up" size={20} />} {isSpeaking ? "Stop" : "Read"}
           </button>
         </div>
       </div>

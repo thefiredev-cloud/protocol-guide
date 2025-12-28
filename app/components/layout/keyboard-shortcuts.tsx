@@ -1,9 +1,9 @@
 'use client';
 
-import { MaterialIcon } from '../ui/material-icon';
 import { useEffect, useRef, useState } from 'react';
 
 import { useSettings } from '../../contexts/settings-context';
+import { MaterialIcon } from '../ui/material-icon';
 
 interface Shortcut {
   keys: string[];
