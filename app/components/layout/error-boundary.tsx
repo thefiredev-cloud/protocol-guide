@@ -62,7 +62,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="error-boundary">
           <div className="error-boundary-content">
-            <AlertTriangle size={48} className="error-boundary-icon" />
+            <MaterialIcon name="warning" size={48} className="error-boundary-icon" />
             <h1 className="error-boundary-title">Something went wrong</h1>
             <p className="error-boundary-message">
               The application encountered an unexpected error. This has been logged and our team will
@@ -79,7 +79,7 @@ export class ErrorBoundary extends Component<Props, State> {
             )}
             <div className="error-boundary-actions">
               <button onClick={this.handleReset} className="btn-primary" type="button">
-                <RefreshCw size={16} />
+                <MaterialIcon name="refresh" size={16} />
                 Try Again
               </button>
               <button
