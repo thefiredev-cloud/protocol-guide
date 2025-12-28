@@ -1,7 +1,8 @@
 'use client';
 
-import { MaterialIcon } from '../ui/material-icon';
 import { useEffect, useState } from 'react';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;

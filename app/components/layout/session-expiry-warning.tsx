@@ -7,7 +7,7 @@
  */
 
 import { useAuth } from '@/app/contexts/authentication-context';
-import { AlertTriangle, Clock, RefreshCw, X } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 import { useCallback, useMemo } from 'react';
 
 export function SessionExpiryWarning() {
