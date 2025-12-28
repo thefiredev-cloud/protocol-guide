@@ -7,7 +7,143 @@ import { useState } from 'react';
 import { MaterialIcon } from '../../components/ui/material-icon';
 
 // Mock protocol data (will be replaced with real API data)
-const MOCK_PROTOCOL = {
+const MOCK_PROTOCOLS: Record<string, typeof MOCK_PROTOCOL_DEFAULT> = {
+  'tp-1245': {
+    id: 'tp-1245',
+    tpCode: 'TP-1245',
+    title: 'Pediatric Trauma',
+    subtitle: 'Pediatric Medical • Standing Order',
+    category: 'Trauma',
+    priority: 'ALS',
+    effectiveDate: 'Dec 12, 2023',
+    scope: 'County-Wide',
+    criticalWarning: {
+      severity: 'critical' as const,
+      text: 'Patients meeting Step 1 or Step 2 criteria MUST be transported to the nearest designated Pediatric Trauma Center (PTC).',
+    },
+    isSaved: true,
+    treatmentSequence: [
+      {
+        id: 'primary-survey',
+        title: 'Primary Survey & Vitals',
+        subtitle: 'Initial Assessment',
+        icon: 'ecg_heart',
+        colorClass: 'text-blue-600 dark:text-blue-400',
+        bgClass: 'bg-blue-100 dark:bg-blue-900/30',
+        content: [
+          'Ensure scene safety and utilize appropriate PPE',
+          'Maintain C-Spine precautions immediately',
+          'Airway: Ensure patency. Suction if necessary',
+          'Breathing: Administer high-flow O2 if SpO2 < 94% or signs of shock',
+          'Circulation: Control major bleeding. Assess pulses, capillary refill (< 2s)',
+        ],
+      },
+      {
+        id: 'fluid-resuscitation',
+        title: 'Fluid Resuscitation',
+        subtitle: 'IV/IO Access & Fluids',
+        icon: 'water_drop',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-100 dark:bg-indigo-900/30',
+        content: [
+          'Establish IV/IO access',
+          'NS 20 mL/kg bolus if signs of shock',
+          'May repeat x1 if hypotension persists',
+          'Contact Base for additional fluid orders',
+        ],
+      },
+    ],
+    painManagement: [
+      { name: 'Fentanyl', dose: '1 mcg/kg', route: 'IV/IN', max: 'Max 50mcg' },
+      { name: 'Morphine', dose: '0.1 mg/kg', route: 'IV/IM', max: 'Max 5mg' },
+    ],
+    pharmacology: [
+      { name: 'Fentanyl', dose: '1 mcg/kg', route: 'IV/IN' },
+      { name: 'Morphine', dose: '0.1 mg/kg', route: 'IV/IM' },
+      { name: 'Normal Saline', dose: '20 mL/kg', route: 'IV/IO' },
+    ],
+    triageCriteria: [
+      { id: 'physiologic', question: 'Physiologic Criteria?', criteria: 'GCS ≤ 14, SBP < 90, RR < 10 or > 28', result: 'YES: Transport to L1' },
+      { id: 'anatomic', question: 'Anatomic Criteria?', criteria: 'Penetrating injury, Flail chest, 2+ proximal long bone fx', result: 'YES: L1 Transport' },
+    ],
+    relatedProtocols: [
+      { id: 'tp-1244', code: 'TP-1244', title: 'Adult Trauma' },
+      { id: 'tp-1210', code: 'TP-1210', title: 'Cardiac Arrest' },
+      { id: 'tp-1204', code: 'TP-1204', title: 'Burns' },
+    ],
+  },
+  'tp-1244': {
+    id: 'tp-1244',
+    tpCode: 'TP-1244',
+    title: 'Cardiac Arrest',
+    subtitle: 'Adult Medical • Standing Order',
+    category: 'Cardiac',
+    priority: 'ALS Priority',
+    effectiveDate: 'Jan 1, 2024',
+    scope: 'County-Wide',
+    criticalWarning: undefined,
+    isSaved: true,
+    treatmentSequence: [
+      {
+        id: 'assessment',
+        title: 'Initial Assessment',
+        subtitle: 'CPR, Defibrillation, Airway',
+        icon: 'ecg_heart',
+        colorClass: 'text-blue-600 dark:text-blue-400',
+        bgClass: 'bg-blue-100 dark:bg-blue-900/30',
+        content: [
+          'Confirm pulselessness and apnea',
+          'Begin high-quality CPR immediately',
+          'Attach defibrillator and analyze rhythm',
+          'If VF/VT: Defibrillate at maximum energy',
+          'Resume CPR immediately after shock',
+        ],
+      },
+      {
+        id: 'vascular',
+        title: 'Vascular Access',
+        subtitle: 'IV/IO Establishment',
+        icon: 'water_drop',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-100 dark:bg-indigo-900/30',
+        content: [
+          'Establish IV access during CPR',
+          'If IV unsuccessful after 2 attempts, establish IO',
+          'Preferred IO sites: proximal tibia, proximal humerus',
+          'Confirm placement with flush',
+        ],
+      },
+      {
+        id: 'medications',
+        title: 'Medication Administration',
+        subtitle: 'Epinephrine, Amiodarone details',
+        icon: 'pill',
+        colorClass: 'text-purple-600 dark:text-purple-400',
+        bgClass: 'bg-purple-100 dark:bg-purple-900/30',
+        content: [
+          'Epinephrine 1mg IV/IO every 3-5 minutes',
+          'For VF/VT: Amiodarone 300mg IV/IO first dose',
+          'Second dose Amiodarone: 150mg IV/IO',
+          'Consider Lidocaine if Amiodarone unavailable',
+        ],
+      },
+    ],
+    painManagement: undefined,
+    pharmacology: [
+      { name: 'Epinephrine 1:10,000', dose: '1mg IV/IO q3-5min', route: 'IV/IO' },
+      { name: 'Amiodarone', dose: '300mg, then 150mg', route: 'IV/IO' },
+      { name: 'Sodium Bicarbonate', dose: '1 mEq/kg', route: 'IV/IO' },
+    ],
+    triageCriteria: undefined,
+    relatedProtocols: [
+      { id: 'tp-1210', code: 'TP-1210', title: 'STEMI' },
+      { id: 'tp-1212', code: 'TP-1212', title: 'Cardiac Arrhythmias' },
+      { id: 'tp-1244-p', code: 'TP-1244-P', title: 'Pediatric Cardiac Arrest' },
+    ],
+  },
+};
+
+const MOCK_PROTOCOL_DEFAULT = {
   id: 'tp-1244',
   tpCode: 'TP-1244',
   title: 'Cardiac Arrest',
@@ -16,75 +152,21 @@ const MOCK_PROTOCOL = {
   priority: 'ALS Priority',
   effectiveDate: 'Jan 1, 2024',
   scope: 'County-Wide',
-  criticalConsideration: 'Minimize interruptions in chest compressions',
+  criticalWarning: undefined as { severity: 'critical' | 'warning'; text: string } | undefined,
   isSaved: true,
-  treatmentSequence: [
-    {
-      id: 'assessment',
-      title: 'Initial Assessment',
-      subtitle: 'CPR, Defibrillation, Airway',
-      icon: 'ecg_heart',
-      colorClass: 'text-blue-600 dark:text-blue-400',
-      bgClass: 'bg-blue-100 dark:bg-blue-900/30',
-      content: [
-        'Confirm pulselessness and apnea',
-        'Begin high-quality CPR immediately',
-        'Attach defibrillator and analyze rhythm',
-        'If VF/VT: Defibrillate at maximum energy',
-        'Resume CPR immediately after shock',
-      ],
-    },
-    {
-      id: 'vascular',
-      title: 'Vascular Access',
-      subtitle: 'IV/IO Establishment',
-      icon: 'water_drop',
-      colorClass: 'text-indigo-600 dark:text-indigo-400',
-      bgClass: 'bg-indigo-100 dark:bg-indigo-900/30',
-      content: [
-        'Establish IV access during CPR',
-        'If IV unsuccessful after 2 attempts, establish IO',
-        'Preferred IO sites: proximal tibia, proximal humerus',
-        'Confirm placement with flush',
-      ],
-    },
-    {
-      id: 'medications',
-      title: 'Medication Administration',
-      subtitle: 'Epinephrine, Amiodarone details',
-      icon: 'pill',
-      colorClass: 'text-purple-600 dark:text-purple-400',
-      bgClass: 'bg-purple-100 dark:bg-purple-900/30',
-      content: [
-        'Epinephrine 1mg IV/IO every 3-5 minutes',
-        'For VF/VT: Amiodarone 300mg IV/IO first dose',
-        'Second dose Amiodarone: 150mg IV/IO',
-        'Consider Lidocaine if Amiodarone unavailable',
-      ],
-    },
-  ],
-  pharmacology: [
-    {
-      name: 'Epinephrine 1:10,000',
-      dose: '1mg IV/IO q3-5min',
-      route: 'IV/IO',
-    },
-    {
-      name: 'Amiodarone',
-      dose: '300mg, then 150mg',
-      route: 'IV/IO',
-    },
-    {
-      name: 'Sodium Bicarbonate',
-      dose: '1 mEq/kg',
-      route: 'IV/IO',
-    },
-  ],
-  relatedProtocols: [
-    { id: 'tp-1210', code: 'TP-1210', title: 'STEMI' },
-    { id: 'tp-1212', code: 'TP-1212', title: 'Cardiac Arrhythmias' },
-    { id: 'tp-1244-p', code: 'TP-1244-P', title: 'Pediatric Cardiac Arrest' },
-  ],
+  treatmentSequence: [] as Array<{
+    id: string;
+    title: string;
+    subtitle: string;
+    icon: string;
+    colorClass: string;
+    bgClass: string;
+    content: string[];
+  }>,
+  painManagement: undefined as Array<{ name: string; dose: string; route: string; max: string }> | undefined,
+  pharmacology: [] as Array<{ name: string; dose: string; route: string }>,
+  triageCriteria: undefined as Array<{ id: string; question: string; criteria: string; result: string }> | undefined,
+  relatedProtocols: [] as Array<{ id: string; code: string; title: string }>,
 };
 
 function CollapsibleSection({
