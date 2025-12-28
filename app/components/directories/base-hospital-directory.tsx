@@ -25,11 +25,11 @@ export function BaseHospitalDirectory() {
       <section className="critical-contacts">
         <div className="contact-card priority">
           <div className="contact-header">
-            <AlertCircle size={24} color="var(--error)" />
+            <MaterialIcon name="error" size={24} className="text-red-600" />
             <h3>Medical Alert Center (MAC)</h3>
           </div>
           <a href={`tel:${MEDICAL_ALERT_CENTER.phone}`} className="phone-link primary">
-            <Phone size={20} />
+            <MaterialIcon name="phone" size={20} />
             <span>{MEDICAL_ALERT_CENTER.phone}</span>
           </a>
           <p className="contact-usage">{MEDICAL_ALERT_CENTER.usage}</p>
