@@ -1,8 +1,9 @@
 'use client';
 
-import { BASE_HOSPITALS, MEDICAL_ALERT_CENTER, BaseHospital } from '../../../lib/clinical/base-hospitals';
-import { MaterialIcon } from '../ui/material-icon';
 import { useState } from 'react';
+
+import { BASE_HOSPITALS, BaseHospital,MEDICAL_ALERT_CENTER } from '../../../lib/clinical/base-hospitals';
+import { MaterialIcon } from '../ui/material-icon';
 
 type SpecialtyFilter = 'All' | 'Trauma' | 'STEMI' | 'Stroke' | 'ECMO' | 'Burn';
 
@@ -18,42 +19,42 @@ const SPECIALTY_CATEGORIES: SpecialtyCategory[] = [
   {
     id: 'All',
     name: 'All Hospitals',
-    icon: <Heart size={20} />,
+    icon: <MaterialIcon name="favorite" size={20} />,
     color: '#2563eb',
     description: 'View all 13 base hospitals'
   },
   {
     id: 'Trauma',
     name: 'Trauma Centers',
-    icon: <AlertCircle size={20} />,
+    icon: <MaterialIcon name="error" size={20} />,
     color: '#dc2626',
     description: 'Level I & II trauma centers'
   },
   {
     id: 'STEMI',
     name: 'STEMI Centers',
-    icon: <Zap size={20} />,
+    icon: <MaterialIcon name="bolt" size={20} />,
     color: '#ea580c',
     description: 'ST-Elevation MI treatment'
   },
   {
     id: 'Stroke',
     name: 'Stroke Centers',
-    icon: <Brain size={20} />,
+    icon: <MaterialIcon name="psychology" size={20} />,
     color: '#7c3aed',
     description: 'Comprehensive stroke care'
   },
   {
     id: 'ECMO',
     name: 'ECMO Centers',
-    icon: <Activity size={20} />,
+    icon: <MaterialIcon name="monitor_heart" size={20} />,
     color: '#0891b2',
     description: 'Advanced cardiac support'
   },
   {
     id: 'Burn',
     name: 'Burn Center',
-    icon: <Flame size={20} />,
+    icon: <MaterialIcon name="local_fire_department" size={20} />,
     color: '#f59e0b',
     description: 'Specialized burn treatment'
   }
