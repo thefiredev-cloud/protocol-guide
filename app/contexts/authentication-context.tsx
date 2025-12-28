@@ -22,6 +22,8 @@ interface AuthUser {
   fullName: string;
   role: 'paramedic' | 'emt' | 'medical_director' | 'admin' | 'guest';
   stationId: string | null;
+  badgeNumber: string | null;
+  department: string;
 }
 
 /**
