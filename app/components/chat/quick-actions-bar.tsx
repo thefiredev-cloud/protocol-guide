@@ -1,9 +1,9 @@
 "use client";
 
-import { MaterialIcon } from "../ui/material-icon";
 import { useCallback, useEffect, useState } from "react";
 
 import type { CarePlan } from "../../types/chat";
+import { MaterialIcon } from "../ui/material-icon";
 
 type QuickActionsBarProps = {
   carePlan?: CarePlan | null;
