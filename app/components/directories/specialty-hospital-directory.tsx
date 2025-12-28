@@ -436,18 +436,18 @@ function SpecialtyHospitalCard({ hospital, highlightSpecialty }: SpecialtyHospit
         </div>
         {isLevel1 && (
           <div className="level-1-badge">
-            <AlertCircle size={16} fill="currentColor" />
+            <MaterialIcon name="error" size={16} filled />
             Level I Trauma
           </div>
         )}
       </div>
 
-      <a 
-        href={`tel:${hospital.phone}`} 
+      <a
+        href={`tel:${hospital.phone}`}
         className="hospital-call-button"
         aria-label={`Call ${hospital.shortName}`}
       >
-        <Phone size={24} strokeWidth={2.5} />
+        <MaterialIcon name="phone" size={24} />
         <span className="button-phone-number">{hospital.phone}</span>
       </a>
 
