@@ -297,7 +297,7 @@ export function QuickAccessFeatures({
                   </ul>
                 ) : (
                   <div className="quick-access-empty">
-                    <Star size={32} />
+                    <MaterialIcon name="star" size={32} />
                     <p>No favorite protocols</p>
                     <p className="quick-access-empty-hint">
                       Tap the star icon to add protocols to favorites
