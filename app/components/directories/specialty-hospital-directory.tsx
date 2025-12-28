@@ -160,7 +160,7 @@ export function SpecialtyHospitalDirectory() {
       <section className="hospitals-list">
         {filteredHospitals.length === 0 ? (
           <div className="no-results">
-            <AlertCircle size={48} />
+            <MaterialIcon name="error" size={48} />
             <h3>No hospitals found</h3>
             <p>No hospitals match the selected specialty</p>
           </div>
