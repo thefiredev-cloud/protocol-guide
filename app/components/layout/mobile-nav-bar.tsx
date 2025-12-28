@@ -58,10 +58,6 @@ function NavTab({ href, icon, label, active }: NavTabProps) {
   );
 }
 
-interface MobileNavBarProps {
-  onMicClick?: () => void;
-}
-
 export function MobileNavBar() {
   const pathname = usePathname();
   const router = useRouter();
