@@ -449,6 +449,17 @@ export default function ProtocolDetailPage() {
             ))}
           </div>
         </div>
+
+        {/* Link to PCR - ImageTrend Elite Integration */}
+        <div className="mb-8">
+          <button className="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex items-center justify-center gap-2 transition-colors shadow-lg shadow-indigo-600/20">
+            <MaterialIcon name="sync" size={20} />
+            Link to PCR
+            <span className="px-2 py-0.5 rounded bg-indigo-500 text-xs ml-1">
+              ImageTrend Elite
+            </span>
+          </button>
+        </div>
       </main>
     </div>
   );
