@@ -1,7 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
 export interface MaterialIconProps {
   /** The Material Symbol icon name (e.g., "chat_bubble", "menu_book") */
   name: string;
@@ -25,16 +23,20 @@ export function MaterialIcon({
   name,
   filled = false,
   size = 24,
-  className,
+  className = "",
   "aria-label": ariaLabel,
 }: MaterialIconProps) {
+  const classes = [
+    "material-symbols-outlined",
+    filled ? "filled" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <span
-      className={cn(
-        "material-symbols-outlined",
-        filled && "filled",
-        className
-      )}
+      className={classes}
       style={{ fontSize: size }}
       aria-label={ariaLabel}
       role={ariaLabel ? "img" : undefined}
