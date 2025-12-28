@@ -260,7 +260,7 @@ const CitationsList = memo(function CitationsList({ citations }: { citations: Ci
   return (
     <div className="citations-container">
       <div className="citations-header">
-        <FileText size={14} />
+        <MaterialIcon name="description" size={14} />
         <span>Protocol References</span>
       </div>
       <div className="citations-list">
