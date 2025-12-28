@@ -1,8 +1,7 @@
 'use client';
 
-import { MaterialIcon } from '../ui/material-icon';
-
 import { useSettings } from '../../contexts/settings-context';
+import { MaterialIcon } from '../ui/material-icon';
 
 /**
  * User settings panel for accessibility and preferences

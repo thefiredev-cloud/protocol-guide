@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, MessageSquare } from "lucide-react";
+import { MaterialIcon } from "../ui/material-icon";
 
 import SpotlightCard from "../ui/react-bits/spotlight-card";
 
