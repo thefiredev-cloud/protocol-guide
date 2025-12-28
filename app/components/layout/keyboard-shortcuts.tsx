@@ -1,6 +1,6 @@
 'use client';
 
-import { Command, X } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 import { useEffect, useRef, useState } from 'react';
 
 import { useSettings } from '../../contexts/settings-context';

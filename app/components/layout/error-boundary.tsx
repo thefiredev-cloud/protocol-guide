@@ -1,8 +1,9 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
-import { MaterialIcon } from '../ui/material-icon';
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 interface Props {
   children: ReactNode;
