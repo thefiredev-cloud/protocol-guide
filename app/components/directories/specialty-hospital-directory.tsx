@@ -89,7 +89,7 @@ export function SpecialtyHospitalDirectory() {
       {/* Header */}
       <header className="specialty-header">
         <div className="header-icon-wrapper">
-          <Heart size={40} strokeWidth={2.5} />
+          <MaterialIcon name="favorite" size={40} />
         </div>
         <h1 className="specialty-title">Base Hospital Directory</h1>
         <p className="specialty-subtitle">Categorized by Specialty Capabilities</p>
@@ -99,14 +99,14 @@ export function SpecialtyHospitalDirectory() {
       <section className="mac-section">
         <div className="mac-card">
           <div className="mac-header">
-            <AlertCircle size={28} />
+            <MaterialIcon name="error" size={28} />
             <div>
               <h2>Medical Alert Center (MAC)</h2>
               <p className="mac-description">24/7 specialized consultations</p>
             </div>
           </div>
           <a href={`tel:${MEDICAL_ALERT_CENTER.phone}`} className="mac-phone-button">
-            <Phone size={24} />
+            <MaterialIcon name="phone" size={24} />
             <span className="phone-text">{MEDICAL_ALERT_CENTER.phone}</span>
           </a>
           <p className="mac-usage">{MEDICAL_ALERT_CENTER.usage}</p>
