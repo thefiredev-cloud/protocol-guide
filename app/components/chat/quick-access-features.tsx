@@ -250,7 +250,7 @@ export function QuickAccessFeatures({
                   </ul>
                 ) : (
                   <div className="quick-access-empty">
-                    <Clock size={32} />
+                    <MaterialIcon name="schedule" size={32} />
                     <p>No recent protocols</p>
                     <p className="quick-access-empty-hint">
                       Protocols you access will appear here
