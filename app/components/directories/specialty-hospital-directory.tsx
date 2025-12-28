@@ -1,7 +1,7 @@
 'use client';
 
 import { BASE_HOSPITALS, MEDICAL_ALERT_CENTER, BaseHospital } from '../../../lib/clinical/base-hospitals';
-import { Phone, Heart, Zap, Brain, Activity, Flame, AlertCircle } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 import { useState } from 'react';
 
 type SpecialtyFilter = 'All' | 'Trauma' | 'STEMI' | 'Stroke' | 'ECMO' | 'Burn';
