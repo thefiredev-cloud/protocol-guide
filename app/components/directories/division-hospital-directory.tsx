@@ -311,12 +311,12 @@ function DivisionHospitalCard({ hospital, divisionColor }: DivisionHospitalCardP
       </div>
 
       {/* Phone Button */}
-      <a 
-        href={`tel:${hospital.phone}`} 
+      <a
+        href={`tel:${hospital.phone}`}
         className="phone-button"
         aria-label={`Call ${hospital.shortName}`}
       >
-        <Phone size={36} strokeWidth={3} />
+        <MaterialIcon name="phone" size={36} />
         <span className="phone-number">{hospital.phone}</span>
       </a>
 
