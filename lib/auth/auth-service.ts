@@ -212,7 +212,7 @@ class AuthService {
 
     const { data, error } = await adminClient
       .from('users')
-      .select('id, email, full_name, role, station_id')
+      .select('id, email, full_name, role, station_id, badge_number, department')
       .eq('id', userId)
       .single();
 
@@ -226,6 +226,8 @@ class AuthService {
       fullName: data.full_name,
       role: data.role as AuthUser['role'],
       stationId: data.station_id,
+      badgeNumber: data.badge_number,
+      department: data.department,
     };
   }
 
