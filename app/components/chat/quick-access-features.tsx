@@ -169,7 +169,7 @@ export function QuickAccessFeatures({
               className="quick-access-close"
               aria-label="Close quick access"
             >
-              <X size={20} />
+              <MaterialIcon name="close" size={20} />
             </button>
           </div>
 
@@ -185,7 +185,7 @@ export function QuickAccessFeatures({
               }`}
               onClick={() => setActiveTab("recent")}
             >
-              <Clock size={16} />
+              <MaterialIcon name="schedule" size={16} />
               Recent ({recentProtocols.length})
             </button>
             <button
@@ -198,7 +198,7 @@ export function QuickAccessFeatures({
               }`}
               onClick={() => setActiveTab("favorites")}
             >
-              <Star size={16} />
+              <MaterialIcon name="star" size={16} />
               Favorites ({favoriteProtocols.length})
             </button>
           </div>
