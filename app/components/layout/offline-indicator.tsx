@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, CheckCircle, Wifi, WifiOff } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type ConnectionStatus = 'online' | 'offline' | 'reconnected';
