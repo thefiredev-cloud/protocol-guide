@@ -283,7 +283,7 @@ interface BaseHospitalCardProps {
 
 function BaseHospitalCard({ hospital }: BaseHospitalCardProps) {
   const isLevel1Trauma = hospital.capabilities.some(cap => cap.includes('Level I Trauma'));
-  
+
   return (
     <div className={`hospital-card ${isLevel1Trauma ? 'level-1' : ''}`}>
       <div className="hospital-header">
@@ -293,23 +293,23 @@ function BaseHospitalCard({ hospital }: BaseHospitalCardProps) {
         </div>
         {isLevel1Trauma && (
           <div className="level-1-badge">
-            <Star size={16} fill="currentColor" />
+            <MaterialIcon name="star" size={16} filled />
             Level I
           </div>
         )}
       </div>
 
-      <a 
-        href={`tel:${hospital.phone}`} 
+      <a
+        href={`tel:${hospital.phone}`}
         className="hospital-phone"
         aria-label={`Call ${hospital.shortName} at ${hospital.phone}`}
       >
-        <Phone size={24} />
+        <MaterialIcon name="phone" size={24} />
         <span className="phone-number">{hospital.phone}</span>
       </a>
 
       <div className="hospital-address">
-        <MapPin size={14} />
+        <MaterialIcon name="location_on" size={14} />
         <span>{hospital.address}</span>
       </div>
 
