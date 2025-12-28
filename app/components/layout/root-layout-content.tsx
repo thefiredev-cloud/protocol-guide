@@ -2,9 +2,8 @@
 
 import React, { useEffect } from 'react';
 
-import { SettingsPanel } from '../settings/app-settings-panel';
-
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
+import { SettingsPanel } from '../settings/app-settings-panel';
 import { ChatbotLayout } from './chatbot-layout';
 import { KeyboardShortcuts } from './keyboard-shortcuts';
 import { MobileNavBar } from './mobile-nav-bar';

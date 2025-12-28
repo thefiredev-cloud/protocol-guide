@@ -12,19 +12,11 @@ interface ChatbotLayoutProps {
  */
 export function ChatbotLayout({ children }: ChatbotLayoutProps) {
   const pathname = usePathname();
-  const hideHeader = pathname === '/login';
+  const isLoginPage = pathname === '/login';
 
   return (
     <div className="chatbot-layout">
-      {!hideHeader && (
-        <header className="chatbot-header">
-          <div className="chatbot-header-content">
-            <h1 className="chatbot-title">ProtocolGuide</h1>
-            <span className="chatbot-subtitle">LA County Protocol Assistant</span>
-          </div>
-        </header>
-      )}
-      <main className="chatbot-main">
+      <main className={`chatbot-main ${!isLoginPage ? 'pb-20' : ''}`}>
         {children}
       </main>
     </div>
