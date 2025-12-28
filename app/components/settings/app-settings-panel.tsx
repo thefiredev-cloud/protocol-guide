@@ -1,6 +1,6 @@
 'use client';
 
-import { Moon, Settings, Sun, Type, X } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 
 import { useSettings } from '../../contexts/settings-context';
 
