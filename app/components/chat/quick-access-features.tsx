@@ -329,7 +329,7 @@ export function QuickAccessFeatures({
           {/* Emergency Contact Info */}
           <div className="quick-access-emergency" role="region" aria-label="Emergency contact">
             <div className="quick-access-emergency-title">
-              <Bookmark size={16} />
+              <MaterialIcon name="bookmark" size={16} />
               Emergency Contact
             </div>
             <div className="quick-access-emergency-info">
