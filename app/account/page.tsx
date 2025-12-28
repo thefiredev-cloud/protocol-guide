@@ -85,13 +85,13 @@ export default function AccountPage() {
     router.push('/login');
   }, [logout, router]);
 
-  // User data from auth context with fallbacks
+  // User data from auth context with fallbacks - using real profile data
   const user = {
     name: authUser?.fullName || authUser?.email?.split('@')[0] || 'Paramedic',
-    department: 'LA County Fire Dept.',
+    department: authUser?.department === 'lacfd' ? 'LA County Fire Dept.' : (authUser?.department || 'LA County Fire Dept.'),
     status: 'Active Duty',
-    employeeId: 'LAC-FD-8942',
-    station: authUser?.stationId || 'Station 12',
+    employeeId: authUser?.badgeNumber ? `LAC-FD-${authUser.badgeNumber}` : 'Not Assigned',
+    station: authUser?.stationId ? `Station ${authUser.stationId}` : 'Unassigned',
     email: authUser?.email || 'user@fire.lacounty.gov',
   };
 
