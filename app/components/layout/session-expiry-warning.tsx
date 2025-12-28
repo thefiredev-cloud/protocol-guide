@@ -57,9 +57,9 @@ export function SessionExpiryWarning() {
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           {isCritical ? (
-            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <MaterialIcon name="warning" size={20} className="flex-shrink-0" />
           ) : (
-            <Clock className="w-5 h-5 flex-shrink-0" />
+            <MaterialIcon name="schedule" size={20} className="flex-shrink-0" />
           )}
           <span className="font-medium">
             {isCritical
@@ -77,7 +77,7 @@ export function SessionExpiryWarning() {
                 : 'bg-black text-amber-500 hover:bg-gray-900'
             }`}
           >
-            <RefreshCw className="w-4 h-4" />
+            <MaterialIcon name="refresh" size={16} />
             Stay Logged In
           </button>
 
@@ -87,7 +87,7 @@ export function SessionExpiryWarning() {
               className="p-1.5 rounded hover:bg-black/10 transition-colors"
               aria-label="Dismiss warning"
             >
-              <X className="w-4 h-4" />
+              <MaterialIcon name="close" size={16} />
             </button>
           )}
         </div>
