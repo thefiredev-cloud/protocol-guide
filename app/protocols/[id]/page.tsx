@@ -356,6 +356,53 @@ export default function ProtocolDetailPage() {
           </div>
         </div>
 
+        {/* Pain Management - 2 Column Cards (for trauma protocols) */}
+        {protocol.painManagement && (
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">
+              Pain Management
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {protocol.painManagement.map((med, idx) => (
+                <div key={idx} className="p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">{med.name}</p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">{med.dose}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{med.route}</p>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{med.max}</p>
+                </div>
+              ))}
+            </div>
+            {/* View Contraindications Button */}
+            <button className="w-full mt-4 py-3 rounded-xl border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 font-semibold text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+              View Contraindications
+            </button>
+          </div>
+        )}
+
+        {/* Trauma Triage Criteria */}
+        {protocol.triageCriteria && (
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">
+              Trauma Triage Criteria
+            </h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              {protocol.triageCriteria.map((item) => (
+                <div key={item.id} className="p-4 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold mb-1">
+                    {item.question}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                    {item.criteria}
+                  </p>
+                  <span className="inline-flex px-3 py-1 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-semibold">
+                    {item.result}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Pharmacology */}
         <div className="mb-8">
           <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 ml-1">
