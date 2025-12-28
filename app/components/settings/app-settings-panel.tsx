@@ -32,11 +32,11 @@ export function SettingsPanel() {
       <div className="settings-panel" onClick={(e) => e.stopPropagation()}>
         <div className="settings-header">
           <div className="settings-title-row">
-            <Settings size={24} />
+            <MaterialIcon name="settings" size={24} />
             <h2 id="settings-title">Settings</h2>
           </div>
           <button onClick={closeSettings} className="settings-close" aria-label="Close settings" type="button">
-            <X size={24} />
+            <MaterialIcon name="close" size={24} />
           </button>
         </div>
 
@@ -44,7 +44,7 @@ export function SettingsPanel() {
           {/* Font Size */}
           <div className="setting-group">
             <label className="setting-label">
-              <Type size={18} />
+              <MaterialIcon name="text_fields" size={18} />
               Font Size
             </label>
             <div className="setting-options">
