@@ -225,7 +225,7 @@ const CitationCard = memo(function CitationCard({ citation }: { citation: Citati
   return (
     <div className="citation-card">
       <div className="citation-header">
-        <FileText size={16} className="citation-icon" />
+        <MaterialIcon name="description" size={16} className="citation-icon" />
         {referenceNumber && (
           <span className="citation-ref-badge">Ref {referenceNumber}</span>
         )}
