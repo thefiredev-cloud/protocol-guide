@@ -326,15 +326,22 @@ export default function ProtocolDetailPage() {
             </div>
           </div>
 
-          {/* Critical Consideration */}
-          <div className="mt-4 text-center p-3 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-900/30">
-            <p className="text-[10px] uppercase tracking-wider text-yellow-600 dark:text-yellow-500 font-semibold mb-1">
-              Critical Consideration
-            </p>
-            <p className="text-sm font-bold text-gray-900 dark:text-white">
-              {protocol.criticalConsideration}
-            </p>
-          </div>
+          {/* Critical Warning (Red banner for trauma protocols) */}
+          {protocol.criticalWarning && (
+            <div className="mt-4 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+              <div className="flex items-start gap-3">
+                <MaterialIcon name="warning" size={20} className="text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-red-800 dark:text-red-200">
+                    TRAUMA CENTER TRANSPORT
+                  </p>
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                    {protocol.criticalWarning.text}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Treatment Sequence */}
