@@ -1,7 +1,8 @@
 "use client";
 
-import { MaterialIcon } from "../ui/material-icon";
 import { useCallback, useEffect, useState } from "react";
+
+import { MaterialIcon } from "../ui/material-icon";
 
 /**
  * Storage keys for recent and favorite protocols
