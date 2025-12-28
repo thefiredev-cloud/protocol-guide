@@ -1,10 +1,15 @@
-const CACHE_NAME = "protocol-guide-v2-chunked";
+const CACHE_NAME = "protocol-guide-v3-offline";
 const CORE_ASSETS = [
   "/",
   "/icon.svg",
   "/manifest.json",
-  "/kb/manifest.json", // Only cache the manifest, not the full 11MB KB
+  "/kb/manifest.json",
+  "/offline.html", // Offline fallback page
 ];
+
+// Database names for sync operations
+const SYNC_DB_NAME = 'medic-bot-sync';
+const SYNC_STORE_NAME = 'sync-queue';
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
