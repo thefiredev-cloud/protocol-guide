@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { MaterialIcon } from '../ui/material-icon';
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
+import { MaterialIcon } from '../ui/material-icon';
 
 interface NavItem {
   href: string;
