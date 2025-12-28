@@ -53,9 +53,9 @@ export function OfflineIndicator() {
   if (status === 'offline') {
     return (
       <div className="connection-banner offline" role="alert" aria-live="assertive">
-        <WifiOff size={18} strokeWidth={2.5} />
+        <MaterialIcon name="wifi_off" size={18} />
         <span className="connection-text">Offline - Using cached data</span>
-        <AlertTriangle size={16} className="connection-warning" />
+        <MaterialIcon name="warning" size={16} className="connection-warning" />
       </div>
     );
   }
@@ -64,9 +64,9 @@ export function OfflineIndicator() {
   if (showReconnectedToast) {
     return (
       <div className="connection-banner reconnected" role="status" aria-live="polite">
-        <CheckCircle size={18} strokeWidth={2.5} />
+        <MaterialIcon name="check_circle" size={18} />
         <span className="connection-text">Back Online</span>
-        <Wifi size={16} className="connection-icon" />
+        <MaterialIcon name="wifi" size={16} className="connection-icon" />
       </div>
     );
   }

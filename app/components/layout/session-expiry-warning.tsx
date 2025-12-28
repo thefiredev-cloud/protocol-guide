@@ -6,9 +6,11 @@
  * Allows user to refresh session or dismiss warning
  */
 
-import { useAuth } from '@/app/contexts/authentication-context';
-import { MaterialIcon } from '../ui/material-icon';
 import { useCallback, useMemo } from 'react';
+
+import { useAuth } from '@/app/contexts/authentication-context';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 export function SessionExpiryWarning() {
   const {
