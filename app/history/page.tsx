@@ -1,8 +1,9 @@
 'use client';
 
-import { Clock, MessageCircle, Search, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+
+import { MaterialIcon } from '../components/ui/material-icon';
 
 interface ChatSession {
   id: string;
@@ -44,24 +45,24 @@ function HistoryItem({
     >
       <Link
         href={`/?session=${session.id}`}
-        className="block p-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all hover:shadow-md active:scale-[0.99]"
+        className="block p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary/30 transition-all hover:shadow-md active:scale-[0.99]"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-[var(--text-primary)] truncate">
+            <h3 className="font-semibold text-gray-900 dark:text-white truncate">
               {session.title || 'Untitled conversation'}
             </h3>
-            <p className="text-sm text-[var(--text-secondary)] mt-1 line-clamp-2">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
               {session.preview || 'No messages yet'}
             </p>
           </div>
           <div className="shrink-0 flex flex-col items-end gap-1">
-            <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)]">
-              <Clock size={12} />
+            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+              <MaterialIcon name="schedule" size={12} />
               <span>{formatRelativeTime(session.lastMessageAt)}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)]">
-              <MessageCircle size={12} />
+            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+              <MaterialIcon name="chat_bubble" size={12} />
               <span>{session.messageCount}</span>
             </div>
           </div>
@@ -78,7 +79,7 @@ function HistoryItem({
           className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
           aria-label="Delete conversation"
         >
-          <Trash2 size={16} />
+          <MaterialIcon name="delete" size={16} />
         </button>
       )}
     </div>
@@ -89,23 +90,24 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
       <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-        <MessageCircle
+        <MaterialIcon
+          name="chat_bubble"
           size={32}
-          className="text-[var(--text-secondary)]"
+          className="text-gray-400 dark:text-gray-500"
         />
       </div>
-      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
         No conversations yet
       </h3>
-      <p className="text-sm text-[var(--text-secondary)] mb-6 max-w-xs">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-xs">
         Start a new conversation with the AI assistant to see your chat history
         here.
       </p>
       <Link
         href="/"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--accent)] text-white font-medium hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white font-medium hover:opacity-90 transition-opacity"
       >
-        <MessageCircle size={18} />
+        <MaterialIcon name="chat_bubble" size={18} />
         Start a conversation
       </Link>
     </div>
@@ -118,7 +120,7 @@ function LoadingSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="p-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] animate-pulse"
+          className="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 animate-pulse"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
@@ -188,15 +190,15 @@ export default function HistoryPage() {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--background)] pb-24">
+    <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[var(--surface)]/95 backdrop-blur-md border-b border-[var(--border)] transition-colors duration-200">
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div className="flex items-center justify-between px-5 pt-12 pb-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               History
             </h1>
-            <p className="text-xs font-medium text-[var(--text-secondary)] mt-1">
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">
               {sessions.length} conversation{sessions.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -207,9 +209,10 @@ export default function HistoryPage() {
           <div className="px-5 pb-4">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search
+                <MaterialIcon
+                  name="search"
                   size={20}
-                  className="text-[var(--text-secondary)] group-focus-within:text-[var(--accent)] transition-colors"
+                  className="text-gray-400 dark:text-gray-500 group-focus-within:text-primary transition-colors"
                 />
               </div>
               <input
@@ -217,7 +220,7 @@ export default function HistoryPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search conversations..."
-                className="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--surface-input)] border-transparent focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] text-sm font-medium placeholder:text-[var(--text-secondary)]/70 text-[var(--text-primary)] transition-all shadow-sm"
+                className="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 border-transparent focus:border-primary focus:ring-1 focus:ring-primary text-sm font-medium placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 text-gray-900 dark:text-white transition-all shadow-sm"
               />
             </div>
           </div>
@@ -229,11 +232,11 @@ export default function HistoryPage() {
           <LoadingSkeleton />
         ) : error ? (
           <div className="text-center py-8">
-            <p className="text-[var(--text-secondary)]">{error}</p>
+            <p className="text-gray-500 dark:text-gray-400">{error}</p>
             <button
               type="button"
               onClick={fetchSessions}
-              className="mt-4 text-[var(--accent)] font-medium"
+              className="mt-4 text-primary font-medium"
             >
               Try again
             </button>
@@ -241,7 +244,7 @@ export default function HistoryPage() {
         ) : filteredSessions.length === 0 ? (
           searchQuery ? (
             <div className="text-center py-8">
-              <p className="text-[var(--text-secondary)]">
+              <p className="text-gray-500 dark:text-gray-400">
                 No conversations match &quot;{searchQuery}&quot;
               </p>
             </div>
