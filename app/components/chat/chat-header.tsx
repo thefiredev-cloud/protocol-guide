@@ -44,11 +44,17 @@ export function ChatHeader() {
 
           {/* Title and status */}
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">
-              Protocol Assistant
-            </h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">
+                Protocol Assistant
+              </h1>
+              {/* ImageTrend Elite Integrated Badge */}
+              <span className="px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[9px] font-semibold">
+                ImageTrend Elite
+              </span>
+            </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              {isOnline ? "Online" : "Offline"} • AI Support Active
+              {isOnline ? "Online" : "Limited mode - Using offline guidance"} • AI Support Active
             </p>
           </div>
         </div>
