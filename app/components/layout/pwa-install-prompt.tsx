@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, X } from 'lucide-react';
+import { MaterialIcon } from '../ui/material-icon';
 import { useEffect, useState } from 'react';
 
 interface BeforeInstallPromptEvent extends Event {

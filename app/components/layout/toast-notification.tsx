@@ -1,7 +1,8 @@
 'use client';
 
-import { MaterialIcon } from '../ui/material-icon';
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
