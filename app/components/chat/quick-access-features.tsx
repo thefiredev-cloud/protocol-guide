@@ -239,9 +239,10 @@ export function QuickAccessFeatures({
                           }
                           aria-pressed={isFavorite(protocol.name)}
                         >
-                          <Star
+                          <MaterialIcon
+                            name="star"
                             size={16}
-                            fill={isFavorite(protocol.name) ? "currentColor" : "none"}
+                            filled={isFavorite(protocol.name)}
                           />
                         </button>
                       </li>
