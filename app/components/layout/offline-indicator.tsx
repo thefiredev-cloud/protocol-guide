@@ -1,7 +1,8 @@
 'use client';
 
-import { MaterialIcon } from '../ui/material-icon';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { MaterialIcon } from '../ui/material-icon';
 
 type ConnectionStatus = 'online' | 'offline' | 'reconnected';
 
