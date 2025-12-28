@@ -284,6 +284,8 @@ class AuthService {
       fullName: profile.fullName,
       role: profile.role ?? 'emt',
       stationId: profile.stationId ?? null,
+      badgeNumber: null,
+      department: 'lacfd',
     };
   }
 }
