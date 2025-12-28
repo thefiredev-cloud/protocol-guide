@@ -149,7 +149,7 @@ export function QuickAccessFeatures({
         aria-expanded={isOpen}
         title="Quick Access Protocols"
       >
-        {isOpen ? <X size={24} /> : <Plus size={24} />}
+        {isOpen ? <MaterialIcon name="close" size={24} /> : <MaterialIcon name="add" size={24} />}
       </button>
 
       {/* Quick Access Sidebar */}
