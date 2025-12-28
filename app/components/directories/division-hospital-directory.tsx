@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 
-import { MaterialIcon } from '../ui/material-icon';
-
 import { BASE_HOSPITALS, BaseHospital, MEDICAL_ALERT_CENTER } from '../../../lib/clinical/base-hospitals';
+import { MaterialIcon } from '../ui/material-icon';
 
 type Division = 'All' | 'Central' | 'North' | 'South' | 'East' | 'West';
 
@@ -66,7 +65,7 @@ export function DivisionHospitalDirectory() {
       <div className="mac-card">
         <div className="mac-label">MEDICAL ALERT CENTER</div>
         <a href={`tel:${MEDICAL_ALERT_CENTER.phone}`} className="mac-button">
-          <Phone size={32} strokeWidth={3} />
+          <MaterialIcon name="phone" size={32} />
           <span>{MEDICAL_ALERT_CENTER.phone}</span>
         </a>
       </div>
