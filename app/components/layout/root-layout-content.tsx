@@ -7,6 +7,7 @@ import { SettingsPanel } from '../settings/app-settings-panel';
 import { SettingsProvider, useSettings } from '../../contexts/settings-context';
 import { ChatbotLayout } from './chatbot-layout';
 import { KeyboardShortcuts } from './keyboard-shortcuts';
+import { MobileNavBar } from './mobile-nav-bar';
 import { OfflineIndicator } from './offline-indicator';
 import { SessionExpiryWarning } from './session-expiry-warning';
 
