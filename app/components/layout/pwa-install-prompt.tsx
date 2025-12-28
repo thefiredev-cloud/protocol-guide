@@ -73,7 +73,7 @@ export function PWAInstallPrompt() {
   return (
     <div className="pwa-install-banner" role="dialog" aria-label="Install app prompt">
       <div className="pwa-install-content">
-        <Download size={24} className="pwa-install-icon" />
+        <MaterialIcon name="download" size={24} className="pwa-install-icon" />
         <div className="pwa-install-text">
           <h3 className="pwa-install-title">Install ProtocolGuide</h3>
           <p className="pwa-install-description">
@@ -86,7 +86,7 @@ export function PWAInstallPrompt() {
           Install
         </button>
         <button onClick={handleDismiss} className="pwa-install-close" aria-label="Dismiss" type="button">
-          <X size={20} />
+          <MaterialIcon name="close" size={20} />
         </button>
       </div>
     </div>
