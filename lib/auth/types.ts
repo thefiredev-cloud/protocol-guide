@@ -14,6 +14,8 @@ export interface AuthUser {
   fullName: string;
   role: UserRole;
   stationId: string | null;
+  badgeNumber: string | null;
+  department: string;
 }
 
 /**
