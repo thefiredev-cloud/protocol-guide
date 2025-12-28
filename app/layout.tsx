@@ -83,10 +83,12 @@ export default function RootLayout({
       <body>
         <ErrorBoundary>
           <AuthProvider>
-            <ToastProvider>
-              <WebVitals />
-              <RootLayoutContent>{children}</RootLayoutContent>
-            </ToastProvider>
+            <OfflineProvider>
+              <ToastProvider>
+                <WebVitals />
+                <RootLayoutContent>{children}</RootLayoutContent>
+              </ToastProvider>
+            </OfflineProvider>
           </AuthProvider>
         </ErrorBoundary>
       </body>
