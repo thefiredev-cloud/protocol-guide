@@ -6,8 +6,8 @@
  * Redirects user to ImageTrend authorization page
  */
 
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { withApiHandler } from '../../../../../../lib/api/handler';
 import { createLogger } from '../../../../../../lib/log';

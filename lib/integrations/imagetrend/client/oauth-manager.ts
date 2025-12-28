@@ -14,7 +14,6 @@ import {
   type StoredTokenMetadata,
   type TokenExchangeParams,
   type TokenRefreshParams,
-  type TokenRefreshResult,
   type TokenRevocationParams,
 } from './types';
 
