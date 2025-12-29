@@ -40,7 +40,8 @@ export const GET = withApiHandler(
  * Toggle bookmark for a protocol
  */
 export const POST = withApiHandler(
-  async (_input: unknown, req: NextRequest) => {
+  async (input: unknown, req: NextRequest) => {
+    void input; // unused
     const token = req.cookies.get('sb-access-token')?.value;
 
     if (!token) {
