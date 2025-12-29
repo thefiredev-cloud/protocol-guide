@@ -41,9 +41,15 @@ const supabase = createClient(url, serviceKey, {
 });
 
 async function setupAdmin() {
-  const email = 'tanner@thefiredev.com';
-  const password = 'jackie99';
-  const fullName = 'Tanner Osterkamp';
+  const email = process.env.ADMIN_EMAIL || 'admin@example.com';
+  const password = process.env.ADMIN_PASSWORD;
+  const fullName = process.env.ADMIN_NAME || 'Admin User';
+
+  if (!password) {
+    console.error('❌ Error: ADMIN_PASSWORD environment variable is required');
+    console.log('Usage: ADMIN_EMAIL=x ADMIN_PASSWORD=x ADMIN_NAME=x npx tsx scripts/setup-admin.ts');
+    process.exit(1);
+  }
 
   console.log(`🚀 Setting up admin user: ${email}...`);
 
