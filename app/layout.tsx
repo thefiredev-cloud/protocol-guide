@@ -51,7 +51,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff", // Force light mode theme color
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover", // iPad safe area support
 };
 
 export default function RootLayout({
