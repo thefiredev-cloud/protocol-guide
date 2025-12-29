@@ -476,3 +476,128 @@ function getAllFromStore(store) {
     request.onsuccess = () => resolve(request.result);
   });
 }
+
+// ============================================================================
+// PROTOCOL CACHING
+// ============================================================================
+
+/**
+ * Priority protocols for critical situations
+ * These are cached first for immediate offline access
+ */
+const PRIORITY_PROTOCOLS = [
+  'cardiac-arrest',
+  'stemi',
+  'stroke',
+  'airway-management',
+  'pediatric-arrest',
+  'anaphylaxis',
+  'trauma-assessment',
+  'respiratory-distress',
+  'sepsis',
+  'overdose',
+];
+
+/**
+ * Cache priority protocols for offline use
+ * These are the most critical protocols needed in emergencies
+ */
+async function cachePriorityProtocols() {
+  console.log('[SW] Caching priority protocols');
+  const cache = await caches.open(CACHE_NAME);
+
+  let cached = 0;
+  for (const protocolId of PRIORITY_PROTOCOLS) {
+    try {
+      // Cache protocol API endpoint
+      const apiUrl = `/api/protocols/${protocolId}`;
+      const apiResponse = await fetch(apiUrl);
+      if (apiResponse.ok) {
+        await cache.put(apiUrl, apiResponse.clone());
+        cached++;
+      }
+
+      // Cache protocol page
+      const pageUrl = `/protocols/${protocolId}`;
+      const pageResponse = await fetch(pageUrl);
+      if (pageResponse.ok) {
+        await cache.put(pageUrl, pageResponse.clone());
+      }
+    } catch (error) {
+      console.warn('[SW] Failed to cache protocol:', protocolId, error.message);
+    }
+  }
+
+  console.log('[SW] Cached', cached, 'priority protocols');
+  return { cached, total: PRIORITY_PROTOCOLS.length };
+}
+
+/**
+ * Cache all protocols for complete offline access
+ * Fetches protocol list and caches each one
+ */
+async function cacheAllProtocols() {
+  console.log('[SW] Caching all protocols');
+  const cache = await caches.open(CACHE_NAME);
+
+  // First cache priority protocols
+  await cachePriorityProtocols();
+
+  try {
+    // Fetch all KB chunks for comprehensive offline access
+    const manifestResponse = await fetch('/kb/manifest.json');
+    if (!manifestResponse.ok) {
+      console.warn('[SW] Could not fetch KB manifest');
+      return { cached: 0, total: 0 };
+    }
+
+    const manifest = await manifestResponse.json();
+    await cache.put('/kb/manifest.json', new Response(JSON.stringify(manifest)));
+
+    let cached = 0;
+    const chunks = manifest.chunks || [];
+
+    for (const chunk of chunks) {
+      try {
+        const chunkUrl = `/kb/${chunk.file}`;
+        const chunkResponse = await fetch(chunkUrl);
+        if (chunkResponse.ok) {
+          await cache.put(chunkUrl, chunkResponse.clone());
+          cached++;
+        }
+      } catch (error) {
+        console.warn('[SW] Failed to cache chunk:', chunk.file, error.message);
+      }
+
+      // Small delay to avoid overwhelming the network
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    console.log('[SW] Cached', cached, 'of', chunks.length, 'KB chunks');
+
+    // Cache drug database
+    try {
+      const drugManifest = await fetch('/drugs/manifest.json');
+      if (drugManifest.ok) {
+        const drugs = await drugManifest.json();
+        await cache.put('/drugs/manifest.json', new Response(JSON.stringify(drugs)));
+
+        if (drugs.files) {
+          for (const file of drugs.files) {
+            const drugResponse = await fetch(`/drugs/${file}`);
+            if (drugResponse.ok) {
+              await cache.put(`/drugs/${file}`, drugResponse.clone());
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('[SW] Could not cache drug database:', error.message);
+    }
+
+    return { cached, total: chunks.length };
+  } catch (error) {
+    console.error('[SW] Failed to cache all protocols:', error);
+    throw error;
+  }
+}
