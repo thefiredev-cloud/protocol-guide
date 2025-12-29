@@ -15,7 +15,8 @@ import { authService } from '../../../../lib/auth/auth-service';
  * Get user's bookmarked protocols
  */
 export const GET = withApiHandler(
-  async (_input: unknown, req: NextRequest) => {
+  async (input: unknown, req: NextRequest) => {
+    void input; // unused
     const token = req.cookies.get('sb-access-token')?.value;
 
     if (!token) {
