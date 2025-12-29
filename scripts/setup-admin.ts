@@ -108,7 +108,6 @@ async function syncProfile(userId: string, email: string, fullName: string, pass
   console.log('✅ User profile synced successfully.');
   console.log('\n✨ Admin setup complete!');
   console.log(`Email: ${email}`);
-  if (password) console.log(`Password: ${password}`);
 }
 
 setupAdmin().catch(error => {
