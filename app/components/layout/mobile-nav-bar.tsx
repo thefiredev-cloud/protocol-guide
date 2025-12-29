@@ -1,11 +1,12 @@
 'use client';
-// v3.0 - New frontend navigation with Material Symbols (Dec 28, 2025)
+// v4.0 - 5-Tab Navigation with Floating Mic Button (Dec 29, 2025)
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
+import { FloatingMicButton } from '../ui/floating-mic-button';
 import { MaterialIcon } from '../ui/material-icon';
 
 interface NavItem {
@@ -21,6 +22,12 @@ interface NavTabProps {
   active: boolean;
 }
 
+interface MobileNavBarProps {
+  onVoiceInput?: (text: string) => void;
+  onVoiceError?: (error: string) => void;
+  voiceDisabled?: boolean;
+}
+
 function NavTab({ href, icon, label, active }: NavTabProps) {
   const { tap } = useHapticFeedback();
   const [isPressed, setIsPressed] = useState(false);
@@ -30,7 +37,7 @@ function NavTab({ href, icon, label, active }: NavTabProps) {
       href={href}
       className={`
         flex flex-col items-center justify-center flex-1 h-full gap-1
-        transition-colors
+        transition-colors min-w-[64px]
         ${active
           ? 'text-primary dark:text-red-400'
           : 'text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary'
@@ -50,28 +57,36 @@ function NavTab({ href, icon, label, active }: NavTabProps) {
       <MaterialIcon
         name={icon}
         filled={active}
-        size={26}
-        className="transition-transform duration-200 group-hover:-translate-y-0.5"
+        size={24}
+        className="transition-transform duration-200"
       />
       <span className="text-[10px] font-medium">{label}</span>
     </Link>
   );
 }
 
-export function MobileNavBar() {
+export function MobileNavBar({
+  onVoiceInput,
+  onVoiceError,
+  voiceDisabled = false,
+}: MobileNavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
 
-  // Define navigation order for swipe and keyboard navigation - 4 tabs matching sketch design
-  const navItems: NavItem[] = [
-    { href: '/', label: 'Chat', icon: 'home' },
-    { href: '/protocols', label: 'Protocols', icon: 'list' },
+  // 5-tab navigation: Assistant, Protocols, [Mic], History, Account
+  const leftTabs: NavItem[] = [
+    { href: '/', label: 'Assistant', icon: 'chat_bubble' },
+    { href: '/protocols', label: 'Protocols', icon: 'menu_book' },
+  ];
+
+  const rightTabs: NavItem[] = [
     { href: '/history', label: 'History', icon: 'history' },
     { href: '/account', label: 'Account', icon: 'person' },
   ];
 
-  const currentIndex = navItems.findIndex(item => item.href === pathname);
+  const allTabs = [...leftTabs, ...rightTabs];
+  const currentIndex = allTabs.findIndex(item => item.href === pathname);
 
   // Keyboard navigation support
   useEffect(() => {
@@ -80,31 +95,41 @@ export function MobileNavBar() {
 
       if (e.key === 'ArrowLeft' && currentIndex > 0) {
         e.preventDefault();
-        router.push(navItems[currentIndex - 1].href);
-      } else if (e.key === 'ArrowRight' && currentIndex < navItems.length - 1) {
+        router.push(allTabs[currentIndex - 1].href);
+      } else if (e.key === 'ArrowRight' && currentIndex < allTabs.length - 1) {
         e.preventDefault();
-        router.push(navItems[currentIndex + 1].href);
+        router.push(allTabs[currentIndex + 1].href);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, router, navItems]);
+  }, [currentIndex, router, allTabs]);
 
   const handleSwipeLeft = useCallback(() => {
-    const nextIndex = (currentIndex + 1) % navItems.length;
-    router.push(navItems[nextIndex].href);
-  }, [currentIndex, router, navItems]);
+    const nextIndex = (currentIndex + 1) % allTabs.length;
+    router.push(allTabs[nextIndex].href);
+  }, [currentIndex, router, allTabs]);
 
   const handleSwipeRight = useCallback(() => {
-    const prevIndex = currentIndex === 0 ? navItems.length - 1 : currentIndex - 1;
-    router.push(navItems[prevIndex].href);
-  }, [currentIndex, router, navItems]);
+    const prevIndex = currentIndex === 0 ? allTabs.length - 1 : currentIndex - 1;
+    router.push(allTabs[prevIndex].href);
+  }, [currentIndex, router, allTabs]);
 
   const { handleTouchStart, handleTouchEnd } = useSwipeNavigation({
     onSwipeLeft: handleSwipeLeft,
     onSwipeRight: handleSwipeRight,
   });
+
+  const handleVoiceTranscription = useCallback((text: string) => {
+    // If on chat page and handler provided, use it
+    if (onVoiceInput) {
+      onVoiceInput(text);
+    } else {
+      // Navigate to chat with the transcribed text
+      router.push(`/?q=${encodeURIComponent(text)}`);
+    }
+  }, [onVoiceInput, router]);
 
   return (
     <nav
@@ -115,16 +140,47 @@ export function MobileNavBar() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="flex justify-around items-center max-w-md mx-auto h-16">
-        {navItems.map((item) => (
-          <NavTab
-            key={item.href}
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            active={pathname === item.href}
-          />
-        ))}
+      <div className="relative flex items-center max-w-lg mx-auto h-16">
+        {/* Left tabs */}
+        <div className="flex flex-1 justify-around items-center h-full">
+          {leftTabs.map((item) => (
+            <NavTab
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              active={pathname === item.href}
+            />
+          ))}
+        </div>
+
+        {/* Floating Mic Button - Raised above nav */}
+        <div className="relative flex items-center justify-center w-20">
+          <div className="absolute -top-5">
+            <FloatingMicButton
+              onTranscription={handleVoiceTranscription}
+              onError={onVoiceError}
+              disabled={voiceDisabled}
+            />
+          </div>
+          {/* Spacer for mic label */}
+          <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 mt-6">
+            Speak
+          </span>
+        </div>
+
+        {/* Right tabs */}
+        <div className="flex flex-1 justify-around items-center h-full">
+          {rightTabs.map((item) => (
+            <NavTab
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              active={pathname === item.href}
+            />
+          ))}
+        </div>
       </div>
     </nav>
   );
