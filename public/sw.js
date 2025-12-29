@@ -173,6 +173,24 @@ self.addEventListener('message', (event) => {
   if (event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
+
+  // Pre-cache all protocols for offline use
+  if (event.data.type === 'CACHE_ALL_PROTOCOLS') {
+    cacheAllProtocols().then(() => {
+      notifyClients({ type: 'PROTOCOLS_CACHED' });
+    }).catch((error) => {
+      notifyClients({ type: 'PROTOCOLS_CACHE_ERROR', error: error.message });
+    });
+  }
+
+  // Cache specific priority protocols
+  if (event.data.type === 'CACHE_PRIORITY_PROTOCOLS') {
+    cachePriorityProtocols().then(() => {
+      notifyClients({ type: 'PRIORITY_PROTOCOLS_CACHED' });
+    }).catch((error) => {
+      notifyClients({ type: 'PROTOCOLS_CACHE_ERROR', error: error.message });
+    });
+  }
 });
 
 /**
