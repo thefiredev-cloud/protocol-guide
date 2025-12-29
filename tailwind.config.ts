@@ -70,11 +70,63 @@ const config: Config = {
         "safe-top": "env(safe-area-inset-top)",
       },
 
+      // iPad-specific spacing
+      spacing: {
+        "touch": "56px", // Minimum touch target for gloved/field use
+        "touch-sm": "44px", // Standard touch target
+      },
+
+      // iPad-specific min dimensions
+      minHeight: {
+        "touch": "56px",
+        "touch-sm": "44px",
+      },
+      minWidth: {
+        "touch": "56px",
+        "touch-sm": "44px",
+      },
+
       animation: {
         "bounce-subtle": "bounce 1s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "recording": "recording 1.5s ease-in-out infinite",
+      },
+
+      keyframes: {
+        "pulse-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px rgba(220, 38, 38, 0.4), 0 0 40px rgba(220, 38, 38, 0.2)"
+          },
+          "50%": {
+            boxShadow: "0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3)"
+          },
+        },
+        "recording": {
+          "0%, 100%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.1)", opacity: "0.8" },
+        },
+      },
+
+      // Category colors for protocol library
+      colors: {
+        "category-cardiac": "#ef4444",
+        "category-trauma": "#f97316",
+        "category-peds": "#a855f7",
+        "category-medical": "#3b82f6",
+        "category-pharma": "#10b981",
+        "category-procedures": "#6366f1",
+        "category-admin": "#64748b",
       },
     },
   },
+
+  // iPad-specific screens
+  screens: {
+    "ipad-mini": { min: "744px", max: "820px" },
+    "ipad-air": { min: "820px", max: "1024px" },
+    "ipad-pro": { min: "1024px", max: "1366px" },
+  },
+
   plugins: [],
 };
 
