@@ -41,10 +41,16 @@ const supabase = createClient(url, serviceKey, {
 });
 
 async function addUser() {
-  const email = 'christiansafina@gmail.com';
-  const password = 'Carter123';
-  const fullName = 'Carter';
+  const email = process.env.SETUP_USER_EMAIL || 'user@example.com';
+  const password = process.env.SETUP_USER_PASSWORD;
+  const fullName = process.env.SETUP_USER_NAME || 'User';
   const role = 'admin';
+
+  if (!password) {
+    console.error('Error: SETUP_USER_PASSWORD environment variable is required');
+    console.log('Usage: SETUP_USER_EMAIL=x SETUP_USER_PASSWORD=x SETUP_USER_NAME=x npx tsx scripts/add-user-carter.ts');
+    process.exit(1);
+  }
 
   console.log(`Adding user: ${email}...`);
 
