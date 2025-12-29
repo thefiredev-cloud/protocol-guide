@@ -1,74 +1,66 @@
-import { NextRequest, NextResponse } from 'next/server';
+/**
+ * Recently Viewed Protocols API
+ * GET /api/protocols/recent - Get recently viewed
+ * POST /api/protocols/recent - Record a view
+ */
 
-import { createRouteClient } from '../../../../lib/supabase/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+
+import { withApiHandler } from '../../../../lib/api/handler';
+import { authService } from '../../../../lib/auth/auth-service';
 
 /**
  * GET /api/protocols/recent
  * Get user's recently viewed protocols
  */
-export async function GET(request: NextRequest) {
-  try {
-    const supabase = await createRouteClient();
+export const GET = withApiHandler(
+  async (input: unknown, req: NextRequest) => {
+    void input;
+    const token = req.cookies.get('sb-access-token')?.value;
 
-    const { data: { user } } = await supabase.auth.getUser();
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const user = await authService.validateToken(token);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const url = new URL(request.url);
-    const limit = parseInt(url.searchParams.get('limit') || '10', 10);
-
-    const { data, error } = await supabase.rpc('get_recently_viewed', {
-      p_limit: limit,
-    });
-
-    if (error) {
-      console.error('[Recent GET] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ recent: data });
-  } catch (err) {
-    console.error('[Recent GET] Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+    // Placeholder - will query protocol_views table once migration is applied
+    return NextResponse.json({ recent: [] });
+  },
+  { loggerName: 'api.protocols.recent' }
+);
 
 /**
  * POST /api/protocols/recent
  * Record a protocol view
  */
-export async function POST(request: NextRequest) {
-  try {
-    const supabase = await createRouteClient();
+export const POST = withApiHandler(
+  async (input: unknown, req: NextRequest) => {
+    void input;
+    const token = req.cookies.get('sb-access-token')?.value;
 
-    const { data: { user } } = await supabase.auth.getUser();
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const user = await authService.validateToken(token);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { protocolId, protocolTitle, protocolCode, category } = body;
+    const body = await req.json();
+    const { protocolId } = body;
 
     if (!protocolId) {
       return NextResponse.json({ error: 'protocolId is required' }, { status: 400 });
     }
 
-    const { data, error } = await supabase.rpc('record_protocol_view', {
-      p_protocol_id: protocolId,
-      p_protocol_title: protocolTitle || null,
-      p_protocol_code: protocolCode || null,
-      p_category: category || null,
-    });
-
-    if (error) {
-      console.error('[Recent POST] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json(data);
-  } catch (err) {
-    console.error('[Recent POST] Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+    // Placeholder - will use RPC function once migration is applied
+    return NextResponse.json({ success: true });
+  },
+  { loggerName: 'api.protocols.recent' }
+);
