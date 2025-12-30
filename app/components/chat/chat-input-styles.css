@@ -379,30 +379,7 @@
   cursor: not-allowed;
 }
 
-/* Color classes */
-.critical-lookup-pill.bg-red-600 {
-  background: #dc2626;
-}
-
-.critical-lookup-pill.bg-red-700 {
-  background: #b91c1c;
-}
-
-.critical-lookup-pill.bg-orange-600 {
-  background: #ea580c;
-}
-
-.critical-lookup-pill.bg-purple-600 {
-  background: #9333ea;
-}
-
-.critical-lookup-pill.bg-blue-600 {
-  background: #2563eb;
-}
-
-.critical-lookup-pill.bg-green-600 {
-  background: #16a34a;
-}
+/* Color classes removed - all pills now use primary red (#dc2626) */
 
 /* Tablet and desktop */
 @media (min-width: 768px) {
