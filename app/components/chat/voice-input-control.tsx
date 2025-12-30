@@ -125,7 +125,7 @@ export function VoiceFirstInput({
               rows={1}
             />
 
-            {/* Attach/Voice button inside input */}
+            {/* Microphone button inside input */}
             <button
               type="button"
               onClick={onToggleVoice}
@@ -133,7 +133,7 @@ export function VoiceFirstInput({
               className={`
                 p-2 rounded-full transition-colors
                 ${listening
-                  ? "text-primary bg-red-50 dark:bg-red-900/20"
+                  ? "text-white bg-primary"
                   : "text-gray-400 hover:text-primary dark:hover:text-primary"
                 }
                 disabled:opacity-50
