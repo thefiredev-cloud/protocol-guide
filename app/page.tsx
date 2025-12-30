@@ -17,27 +17,21 @@ export default function Page() {
 
   return (
     <div className="bg-background-light dark:bg-background-dark min-h-screen font-sans text-text-light dark:text-gray-100 antialiased overflow-hidden flex flex-col">
-      {/* Chat Header */}
+      {/* Chat Header - Fixed at top */}
       <ChatHeader />
 
-      {/* Main Chat Content */}
-      <div className="flex-1 overflow-y-auto pt-32 pb-44 px-5 max-w-md mx-auto w-full">
+      {/* Main Chat Content - Scrollable area */}
+      <div className="flex-1 overflow-y-auto pt-24 pb-40 px-5 max-w-md mx-auto w-full">
         {!hasMessages ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
-            {/* Welcome Message */}
-            <div className="flex justify-center mb-6">
-              <span className="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-                Ready to assist
-              </span>
-            </div>
-
-            <div className="w-20 h-20 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mb-6">
-              <span className="material-symbols-outlined text-primary text-[40px] filled">
+            {/* Welcome State - Centered icon + title + subtitle (Stitch design) */}
+            <div className="w-24 h-24 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mb-6">
+              <span className="material-symbols-outlined text-primary text-[48px] filled">
                 local_hospital
               </span>
             </div>
 
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
               ProtocolGuide
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs">
@@ -58,13 +52,15 @@ export default function Page() {
         <div ref={controller.endRef} />
       </div>
 
-      {/* Quick Lookup Bar */}
-      <CriticalLookupBar
-        onQuerySubmit={controller.sendProtocolSelection}
-        disabled={controller.chat.loading}
-      />
+      {/* Quick Action Pills - Fixed above input (Stitch design) */}
+      <div className="fixed bottom-[155px] left-0 w-full z-30">
+        <CriticalLookupBar
+          onQuerySubmit={controller.sendProtocolSelection}
+          disabled={controller.chat.loading}
+        />
+      </div>
 
-      {/* Input Area */}
+      {/* Input Area - Fixed at bottom with proper z-index */}
       <VoiceFirstInput
         input={controller.chat.input}
         loading={controller.chat.loading}
@@ -77,6 +73,8 @@ export default function Page() {
         listening={controller.voice.listening}
         voiceState={controller.voice.state}
       />
+
+      {/* Bottom Navigation at z-50 is in RootLayoutContent */}
     </div>
   );
 }
