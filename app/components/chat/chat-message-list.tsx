@@ -17,10 +17,10 @@ type ChatListProps = {
 const ThinkingIndicator = memo(function ThinkingIndicator() {
   return (
     <div className="flex gap-3 mb-4" role="status" aria-label="AI is thinking">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
-        <MaterialIcon name="smart_toy" filled size={16} className="text-primary" />
+      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center self-end mb-1">
+        <MaterialIcon name="medical_services" filled size={16} className="text-white" />
       </div>
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-soft">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-sm px-4 py-3 shadow-soft">
         <div className="flex space-x-1">
           <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
           <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
