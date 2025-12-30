@@ -1,12 +1,11 @@
 'use client';
-// v4.0 - 5-Tab Navigation with Floating Mic Button (Dec 29, 2025)
+// v5.0 - 4-Tab Navigation (Stitch Design) (Dec 29, 2025)
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useHapticFeedback } from '../../hooks/use-haptic-feedback';
 import { useSwipeNavigation } from '../../hooks/use-swipe-navigation';
-import { FloatingMicButton } from '../ui/floating-mic-button';
 import { MaterialIcon } from '../ui/material-icon';
 
 interface NavItem {
