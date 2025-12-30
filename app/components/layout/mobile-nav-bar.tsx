@@ -100,16 +100,6 @@ export function MobileNavBar() {
     onSwipeRight: handleSwipeRight,
   });
 
-  const handleVoiceTranscription = useCallback((text: string) => {
-    // If on chat page and handler provided, use it
-    if (onVoiceInput) {
-      onVoiceInput(text);
-    } else {
-      // Navigate to chat with the transcribed text
-      router.push(`/?q=${encodeURIComponent(text)}`);
-    }
-  }, [onVoiceInput, router]);
-
   return (
     <nav
       ref={navRef}
@@ -119,47 +109,17 @@ export function MobileNavBar() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="relative flex items-center max-w-lg mx-auto h-16">
-        {/* Left tabs */}
-        <div className="flex flex-1 justify-around items-center h-full">
-          {leftTabs.map((item) => (
-            <NavTab
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              active={pathname === item.href}
-            />
-          ))}
-        </div>
-
-        {/* Floating Mic Button - Raised above nav */}
-        <div className="relative flex items-center justify-center w-20">
-          <div className="absolute -top-5">
-            <FloatingMicButton
-              onTranscription={handleVoiceTranscription}
-              onError={onVoiceError}
-              disabled={voiceDisabled}
-            />
-          </div>
-          {/* Spacer for mic label */}
-          <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 mt-6">
-            Speak
-          </span>
-        </div>
-
-        {/* Right tabs */}
-        <div className="flex flex-1 justify-around items-center h-full">
-          {rightTabs.map((item) => (
-            <NavTab
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              active={pathname === item.href}
-            />
-          ))}
-        </div>
+      <div className="flex items-center max-w-lg mx-auto h-16">
+        {/* 4 equal tabs */}
+        {navTabs.map((item) => (
+          <NavTab
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={pathname === item.href}
+          />
+        ))}
       </div>
     </nav>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { MaterialIcon } from "../ui/material-icon";
-import SpotlightCard from "../ui/react-bits/spotlight-card";
 
 export interface ProtocolMatch {
   tp_code: string;
@@ -12,11 +11,18 @@ export interface ProtocolMatch {
   matchReasons?: string[];
 }
 
+export interface ProtocolSection {
+  title: string;
+  content: string;
+}
+
 export interface ProtocolCardProps {
   protocol: ProtocolMatch;
   patientAge?: number;
   onUseInChat?: (code: string) => void;
   recommended?: boolean;
+  sections?: ProtocolSection[];
+  content?: string;
 }
 
 /**
@@ -27,6 +33,8 @@ export function ProtocolCard({
   patientAge,
   onUseInChat,
   recommended = false,
+  sections,
+  content,
 }: ProtocolCardProps) {
   // Use pediatric code if patient is under 18 and pediatric code exists
   const effectiveCode =
@@ -47,45 +55,82 @@ export function ProtocolCard({
   };
 
   return (
-    <SpotlightCard className={`protocol-card ${recommended ? "recommended" : ""}`} spotlightColor="rgba(255, 59, 48, 0.15)">
-      <div className="protocol-card-header">
-        <span className="protocol-code">TP {effectiveCode}</span>
-      </div>
-      <h3 className="protocol-name">{protocol.tp_name}</h3>
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+      {/* Reference header */}
+      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+        Reference <strong className="text-primary font-bold">TP {effectiveCode}: {protocol.tp_name}</strong>
+      </p>
 
-      {protocol.pi_name && (
-        <p className="protocol-match-reasons">
-          Provider Impression: {protocol.pi_name}
-        </p>
+      {/* Content sections with headers */}
+      {sections && sections.length > 0 && (
+        <div className="space-y-4 mb-3">
+          {sections.map((section, index) => (
+            <div
+              key={index}
+              className="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50"
+            >
+              <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">
+                {section.title}
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                {section.content}
+              </p>
+            </div>
+          ))}
+        </div>
       )}
 
-      {protocol.matchReasons && protocol.matchReasons.length > 0 && (
-        <p className="protocol-match-reasons">
-          Matched: {protocol.matchReasons.join(", ")}
-        </p>
+      {/* Simple content (if no sections) */}
+      {!sections && content && (
+        <div className="text-sm text-gray-600 dark:text-gray-300 mb-3 space-y-2">
+          {content.split('\n').map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </div>
       )}
 
-      <div className="protocol-actions">
+      {/* Provider Impression and Match Reasons */}
+      {!sections && !content && (
+        <>
+          {protocol.pi_name && (
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              Provider Impression: {protocol.pi_name}
+            </p>
+          )}
+
+          {protocol.matchReasons && protocol.matchReasons.length > 0 && (
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+              Matched: {protocol.matchReasons.join(", ")}
+            </p>
+          )}
+        </>
+      )}
+
+      {/* View Full Protocol link */}
+      <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
         <button
-          type="button"
-          className="protocol-action-btn primary"
           onClick={handleViewProtocol}
+          className="flex items-center gap-2 text-primary dark:text-red-400 text-xs font-semibold hover:underline"
         >
           <MaterialIcon name="open_in_new" size={16} />
-          View Protocol
+          View Full Protocol {effectiveCode}
         </button>
-        {onUseInChat && (
+      </div>
+
+      {/* Optional: Ask About button */}
+      {onUseInChat && (
+        <div className="mt-2">
           <button
             type="button"
-            className="protocol-action-btn secondary"
             onClick={handleUseInChat}
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-xs font-medium hover:text-primary dark:hover:text-red-400 transition-colors"
           >
             <MaterialIcon name="chat_bubble" size={16} />
-            Ask About
+            Ask About This Protocol
           </button>
-        )}
-      </div>
-    </SpotlightCard>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -110,8 +155,12 @@ export function ProtocolCardList({
   }
 
   return (
-    <div className="protocol-card-list">
-      {title && <h4 className="protocol-list-title">{title}</h4>}
+    <div className="space-y-3">
+      {title && (
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          {title}
+        </h4>
+      )}
       {protocols.map((protocol, index) => (
         <ProtocolCard
           key={`${protocol.tp_code}-${index}`}
