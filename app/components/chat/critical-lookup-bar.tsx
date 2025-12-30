@@ -70,7 +70,7 @@ export const CriticalLookupBar = memo(function CriticalLookupBar({
           <button
             key={lookup.id}
             type="button"
-            className={`critical-lookup-pill ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`critical-lookup-pill bg-primary ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={() => handleClick(lookup.query)}
             disabled={disabled}
             aria-label={`Quick lookup: ${lookup.label}`}
