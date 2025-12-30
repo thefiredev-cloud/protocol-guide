@@ -57,7 +57,7 @@ function RootLayoutInner({ children }: RootLayoutContentProps) {
       <ChatbotLayout>
         {children}
       </ChatbotLayout>
-      <MobileNavBar />
+      <BottomNavigation />
     </>
   );
 }
