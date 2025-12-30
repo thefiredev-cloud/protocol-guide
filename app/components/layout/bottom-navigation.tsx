@@ -86,7 +86,7 @@ export function BottomNavigation({ onMicPress }: BottomNavigationProps) {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-800 pb-safe pt-1 px-2 z-50"
+      className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 backdrop-blur-xl border-t-4 border-red-500 pb-safe pt-1 px-2 z-[9999]"
       role="navigation"
       aria-label="Primary navigation"
     >
