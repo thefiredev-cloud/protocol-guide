@@ -25,6 +25,53 @@ export interface ProtocolCardProps {
   content?: string;
 }
 
+function ProtocolSections({ sections }: { sections: ProtocolSection[] }) {
+  return (
+    <div className="space-y-4 mb-3">
+      {sections.map((section, index) => (
+        <div
+          key={index}
+          className="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50"
+        >
+          <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">
+            {section.title}
+          </h4>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            {section.content}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProtocolContent({ content }: { content: string }) {
+  return (
+    <div className="text-sm text-gray-600 dark:text-gray-300 mb-3 space-y-2">
+      {content.split('\n').map((line, index) => (
+        <p key={index}>{line}</p>
+      ))}
+    </div>
+  );
+}
+
+function ProtocolMetadata({ protocol }: { protocol: ProtocolMatch }) {
+  return (
+    <>
+      {protocol.pi_name && (
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+          Provider Impression: {protocol.pi_name}
+        </p>
+      )}
+      {protocol.matchReasons && protocol.matchReasons.length > 0 && (
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+          Matched: {protocol.matchReasons.join(", ")}
+        </p>
+      )}
+    </>
+  );
+}
+
 /**
  * Protocol recommendation card for display in chat
  */
@@ -32,18 +79,15 @@ export function ProtocolCard({
   protocol,
   patientAge,
   onUseInChat,
-  recommended = false,
   sections,
   content,
 }: ProtocolCardProps) {
-  // Use pediatric code if patient is under 18 and pediatric code exists
   const effectiveCode =
     patientAge !== undefined && patientAge < 18 && protocol.tp_code_pediatric
       ? protocol.tp_code_pediatric
       : protocol.tp_code;
 
   const handleViewProtocol = () => {
-    // Open LA County PCM landing page
     const url = "https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/";
     window.open(url, "_blank", "noopener,noreferrer");
   };
@@ -56,57 +100,14 @@ export function ProtocolCard({
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
-      {/* Reference header */}
       <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
         Reference <strong className="text-primary font-bold">TP {effectiveCode}: {protocol.tp_name}</strong>
       </p>
 
-      {/* Content sections with headers */}
-      {sections && sections.length > 0 && (
-        <div className="space-y-4 mb-3">
-          {sections.map((section, index) => (
-            <div
-              key={index}
-              className="relative pl-3 border-l-2 border-primary/30 dark:border-primary/50"
-            >
-              <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-1">
-                {section.title}
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                {section.content}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+      {sections && sections.length > 0 && <ProtocolSections sections={sections} />}
+      {!sections && content && <ProtocolContent content={content} />}
+      {!sections && !content && <ProtocolMetadata protocol={protocol} />}
 
-      {/* Simple content (if no sections) */}
-      {!sections && content && (
-        <div className="text-sm text-gray-600 dark:text-gray-300 mb-3 space-y-2">
-          {content.split('\n').map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
-        </div>
-      )}
-
-      {/* Provider Impression and Match Reasons */}
-      {!sections && !content && (
-        <>
-          {protocol.pi_name && (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-              Provider Impression: {protocol.pi_name}
-            </p>
-          )}
-
-          {protocol.matchReasons && protocol.matchReasons.length > 0 && (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-              Matched: {protocol.matchReasons.join(", ")}
-            </p>
-          )}
-        </>
-      )}
-
-      {/* View Full Protocol link */}
       <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
         <button
           onClick={handleViewProtocol}
@@ -117,7 +118,6 @@ export function ProtocolCard({
         </button>
       </div>
 
-      {/* Optional: Ask About button */}
       {onUseInChat && (
         <div className="mt-2">
           <button
