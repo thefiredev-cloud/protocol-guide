@@ -14,6 +14,22 @@
 import crypto from "crypto";
 
 /**
+ * Whitelisted emails that bypass all rate limiting and lockouts
+ * These accounts will NEVER be rate limited or banned
+ */
+export const WHITELISTED_EMAILS = new Set([
+  "tanner@thefiredev.com",
+]);
+
+/**
+ * Check if an email is whitelisted (bypasses rate limits)
+ */
+export function isWhitelistedEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return WHITELISTED_EMAILS.has(email.toLowerCase());
+}
+
+/**
  * Rate limit configurations by endpoint type
  * Reduced limits for public access security
  */
