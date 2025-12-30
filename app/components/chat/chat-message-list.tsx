@@ -58,7 +58,7 @@ const MessageWrapper = memo(function MessageWrapper({
     return (
       <div className="flex gap-3 mb-6 flex-row-reverse">
         <div className="flex flex-col gap-1 max-w-[85%] items-end">
-          <div className="bg-primary text-white rounded-2xl rounded-br-none p-4 shadow-md shadow-red-500/20">
+          <div className="bg-primary text-white rounded-2xl rounded-br-sm p-4 shadow-md shadow-red-500/20">
             <p className="text-sm leading-relaxed whitespace-pre-wrap">
               {message.content}
             </p>
