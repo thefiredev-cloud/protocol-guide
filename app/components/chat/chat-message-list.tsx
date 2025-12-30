@@ -74,12 +74,12 @@ const MessageWrapper = memo(function MessageWrapper({
   // Assistant message - left aligned with avatar
   return (
     <div className="flex gap-3 mb-6">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-end mb-1">
-        <MaterialIcon name="smart_toy" filled size={16} className="text-primary" />
+      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center self-end mb-1">
+        <MaterialIcon name="medical_services" filled size={16} className="text-white" />
       </div>
       <div className="flex flex-col gap-1 max-w-[90%]">
         <span className="text-[10px] text-gray-400 ml-1">Protocol Assistant</span>
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-none p-4 shadow-soft">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-sm p-4 shadow-soft">
           <MessageItem m={message} onProtocolSelect={onProtocolSelect} />
           {isStreaming && <StreamingCursor />}
         </div>
