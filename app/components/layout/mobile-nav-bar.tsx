@@ -21,37 +21,24 @@ interface NavTabProps {
   active: boolean;
 }
 
-interface MobileNavBarProps {
-  onVoiceInput?: (text: string) => void;
-  onVoiceError?: (error: string) => void;
-  voiceDisabled?: boolean;
-}
-
 function NavTab({ href, icon, label, active }: NavTabProps) {
   const { tap } = useHapticFeedback();
-  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <Link
       href={href}
       className={`
         flex flex-col items-center justify-center flex-1 h-full gap-1
-        transition-colors min-w-[64px]
+        transition-all duration-200 min-w-[64px]
         ${active
-          ? 'text-primary dark:text-red-400'
-          : 'text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary'
+          ? 'text-red-600 dark:text-red-400'
+          : 'text-gray-400 dark:text-gray-500'
         }
-        ${isPressed ? 'scale-95' : ''}
+        active:scale-95
       `}
       aria-label={label}
       aria-current={active ? 'page' : undefined}
-      onPointerDown={() => {
-        tap();
-        setIsPressed(true);
-      }}
-      onPointerUp={() => setIsPressed(false)}
-      onPointerLeave={() => setIsPressed(false)}
-      onPointerCancel={() => setIsPressed(false)}
+      onPointerDown={tap}
     >
       <MaterialIcon
         name={icon}

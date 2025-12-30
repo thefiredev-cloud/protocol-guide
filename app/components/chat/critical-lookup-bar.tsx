@@ -11,37 +11,31 @@ const QUICK_LOOKUPS = [
     id: 'peds-trauma',
     label: 'Peds Trauma',
     query: 'pediatric trauma assessment and treatment protocol',
-    color: 'bg-red-600',
   },
   {
     id: 'stemi',
     label: 'STEMI',
     query: 'STEMI protocol 12-lead criteria and treatment',
-    color: 'bg-orange-600',
   },
   {
     id: 'stroke',
     label: 'Stroke',
     query: 'stroke assessment FAST LAMS transport criteria',
-    color: 'bg-purple-600',
   },
   {
     id: 'cardiac-arrest',
     label: 'Cardiac Arrest',
     query: 'cardiac arrest ACLS algorithm medications',
-    color: 'bg-red-700',
   },
   {
     id: 'airway',
     label: 'Airway',
     query: 'difficult airway management protocol',
-    color: 'bg-blue-600',
   },
   {
     id: 'meds',
     label: 'Meds',
     query: 'medication dosing quick reference',
-    color: 'bg-green-600',
   },
 ] as const;
 
