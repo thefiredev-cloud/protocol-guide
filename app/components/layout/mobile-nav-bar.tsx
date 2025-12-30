@@ -51,27 +51,20 @@ function NavTab({ href, icon, label, active }: NavTabProps) {
   );
 }
 
-export function MobileNavBar({
-  onVoiceInput,
-  onVoiceError,
-  voiceDisabled = false,
-}: MobileNavBarProps) {
+export function MobileNavBar() {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
 
-  // 5-tab navigation: Assistant, Protocols, [Mic], History, Account
-  const leftTabs: NavItem[] = [
-    { href: '/', label: 'Assistant', icon: 'chat_bubble' },
+  // 4-tab navigation (Stitch Design): Assistant, Protocols, History, Account
+  const navTabs: NavItem[] = [
+    { href: '/', label: 'Assistant', icon: 'home' },
     { href: '/protocols', label: 'Protocols', icon: 'menu_book' },
-  ];
-
-  const rightTabs: NavItem[] = [
     { href: '/history', label: 'History', icon: 'history' },
     { href: '/account', label: 'Account', icon: 'person' },
   ];
 
-  const allTabs = [...leftTabs, ...rightTabs];
+  const allTabs = navTabs;
   const currentIndex = allTabs.findIndex(item => item.href === pathname);
 
   // Keyboard navigation support
