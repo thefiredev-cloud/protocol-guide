@@ -198,7 +198,7 @@ const Chat: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-primary border border-red-200 dark:border-red-900/50 overflow-hidden">
-                <img src="/logo.svg" alt="Protocol Guide" className="w-9 h-9" />
+                <img src="/logo.png" alt="Protocol Guide" className="w-9 h-9" />
               </div>
               <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
             </div>
@@ -227,7 +227,7 @@ const Chat: React.FC = () => {
           <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
              {msg.role === 'assistant' && (
                 <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-start mt-4 border border-red-100 dark:border-red-900/30 overflow-hidden">
-                  <img src="/logo.svg" alt="Protocol Guide" className="w-6 h-6" />
+                  <img src="/logo.png" alt="Protocol Guide" className="w-6 h-6" />
                 </div>
              )}
 
