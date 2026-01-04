@@ -1,0 +1,132 @@
+
+import React, { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import { HashRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import Browse from './pages/Browse';
+import ProtocolDetail from './pages/ProtocolDetail';
+import Chat from './pages/Chat';
+import Account from './pages/Account';
+import Hospitals from './pages/Hospitals';
+import Login from './pages/Login';
+import BottomNav from './components/BottomNav';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './contexts/AuthContext';
+
+// Error Boundary Component
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('App Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-slate-50 dark:bg-background-dark flex items-center justify-center p-6">
+          <div className="text-center max-w-sm">
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+              <span className="material-symbols-outlined text-red-500 text-3xl">error</span>
+            </div>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Something went wrong</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">The app encountered an unexpected error.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-red-600 transition-colors"
+            >
+              Reload App
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Live time status bar
+const StatusBar = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedTime = time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+  return (
+    <div className="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pointer-events-none border-b border-transparent dark:border-slate-800/50">
+      <span className="dark:text-white">{formattedTime}</span>
+      <div className="flex gap-1.5 items-center dark:text-white">
+        <span className="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+        <span className="material-symbols-outlined text-[18px]">wifi</span>
+        <span className="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+      </div>
+    </div>
+  );
+};
+
+const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200">
+      <StatusBar />
+      <div className="pt-safe-top pt-12 pb-safe-bottom">
+        {children}
+      </div>
+      <BottomNav />
+    </div>
+  );
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+const App: React.FC = () => {
+  return (
+    <ErrorBoundary>
+      <AuthProvider>
+        <HashRouter>
+          <ScrollToTop />
+          <Routes>
+            {/* Login route - no MainLayout */}
+            <Route path="/login" element={<Login />} />
+
+            {/* Protected routes with MainLayout */}
+            <Route path="/*" element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Browse />} />
+                    <Route path="/protocol/:id" element={<ProtocolDetail />} />
+                    <Route path="/chat" element={<Chat />} />
+                    <Route path="/account" element={<Account />} />
+                    <Route path="/hospitals" element={<Hospitals />} />
+                  </Routes>
+                </MainLayout>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </HashRouter>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
+};
+
+export default App;

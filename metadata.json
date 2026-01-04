@@ -1,0 +1,8 @@
+{
+  "name": "ProtocolGuide",
+  "description": "A comprehensive EMS protocol reference and assistant application featuring protocol browsing, detailed views, AI chat assistance, and user account management.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
+}
