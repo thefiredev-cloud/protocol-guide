@@ -136,8 +136,8 @@ const Browse: React.FC = () => {
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-1 group"
               >
-                <span className="material-symbols-outlined text-red-500 dark:text-red-500 text-[24px] group-hover:scale-110 transition-transform">menu_book</span>
-                <span className="text-[10px] font-bold text-red-600 dark:text-red-500 tracking-wider">OFFICIAL</span>
+                <span className="material-symbols-outlined text-[#9B1B30] dark:text-[#C9344F] text-[24px] group-hover:scale-110 transition-transform">menu_book</span>
+                <span className="text-[10px] font-bold text-[#9B1B30] dark:text-[#C9344F] tracking-wider">OFFICIAL</span>
               </a>
             </div>
           </div>

@@ -36,14 +36,14 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
       return (
         <div className="min-h-screen bg-slate-50 dark:bg-background-dark flex items-center justify-center p-6">
           <div className="text-center max-w-sm">
-            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 rounded-full flex items-center justify-center">
               <span className="material-symbols-outlined text-red-500 text-3xl">error</span>
             </div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Something went wrong</h1>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">The app encountered an unexpected error.</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-red-600 transition-colors"
+              className="px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-[#7A1628] transition-colors"
             >
               Reload App
             </button>
@@ -113,7 +113,7 @@ const NotFound: React.FC = () => {
         </p>
         <button
           onClick={() => navigate('/')}
-          className="px-6 py-3 bg-primary text-white font-bold text-sm rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20"
+          className="px-6 py-3 bg-primary text-white font-bold text-sm rounded-xl hover:bg-[#7A1628] transition-colors shadow-lg shadow-[#9B1B30]/20"
         >
           Go to Protocols
         </button>

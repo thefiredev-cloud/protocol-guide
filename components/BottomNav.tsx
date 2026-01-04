@@ -20,7 +20,7 @@ const BottomNav: React.FC = () => {
     const active = isActive(path);
     return `flex flex-col items-center justify-center flex-1 h-full gap-1 transition-all ${
       active 
-        ? 'text-primary dark:text-red-400 scale-105' 
+        ? 'text-primary dark:text-[#C9344F] scale-105' 
         : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'
     }`;
   };

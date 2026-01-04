@@ -68,7 +68,7 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-background-dark flex flex-col items-center justify-center px-6">
       {/* Logo/Branding */}
       <div className="mb-8 text-center">
-        <div className="w-20 h-20 mx-auto mb-4 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center border border-red-200 dark:border-red-900/50">
+        <div className="w-20 h-20 mx-auto mb-4 bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 rounded-2xl flex items-center justify-center border border-[#9B1B30]/30 dark:border-[#9B1B30]/50">
           <span className="material-symbols-outlined text-primary text-4xl">emergency</span>
         </div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">ProtocolGuide</h1>
@@ -132,7 +132,7 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-red-600 text-white font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-red-500/20"
+            className="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-[#7A1628] text-white font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-[#9B1B30]/20"
           >
             {isSubmitting ? (
               <>

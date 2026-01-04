@@ -197,7 +197,7 @@ const Chat: React.FC = () => {
         <header className="flex justify-between items-center max-w-3xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-primary border border-red-200 dark:border-red-900/50 overflow-hidden">
+              <div className="w-12 h-12 rounded-full bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 flex items-center justify-center text-primary border border-[#9B1B30]/30 dark:border-[#9B1B30]/50 overflow-hidden">
                 <img src="/logo.png" alt="Protocol Guide" className="w-9 h-9" />
               </div>
               <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
@@ -226,7 +226,7 @@ const Chat: React.FC = () => {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
              {msg.role === 'assistant' && (
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-start mt-4 border border-red-100 dark:border-red-900/30 overflow-hidden">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#9B1B30]/10 dark:bg-[#9B1B30]/20 flex items-center justify-center self-start mt-4 border border-[#9B1B30]/20 dark:border-[#9B1B30]/30 overflow-hidden">
                   <img src="/logo.png" alt="Protocol Guide" className="w-6 h-6" />
                 </div>
              )}
@@ -236,7 +236,7 @@ const Chat: React.FC = () => {
                
                <div className={`p-5 shadow-soft ${
                  msg.role === 'user' 
-                   ? 'bg-red-500 text-white rounded-2xl rounded-br-none shadow-red-500/20 shadow-lg' 
+                   ? 'bg-[#9B1B30] text-white rounded-2xl rounded-br-none shadow-[#9B1B30]/20 shadow-lg' 
                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none text-slate-800 dark:text-slate-200 shadow-md'
                }`}>
                  <div className="text-[15px] leading-relaxed whitespace-pre-wrap font-medium">
@@ -254,7 +254,7 @@ const Chat: React.FC = () => {
 
         {isTyping && (
           <div className="flex gap-3 mb-4">
-            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center self-start mt-4">
+            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#9B1B30]/10 dark:bg-[#9B1B30]/20 flex items-center justify-center self-start mt-4">
               <span className="material-symbols-outlined text-primary text-[18px] filled">smart_toy</span>
             </div>
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none px-5 py-4 shadow-soft">
@@ -287,7 +287,7 @@ const Chat: React.FC = () => {
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
               className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all active:scale-90 ${
-                !input.trim() || isTyping ? 'bg-slate-200 dark:bg-slate-700 text-slate-400' : 'bg-slate-900 dark:bg-red-500 text-white hover:bg-slate-800'
+                !input.trim() || isTyping ? 'bg-slate-200 dark:bg-slate-700 text-slate-400' : 'bg-slate-900 dark:bg-[#9B1B30] text-white hover:bg-slate-800'
               }`}
             >
               <span className="material-symbols-outlined text-[22px] ml-1">send</span>

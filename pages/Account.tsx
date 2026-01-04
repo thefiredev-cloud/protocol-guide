@@ -105,7 +105,7 @@ const Account: React.FC = () => {
             <span className="material-symbols-outlined text-slate-400 dark:text-slate-500">lock</span>
           </div>
           <div className="w-full text-left p-4 flex items-center gap-4 opacity-50 cursor-not-allowed">
-            <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+            <div className="w-10 h-10 rounded-full bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 flex items-center justify-center text-[#9B1B30] dark:text-[#C9344F]">
               <span className="material-symbols-outlined">bookmark</span>
             </div>
             <div className="flex-1">
@@ -156,7 +156,7 @@ const Account: React.FC = () => {
       <div className="mt-8 flex flex-col items-center">
         <button
           onClick={handleLogout}
-          className="text-red-600 dark:text-red-400 font-semibold text-sm py-3 px-6 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full bg-white dark:bg-slate-800 border border-red-100 dark:border-red-900/30 shadow-sm"
+          className="text-[#9B1B30] dark:text-[#C9344F] font-semibold text-sm py-3 px-6 rounded-xl hover:bg-[#9B1B30]/10 dark:hover:bg-[#9B1B30]/20 transition-colors w-full bg-white dark:bg-slate-800 border border-[#9B1B30]/20 dark:border-[#9B1B30]/30 shadow-sm"
         >
           Log Out
         </button>
