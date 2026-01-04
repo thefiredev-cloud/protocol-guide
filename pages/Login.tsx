@@ -68,9 +68,7 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-background-dark flex flex-col items-center justify-center px-6">
       {/* Logo/Branding */}
       <div className="mb-8 text-center">
-        <div className="w-20 h-20 mx-auto mb-4 bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 rounded-2xl flex items-center justify-center border border-[#9B1B30]/30 dark:border-[#9B1B30]/50">
-          <img src="/logo.png" alt="Protocol Guide" className="w-12 h-12" />
-        </div>
+        <img src="/logo.png" alt="Protocol Guide" className="w-20 h-20 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">ProtocolGuide</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">LA County EMS Reference</p>
       </div>
