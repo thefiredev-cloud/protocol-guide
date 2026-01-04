@@ -147,12 +147,13 @@ const Browse: React.FC = () => {
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 text-[22px]">search</span>
               </div>
-              <input 
+              <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="block w-full pl-12 pr-10 py-3.5 rounded-xl bg-slate-100 dark:bg-[#1e293b] border border-transparent dark:border-slate-700/50 text-sm font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:bg-white dark:focus:bg-[#1e293b] transition-all shadow-sm focus:outline-none" 
-                placeholder="Search protocols (e.g. 1202, Sepsis)" 
-                type="text" 
+                className="block w-full pl-12 pr-10 py-3.5 rounded-xl bg-slate-100 dark:bg-[#1e293b] border border-transparent dark:border-slate-700/50 text-sm font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:bg-white dark:focus:bg-[#1e293b] transition-all shadow-sm focus:outline-none"
+                placeholder="Search protocols (e.g. 1202, Sepsis)"
+                type="search"
+                aria-label="Search protocols"
               />
               {search !== '' && (
                 <button 

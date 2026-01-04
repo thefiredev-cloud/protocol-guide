@@ -98,6 +98,30 @@ const ScrollToTop = () => {
   return null;
 };
 
+// 404 Not Found Component
+const NotFound: React.FC = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-6">
+      <div className="text-center max-w-sm">
+        <div className="w-20 h-20 mx-auto mb-6 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
+          <span className="material-symbols-outlined text-slate-400 text-4xl">search_off</span>
+        </div>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Page Not Found</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className="px-6 py-3 bg-primary text-white font-bold text-sm rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20"
+        >
+          Go to Protocols
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
@@ -118,6 +142,7 @@ const App: React.FC = () => {
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/account" element={<Account />} />
                     <Route path="/hospitals" element={<Hospitals />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </MainLayout>
               </ProtectedRoute>
