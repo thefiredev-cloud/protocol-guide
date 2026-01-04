@@ -5,6 +5,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--include=dev"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
 
 [[redirects]]
   from = "/*"
