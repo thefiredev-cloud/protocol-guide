@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 ENV_AUDIT_REPORT.md
+
+# Local Netlify folder
+.netlify

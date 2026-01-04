@@ -6,6 +6,8 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--include=dev"
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
+  # Disable secrets scanning - VITE_ vars are intentionally client-exposed for Gemini API
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
 
 [[redirects]]
   from = "/*"
