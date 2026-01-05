@@ -10,6 +10,9 @@ import Login from './pages/Login';
 import BottomNav from './components/BottomNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import { WidgetModeProvider, useWidgetMode } from './contexts/WidgetModeContext';
+import { WidgetButton, WidgetContainer } from './components/Widget';
+import OfflineIndicator from './components/OfflineIndicator';
 
 // Error Boundary Component
 interface ErrorBoundaryState {
@@ -82,11 +85,32 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200">
       <StatusBar />
+      <OfflineIndicator />
       <div className="pt-safe-top pt-12 pb-safe-bottom">
         {children}
       </div>
       <BottomNav />
     </div>
+  );
+};
+
+// Widget-aware layout - shows collapsed button or expanded panel in widget mode
+const WidgetLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isWidgetMode, isExpanded } = useWidgetMode();
+
+  // Standalone mode - render normally
+  if (!isWidgetMode) {
+    return <>{children}</>;
+  }
+
+  // Widget mode - show button and container
+  return (
+    <>
+      <WidgetButton />
+      <WidgetContainer>
+        {children}
+      </WidgetContainer>
+    </>
   );
 };
 
@@ -125,31 +149,35 @@ const NotFound: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <HashRouter>
-          <ScrollToTop />
-          <Routes>
-            {/* Login route - no MainLayout */}
-            <Route path="/login" element={<Login />} />
+      <WidgetModeProvider>
+        <AuthProvider>
+          <HashRouter>
+            <ScrollToTop />
+            <WidgetLayout>
+              <Routes>
+                {/* Login route - no MainLayout */}
+                <Route path="/login" element={<Login />} />
 
-            {/* Protected routes with MainLayout */}
-            <Route path="/*" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Routes>
-                    <Route path="/" element={<Browse />} />
-                    <Route path="/protocol/:id" element={<ProtocolDetail />} />
-                    <Route path="/chat" element={<Chat />} />
-                    <Route path="/account" element={<Account />} />
-                    <Route path="/hospitals" element={<Hospitals />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-          </Routes>
-        </HashRouter>
-      </AuthProvider>
+                {/* Protected routes with MainLayout */}
+                <Route path="/*" element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Routes>
+                        <Route path="/" element={<Browse />} />
+                        <Route path="/protocol/:id" element={<ProtocolDetail />} />
+                        <Route path="/chat" element={<Chat />} />
+                        <Route path="/account" element={<Account />} />
+                        <Route path="/hospitals" element={<Hospitals />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </MainLayout>
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </WidgetLayout>
+          </HashRouter>
+        </AuthProvider>
+      </WidgetModeProvider>
     </ErrorBoundary>
   );
 };

@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { Protocol } from '../types';
+import { useWidgetMode, PatientContext } from '../contexts/WidgetModeContext';
 
 interface Source {
   uri: string;
@@ -23,6 +24,29 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSession = useRef<GeminiChat | null>(null);
+  const { patientContext, isWidgetMode } = useWidgetMode();
+
+  // Format patient context for AI prompt
+  const formatPatientContext = (ctx: PatientContext | null): string => {
+    if (!ctx) return '';
+    const parts: string[] = [];
+    if (ctx.age !== undefined) {
+      parts.push(`Age: ${ctx.age} ${ctx.ageUnit || 'years'}`);
+    }
+    if (ctx.weight !== undefined) {
+      parts.push(`Weight: ${ctx.weight} kg`);
+    }
+    if (ctx.sex) {
+      parts.push(`Sex: ${ctx.sex}`);
+    }
+    if (ctx.chiefComplaint) {
+      parts.push(`Chief Complaint: ${ctx.chiefComplaint}`);
+    }
+    if (ctx.incidentType) {
+      parts.push(`Incident: ${ctx.incidentType}`);
+    }
+    return parts.length > 0 ? `PATIENT INFO: ${parts.join(' | ')}` : '';
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -151,14 +175,21 @@ const Chat: React.FC = () => {
     if (!input.trim() || !chatSession.current) return;
     
     const originalInput = input; // Keep original for UI
-    
+
     // 1. Retrieve Context
     const context = getRelevantContext(originalInput);
-    
-    // 2. Construct Augmented Prompt
-    const augmentedPrompt = context 
-      ? `CONTEXT FROM PROTOCOLS:\n${context}\n\nUSER QUERY:\n${originalInput}`
-      : originalInput;
+
+    // 2. Get patient context from ImageTrend (if in widget mode)
+    const patientInfo = formatPatientContext(patientContext);
+
+    // 3. Construct Augmented Prompt with patient context
+    let augmentedPrompt = originalInput;
+    if (patientInfo || context) {
+      const contextParts: string[] = [];
+      if (patientInfo) contextParts.push(patientInfo);
+      if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
+      augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
+    }
 
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: originalInput, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
@@ -217,10 +248,16 @@ const Chat: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto pt-36 pb-48 px-6 max-w-3xl mx-auto w-full no-scrollbar">
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center gap-2 mb-8 flex-wrap">
           <span className="bg-slate-200/50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
              {protocols.length > 0 ? 'Index Loaded' : 'Database Empty'}
           </span>
+          {patientContext && (
+            <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Patient Context Active
+            </span>
+          )}
         </div>
 
         {messages.map((msg) => (

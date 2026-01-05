@@ -143,35 +143,38 @@ const Browse: React.FC = () => {
           </div>
           
           <div className="px-5 pb-6">
+            {/* EMS: Search input with 56px height for gloved touch */}
             <div className="relative group mb-5">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 text-[22px]">search</span>
+                <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 text-[24px]">search</span>
               </div>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="block w-full pl-12 pr-10 py-3.5 rounded-xl bg-slate-100 dark:bg-[#1e293b] border border-transparent dark:border-slate-700/50 text-sm font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:bg-white dark:focus:bg-[#1e293b] transition-all shadow-sm focus:outline-none"
+                className="block w-full h-14 pl-12 pr-14 rounded-xl bg-slate-100 dark:bg-[#1e293b] border border-transparent dark:border-slate-700/50 text-base font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:bg-white dark:focus:bg-[#1e293b] transition-all shadow-sm focus:outline-none"
                 placeholder="Search protocols (e.g. 1202, Sepsis)"
                 type="search"
                 aria-label="Search protocols"
               />
               {search !== '' && (
-                <button 
-                  onClick={() => setSearch('')} 
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-white"
+                <button
+                  onClick={() => setSearch('')}
+                  className="absolute inset-y-0 right-0 pr-2 flex items-center"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <span className="w-10 h-10 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:text-slate-500 dark:hover:text-white dark:hover:bg-slate-700 transition-colors">
+                    <span className="material-symbols-outlined text-[22px]">close</span>
+                  </span>
                 </button>
               )}
             </div>
 
-            {/* Category Chips */}
+            {/* Category Chips - EMS: min 48px height for easier touch */}
             <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-5 px-5">
-              <button 
+              <button
                 onClick={() => setSelectedCategory('All')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap border ${
-                    selectedCategory === 'All' 
-                    ? 'bg-slate-800 text-white border-slate-900 dark:bg-slate-700 dark:text-white dark:border-slate-600' 
+                className={`px-5 py-3 min-h-[48px] rounded-xl text-sm font-bold transition-all whitespace-nowrap border active:scale-95 ${
+                    selectedCategory === 'All'
+                    ? 'bg-slate-800 text-white border-slate-900 dark:bg-slate-700 dark:text-white dark:border-slate-600'
                     : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:border-slate-300 dark:bg-[#1e293b] dark:text-slate-400 dark:border-slate-800 dark:hover:bg-slate-800 dark:hover:border-slate-700'
                 }`}
               >
@@ -181,9 +184,9 @@ const Browse: React.FC = () => {
                 <button
                   key={cat.name}
                   onClick={() => setSelectedCategory(cat.name)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap border ${
-                      selectedCategory === cat.name 
-                      ? 'bg-slate-800 text-white border-slate-900 dark:bg-slate-700 dark:text-white dark:border-slate-600' 
+                  className={`px-5 py-3 min-h-[48px] rounded-xl text-sm font-bold transition-all whitespace-nowrap border active:scale-95 ${
+                      selectedCategory === cat.name
+                      ? 'bg-slate-800 text-white border-slate-900 dark:bg-slate-700 dark:text-white dark:border-slate-600'
                       : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:border-slate-300 dark:bg-[#1e293b] dark:text-slate-400 dark:border-slate-800 dark:hover:bg-slate-800 dark:hover:border-slate-700'
                   }`}
                 >
@@ -204,18 +207,19 @@ const Browse: React.FC = () => {
                     <span className="material-symbols-outlined text-[16px]">history</span>
                     Recently Viewed
                 </h2>
+                {/* EMS: Larger cards with better touch targets */}
                 <div className="flex gap-3 overflow-x-auto pb-4 -mx-5 px-5 no-scrollbar snap-x">
                    {recentProtocols.map(p => (
-                      <button 
+                      <button
                         key={`recent-${p.id}`}
                         onClick={() => navigate(`/protocol/${p.id}`)}
-                        className="snap-start min-w-[160px] max-w-[160px] flex flex-col items-start p-3 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/30 dark:hover:border-primary/30 transition-all text-left"
+                        className="snap-start min-w-[180px] max-w-[180px] min-h-[100px] flex flex-col items-start p-4 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/30 dark:hover:border-primary/30 transition-all text-left active:scale-[0.98]"
                       >
-                         <div className={`w-8 h-8 rounded-lg ${getIconBgClass(p.color)} flex items-center justify-center mb-2`}>
-                            {renderIcon(p.icon, "w-4 h-4")}
+                         <div className={`w-10 h-10 rounded-lg ${getIconBgClass(p.color)} flex items-center justify-center mb-2`}>
+                            {renderIcon(p.icon, "w-5 h-5")}
                          </div>
-                         <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 font-mono mb-0.5">{p.refNo.replace(/^(Ref\.|TP-|Ref|TP)\s*/, '')}</span>
-                         <span className="text-xs font-bold text-slate-800 dark:text-white leading-tight line-clamp-2">{p.title}</span>
+                         <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 font-mono mb-0.5">{p.refNo.replace(/^(Ref\.|TP-|Ref|TP)\s*/, '')}</span>
+                         <span className="text-sm font-bold text-slate-800 dark:text-white leading-tight line-clamp-2">{p.title}</span>
                       </button>
                    ))}
                 </div>
@@ -233,14 +237,14 @@ const Browse: React.FC = () => {
              }
              
              return (
-               <button 
+               <button
                 key={protocol.id}
                 onClick={() => navigate(`/protocol/${protocol.id}`)}
-                className="group flex items-center w-full p-4 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md dark:hover:bg-[#253248] transition-all text-left relative overflow-hidden shadow-sm"
+                className="group flex items-center w-full min-h-[76px] p-4 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md dark:hover:bg-[#253248] transition-all text-left relative overflow-hidden shadow-sm active:scale-[0.98]"
                >
-                 {/* Icon Box */}
-                 <div className={`flex items-center justify-center w-12 h-12 rounded-lg ${getIconBgClass(protocol.color)} shrink-0`}>
-                    {renderIcon(protocol.icon, "w-6 h-6")}
+                 {/* Icon Box - EMS: larger for visibility */}
+                 <div className={`flex items-center justify-center w-14 h-14 rounded-xl ${getIconBgClass(protocol.color)} shrink-0`}>
+                    {renderIcon(protocol.icon, "w-7 h-7")}
                  </div>
                  
                  <div className="ml-4 flex-1 min-w-0">
