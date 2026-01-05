@@ -6,8 +6,10 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--include=dev"
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  # Disable secrets scanning - VITE_ vars are intentionally client-exposed for Gemini API
+  # Disable secrets scanning - VITE_ vars are intentionally client-exposed
+  # Gemini API keys (AIza*) are browser-safe publishable keys
   SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIza"
 
 [[redirects]]
   from = "/*"
