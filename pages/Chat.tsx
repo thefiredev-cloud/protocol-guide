@@ -175,7 +175,7 @@ const Chat: React.FC = () => {
       });
 
       const initMessage = useRAG
-        ? 'Protocol-Guide Active (RAG Enabled). Zero-hallucination mode ready.'
+        ? 'LA County protocols indexed. Ready for field reference.'
         : 'Protocol-Guide Active. Ready for rapid retrieval.';
 
       setMessages([{
