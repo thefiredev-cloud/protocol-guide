@@ -20,6 +20,14 @@ import {
   type PatientContext,
 } from '../lib/rag';
 
+// Conversation fact extraction for follow-up questions
+import {
+  extractFactsFromMessage,
+  suggestFollowUp,
+  formatFactsForPrompt,
+  type ConversationFacts,
+} from '../lib/conversation';
+
 interface CitationLink {
   ref: string;
   title: string;
@@ -50,6 +58,25 @@ STRICT GROUNDING RULES:
 4. ALWAYS cite the specific protocol reference (e.g., "Per TP-1201:" or "Ref: MCG 1302")
 5. If multiple protocols apply, list all relevant references.
 
+VERBATIM REQUIREMENTS (CRITICAL FOR CLINICAL ACCURACY):
+- For ALL clinical facts, quote EXACT text from the protocol context
+- NEVER paraphrase or summarize the following - always quote verbatim:
+  * Medication dosages (mg, mcg, mL, mg/kg)
+  * Procedure steps and technique details
+  * Clinical criteria and decision thresholds
+  * Time windows and intervals
+  * Contraindications and precautions
+- Format verbatim quotes with the protocol reference: "Per TP-1201: [exact text]"
+- If you cannot quote verbatim for clinical content, state: "Protocol context does not contain specific [dosage/criteria/etc.]"
+
+CONVERSATION BEHAVIOR:
+1. When a query lacks critical clinical details, ASK ONE focused clarifying question.
+2. For trauma/wound queries: ask injury LOCATION if not specified.
+   - Proximal wounds (above knee/elbow) = higher risk, may require base contact
+3. For stroke queries: ask for LAMS score or LKWT if not specified.
+4. Use facts from prior messages (shown in ESTABLISHED FACTS) to inform responses.
+5. If ESTABLISHED FACTS indicate BASE CONTACT REQUIRED, prominently state this.
+
 RESPONSE FORMAT:
 - Be concise and use bullet points for steps/lists
 - Do NOT use markdown bold (**text**)
@@ -73,6 +100,7 @@ const Chat: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [useRAG, setUseRAG] = useState(false);
+  const [conversationFacts, setConversationFacts] = useState<ConversationFacts>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSession = useRef<GeminiChat | null>(null);
   const { patientContext, isWidgetMode } = useWidgetMode();
@@ -206,6 +234,13 @@ const Chat: React.FC = () => {
     setInput('');
     setIsTyping(true);
 
+    // Extract clinical facts from user message for conversation context
+    const updatedFacts = extractFactsFromMessage(originalInput, conversationFacts);
+    setConversationFacts(updatedFacts);
+
+    // Check if we should suggest a follow-up question
+    const followUpSuggestion = suggestFollowUp(updatedFacts);
+
     try {
       let retrieval: RetrievalResult | null = null;
       let context = '';
@@ -242,20 +277,38 @@ const Chat: React.FC = () => {
       // Get patient context
       patientInfo = formatPatientContext(patientContext as PatientContext);
 
-      // Construct augmented prompt with confidence indicator
+      // Construct augmented prompt with confidence indicator and conversation facts
       const confidenceInstruction = confidenceLevel === 'LOW'
         ? '\nCONFIDENCE: LOW - Prepend warning to response.\n'
         : confidenceLevel === 'MEDIUM'
         ? '\nCONFIDENCE: MEDIUM - Cite sources carefully.\n'
         : '\nCONFIDENCE: HIGH - Multiple strong matches found.\n';
 
+      // Format conversation facts for context
+      const factsContext = formatFactsForPrompt(updatedFacts);
+
+      // Include follow-up suggestion if applicable
+      const followUpInstruction = followUpSuggestion
+        ? `\nSUGGESTED FOLLOW-UP: Consider asking "${followUpSuggestion.question}" (${followUpSuggestion.reason})\n`
+        : '';
+
+      // Build recent conversation history (last 4 user messages for context)
+      const recentHistory = messages
+        .filter(m => m.role === 'user')
+        .slice(-4)
+        .map(m => `Previous query: ${m.content}`)
+        .join('\n');
+
       let augmentedPrompt = originalInput;
-      if (patientInfo || context) {
-        const contextParts: string[] = [confidenceInstruction];
-        if (patientInfo) contextParts.push(patientInfo);
-        if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
-        augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
-      }
+      const contextParts: string[] = [confidenceInstruction];
+
+      if (factsContext) contextParts.push(factsContext);
+      if (followUpInstruction) contextParts.push(followUpInstruction);
+      if (patientInfo) contextParts.push(patientInfo);
+      if (recentHistory && messages.length > 2) contextParts.push(`CONVERSATION HISTORY:\n${recentHistory}`);
+      if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
+
+      augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
 
       // Send to AI with timeout protection
       const TIMEOUT_MS = 15000; // 15 second timeout

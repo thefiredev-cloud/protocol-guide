@@ -8,7 +8,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "sync:test": "npx tsx scripts/test-dhs-scraper.ts",
-    "sync:run": "npx tsx scripts/run-sync.ts"
+    "sync:run": "npx tsx scripts/run-sync.ts",
+    "embeddings:generate": "npx tsx scripts/generate-embeddings.ts",
+    "embeddings:medications": "npx tsx scripts/generate-medication-chunks.ts",
+    "test:retrieval": "npx tsx scripts/validate-retrieval.ts"
   },
   "dependencies": {
     "@google/genai": "^1.34.0",

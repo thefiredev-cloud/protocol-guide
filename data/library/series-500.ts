@@ -261,14 +261,33 @@ export const series500: Protocol[] = [
     id: "521", refNo: "Ref. 521", title: "Stroke Patient Destination", category: "Administrative", type: "Policy", lastUpdated: "2024", icon: "neurology", color: "indigo",
     sections: [
         { type: "header", items: [{ title: "Stroke Destination", subtitle: "Ref. 521" }] },
-        { type: "list", title: "Screening Tools", items: [
-            { title: "mLAPSS", content: "Modified Los Angeles Prehospital Stroke Screen. Used to identify acute stroke." },
-            { title: "LAMS", content: "Los Angeles Motor Scale (0-5). Used to identify Large Vessel Occlusion (LVO)." }
+        { type: "section", title: "mLAPSS - Modified Los Angeles Prehospital Stroke Screen" },
+        { type: "text", content: "Positive if ALL criteria are met:" },
+        { type: "list", title: "mLAPSS Criteria", items: [
+            { title: "Age", content: "≥40 years old" },
+            { title: "Seizure History", content: "No history of seizures or epilepsy" },
+            { title: "Baseline Mobility", content: "NOT wheelchair-bound or bedridden at baseline" },
+            { title: "Blood Glucose", content: "60-400 mg/dL" },
+            { title: "Motor Findings", content: "Unilateral weakness present: <b>Facial asymmetry</b> OR <b>Arm drift</b> OR <b>Grip weakness</b>" }
         ]},
-        { type: "accordion", title: "Destination Logic", items: [
+        { type: "warning", content: "mLAPSS does NOT rule out stroke. Negative screen with high clinical suspicion → Calculate LAMS, contact Base Hospital." },
+        { type: "section", title: "LAMS - Los Angeles Motor Scale" },
+        { type: "text", content: "Score each component (Total 0-5):" },
+        { type: "list", title: "LAMS Components", items: [
+            { title: "Facial Droop (0-1)", content: "<b>0</b> = Absent (symmetrical smile)<br><b>1</b> = Present (ask patient to smile or grimace - look for asymmetry)" },
+            { title: "Arm Drift (0-2)", content: "<b>0</b> = Absent (both arms stay up for 10 seconds)<br><b>1</b> = Drifts down (one arm drifts lower)<br><b>2</b> = Falls rapidly (arm falls rapidly or cannot be raised)" },
+            { title: "Grip Strength (0-2)", content: "<b>0</b> = Normal (equal bilateral grip)<br><b>1</b> = Weak grip (one side noticeably weaker)<br><b>2</b> = No grip (no grip strength on affected side)" }
+        ]},
+        { type: "accordion", title: "LAMS Interpretation", items: [
+            { title: "LAMS ≥4 (Score 4-5)", content: "<b>LVO LIKELY</b> - Large Vessel Occlusion suspected. Severe stroke requiring acute intervention.<br>→ Transport to <b>Comprehensive Stroke Center (CSC)</b> if ≤30 min transport time<br>→ If >30 min to CSC, transport to closest Primary Stroke Center" },
+            { title: "LAMS <4 (Score 0-3)", content: "LVO less likely. Minor or moderate stroke.<br>→ Transport to nearest Stroke Center (Primary or Comprehensive)" }
+        ]},
+        { type: "section", title: "Transport Destination Logic" },
+        { type: "accordion", title: "Destination Decision", items: [
             { title: "Positive mLAPSS", content: "Transport to closest Stroke Center (Primary or Comprehensive)." },
-            { title: "LAMS 4-5 (Suspected LVO)", content: "Transport directly to a <b>Comprehensive Stroke Center (CSC)</b> if transport time is <= 30 minutes. If > 30 mins, go to closest Primary Stroke Center." },
-            { title: "LAMS <= 3", content: "Transport to closest Primary Stroke Center (PSC)." }
+            { title: "LAMS 4-5 (Suspected LVO)", content: "Transport directly to a <b>Comprehensive Stroke Center (CSC)</b> if transport time is ≤30 minutes. If >30 mins, go to closest Primary Stroke Center." },
+            { title: "LAMS ≤3", content: "Transport to closest Primary Stroke Center (PSC)." },
+            { title: "LKWT Considerations", content: "Last Known Well Time (LKWT) affects treatment options. Document exact time patient was last seen normal. tPA window is generally ≤4.5 hours. Thrombectomy may be considered up to 24 hours in select patients." }
         ]}
     ]
   },

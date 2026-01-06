@@ -1,0 +1,811 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2026-01-06",
+    "description": "Benchmark queries for Protocol Guide RAG retrieval accuracy testing",
+    "categories": ["cardiac", "stroke", "trauma", "medication", "procedure", "pediatric", "protocol_number", "acronym", "general"],
+    "total_queries": 100
+  },
+  "queries": [
+    {
+      "id": 1,
+      "query": "1201",
+      "category": "protocol_number",
+      "expected_protocols": ["TP-1201", "1201"],
+      "description": "Exact protocol number lookup",
+      "priority": "critical"
+    },
+    {
+      "id": 2,
+      "query": "TP-1210",
+      "category": "protocol_number",
+      "expected_protocols": ["TP-1210", "1210"],
+      "description": "Protocol with TP prefix",
+      "priority": "critical"
+    },
+    {
+      "id": 3,
+      "query": "Ref 518",
+      "category": "protocol_number",
+      "expected_protocols": ["518", "Ref. 518"],
+      "description": "Reference number lookup",
+      "priority": "critical"
+    },
+    {
+      "id": 4,
+      "query": "MCG 1302",
+      "category": "protocol_number",
+      "expected_protocols": ["MCG 1302", "1302"],
+      "description": "MCG reference lookup",
+      "priority": "critical"
+    },
+    {
+      "id": 5,
+      "query": "521",
+      "category": "protocol_number",
+      "expected_protocols": ["521", "Ref. 521"],
+      "description": "Stroke protocol number",
+      "priority": "critical"
+    },
+    {
+      "id": 6,
+      "query": "STEMI protocol",
+      "category": "cardiac",
+      "expected_protocols": ["503", "504", "1203", "1204"],
+      "expected_terms": ["ST elevation", "cardiac cath", "PCI"],
+      "priority": "high"
+    },
+    {
+      "id": 7,
+      "query": "cardiac arrest algorithm",
+      "category": "cardiac",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["VF", "asystole", "PEA", "CPR", "epinephrine"],
+      "priority": "high"
+    },
+    {
+      "id": 8,
+      "query": "VF treatment",
+      "category": "cardiac",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["defibrillation", "shock", "joules"],
+      "priority": "high"
+    },
+    {
+      "id": 9,
+      "query": "bradycardia with pulse",
+      "category": "cardiac",
+      "expected_protocols": ["505", "1205"],
+      "expected_terms": ["atropine", "pacing", "dopamine"],
+      "priority": "high"
+    },
+    {
+      "id": 10,
+      "query": "wide complex tachycardia",
+      "category": "cardiac",
+      "expected_protocols": ["505", "1205"],
+      "expected_terms": ["amiodarone", "synchronized cardioversion"],
+      "priority": "high"
+    },
+    {
+      "id": 11,
+      "query": "chest pain assessment",
+      "category": "cardiac",
+      "expected_protocols": ["503", "504"],
+      "expected_terms": ["12-lead", "aspirin", "nitroglycerin"],
+      "priority": "high"
+    },
+    {
+      "id": 12,
+      "query": "post ROSC care",
+      "category": "cardiac",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["targeted temperature", "blood pressure", "glucose"],
+      "priority": "high"
+    },
+    {
+      "id": 13,
+      "query": "ACS treatment",
+      "category": "cardiac",
+      "expected_protocols": ["503", "504", "1203"],
+      "expected_terms": ["aspirin", "nitroglycerin", "morphine"],
+      "priority": "high"
+    },
+    {
+      "id": 14,
+      "query": "ECMO criteria",
+      "category": "cardiac",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["ECPR", "refractory", "base contact"],
+      "priority": "medium"
+    },
+    {
+      "id": 15,
+      "query": "transcutaneous pacing",
+      "category": "cardiac",
+      "expected_protocols": ["505", "1365"],
+      "expected_terms": ["TCP", "mA", "capture"],
+      "priority": "high"
+    },
+    {
+      "id": 16,
+      "query": "LAMS score",
+      "category": "stroke",
+      "expected_protocols": ["521", "522", "1232"],
+      "expected_terms": ["facial droop", "arm drift", "grip strength", "0-5"],
+      "priority": "critical"
+    },
+    {
+      "id": 17,
+      "query": "stroke assessment mLAPSS",
+      "category": "stroke",
+      "expected_protocols": ["521", "1232"],
+      "expected_terms": ["age", "seizure", "glucose", "unilateral"],
+      "priority": "high"
+    },
+    {
+      "id": 18,
+      "query": "LVO stroke transport",
+      "category": "stroke",
+      "expected_protocols": ["521", "522", "506"],
+      "expected_terms": ["CSC", "comprehensive stroke center", "LAMS 4"],
+      "priority": "high"
+    },
+    {
+      "id": 19,
+      "query": "stroke LKWT greater than 24 hours",
+      "category": "stroke",
+      "expected_protocols": ["521", "522"],
+      "expected_terms": ["last known well", "time window"],
+      "priority": "high"
+    },
+    {
+      "id": 20,
+      "query": "stroke destination decision",
+      "category": "stroke",
+      "expected_protocols": ["506", "521"],
+      "expected_terms": ["PSC", "CSC", "transport"],
+      "priority": "high"
+    },
+    {
+      "id": 21,
+      "query": "TIA symptoms",
+      "category": "stroke",
+      "expected_protocols": ["521"],
+      "expected_terms": ["transient", "resolved"],
+      "priority": "medium"
+    },
+    {
+      "id": 22,
+      "query": "hemorrhagic stroke",
+      "category": "stroke",
+      "expected_protocols": ["521", "522"],
+      "expected_terms": ["blood pressure", "hypertension"],
+      "priority": "medium"
+    },
+    {
+      "id": 23,
+      "query": "burn treatment",
+      "category": "trauma",
+      "expected_protocols": ["820", "1254"],
+      "expected_terms": ["BSA", "fluid", "cooling"],
+      "priority": "high"
+    },
+    {
+      "id": 24,
+      "query": "trauma assessment",
+      "category": "trauma",
+      "expected_protocols": ["801", "802"],
+      "expected_terms": ["primary survey", "ABCDE", "GCS"],
+      "priority": "high"
+    },
+    {
+      "id": 25,
+      "query": "GSW to chest",
+      "category": "trauma",
+      "expected_protocols": ["805", "806", "1260"],
+      "expected_terms": ["penetrating", "occlusive dressing", "decompression"],
+      "priority": "high"
+    },
+    {
+      "id": 26,
+      "query": "tension pneumothorax",
+      "category": "trauma",
+      "expected_protocols": ["806", "1260"],
+      "expected_terms": ["needle decompression", "midclavicular", "2nd intercostal"],
+      "priority": "high"
+    },
+    {
+      "id": 27,
+      "query": "hemorrhage control",
+      "category": "trauma",
+      "expected_protocols": ["805", "1260"],
+      "expected_terms": ["tourniquet", "pressure", "TXA"],
+      "priority": "high"
+    },
+    {
+      "id": 28,
+      "query": "spinal immobilization",
+      "category": "trauma",
+      "expected_protocols": ["810", "811"],
+      "expected_terms": ["c-spine", "backboard", "collar"],
+      "priority": "high"
+    },
+    {
+      "id": 29,
+      "query": "head injury GCS less than 8",
+      "category": "trauma",
+      "expected_protocols": ["810", "1253"],
+      "expected_terms": ["intubation", "airway", "hyperventilation"],
+      "priority": "high"
+    },
+    {
+      "id": 30,
+      "query": "crush injury syndrome",
+      "category": "trauma",
+      "expected_protocols": ["815"],
+      "expected_terms": ["potassium", "rhabdomyolysis", "fluid"],
+      "priority": "medium"
+    },
+    {
+      "id": 31,
+      "query": "MVC trauma criteria",
+      "category": "trauma",
+      "expected_protocols": ["801", "802", "830"],
+      "expected_terms": ["mechanism", "ejection", "death in vehicle"],
+      "priority": "high"
+    },
+    {
+      "id": 32,
+      "query": "dog bite above knee",
+      "category": "trauma",
+      "expected_protocols": ["506", "1260"],
+      "expected_terms": ["proximal", "base contact", "puncture"],
+      "priority": "high"
+    },
+    {
+      "id": 33,
+      "query": "epinephrine dosing cardiac arrest",
+      "category": "medication",
+      "expected_protocols": ["MED-EPI", "518"],
+      "expected_terms": ["1mg", "1:10,000", "every 3-5 minutes", "IV/IO"],
+      "priority": "critical"
+    },
+    {
+      "id": 34,
+      "query": "amiodarone dose VF",
+      "category": "medication",
+      "expected_protocols": ["MED-AMIO", "518"],
+      "expected_terms": ["300mg", "150mg", "IV push"],
+      "priority": "critical"
+    },
+    {
+      "id": 35,
+      "query": "adenosine SVT dose",
+      "category": "medication",
+      "expected_protocols": ["MED-ADEN", "505"],
+      "expected_terms": ["6mg", "12mg", "rapid push", "flush"],
+      "priority": "high"
+    },
+    {
+      "id": 36,
+      "query": "atropine bradycardia",
+      "category": "medication",
+      "expected_protocols": ["MED-ATRO", "505"],
+      "expected_terms": ["0.5mg", "3mg max", "every 3-5 minutes"],
+      "priority": "high"
+    },
+    {
+      "id": 37,
+      "query": "nitroglycerin chest pain",
+      "category": "medication",
+      "expected_protocols": ["MED-NTG", "503"],
+      "expected_terms": ["0.4mg", "sublingual", "blood pressure"],
+      "priority": "high"
+    },
+    {
+      "id": 38,
+      "query": "morphine dosing",
+      "category": "medication",
+      "expected_protocols": ["MED-MORPH"],
+      "expected_terms": ["mg", "IV", "pain"],
+      "priority": "high"
+    },
+    {
+      "id": 39,
+      "query": "fentanyl pain management",
+      "category": "medication",
+      "expected_protocols": ["MED-FENT", "1345"],
+      "expected_terms": ["mcg", "IV", "IM", "IN"],
+      "priority": "high"
+    },
+    {
+      "id": 40,
+      "query": "naloxone overdose",
+      "category": "medication",
+      "expected_protocols": ["MED-NARCAN", "523"],
+      "expected_terms": ["0.4mg", "2mg", "IM", "IN"],
+      "priority": "high"
+    },
+    {
+      "id": 41,
+      "query": "albuterol asthma",
+      "category": "medication",
+      "expected_protocols": ["MED-ALBU", "511"],
+      "expected_terms": ["2.5mg", "nebulizer", "bronchospasm"],
+      "priority": "high"
+    },
+    {
+      "id": 42,
+      "query": "aspirin ACS",
+      "category": "medication",
+      "expected_protocols": ["MED-ASA", "503"],
+      "expected_terms": ["324mg", "chew"],
+      "priority": "high"
+    },
+    {
+      "id": 43,
+      "query": "dextrose hypoglycemia",
+      "category": "medication",
+      "expected_protocols": ["MED-D50", "520"],
+      "expected_terms": ["D50", "D10", "glucose", "IV"],
+      "priority": "high"
+    },
+    {
+      "id": 44,
+      "query": "diphenhydramine allergic reaction",
+      "category": "medication",
+      "expected_protocols": ["MED-BENA", "507"],
+      "expected_terms": ["25mg", "50mg", "IV", "IM"],
+      "priority": "medium"
+    },
+    {
+      "id": 45,
+      "query": "ondansetron nausea",
+      "category": "medication",
+      "expected_protocols": ["MED-ZOFR"],
+      "expected_terms": ["4mg", "IV", "ODT"],
+      "priority": "medium"
+    },
+    {
+      "id": 46,
+      "query": "midazolam seizure",
+      "category": "medication",
+      "expected_protocols": ["MED-MIDA", "519"],
+      "expected_terms": ["mg", "IM", "IN"],
+      "priority": "high"
+    },
+    {
+      "id": 47,
+      "query": "intubation procedure",
+      "category": "procedure",
+      "expected_protocols": ["1100", "1101"],
+      "expected_terms": ["ETT", "laryngoscope", "bougie"],
+      "priority": "high"
+    },
+    {
+      "id": 48,
+      "query": "King airway insertion",
+      "category": "procedure",
+      "expected_protocols": ["1100", "1103"],
+      "expected_terms": ["supraglottic", "BIAD", "size"],
+      "priority": "high"
+    },
+    {
+      "id": 49,
+      "query": "IO access placement",
+      "category": "procedure",
+      "expected_protocols": ["1105"],
+      "expected_terms": ["intraosseous", "tibia", "humerus", "EZ-IO"],
+      "priority": "high"
+    },
+    {
+      "id": 50,
+      "query": "12-lead ECG placement",
+      "category": "procedure",
+      "expected_protocols": ["1120"],
+      "expected_terms": ["leads", "V1-V6", "right sided"],
+      "priority": "medium"
+    },
+    {
+      "id": 51,
+      "query": "needle decompression procedure",
+      "category": "procedure",
+      "expected_protocols": ["1106", "806"],
+      "expected_terms": ["2nd intercostal", "midclavicular", "14 gauge"],
+      "priority": "high"
+    },
+    {
+      "id": 52,
+      "query": "CPAP application",
+      "category": "procedure",
+      "expected_protocols": ["1211", "511"],
+      "expected_terms": ["cmH2O", "mask", "pressure"],
+      "priority": "medium"
+    },
+    {
+      "id": 53,
+      "query": "tourniquet application",
+      "category": "procedure",
+      "expected_protocols": ["805", "1260"],
+      "expected_terms": ["proximal", "time", "bleeding"],
+      "priority": "high"
+    },
+    {
+      "id": 54,
+      "query": "synchronized cardioversion",
+      "category": "procedure",
+      "expected_protocols": ["505", "1205"],
+      "expected_terms": ["joules", "sync", "sedation"],
+      "priority": "high"
+    },
+    {
+      "id": 55,
+      "query": "pediatric cardiac arrest",
+      "category": "pediatric",
+      "expected_protocols": ["830", "831"],
+      "expected_terms": ["0.01mg/kg", "weight", "Broselow"],
+      "priority": "critical"
+    },
+    {
+      "id": 56,
+      "query": "pediatric epinephrine dose",
+      "category": "pediatric",
+      "expected_protocols": ["MED-EPI", "830"],
+      "expected_terms": ["0.01mg/kg", "0.1mL/kg", "1:10,000", "max 1mg"],
+      "priority": "critical"
+    },
+    {
+      "id": 57,
+      "query": "Broselow tape dosing",
+      "category": "pediatric",
+      "expected_protocols": ["830", "1300"],
+      "expected_terms": ["weight", "color", "length-based"],
+      "priority": "high"
+    },
+    {
+      "id": 58,
+      "query": "pediatric seizure treatment",
+      "category": "pediatric",
+      "expected_protocols": ["831", "1337"],
+      "expected_terms": ["midazolam", "mg/kg", "febrile"],
+      "priority": "high"
+    },
+    {
+      "id": 59,
+      "query": "pediatric respiratory distress",
+      "category": "pediatric",
+      "expected_protocols": ["830", "832"],
+      "expected_terms": ["albuterol", "epinephrine", "croup"],
+      "priority": "high"
+    },
+    {
+      "id": 60,
+      "query": "pediatric trauma center criteria",
+      "category": "pediatric",
+      "expected_protocols": ["506", "830"],
+      "expected_terms": ["PTC", "age", "mechanism"],
+      "priority": "high"
+    },
+    {
+      "id": 61,
+      "query": "neonatal resuscitation",
+      "category": "pediatric",
+      "expected_protocols": ["833"],
+      "expected_terms": ["APGAR", "ventilation", "compressions"],
+      "priority": "high"
+    },
+    {
+      "id": 62,
+      "query": "pediatric IO insertion site",
+      "category": "pediatric",
+      "expected_protocols": ["1105", "830"],
+      "expected_terms": ["tibia", "proximal", "1cm below"],
+      "priority": "high"
+    },
+    {
+      "id": 63,
+      "query": "LAMS",
+      "category": "acronym",
+      "expected_protocols": ["521", "522"],
+      "expected_terms": ["Los Angeles Motor Scale", "facial", "arm", "grip"],
+      "priority": "critical"
+    },
+    {
+      "id": 64,
+      "query": "ECMO",
+      "category": "acronym",
+      "expected_protocols": ["518"],
+      "expected_terms": ["extracorporeal", "membrane", "oxygenation"],
+      "priority": "high"
+    },
+    {
+      "id": 65,
+      "query": "IV access",
+      "category": "acronym",
+      "expected_protocols": ["1102", "1104"],
+      "expected_terms": ["intravenous", "catheter"],
+      "priority": "high"
+    },
+    {
+      "id": 66,
+      "query": "IO access",
+      "category": "acronym",
+      "expected_protocols": ["1105"],
+      "expected_terms": ["intraosseous"],
+      "priority": "high"
+    },
+    {
+      "id": 67,
+      "query": "CPR protocol",
+      "category": "acronym",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["compressions", "rate", "depth"],
+      "priority": "critical"
+    },
+    {
+      "id": 68,
+      "query": "AED use",
+      "category": "acronym",
+      "expected_protocols": ["518"],
+      "expected_terms": ["defibrillator", "pads", "shock"],
+      "priority": "high"
+    },
+    {
+      "id": 69,
+      "query": "NS fluid bolus",
+      "category": "acronym",
+      "expected_protocols": ["1317"],
+      "expected_terms": ["normal saline", "0.9%"],
+      "priority": "high"
+    },
+    {
+      "id": 70,
+      "query": "PEA causes",
+      "category": "acronym",
+      "expected_protocols": ["518", "1210"],
+      "expected_terms": ["H's and T's", "hypovolemia", "hypoxia"],
+      "priority": "high"
+    },
+    {
+      "id": 71,
+      "query": "anaphylaxis treatment",
+      "category": "general",
+      "expected_protocols": ["507", "1207"],
+      "expected_terms": ["epinephrine", "IM", "0.3mg"],
+      "priority": "critical"
+    },
+    {
+      "id": 72,
+      "query": "diabetic emergency",
+      "category": "general",
+      "expected_protocols": ["520", "1231"],
+      "expected_terms": ["glucose", "D50", "glucagon"],
+      "priority": "high"
+    },
+    {
+      "id": 73,
+      "query": "seizure management",
+      "category": "general",
+      "expected_protocols": ["519", "1233"],
+      "expected_terms": ["benzodiazepine", "midazolam", "status"],
+      "priority": "high"
+    },
+    {
+      "id": 74,
+      "query": "overdose unknown substance",
+      "category": "general",
+      "expected_protocols": ["523", "1235"],
+      "expected_terms": ["naloxone", "supportive", "airway"],
+      "priority": "high"
+    },
+    {
+      "id": 75,
+      "query": "asthma severe",
+      "category": "general",
+      "expected_protocols": ["511", "1211"],
+      "expected_terms": ["albuterol", "epinephrine", "magnesium"],
+      "priority": "high"
+    },
+    {
+      "id": 76,
+      "query": "COPD exacerbation",
+      "category": "general",
+      "expected_protocols": ["511", "1211"],
+      "expected_terms": ["bronchodilator", "CPAP"],
+      "priority": "medium"
+    },
+    {
+      "id": 77,
+      "query": "altered mental status",
+      "category": "general",
+      "expected_protocols": ["520", "1231"],
+      "expected_terms": ["glucose", "naloxone", "stroke"],
+      "priority": "high"
+    },
+    {
+      "id": 78,
+      "query": "DNR POLST",
+      "category": "general",
+      "expected_protocols": ["100", "101"],
+      "expected_terms": ["do not resuscitate", "advance directive"],
+      "priority": "high"
+    },
+    {
+      "id": 79,
+      "query": "base contact criteria",
+      "category": "general",
+      "expected_protocols": ["200", "506"],
+      "expected_terms": ["OLMC", "medical control"],
+      "priority": "high"
+    },
+    {
+      "id": 80,
+      "query": "destination hospital selection",
+      "category": "general",
+      "expected_protocols": ["506"],
+      "expected_terms": ["trauma", "STEMI", "stroke", "specialty"],
+      "priority": "high"
+    },
+    {
+      "id": 81,
+      "query": "pain management protocol",
+      "category": "general",
+      "expected_protocols": ["1345"],
+      "expected_terms": ["fentanyl", "morphine", "pain scale"],
+      "priority": "high"
+    },
+    {
+      "id": 82,
+      "query": "sedation for procedures",
+      "category": "general",
+      "expected_protocols": ["1346"],
+      "expected_terms": ["midazolam", "fentanyl", "monitoring"],
+      "priority": "medium"
+    },
+    {
+      "id": 83,
+      "query": "hypothermia treatment",
+      "category": "general",
+      "expected_protocols": ["821"],
+      "expected_terms": ["rewarming", "temperature", "cardiac"],
+      "priority": "medium"
+    },
+    {
+      "id": 84,
+      "query": "heat stroke",
+      "category": "general",
+      "expected_protocols": ["822"],
+      "expected_terms": ["cooling", "temperature", "altered mental"],
+      "priority": "high"
+    },
+    {
+      "id": 85,
+      "query": "drowning resuscitation",
+      "category": "general",
+      "expected_protocols": ["823"],
+      "expected_terms": ["ventilation", "hypothermia"],
+      "priority": "medium"
+    },
+    {
+      "id": 86,
+      "query": "patient refusal",
+      "category": "general",
+      "expected_protocols": ["102", "103"],
+      "expected_terms": ["AMA", "capacity", "informed"],
+      "priority": "medium"
+    },
+    {
+      "id": 87,
+      "query": "obvious death criteria",
+      "category": "general",
+      "expected_protocols": ["100"],
+      "expected_terms": ["rigor", "lividity", "decapitation"],
+      "priority": "high"
+    },
+    {
+      "id": 88,
+      "query": "beta blocker overdose",
+      "category": "general",
+      "expected_protocols": ["523"],
+      "expected_terms": ["glucagon", "bradycardia", "hypotension"],
+      "priority": "medium"
+    },
+    {
+      "id": 89,
+      "query": "calcium channel blocker toxicity",
+      "category": "general",
+      "expected_protocols": ["523"],
+      "expected_terms": ["calcium", "glucagon"],
+      "priority": "medium"
+    },
+    {
+      "id": 90,
+      "query": "tricyclic antidepressant overdose",
+      "category": "general",
+      "expected_protocols": ["523"],
+      "expected_terms": ["sodium bicarbonate", "wide QRS"],
+      "priority": "medium"
+    },
+    {
+      "id": 91,
+      "query": "what is the epinephrine dose for anaphylaxis",
+      "category": "medication",
+      "expected_protocols": ["MED-EPI", "507"],
+      "expected_terms": ["0.3mg", "0.5mg", "1:1,000", "IM"],
+      "priority": "critical"
+    },
+    {
+      "id": 92,
+      "query": "how to perform needle decompression",
+      "category": "procedure",
+      "expected_protocols": ["1106", "806"],
+      "expected_terms": ["2nd intercostal", "midclavicular", "14 gauge"],
+      "priority": "high"
+    },
+    {
+      "id": 93,
+      "query": "when should I contact base hospital",
+      "category": "general",
+      "expected_protocols": ["200", "506"],
+      "expected_terms": ["OLMC", "medical control", "consult"],
+      "priority": "high"
+    },
+    {
+      "id": 94,
+      "query": "amiodarone contraindications",
+      "category": "medication",
+      "expected_protocols": ["MED-AMIO"],
+      "expected_terms": ["cardiogenic shock", "AV block", "QT"],
+      "priority": "high"
+    },
+    {
+      "id": 95,
+      "query": "lidocaine vs amiodarone",
+      "category": "medication",
+      "expected_protocols": ["MED-LIDO", "MED-AMIO", "518"],
+      "expected_terms": ["VF", "VT"],
+      "priority": "medium"
+    },
+    {
+      "id": 96,
+      "query": "what does LAMS score of 4 mean",
+      "category": "stroke",
+      "expected_protocols": ["521", "522"],
+      "expected_terms": ["LVO", "large vessel", "CSC"],
+      "priority": "critical"
+    },
+    {
+      "id": 97,
+      "query": "pediatric amiodarone dose",
+      "category": "pediatric",
+      "expected_protocols": ["MED-AMIO", "831"],
+      "expected_terms": ["5mg/kg", "max 300mg"],
+      "priority": "high"
+    },
+    {
+      "id": 98,
+      "query": "patient with chest pain and low blood pressure",
+      "category": "cardiac",
+      "expected_protocols": ["503", "504"],
+      "expected_terms": ["fluid", "contraindication NTG"],
+      "priority": "high"
+    },
+    {
+      "id": 99,
+      "query": "suspected stroke but LKWT unknown",
+      "category": "stroke",
+      "expected_protocols": ["521", "522"],
+      "expected_terms": ["time window", "CSC"],
+      "priority": "high"
+    },
+    {
+      "id": 100,
+      "query": "trauma with hypotension",
+      "category": "trauma",
+      "expected_protocols": ["805", "806"],
+      "expected_terms": ["hemorrhage", "fluid", "blood"],
+      "priority": "high"
+    }
+  ]
+}

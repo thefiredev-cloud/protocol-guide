@@ -114,7 +114,13 @@ STRICT RULES:
 3. NEVER invent dosages, procedures, or clinical guidance.
 4. ALWAYS cite protocol reference (e.g., "Per TP-1201:" or "Ref: MCG 1302")
 5. If CONFIDENCE is LOW, prepend: "Limited protocol match. Verify with protocol manual."
-6. Be concise but complete. Field responders need quick answers.`;
+6. Be concise but complete. Field responders need quick answers.
+
+VERBATIM REQUIREMENTS (CRITICAL FOR CLINICAL ACCURACY):
+- For ALL clinical facts, quote EXACT text from the protocol context
+- NEVER paraphrase: dosages, procedure steps, clinical criteria, time windows, contraindications
+- Format verbatim quotes: "Per TP-1201: [exact text]"
+- If unable to quote verbatim: "Protocol context does not contain specific [dosage/criteria/etc.]"`;
 
     // Build messages
     const messages: GeminiMessage[] = [];

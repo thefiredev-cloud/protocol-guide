@@ -7,6 +7,7 @@
 
 import { supabase } from '../supabase';
 import { embedQuery } from './embeddings';
+import { expandQuery, hasAcronyms, type ExpandedQueryResult } from './medical-acronyms';
 
 // ============================================
 // Types
@@ -26,9 +27,12 @@ export interface RetrievedChunk {
 
 export interface QueryAnalysis {
   originalQuery: string;
+  expandedQuery: string;
   detectedProtocolRefs: string[];
   medicalTerms: string[];
   queryType: 'specific' | 'general' | 'procedural' | 'medication';
+  acronymExpansion: ExpandedQueryResult | null;
+  hasAcronyms: boolean;
 }
 
 export interface RetrievalResult {
@@ -54,10 +58,14 @@ export interface PatientContext {
 // ============================================
 
 /**
- * Analyze query to extract protocol references and classify type
+ * Analyze query to extract protocol references, expand acronyms, and classify type
  */
 function analyzeQuery(query: string): QueryAnalysis {
   const normalizedQuery = query.toLowerCase();
+
+  // Step 1: Expand medical acronyms (LAMS, ECMO, PTC, etc.)
+  const acronymExpansion = expandQuery(query);
+  const queryHasAcronyms = hasAcronyms(query);
 
   // Detect explicit protocol references (TP-1201, Ref 1210, MCG 1302, etc.)
   const refPatterns = [
@@ -76,6 +84,11 @@ function analyzeQuery(query: string): QueryAnalysis {
         detectedRefs.push(match[1]);
       }
     }
+  }
+
+  // Add related protocols from acronym expansion
+  if (acronymExpansion.relatedProtocols.length > 0) {
+    detectedRefs.push(...acronymExpansion.relatedProtocols);
   }
 
   // Detect medical terms
@@ -110,9 +123,12 @@ function analyzeQuery(query: string): QueryAnalysis {
 
   return {
     originalQuery: query,
+    expandedQuery: acronymExpansion.expandedQuery,
     detectedProtocolRefs: [...new Set(detectedRefs)],
     medicalTerms,
     queryType,
+    acronymExpansion: queryHasAcronyms ? acronymExpansion : null,
+    hasAcronyms: queryHasAcronyms,
   };
 }
 
@@ -185,16 +201,34 @@ function shouldDeclineToAnswer(
     };
   }
 
+  // Lower threshold for queries with recognized medical acronyms
+  // Acronyms like LAMS, ECMO, PTC have mapped protocol references
+  const confidenceThreshold = analysis.hasAcronyms ? 0.15 : 0.25;
+
+  // If acronym matched a related protocol, don't decline
+  if (analysis.hasAcronyms && analysis.acronymExpansion) {
+    const hasAcronymProtocolMatch = analysis.acronymExpansion.relatedProtocols.some(ref =>
+      chunks.some(c =>
+        c.protocolRef.includes(ref) ||
+        c.protocolId.includes(ref)
+      )
+    );
+    if (hasAcronymProtocolMatch) {
+      return { decline: false };
+    }
+  }
+
   // Very low confidence without explicit reference
-  if (confidence < 0.25 && analysis.detectedProtocolRefs.length === 0) {
+  if (confidence < confidenceThreshold && analysis.detectedProtocolRefs.length === 0) {
     return {
       decline: true,
       reason: 'Low confidence in retrieved information.',
     };
   }
 
-  // Top result has very low relevance
-  if (chunks[0].relevanceScore < 0.02) {
+  // Top result has very low relevance (lowered for acronym queries)
+  const relevanceThreshold = analysis.hasAcronyms ? 0.01 : 0.02;
+  if (chunks[0].relevanceScore < relevanceThreshold) {
     return {
       decline: true,
       reason: 'Retrieved protocols may not be relevant to your query.',
@@ -251,16 +285,44 @@ async function hybridSearch(
 }
 
 /**
- * Search by explicit protocol reference
+ * Search by explicit protocol reference (exact matching)
  */
 async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
-  const { data, error } = await supabase.rpc('search_protocols_by_ref', {
+  // Use exact search function for better precision
+  const { data, error } = await supabase.rpc('search_protocols_by_ref_exact', {
     search_ref: refNo,
   });
 
   if (error) {
-    console.error('Ref search error:', error);
-    return [];
+    // Fall back to original function if exact search not available
+    console.warn('Exact search failed, falling back:', error);
+    const { data: fallbackData, error: fallbackError } = await supabase.rpc('search_protocols_by_ref', {
+      search_ref: refNo,
+    });
+    if (fallbackError) {
+      console.error('Ref search error:', fallbackError);
+      return [];
+    }
+    return (fallbackData || []).map((row: {
+      chunk_id: string;
+      protocol_id: string;
+      protocol_ref: string;
+      protocol_title: string;
+      category: string;
+      section_title: string | null;
+      content: string;
+      chunk_index: number;
+    }) => ({
+      chunkId: row.chunk_id,
+      protocolId: row.protocol_id,
+      protocolRef: row.protocol_ref,
+      protocolTitle: row.protocol_title,
+      category: row.category,
+      sectionTitle: row.section_title,
+      content: row.content,
+      relevanceScore: 1.0,
+      matchType: 'keyword' as const,
+    }));
   }
 
   return (data || []).map((row: {
@@ -272,6 +334,7 @@ async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
     section_title: string | null;
     content: string;
     chunk_index: number;
+    match_quality: string;
   }) => ({
     chunkId: row.chunk_id,
     protocolId: row.protocol_id,
@@ -280,9 +343,29 @@ async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
     category: row.category,
     sectionTitle: row.section_title,
     content: row.content,
-    relevanceScore: 1.0, // Exact match
+    // Score based on match quality
+    relevanceScore: row.match_quality === 'exact_id' || row.match_quality === 'exact_ref' ? 1.5 :
+                   row.match_quality === 'tp_prefix' || row.match_quality === 'ref_prefix' ? 1.3 :
+                   row.match_quality === 'mcg_prefix' ? 1.2 : 1.0,
     matchType: 'keyword' as const,
   }));
+}
+
+/**
+ * Check if query is a numeric-only protocol reference
+ */
+function isNumericProtocolQuery(query: string): boolean {
+  const trimmed = query.trim();
+  // Match: "1201", "TP-1201", "Ref 1201", "MCG 1302", "protocol 521"
+  return /^(?:tp[-\s]?|ref\.?\s*|mcg[-\s]?|protocol\s*)?(\d{3,4})$/i.test(trimmed);
+}
+
+/**
+ * Extract protocol number from query
+ */
+function extractProtocolNumber(query: string): string | null {
+  const match = query.match(/(\d{3,4})/);
+  return match ? match[1] : null;
 }
 
 // ============================================
@@ -305,11 +388,45 @@ export async function retrieveContext(
   // Step 1: Analyze query
   const analysis = analyzeQuery(query);
 
-  // Step 2: Generate query embedding
+  // FAST PATH: For numeric protocol queries, skip hybrid search entirely
+  // This ensures "1201" returns TP-1201 with 100% confidence
+  if (isNumericProtocolQuery(query)) {
+    const protocolNum = extractProtocolNumber(query);
+    if (protocolNum) {
+      console.log('[RAG] Fast-path: numeric protocol query', protocolNum);
+      const exactResults = await searchByRef(protocolNum);
+
+      if (exactResults.length > 0) {
+        // Build protocol map
+        const protocols = new Map<string, { ref: string; title: string; category: string }>();
+        for (const chunk of exactResults) {
+          if (!protocols.has(chunk.protocolId)) {
+            protocols.set(chunk.protocolId, {
+              ref: chunk.protocolRef,
+              title: chunk.protocolTitle,
+              category: chunk.category,
+            });
+          }
+        }
+
+        return {
+          chunks: exactResults.slice(0, maxChunks),
+          protocols,
+          confidence: 1.0, // Maximum confidence for exact protocol match
+          queryAnalysis: analysis,
+          shouldDecline: false,
+        };
+      }
+    }
+  }
+
+  // Step 2: Generate query embedding using expanded query
   let queryEmbedding: number[];
   try {
-    // Enhance query with patient context if available
-    let enhancedQuery = query;
+    // Start with acronym-expanded query for better semantic matching
+    let enhancedQuery = analysis.expandedQuery;
+
+    // Further enhance with patient context if available
     if (patientContext) {
       const contextParts: string[] = [];
       if (patientContext.age) {
@@ -324,8 +441,18 @@ export async function retrieveContext(
         contextParts.push(`chief complaint: ${patientContext.chiefComplaint}`);
       }
       if (contextParts.length > 0) {
-        enhancedQuery = `${query} ${contextParts.join(' ')}`;
+        enhancedQuery = `${enhancedQuery} ${contextParts.join(' ')}`;
       }
+    }
+
+    // Log acronym expansion for debugging
+    if (analysis.hasAcronyms && analysis.acronymExpansion) {
+      console.log('[RAG] Acronym expansion:', {
+        original: query,
+        expanded: analysis.expandedQuery,
+        acronyms: analysis.acronymExpansion.detectedAcronyms.map(a => a.acronym),
+        relatedProtocols: analysis.acronymExpansion.relatedProtocols,
+      });
     }
 
     queryEmbedding = await embedQuery(enhancedQuery);
