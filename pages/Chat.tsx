@@ -2,12 +2,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
-import { Protocol } from '../types';
-import { useWidgetMode, PatientContext } from '../contexts/WidgetModeContext';
+import { useWidgetMode } from '../contexts/WidgetModeContext';
+import { isSupabaseConfigured } from '../lib/supabase';
 
-interface Source {
-  uri: string;
+// RAG imports - use when Supabase is configured
+import {
+  retrieveContext,
+  formatContextForAI,
+  formatPatientContext,
+  getConfidenceLevel,
+  validateGrounding,
+  createCitationLinks,
+  enhanceResponseWithCitations,
+  isDeclineResponse,
+  type RetrievalResult,
+  type PatientContext,
+} from '../lib/rag';
+
+interface CitationLink {
+  ref: string;
   title: string;
+  protocolId: string;
 }
 
 interface Message {
@@ -15,38 +30,56 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  sources?: Source[];
+  citations?: CitationLink[];
+  confidence?: 'HIGH' | 'MEDIUM' | 'LOW';
+  isWarning?: boolean;
 }
+
+// Grounded System Prompt for Zero Hallucination
+const GROUNDED_SYSTEM_PROMPT = `ROLE: Protocol-Guide (LA County Fire EMS Medical Reference)
+
+CRITICAL SAFETY REQUIREMENT: You are a medical reference system for emergency responders.
+Your responses directly impact patient care. ACCURACY IS PARAMOUNT.
+
+STRICT GROUNDING RULES:
+1. ONLY answer using the PROTOCOL CONTEXT provided below. Do not use any external knowledge.
+2. If the context does not contain information to answer the question, respond with:
+   "I don't have specific protocol information for this query. Please consult the full protocol manual or contact medical control."
+3. NEVER invent, assume, or extrapolate dosages, procedures, or clinical guidance.
+4. ALWAYS cite the specific protocol reference (e.g., "Per TP-1201:" or "Ref: MCG 1302")
+5. If multiple protocols apply, list all relevant references.
+
+RESPONSE FORMAT:
+- Be concise and use bullet points for steps/lists
+- Do NOT use markdown bold (**text**)
+- Always include protocol reference numbers
+- Flag any uncertainties with "Verify with medical control:"
+
+CONFIDENCE INDICATOR:
+- If CONFIDENCE is LOW, prepend response with: "Limited protocol match. Verify with protocol manual."
+`;
+
+// Decline response for when we can't answer
+const DECLINE_RESPONSE = `I don't have specific protocol information that matches your query.
+
+Recommended actions:
+• Check the Protocol Browser for related topics
+• Consult the full LA County EMS Protocol Manual
+• Contact Base Hospital for real-time medical direction`;
 
 const Chat: React.FC = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [useRAG, setUseRAG] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSession = useRef<GeminiChat | null>(null);
   const { patientContext, isWidgetMode } = useWidgetMode();
 
-  // Format patient context for AI prompt
-  const formatPatientContext = (ctx: PatientContext | null): string => {
-    if (!ctx) return '';
-    const parts: string[] = [];
-    if (ctx.age !== undefined) {
-      parts.push(`Age: ${ctx.age} ${ctx.ageUnit || 'years'}`);
-    }
-    if (ctx.weight !== undefined) {
-      parts.push(`Weight: ${ctx.weight} kg`);
-    }
-    if (ctx.sex) {
-      parts.push(`Sex: ${ctx.sex}`);
-    }
-    if (ctx.chiefComplaint) {
-      parts.push(`Chief Complaint: ${ctx.chiefComplaint}`);
-    }
-    if (ctx.incidentType) {
-      parts.push(`Incident: ${ctx.incidentType}`);
-    }
-    return parts.length > 0 ? `PATIENT INFO: ${parts.join(' | ')}` : '';
-  };
+  // Check if RAG is available (Supabase configured)
+  useEffect(() => {
+    setUseRAG(isSupabaseConfigured());
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -133,31 +166,22 @@ const Chat: React.FC = () => {
     try {
       const ai = new GoogleGenAI({ apiKey });
 
-      // Lightweight System Instruction
-      const systemInstruction = `ROLE: Protocol-Guide (LA County EMS Assistant).
-
-      INSTRUCTIONS:
-      1. You are an expert paramedic assistant for LA County Fire Dept.
-      2. You will receive relevant protocol extracts with each user message under "CONTEXT".
-      3. ANSWER ONLY using the provided context or previous conversation history.
-      4. If the context is empty and the question is not about general medical knowledge contained in previous turns, politely ask for clarification.
-      5. BE EXTREMELY CONCISE. Bullet points are preferred.
-      6. FORMATTING: Do NOT use markdown bold (**). Use plain text.
-      7. Always cite the Protocol Ref Number (e.g. "Ref: 1210") if available.
-      `;
-
       chatSession.current = ai.chats.create({
         model: 'gemini-3-flash-preview',
         config: {
-          systemInstruction,
-          temperature: 0.1,
+          systemInstruction: GROUNDED_SYSTEM_PROMPT,
+          temperature: 0.1, // Low temperature for consistency and reduced hallucination
         },
       });
+
+      const initMessage = useRAG
+        ? 'Protocol-Guide Active (RAG Enabled). Zero-hallucination mode ready.'
+        : 'Protocol-Guide Active. Ready for rapid retrieval.';
 
       setMessages([{
         id: 'init-1',
         role: 'assistant',
-        content: `Protocol-Guide Active. Ready for rapid retrieval.`,
+        content: initMessage,
         timestamp: new Date()
       }]);
     } catch (err) {
@@ -169,27 +193,12 @@ const Chat: React.FC = () => {
         timestamp: new Date()
       }]);
     }
-  }, []);
+  }, [useRAG]);
 
   const handleSend = async () => {
     if (!input.trim() || !chatSession.current) return;
-    
+
     const originalInput = input; // Keep original for UI
-
-    // 1. Retrieve Context
-    const context = getRelevantContext(originalInput);
-
-    // 2. Get patient context from ImageTrend (if in widget mode)
-    const patientInfo = formatPatientContext(patientContext);
-
-    // 3. Construct Augmented Prompt with patient context
-    let augmentedPrompt = originalInput;
-    if (patientInfo || context) {
-      const contextParts: string[] = [];
-      if (patientInfo) contextParts.push(patientInfo);
-      if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
-      augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
-    }
 
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: originalInput, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
@@ -197,10 +206,88 @@ const Chat: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // 3. Send Augmented Prompt (Hidden from user UI, but seen by AI)
+      let retrieval: RetrievalResult | null = null;
+      let context = '';
+      let patientInfo = '';
+      let confidenceLevel: 'HIGH' | 'MEDIUM' | 'LOW' = 'HIGH';
+
+      // Use RAG pipeline if available, otherwise fallback to local search
+      if (useRAG) {
+        // RAG Pipeline: Retrieve context from Supabase with vector search
+        retrieval = await retrieveContext(originalInput, patientContext as PatientContext);
+
+        // Check if we should decline to answer
+        if (retrieval.shouldDecline) {
+          const declineMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: DECLINE_RESPONSE,
+            timestamp: new Date(),
+            confidence: 'LOW',
+            isWarning: true,
+          };
+          setMessages(prev => [...prev, declineMsg]);
+          setIsTyping(false);
+          return;
+        }
+
+        context = formatContextForAI(retrieval);
+        confidenceLevel = getConfidenceLevel(retrieval.confidence);
+      } else {
+        // Fallback: Use local keyword search
+        context = getRelevantContext(originalInput);
+      }
+
+      // Get patient context
+      patientInfo = formatPatientContext(patientContext as PatientContext);
+
+      // Construct augmented prompt with confidence indicator
+      const confidenceInstruction = confidenceLevel === 'LOW'
+        ? '\nCONFIDENCE: LOW - Prepend warning to response.\n'
+        : confidenceLevel === 'MEDIUM'
+        ? '\nCONFIDENCE: MEDIUM - Cite sources carefully.\n'
+        : '\nCONFIDENCE: HIGH - Multiple strong matches found.\n';
+
+      let augmentedPrompt = originalInput;
+      if (patientInfo || context) {
+        const contextParts: string[] = [confidenceInstruction];
+        if (patientInfo) contextParts.push(patientInfo);
+        if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
+        augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
+      }
+
+      // Send to AI
       const result = await chatSession.current.sendMessage({ message: augmentedPrompt });
-      const botMsg: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: result.text || "No response generated.", timestamp: new Date() };
+      let responseText = result.text || "No response generated.";
+
+      // Validate grounding and extract citations
+      let citations: CitationLink[] = [];
+      let isWarning = false;
+
+      if (retrieval && useRAG) {
+        const validation = validateGrounding(responseText, retrieval);
+        citations = createCitationLinks(validation.citations);
+
+        // Add citations if response doesn't have them
+        responseText = enhanceResponseWithCitations(responseText, retrieval);
+
+        // Flag if grounding is questionable
+        if (!validation.isGrounded || validation.ungroundedClaims.length > 0) {
+          isWarning = true;
+        }
+      }
+
+      const botMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responseText,
+        timestamp: new Date(),
+        citations: citations.length > 0 ? citations : undefined,
+        confidence: confidenceLevel,
+        isWarning,
+      };
       setMessages(prev => [...prev, botMsg]);
+
     } catch (error: any) {
       console.error('Chat error:', error);
 
@@ -216,7 +303,13 @@ const Chat: React.FC = () => {
         errorMessage = "AI model unavailable. Please try again later.";
       }
 
-      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: errorMessage, timestamp: new Date() }]);
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: errorMessage,
+        timestamp: new Date(),
+        isWarning: true,
+      }]);
     } finally {
       setIsTyping(false);
     }
@@ -269,20 +362,64 @@ const Chat: React.FC = () => {
              )}
 
              <div className={`flex flex-col gap-1.5 max-w-[82%] ${msg.role === 'user' ? 'items-end' : ''}`}>
-               {msg.role === 'assistant' && <span className="text-[11px] font-bold text-slate-400 ml-1 mb-1">Protocol-Guide</span>}
-               
+               {msg.role === 'assistant' && (
+                 <div className="flex items-center gap-2 ml-1 mb-1">
+                   <span className="text-[11px] font-bold text-slate-400">Protocol-Guide</span>
+                   {/* Confidence Badge */}
+                   {msg.confidence && (
+                     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                       msg.confidence === 'HIGH'
+                         ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+                         : msg.confidence === 'MEDIUM'
+                         ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
+                         : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                     }`}>
+                       {msg.confidence}
+                     </span>
+                   )}
+                   {/* Warning Indicator */}
+                   {msg.isWarning && (
+                     <span className="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">
+                       <span className="material-symbols-outlined text-[12px]">warning</span>
+                       Verify
+                     </span>
+                   )}
+                 </div>
+               )}
+
                <div className={`p-5 shadow-soft ${
-                 msg.role === 'user' 
-                   ? 'bg-[#9B1B30] text-white rounded-2xl rounded-br-none shadow-[#9B1B30]/20 shadow-lg' 
+                 msg.role === 'user'
+                   ? 'bg-[#9B1B30] text-white rounded-2xl rounded-br-none shadow-[#9B1B30]/20 shadow-lg'
+                   : msg.isWarning
+                   ? 'bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-800/30 rounded-2xl rounded-bl-none text-slate-800 dark:text-slate-200 shadow-md'
                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none text-slate-800 dark:text-slate-200 shadow-md'
                }`}>
                  <div className="text-[15px] leading-relaxed whitespace-pre-wrap font-medium">
                    {msg.content}
                  </div>
+
+                 {/* Citations Section */}
+                 {msg.citations && msg.citations.length > 0 && (
+                   <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
+                     <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Sources</div>
+                     <div className="flex flex-wrap gap-2">
+                       {msg.citations.map((citation, idx) => (
+                         <a
+                           key={idx}
+                           href={`/browse?protocol=${citation.protocolId}`}
+                           className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-[#9B1B30]/10 hover:text-[#9B1B30] dark:hover:bg-[#9B1B30]/20 dark:hover:text-[#9B1B30] transition-colors"
+                         >
+                           <span className="material-symbols-outlined text-[14px]">description</span>
+                           {citation.ref}
+                         </a>
+                       ))}
+                     </div>
+                   </div>
+                 )}
                </div>
-               
+
                <span className={`text-[10px] font-bold text-slate-400 mt-1 ${msg.role === 'user' ? 'mr-1 flex items-center gap-1' : 'ml-1'}`}>
-                 {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} 
+                 {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                  {msg.role === 'user' && <span className="material-symbols-outlined text-[14px] text-blue-400">done_all</span>}
                </span>
              </div>

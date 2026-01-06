@@ -1,27 +1,147 @@
 
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { protocols } from '../data/protocols';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { protocols as staticProtocols } from '../data/protocols';
 import { ProtocolCategory, Protocol } from '../types';
 import { renderIcon } from '../components/Icons';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const Browse: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<ProtocolCategory | 'All'>('All'); 
+  const [selectedCategory, setSelectedCategory] = useState<ProtocolCategory | 'All'>('All');
   const [recentProtocols, setRecentProtocols] = useState<Protocol[]>([]);
+  const [dbProtocols, setDbProtocols] = useState<Protocol[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [useDatabase, setUseDatabase] = useState(false);
+
+  // Use database protocols if available, otherwise fallback to static
+  const protocols = useMemo(() => {
+    return useDatabase && dbProtocols.length > 0 ? dbProtocols : staticProtocols;
+  }, [useDatabase, dbProtocols]);
+
+  // Fetch protocols from Supabase if configured
+  useEffect(() => {
+    const fetchProtocols = async () => {
+      if (!isSupabaseConfigured()) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('protocols')
+          .select('*')
+          .order('ref_no');
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          // Transform database format to Protocol type
+          const transformed: Protocol[] = data.map(p => ({
+            id: p.protocol_id,
+            refNo: p.ref_no,
+            title: p.title,
+            category: p.category as ProtocolCategory,
+            color: getCategoryColor(p.category),
+            icon: getCategoryIcon(p.category),
+            sections: p.sections || [],
+          }));
+          setDbProtocols(transformed);
+          setUseDatabase(true);
+        }
+      } catch (err) {
+        console.error('Failed to fetch protocols from database:', err);
+        // Fallback to static protocols
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProtocols();
+  }, []);
+
+  // Handle direct protocol link from citations
+  useEffect(() => {
+    const protocolId = searchParams.get('protocol');
+    if (protocolId) {
+      const found = protocols.find(p =>
+        p.id === protocolId ||
+        p.refNo.includes(protocolId) ||
+        p.id.includes(protocolId)
+      );
+      if (found) {
+        navigate(`/protocol/${found.id}`);
+      } else {
+        setSearch(protocolId);
+      }
+    }
+  }, [searchParams, protocols, navigate]);
 
   useEffect(() => {
     try {
-        const storedRecents = localStorage.getItem('recent_protocols');
-        if (storedRecents) {
-            const ids: string[] = JSON.parse(storedRecents);
-            const found = ids.map(id => protocols.find(p => p.id === id)).filter(Boolean) as Protocol[];
-            setRecentProtocols(found);
-        }
-    } catch(e) { console.error(e); }
-  }, []);
+      const storedRecents = localStorage.getItem('recent_protocols');
+      if (storedRecents) {
+        const ids: string[] = JSON.parse(storedRecents);
+        const found = ids.map(id => protocols.find(p => p.id === id)).filter(Boolean) as Protocol[];
+        setRecentProtocols(found);
+      }
+    } catch (e) { console.error(e); }
+  }, [protocols]);
+
+  // Helper functions to map category to color/icon
+  const getCategoryColor = (category: string): string => {
+    const colorMap: Record<string, string> = {
+      'Pharmacology': 'teal',
+      'General Medical': 'blue',
+      'Cardiovascular': 'red',
+      'Trauma': 'orange',
+      'Respiratory': 'cyan',
+      'Neurology': 'indigo',
+      'Pediatric': 'purple',
+      'Environmental': 'green',
+      'Toxicology': 'yellow',
+      'OB/GYN': 'pink',
+      'ENT': 'teal',
+      'Procedures': 'gray',
+      'Policies': 'slate',
+      'Administrative': 'slate',
+      'Base Hospital': 'slate',
+      'Provider Agencies': 'slate',
+      'Record Keeping': 'slate',
+      'Equipment': 'slate',
+      'Training': 'slate',
+      'Disaster': 'red',
+    };
+    return colorMap[category] || 'slate';
+  };
+
+  const getCategoryIcon = (category: string): string => {
+    const iconMap: Record<string, string> = {
+      'Pharmacology': 'medication',
+      'General Medical': 'medical_services',
+      'Cardiovascular': 'cardiology',
+      'Trauma': 'personal_injury',
+      'Respiratory': 'pulmonology',
+      'Neurology': 'neurology',
+      'Pediatric': 'child_care',
+      'Environmental': 'nature',
+      'Toxicology': 'science',
+      'OB/GYN': 'pregnancy',
+      'ENT': 'hearing',
+      'Procedures': 'build',
+      'Policies': 'policy',
+      'Administrative': 'admin_panel_settings',
+      'Base Hospital': 'local_hospital',
+      'Provider Agencies': 'groups',
+      'Record Keeping': 'description',
+      'Equipment': 'construction',
+      'Training': 'school',
+      'Disaster': 'warning',
+    };
+    return iconMap[category] || 'description';
+  };
 
   // Categories based on LA County Manual structure
   const categories: { name: ProtocolCategory; color: string }[] = [
@@ -127,8 +247,14 @@ const Browse: React.FC = () => {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <span className="text-lg font-bold text-slate-900 dark:text-white">{protocols.length}</span>
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Protocols</span>
+                {isLoading ? (
+                  <span className="w-5 h-5 border-2 border-slate-300 border-t-primary rounded-full animate-spin"></span>
+                ) : (
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">{protocols.length}</span>
+                )}
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                  {useDatabase ? 'Database' : 'Protocols'}
+                </span>
               </div>
               <a
                 href="https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/"
