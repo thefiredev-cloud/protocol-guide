@@ -58,8 +58,29 @@ export const WidgetModeProvider: React.FC<{ children: ReactNode }> = ({ children
     if (!isWidgetMode) return;
 
     const handleMessage = (event: MessageEvent) => {
-      // In production, validate origin
-      // if (event.origin !== 'https://imagetrend.com') return;
+      // Validate origin in production - whitelist allowed embedding domains
+      const allowedOrigins = [
+        'https://imagetrend.com',
+        'https://*.imagetrend.com',
+        'https://protocol-guide.com',
+        'https://protocol-guide.netlify.app',
+      ];
+
+      const isAllowedOrigin = allowedOrigins.some(pattern => {
+        if (pattern.includes('*')) {
+          const regex = new RegExp('^' + pattern.replace('*.', '([a-z0-9-]+\\.)?').replace(/\./g, '\\.') + '$');
+          return regex.test(event.origin);
+        }
+        return event.origin === pattern;
+      });
+
+      // Allow localhost in development
+      const isDev = event.origin.startsWith('http://localhost') || event.origin.startsWith('http://127.0.0.1');
+
+      if (!isAllowedOrigin && !isDev) {
+        console.warn('WidgetMode: Rejected message from unauthorized origin:', event.origin);
+        return;
+      }
 
       const { type, payload } = event.data || {};
 

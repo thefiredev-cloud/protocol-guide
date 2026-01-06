@@ -257,8 +257,16 @@ const Chat: React.FC = () => {
         augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
       }
 
-      // Send to AI
-      const result = await chatSession.current.sendMessage({ message: augmentedPrompt });
+      // Send to AI with timeout protection
+      const TIMEOUT_MS = 15000; // 15 second timeout
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), TIMEOUT_MS)
+      );
+
+      const result = await Promise.race([
+        chatSession.current.sendMessage({ message: augmentedPrompt }),
+        timeoutPromise
+      ]);
       let responseText = result.text || "No response generated.";
 
       // Validate grounding and extract citations
