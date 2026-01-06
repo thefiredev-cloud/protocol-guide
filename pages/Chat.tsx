@@ -4,6 +4,7 @@ import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { useWidgetMode } from '../contexts/WidgetModeContext';
 import { isSupabaseConfigured } from '../lib/supabase';
+import { FeedbackButtons } from '../components/FeedbackButtons';
 
 // RAG imports - use when Supabase is configured
 import {
@@ -418,10 +419,19 @@ const Chat: React.FC = () => {
                  )}
                </div>
 
-               <span className={`text-[10px] font-bold text-slate-400 mt-1 ${msg.role === 'user' ? 'mr-1 flex items-center gap-1' : 'ml-1'}`}>
-                 {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-                 {msg.role === 'user' && <span className="material-symbols-outlined text-[14px] text-blue-400">done_all</span>}
-               </span>
+               <div className={`flex items-center gap-3 mt-1 ${msg.role === 'user' ? 'mr-1 flex-row-reverse' : 'ml-1'}`}>
+                 <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                   {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                   {msg.role === 'user' && <span className="material-symbols-outlined text-[14px] text-blue-400">done_all</span>}
+                 </span>
+                 {msg.role === 'assistant' && (
+                   <FeedbackButtons
+                     messageId={msg.id}
+                     query={messages.find(m => m.role === 'user' && m.timestamp < msg.timestamp)?.content || ''}
+                     response={msg.content}
+                   />
+                 )}
+               </div>
              </div>
           </div>
         ))}
