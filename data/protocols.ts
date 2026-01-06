@@ -56,10 +56,21 @@ const detailedProtocols: Protocol[] = [
 
 // Deduplication Logic: Prefer detailed protocols over bulk stubs
 // Also deduplicate within detailedProtocols (first occurrence wins)
+// For Pharmacology: also deduplicate by title to avoid MED-xxx and 1317.x duplicates
 const uniqueDetailedIds = new Set<string>();
+const uniquePharmaTitles = new Set<string>();
 const uniqueDetailedProtocols: Protocol[] = [];
 
 for (const p of detailedProtocols) {
+  // For Pharmacology items, deduplicate by title (case-insensitive)
+  if (p.category === 'Pharmacology') {
+    const titleKey = p.title.toLowerCase().trim();
+    if (uniquePharmaTitles.has(titleKey)) {
+      continue; // Skip duplicate medication
+    }
+    uniquePharmaTitles.add(titleKey);
+  }
+
   if (!uniqueDetailedIds.has(p.id)) {
     uniqueDetailedIds.add(p.id);
     uniqueDetailedProtocols.push(p);
