@@ -1,11 +1,27 @@
 
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import { getProtocolById } from '../data/protocols';
 import { ProtocolSection } from '../types';
 import { renderIcon } from '../components/Icons';
 import { BurnCalculator } from '../components/BurnCalculator';
 import { ColorCodeReference } from '../components/ColorCodeReference';
+
+// Sanitize HTML content to prevent XSS attacks
+const sanitizeHTML = (html: string | undefined): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'span', 'div'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
+  });
+};
+
+// Safe HTML rendering component
+const SafeHTML: React.FC<{ html: string | undefined; className?: string }> = ({ html, className }) => {
+  if (!html) return null;
+  return <div className={className} dangerouslySetInnerHTML={{ __html: sanitizeHTML(html) }} />;
+};
 
 const ProtocolDetail: React.FC = () => {
   const { id } = useParams();
@@ -59,16 +75,16 @@ const ProtocolDetail: React.FC = () => {
         return (
           <div key={index} className="relative w-full mb-6">
             <div className="bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)] overflow-hidden relative border border-slate-100 dark:border-slate-700/50">
-              
+
               {/* Decorative Top Right Corner */}
               <div className={`absolute -top-12 -right-12 w-32 h-32 rounded-full ${getColorClass(protocol.color, 'light-bg')} opacity-60 pointer-events-none`}></div>
-              
+
               <div className="p-8 pb-10 flex flex-col items-center text-center relative z-10">
                 {/* Icon Container */}
                 <div className="relative mb-5">
                    <div className={`w-20 h-20 rounded-full ${getColorClass(protocol.color, 'icon-bg')} flex items-center justify-center relative shadow-sm`}>
                       {renderIcon(headerItem.icon || protocol.icon, `w-9 h-9 ${getColorClass(protocol.color, 'text')}`)}
-                      
+
                       {/* Info Badge */}
                       <div className="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-blue-600 rounded-full p-[3px] border-[3px] border-white dark:border-slate-800 shadow-sm">
                          <span className="material-symbols-outlined text-white text-[12px] font-bold block">info</span>
@@ -119,7 +135,7 @@ const ProtocolDetail: React.FC = () => {
                    )}
                    <div className="flex-1">
                       <p className={`text-sm font-bold text-slate-900 dark:text-white ${isImpressions ? 'text-[15px]' : ''}`}>{item.title}</p>
-                      {item.content && <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed" dangerouslySetInnerHTML={{ __html: item.content }} />}
+                      <SafeHTML html={item.content} className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed" />
                    </div>
                 </div>
               ))}
@@ -146,7 +162,7 @@ const ProtocolDetail: React.FC = () => {
               <span className="material-symbols-outlined text-yellow-600 dark:text-yellow-500 text-2xl shrink-0 mt-0.5">warning</span>
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-yellow-600 dark:text-yellow-500 font-bold mb-1">Critical Consideration</p>
-                <div className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed" dangerouslySetInnerHTML={{ __html: section.content || '' }} />
+                <SafeHTML html={section.content} className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed" />
               </div>
             </div>
           </div>
@@ -157,11 +173,11 @@ const ProtocolDetail: React.FC = () => {
            <div key={index} className="bg-white dark:bg-slate-800 rounded-xl shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-slate-700 mb-6 overflow-hidden">
             <div className={`p-5 ${section.className || ''}`}>
               {section.title && <h3 className="text-xs font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wide">{section.title}</h3>}
-              <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: section.content || '' }} />
+              <SafeHTML html={section.content} className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" />
             </div>
           </div>
         );
-      
+
       case 'info':
         return (
            <div key={index} className="bg-blue-50 dark:bg-blue-900/10 rounded-xl p-4 border border-blue-100 dark:border-blue-900/30 mb-6">
@@ -169,7 +185,7 @@ const ProtocolDetail: React.FC = () => {
               <span className="material-symbols-outlined text-blue-600 dark:text-blue-400 shrink-0">info</span>
               <div>
                 {section.title && <h3 className="text-sm font-bold text-blue-800 dark:text-blue-300 mb-1">{section.title}</h3>}
-                <div className="text-sm text-blue-900 dark:text-blue-200 leading-normal" dangerouslySetInnerHTML={{ __html: section.content || '' }} />
+                <SafeHTML html={section.content} className="text-sm text-blue-900 dark:text-blue-200 leading-normal" />
               </div>
             </div>
           </div>
@@ -193,7 +209,7 @@ const ProtocolDetail: React.FC = () => {
                     <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
                   </summary>
                   <div className="px-4 pb-5 pt-1 pl-[4.5rem] text-sm text-slate-600 dark:text-slate-300">
-                     <div className="prose prose-sm dark:prose-invert max-w-none leading-relaxed" dangerouslySetInnerHTML={{ __html: item.content || '' }} />
+                     <SafeHTML html={item.content} className="prose prose-sm dark:prose-invert max-w-none leading-relaxed" />
                   </div>
                 </details>
               ))}
@@ -221,7 +237,7 @@ const ProtocolDetail: React.FC = () => {
                   </summary>
                   <div className="px-4 pb-4 pt-2 text-sm text-slate-600 dark:text-slate-300 bg-slate-50/50 dark:bg-slate-900/20">
                      {item.subtitle && <p className="mb-2 font-semibold text-slate-800 dark:text-slate-200">{item.subtitle}</p>}
-                     <div dangerouslySetInnerHTML={{ __html: item.content || '' }} />
+                     <SafeHTML html={item.content} />
                   </div>
                 </details>
                ))}
@@ -235,8 +251,8 @@ const ProtocolDetail: React.FC = () => {
              <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 text-center">{section.title}</h3>
              <div className="flex flex-wrap gap-2 justify-center">
                {section.items?.map((item, i) => (
-                 <a 
-                    key={i} 
+                 <a
+                    key={i}
                     href={dhsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -249,7 +265,7 @@ const ProtocolDetail: React.FC = () => {
              </div>
           </div>
         );
-      
+
       default: return null;
     }
   };
@@ -259,14 +275,14 @@ const ProtocolDetail: React.FC = () => {
       {/* Navbar */}
       <div className="sticky top-12 z-30 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md -mx-5 px-5 mb-4 border-b border-transparent dark:border-slate-800/50">
         <header className="flex justify-between items-center h-16">
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 group p-2 -ml-2 rounded-xl active:bg-slate-100 dark:active:bg-slate-800 transition-colors"
           >
             <span className="material-symbols-outlined text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">arrow_back</span>
             <span className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-black dark:group-hover:text-white transition-colors">{protocol.refNo}</span>
           </button>
-          
+
           <button className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-red-500">
             <span className="material-symbols-outlined text-[20px]">bookmark</span>
           </button>
@@ -277,7 +293,7 @@ const ProtocolDetail: React.FC = () => {
         {protocol.sections.map((section, index) => renderSection(section, index))}
 
         <div className="mt-8">
-          <a 
+          <a
               href={dhsUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -293,7 +309,7 @@ const ProtocolDetail: React.FC = () => {
                 Start Resuscitation Timer
               </button>
           )}
-          
+
           <div className="mt-8 text-center">
             <p className="text-[11px] font-medium text-slate-400 leading-relaxed">
               Reference: LA County Prehospital Care Manual
