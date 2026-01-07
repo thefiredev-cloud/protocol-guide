@@ -170,6 +170,11 @@ const App: React.FC = () => {
                         <Route path="/chat" element={<Chat />} />
                         <Route path="/account" element={<Account />} />
                         <Route path="/hospitals" element={<Hospitals />} />
+                        <Route path="/admin" element={
+                          <AdminRoute>
+                            <Admin />
+                          </AdminRoute>
+                        } />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </MainLayout>
