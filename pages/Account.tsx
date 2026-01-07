@@ -154,7 +154,16 @@ const Account: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center">
+      <div className="mt-8 flex flex-col items-center gap-3">
+        {ADMIN_EMAILS.includes(user?.email || '') && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="flex items-center justify-center gap-2 font-semibold text-sm py-3 px-6 rounded-xl transition-colors w-full bg-primary text-white hover:bg-[#7A1628] shadow-sm"
+          >
+            <span className="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+            Admin Dashboard
+          </button>
+        )}
         <button
           onClick={handleLogout}
           className="text-[#9B1B30] dark:text-[#C9344F] font-semibold text-sm py-3 px-6 rounded-xl hover:bg-[#9B1B30]/10 dark:hover:bg-[#9B1B30]/20 transition-colors w-full bg-white dark:bg-slate-800 border border-[#9B1B30]/20 dark:border-[#9B1B30]/30 shadow-sm"
