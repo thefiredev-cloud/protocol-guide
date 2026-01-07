@@ -7,6 +7,8 @@ import { ref300, ref302, ref306 } from './ref-300-series';
 import { mcg1318 } from './mcg-1318';
 import { remainingAdmin } from './all-admin';
 import { tocAdmin } from './toc-admin';
+import { destinationCriteria } from './destination-criteria';
+import { ref506Trauma } from './ref-506-trauma';
 
 export const adminProtocolsList = [
   ref502,
@@ -18,6 +20,8 @@ export const adminProtocolsList = [
   ref302,
   ref306,
   mcg1318,
+  destinationCriteria,
+  ref506Trauma,
   ...remainingAdmin,
   ...tocAdmin
 ];
