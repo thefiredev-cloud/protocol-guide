@@ -63,13 +63,22 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   // Cardiac
   'ECMO': {
     expansion: 'Extracorporeal Membrane Oxygenation',
-    synonyms: ['ECPR', 'mechanical circulatory support', 'heart lung bypass', 'extracorporeal life support'],
+    synonyms: [
+      'ECPR', 'mechanical circulatory support', 'heart lung bypass',
+      'extracorporeal life support', 'ECMO criteria', 'ECMO eligibility',
+      'ECMO candidate', 'ECMO destination', 'ECMO center'
+    ],
     relatedProtocols: ['518', '1210', '1318'],
     category: 'cardiac'
   },
   'ECPR': {
     expansion: 'Extracorporeal Cardiopulmonary Resuscitation',
-    synonyms: ['ECMO CPR', 'mechanical resuscitation', 'extracorporeal resuscitation', 'refractory VF', 'refractory shockable'],
+    synonyms: [
+      'ECMO CPR', 'mechanical resuscitation', 'extracorporeal resuscitation',
+      'refractory VF', 'refractory shockable', 'ECPR criteria', 'ECPR eligibility',
+      'ECPR candidate', 'ECPR patient selection', 'ECPR destination',
+      'refractory cardiac arrest', 'ECPR center'
+    ],
     relatedProtocols: ['518', '1210', '1318'],
     category: 'cardiac'
   },
