@@ -408,10 +408,6 @@ const Chat: React.FC = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-none">Protocol-Guide</h1>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Gemini 3 Flash</p>
-              </div>
             </div>
           </div>
           <button className="w-10 h-10 rounded-full bg-slate-100/50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
