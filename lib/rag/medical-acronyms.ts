@@ -182,8 +182,11 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   },
   'SRC': {
     expansion: 'Stroke Receiving Center',
-    synonyms: ['stroke center', 'stroke hospital', 'stroke receiving'],
-    relatedProtocols: ['506', '521'],
+    synonyms: [
+      'stroke center', 'stroke hospital', 'stroke receiving', 'SRC criteria',
+      'stroke receiving criteria', 'stroke destination', 'stroke eligibility'
+    ],
+    relatedProtocols: ['506', '521', '522', '523'],
     category: 'stroke'
   },
 
