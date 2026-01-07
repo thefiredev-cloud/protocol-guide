@@ -36,14 +36,18 @@ export const ref510: Protocol = {
       type: "list",
       title: "II. PMC Referral Criteria (Critically Ill)",
       items: [
-        { title: "A. Cardiac Dysrhythmia", content: "" },
-        { title: "B. Severe Respiratory Distress", content: "" },
-        { title: "C. Cyanosis", content: "" },
-        { title: "D. Altered Mental Status", content: "Without signs of improvement." },
-        { title: "E. Status Epilepticus", content: "" },
-        { title: "F. BRUE", content: "<= 12 months of age." },
-        { title: "G. Focal Neurologic Signs", content: "Not associated with trauma (e.g. stroke, atypical migraine, petit mal seizures)." },
-        { title: "H. Post-Arrest ROSC", content: "Return of spontaneous circulation achieved." }
+        { title: "A. Cardiac Dysrhythmia", content: "Any unstable cardiac rhythm requiring intervention: SVT, bradycardia with poor perfusion, ventricular tachycardia, or other hemodynamically unstable rhythm." },
+        { title: "B. Severe Respiratory Distress", content: "Requiring advanced airway management, CPAP, high-flow oxygen, or accessory muscle use with SpO2 <90% despite treatment." },
+        { title: "C. Cyanosis", content: "Persistent central cyanosis despite supplemental oxygen therapy." },
+        { title: "D. Altered Mental Status", content: "GCS ≤13 without signs of improvement, unresponsive to stimuli, or deteriorating mental status." },
+        { title: "E. Status Epilepticus", content: "Seizure activity >5 minutes duration or repeated seizures without return to baseline between episodes." },
+        { title: "F. BRUE", content: "<b>Brief Resolved Unexplained Event</b> in infant ≤12 months: episode of absent/irregular breathing, color change, tone change, or altered responsiveness." },
+        { title: "G. Focal Neurologic Signs", content: "Not trauma-related: suspected pediatric stroke, atypical migraine with focal deficits, new unilateral weakness or sensory loss." },
+        { title: "H. Post-Arrest ROSC", content: "Return of spontaneous circulation achieved after cardiac arrest - requires PICU-level post-arrest care." },
+        { title: "I. Sepsis/Shock", content: "Signs of septic shock: hypotension (age-appropriate), poor perfusion, altered mental status with suspected infection." },
+        { title: "J. Diabetic Emergency", content: "DKA (Kussmaul breathing, fruity odor, AMS) or severe hypoglycemia unresponsive to D10/glucagon treatment." },
+        { title: "K. Anaphylaxis (Severe)", content: "Severe allergic reaction with airway compromise or hemodynamic instability despite epinephrine." },
+        { title: "L. Toxic Ingestion/Overdose", content: "Ingestion with altered mental status, hemodynamic instability, or requiring antidote therapy." }
       ]
     },
     {
