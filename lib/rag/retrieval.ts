@@ -193,6 +193,13 @@ function shouldDeclineToAnswer(
   analysis: QueryAnalysis,
   confidence: number
 ): { decline: boolean; reason?: string } {
+  // CRITICAL: Known medical acronym = NEVER decline, always try to answer
+  // This ensures ECMO, LAMS, mLAPSS, PSI, etc. always get a response
+  if (analysis.hasAcronyms && analysis.acronymExpansion) {
+    console.log('[RAG] Known medical acronym detected - bypassing ALL decline checks');
+    return { decline: false };
+  }
+
   // No results at all
   if (chunks.length === 0) {
     return {
@@ -422,46 +429,60 @@ export async function retrieveContext(
     }
   }
 
-  // Step 2: Generate query embedding using expanded query
-  let queryEmbedding: number[];
-  try {
-    // Start with acronym-expanded query for better semantic matching
-    let enhancedQuery = analysis.expandedQuery;
+  // Step 2: Generate query embedding using expanded query with RETRY LOGIC
+  let queryEmbedding: number[] = [];
 
-    // Further enhance with patient context if available
-    if (patientContext) {
-      const contextParts: string[] = [];
-      if (patientContext.age) {
-        const ageStr = `${patientContext.age} ${patientContext.ageUnit || 'years'}`;
-        contextParts.push(`patient age: ${ageStr}`);
-        // Detect pediatric
-        if (patientContext.age < 18 || patientContext.ageUnit === 'months' || patientContext.ageUnit === 'days') {
-          contextParts.push('pediatric');
-        }
-      }
-      if (patientContext.chiefComplaint) {
-        contextParts.push(`chief complaint: ${patientContext.chiefComplaint}`);
-      }
-      if (contextParts.length > 0) {
-        enhancedQuery = `${enhancedQuery} ${contextParts.join(' ')}`;
+  // Build enhanced query first
+  let enhancedQuery = analysis.expandedQuery;
+
+  // Further enhance with patient context if available
+  if (patientContext) {
+    const contextParts: string[] = [];
+    if (patientContext.age) {
+      const ageStr = `${patientContext.age} ${patientContext.ageUnit || 'years'}`;
+      contextParts.push(`patient age: ${ageStr}`);
+      // Detect pediatric
+      if (patientContext.age < 18 || patientContext.ageUnit === 'months' || patientContext.ageUnit === 'days') {
+        contextParts.push('pediatric');
       }
     }
-
-    // Log acronym expansion for debugging
-    if (analysis.hasAcronyms && analysis.acronymExpansion) {
-      console.log('[RAG] Acronym expansion:', {
-        original: query,
-        expanded: analysis.expandedQuery,
-        acronyms: analysis.acronymExpansion.detectedAcronyms.map(a => a.acronym),
-        relatedProtocols: analysis.acronymExpansion.relatedProtocols,
-      });
+    if (patientContext.chiefComplaint) {
+      contextParts.push(`chief complaint: ${patientContext.chiefComplaint}`);
     }
+    if (contextParts.length > 0) {
+      enhancedQuery = `${enhancedQuery} ${contextParts.join(' ')}`;
+    }
+  }
 
-    queryEmbedding = await embedQuery(enhancedQuery);
-  } catch (error) {
-    console.error('Error generating query embedding:', error);
-    // Fall back to keyword-only search
-    queryEmbedding = [];
+  // Log acronym expansion for debugging
+  if (analysis.hasAcronyms && analysis.acronymExpansion) {
+    console.log('[RAG] Acronym expansion:', {
+      original: query,
+      expanded: analysis.expandedQuery,
+      acronyms: analysis.acronymExpansion.detectedAcronyms.map(a => a.acronym),
+      relatedProtocols: analysis.acronymExpansion.relatedProtocols,
+    });
+  }
+
+  // RETRY LOGIC: Try up to 3 times with exponential backoff
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      queryEmbedding = await embedQuery(enhancedQuery);
+      console.log(`[RAG] Embedding SUCCESS on attempt ${attempt}`);
+      break;
+    } catch (error) {
+      console.error(`[RAG] Embedding attempt ${attempt}/${maxAttempts} FAILED:`, error);
+      if (attempt < maxAttempts) {
+        // Exponential backoff: 1s, 2s
+        await new Promise(r => setTimeout(r, 1000 * attempt));
+      }
+    }
+  }
+
+  // Log final embedding status
+  if (queryEmbedding.length === 0) {
+    console.warn('[RAG] All embedding attempts failed - using keyword-only search');
   }
 
   // Step 3: Perform searches
