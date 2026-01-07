@@ -49,13 +49,21 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   // Stroke Centers
   'CSC': {
     expansion: 'Comprehensive Stroke Center',
-    synonyms: ['thrombectomy capable', 'neurointerventional', 'comprehensive stroke'],
-    relatedProtocols: ['521', '522', '506'],
+    synonyms: [
+      'thrombectomy capable', 'neurointerventional', 'comprehensive stroke',
+      'CSC criteria', 'stroke center criteria', 'LVO center', 'thrombectomy center',
+      'stroke destination criteria', 'comprehensive stroke criteria'
+    ],
+    relatedProtocols: ['521', '522', '523', '506'],
     category: 'stroke'
   },
   'PSC': {
     expansion: 'Primary Stroke Center',
-    synonyms: ['stroke center', 'tPA capable', 'primary stroke'],
+    synonyms: [
+      'stroke center', 'tPA capable', 'primary stroke', 'PSC criteria',
+      'stroke receiving center', 'stroke criteria', 'stroke destination',
+      'primary stroke criteria', 'stroke center criteria'
+    ],
     relatedProtocols: ['521', '522', '506'],
     category: 'stroke'
   },
