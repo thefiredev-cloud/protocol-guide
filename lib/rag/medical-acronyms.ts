@@ -143,14 +143,24 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   // Trauma Centers
   'PTC': {
     expansion: 'Pediatric Trauma Center',
-    synonyms: ['pediatric trauma', 'childrens hospital', 'pediatric injury center', 'pediatric level I', 'pediatric level II'],
-    relatedProtocols: ['510', '506', '830', '831'],
+    synonyms: [
+      'pediatric trauma', 'childrens hospital', 'pediatric injury center',
+      'pediatric level I', 'pediatric level II', 'PTC criteria',
+      'pediatric trauma criteria', 'pediatric trauma center criteria',
+      'PTC referral', 'pediatric trauma destination'
+    ],
+    relatedProtocols: ['510', '506', '830', '831', '504'],
     category: 'trauma'
   },
   'PMC': {
     expansion: 'Pediatric Medical Center',
-    synonyms: ['pediatric hospital', 'childrens medical', 'pediatric emergency', 'pediatric receiving center'],
-    relatedProtocols: ['510', '506', '830'],
+    synonyms: [
+      'pediatric hospital', 'childrens medical', 'pediatric emergency',
+      'pediatric receiving center', 'PMC criteria', 'pediatric medical criteria',
+      'PMC referral criteria', 'critically ill pediatric', 'PMC destination',
+      'pediatric medical center criteria', 'PMC referral'
+    ],
+    relatedProtocols: ['510', '506', '507', '508', '830'],
     category: 'pediatric'
   },
   'SRC': {
