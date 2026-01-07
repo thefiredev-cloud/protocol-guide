@@ -54,6 +54,55 @@ export interface PatientContext {
 }
 
 // ============================================
+// Criteria Query Detection
+// ============================================
+
+/**
+ * Detect if query is asking about destination/specialty criteria
+ * These queries need special handling to boost criteria-related content
+ */
+function detectCriteriaQuery(query: string): {
+  isCriteriaQuery: boolean;
+  criteriaType: string | null;
+} {
+  const normalizedQuery = query.toLowerCase();
+
+  // Criteria-related terms
+  const criteriaTerms = [
+    'criteria', 'eligibility', 'requirements', 'qualifications',
+    'indications', 'destination', 'referral', 'transport to'
+  ];
+
+  const hasCriteriaTerm = criteriaTerms.some(term => normalizedQuery.includes(term));
+
+  // Specific criteria type detection
+  const criteriaTypes: Record<string, string[]> = {
+    'PMC': ['pmc', 'pediatric medical center', 'pediatric medical'],
+    'PTC': ['ptc', 'pediatric trauma center', 'pediatric trauma'],
+    'Stroke': ['stroke', 'csc', 'psc', 'lams', 'mlapss', 'stroke center'],
+    'ECMO': ['ecmo', 'ecpr', 'extracorporeal'],
+    'Trauma': ['trauma center', 'trauma triage', 'level i', 'level ii'],
+    'Burn': ['burn center', 'burn criteria'],
+    'STEMI': ['stemi', 'src', 'stemi receiving', 'cardiac cath'],
+    'Perinatal': ['pregnancy', 'perinatal', 'ob', 'obstetric'],
+    'Neonate': ['neonate', 'newborn', 'nicu', 'infant']
+  };
+
+  let detectedType: string | null = null;
+  for (const [type, keywords] of Object.entries(criteriaTypes)) {
+    if (keywords.some(kw => normalizedQuery.includes(kw))) {
+      detectedType = type;
+      break;
+    }
+  }
+
+  return {
+    isCriteriaQuery: hasCriteriaTerm || detectedType !== null,
+    criteriaType: detectedType
+  };
+}
+
+// ============================================
 // Query Analysis
 // ============================================
 
