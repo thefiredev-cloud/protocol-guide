@@ -4,6 +4,7 @@ import { ref510 } from './ref-510';
 import { ref513 } from './ref-513';
 import { ref222 } from './ref-222';
 import { ref300, ref302, ref306 } from './ref-300-series';
+import { mcg1318 } from './mcg-1318';
 import { remainingAdmin } from './all-admin';
 import { tocAdmin } from './toc-admin';
 
@@ -16,6 +17,7 @@ export const adminProtocolsList = [
   ref300,
   ref302,
   ref306,
+  mcg1318,
   ...remainingAdmin,
   ...tocAdmin
 ];

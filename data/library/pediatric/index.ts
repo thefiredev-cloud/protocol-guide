@@ -13,16 +13,16 @@ import { tp1360 } from './tp-1360';
 import { tp1370 } from './tp-1370';
 import { tp1380 } from './tp-1380';
 import { tp1244p } from './tp-1244-p';
-import { tp1220p } from './tp-1220-p';
+// tp-1220-p removed - not an official LA County protocol (pediatric burns covered in TP-1220)
 import { tp1243p } from './tp-1243-p';
 import { tp1203p } from './tp-1203-p';
 import { ref1309 } from './ref-1309';
 import { tocPediatric } from './toc-pediatric';
 
 export const pediatricProtocols = [
-  tp1302, tp1303, tp1234p, tp1305, tp1309, tp1310, 
+  tp1302, tp1303, tp1234p, tp1305, tp1309, tp1310,
   tp1311, tp1322, tp1337, tp1341,
-  tp1244p, tp1220p, tp1243p, tp1203p,
+  tp1244p, tp1243p, tp1203p,
   tp1350, tp1360, tp1370, tp1380,
   ref1309,
   ...tocPediatric

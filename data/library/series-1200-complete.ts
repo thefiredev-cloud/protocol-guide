@@ -3273,16 +3273,35 @@ export const series1200: Protocol[] = [
   {
   id: "1232",
   refNo: "TP-1232",
-  title: "Weakness (Generalized)",
+  title: "Stroke / CVA / TIA / Weakness",
   category: "Medical",
   type: "Protocol",
   lastUpdated: "2025",
-  icon: "medical_services",
-  color: "blue",
+  icon: "neurology",
+  color: "indigo",
   sections: [
     {
       type: "header",
-      items: [{ title: "Weakness (Generalized)", subtitle: "TP-1232 • Protocol", icon: "medical_services" }]
+      items: [{ title: "Stroke / CVA / TIA", subtitle: "TP-1232 • Protocol", icon: "neurology" }]
+    },
+    {
+      type: "section",
+      title: "Initial Assessment"
+    },
+    {
+      type: "list",
+      title: "Step 1 - Scene Assessment",
+      items: [{ content: "Document <b>Last Known Well Time (LKWT)</b> - exact time patient was last seen normal. This is CRITICAL for treatment decisions." }]
+    },
+    {
+      type: "list",
+      title: "Step 2 - Stroke Screening (mLAPSS)",
+      items: [{ content: "Perform <b>mLAPSS</b> screening. Positive if ALL criteria met:<br>• Age ≥40<br>• No seizure history<br>• Not wheelchair-bound/bedridden at baseline<br>• Glucose 60-400 mg/dL<br>• Unilateral weakness (facial droop OR arm drift OR grip weakness)" }]
+    },
+    {
+      type: "list",
+      title: "Step 3 - LAMS Score",
+      items: [{ content: "Calculate <b>LAMS (Los Angeles Motor Scale)</b> - Total 0-5 points:<br><br><b>Facial Droop (0-1):</b> Ask patient to smile. 0=Symmetric, 1=Drooping<br><br><b>Arm Drift (0-2):</b> Both arms extended, palms DOWN, eyes CLOSED, hold 10 seconds. 0=No drift, 1=Drifts down, 2=Falls rapidly<br><br><b>Grip Strength (0-2):</b> Squeeze both hands simultaneously. 0=Equal, 1=Weak one side, 2=No grip one side" }]
     },
     {
       type: "section",
@@ -3290,47 +3309,87 @@ export const series1200: Protocol[] = [
     },
     {
       type: "list",
-      title: "Step 1",
-      items: [{ content: "Perform focused neurologic examination Assess for focal deficits Motor strength in all extremities Facial symmetry, speech" }]
-    },
-    {
-      type: "list",
-      title: "Step 2",
-      items: [{ content: "Assess airway and breathing" }]
-    },
-    {
-      type: "list",
-      title: "Step 3",
-      items: [{ content: "Administer Oxygen prn (MCG 1302)" }]
-    },
-    {
-      type: "list",
       title: "Step 4",
-      items: [{ content: "Initiate cardiac monitoring (MCG 1308)" }]
+      items: [{ content: "Assess airway and breathing - Administer Oxygen prn (MCG 1302)" }]
     },
     {
       type: "list",
       title: "Step 5",
-      items: [{ content: "Establish vascular access (MCG 1375)" }]
+      items: [{ content: "Initiate cardiac monitoring (MCG 1308)" }]
     },
     {
       type: "list",
       title: "Step 6",
-      items: [{ content: "Check blood glucose For abnormal glucose, treat per TP 1203" }]
+      items: [{ content: "Establish vascular access (MCG 1375) - avoid affected extremity" }]
     },
     {
       type: "list",
       title: "Step 7",
-      items: [{ content: "For focal weakness or stroke suspected: Rapid transport to stroke center Document time last known normal" }]
+      items: [{ content: "Check blood glucose - For abnormal glucose, treat per TP 1203. Hypoglycemia can mimic stroke." }]
+    },
+    {
+      type: "list",
+      title: "Step 8",
+      items: [{ content: "Do NOT administer aspirin or other anticoagulants - may worsen hemorrhagic stroke" }]
     },
     {
       type: "section",
-      title: "Special Considerations"
+      title: "Transport Destination"
     },
     {
       type: "accordion",
-      title: "Note 1",
-      items: [{ content: "Differentiate between generalized weakness and focal neurologic deficits. Focal deficits suggest stroke or neurologic emergency." }]
+      title: "LAMS-Based Routing",
+      items: [
+        { title: "LAMS ≥4 (Score 4-5)", content: "<b>LVO LIKELY</b> - Large Vessel Occlusion suspected<br>→ Transport to <b>Comprehensive Stroke Center (CSC)</b> if ≤30 min transport<br>→ If >30 min to CSC, go to nearest Primary Stroke Center (PSC)" },
+        { title: "LAMS <4 (Score 0-3)", content: "LVO less likely<br>→ Transport to nearest Stroke Center (PSC or CSC)" }
+      ]
+    },
+    {
+      type: "warning",
+      content: "<b>TIME IS BRAIN:</b> tPA window ≤4.5 hours | Thrombectomy ≤24 hours | There is NO 36-hour window. Minimize scene time. Rapid transport to stroke center."
+    },
+    {
+      type: "section",
+      title: "Documentation Requirements"
+    },
+    {
+      type: "list",
+      title: "Required Documentation",
+      items: [{ content: "• Last Known Well Time (LKWT) - exact time<br>• mLAPSS result (positive/negative)<br>• LAMS score (0-5)<br>• Blood glucose result<br>• Time of symptom recognition<br>• Stroke center notification time" }]
+    },
+    {
+      type: "section",
+      title: "Differential Diagnosis"
+    },
+    {
+      type: "accordion",
+      title: "Stroke Mimics",
+      items: [
+        { title: "Hypoglycemia", content: "Check glucose first. Can cause focal neurologic deficits. Treat and reassess." },
+        { title: "Seizure (Todd's Paralysis)", content: "Post-ictal weakness can mimic stroke. Ask about seizure history." },
+        { title: "Migraine", content: "Hemiplegic migraine can cause focal weakness. Ask about headache history." },
+        { title: "Hypertensive Encephalopathy", content: "Severely elevated BP can cause neurologic changes." }
+      ]
+    },
+    {
+      type: "accordion",
+      title: "Special Situations",
+      items: [
+        { title: "Wake-Up Stroke", content: "If patient woke with symptoms, LKWT = time last seen normal BEFORE sleep, NOT time of awakening." },
+        { title: "TIA (Resolved Symptoms)", content: "Even if symptoms resolved, transport for evaluation. TIA = high risk for stroke within 48 hours." },
+        { title: "Negative mLAPSS with High Suspicion", content: "Calculate LAMS anyway. Contact Base Hospital. mLAPSS does NOT rule out stroke." }
+      ]
+    },
+    {
+      type: "link-list",
+      title: "Cross References",
+      items: [
+        { title: "Ref. 521 Stroke Patient Destination" },
+        { title: "Ref. 522 Primary Stroke Center" },
+        { title: "Ref. 523 Comprehensive Stroke Center" },
+        { title: "TP-1203 Diabetic Emergencies" },
+        { title: "TP-1231 Altered Mental Status" }
+      ]
     }
   ]
 },

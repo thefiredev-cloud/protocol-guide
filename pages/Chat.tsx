@@ -310,16 +310,34 @@ const Chat: React.FC = () => {
 
       augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
 
-      // Send to AI with timeout protection
-      const TIMEOUT_MS = 15000; // 15 second timeout
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out. Please try again.')), TIMEOUT_MS)
-      );
+      // Send to AI with retry logic and timeout protection
+      const sendWithRetry = async (message: string, maxAttempts = 3): Promise<{ text: string }> => {
+        const timeouts = [15000, 20000, 30000]; // Exponential backoff timeouts
+        const delays = [0, 2000, 4000]; // Delays between retries
 
-      const result = await Promise.race([
-        chatSession.current.sendMessage({ message: augmentedPrompt }),
-        timeoutPromise
-      ]);
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          if (attempt > 0) {
+            await new Promise(r => setTimeout(r, delays[attempt]));
+            console.log(`Retry attempt ${attempt + 1}...`);
+          }
+          try {
+            const timeoutPromise = new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Request timed out')), timeouts[attempt])
+            );
+            const result = await Promise.race([
+              chatSession.current!.sendMessage({ message }),
+              timeoutPromise
+            ]);
+            return result;
+          } catch (error: any) {
+            if (attempt === maxAttempts - 1) throw error;
+            console.warn(`Attempt ${attempt + 1} failed:`, error?.message);
+          }
+        }
+        throw new Error('All retry attempts failed');
+      };
+
+      const result = await sendWithRetry(augmentedPrompt);
       let responseText = result.text || "No response generated.";
 
       // Validate grounding and extract citations

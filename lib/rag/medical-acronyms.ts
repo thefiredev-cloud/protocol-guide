@@ -23,7 +23,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   },
   'mLAPSS': {
     expansion: 'Modified Los Angeles Prehospital Stroke Screen',
-    synonyms: ['stroke screen', 'prehospital stroke', 'LAPSS', 'stroke screening', 'stroke assessment'],
+    synonyms: ['stroke screen', 'prehospital stroke', 'LAPSS', 'MLAPPS', 'stroke screening', 'stroke assessment'],
     relatedProtocols: ['521', '1232'],
     category: 'stroke'
   },
@@ -64,19 +64,37 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'ECMO': {
     expansion: 'Extracorporeal Membrane Oxygenation',
     synonyms: ['ECPR', 'mechanical circulatory support', 'heart lung bypass', 'extracorporeal life support'],
-    relatedProtocols: ['518', '1210'],
+    relatedProtocols: ['518', '1210', '1318'],
     category: 'cardiac'
   },
   'ECPR': {
     expansion: 'Extracorporeal Cardiopulmonary Resuscitation',
-    synonyms: ['ECMO CPR', 'mechanical resuscitation', 'extracorporeal resuscitation'],
-    relatedProtocols: ['518', '1210'],
+    synonyms: ['ECMO CPR', 'mechanical resuscitation', 'extracorporeal resuscitation', 'refractory VF', 'refractory shockable'],
+    relatedProtocols: ['518', '1210', '1318'],
     category: 'cardiac'
   },
   'STEMI': {
     expansion: 'ST Elevation Myocardial Infarction',
     synonyms: ['heart attack', 'acute MI', 'ST elevation', 'STEMI alert', 'cardiac cath'],
-    relatedProtocols: ['503', '504', '1203', '1204'],
+    relatedProtocols: ['503', '504', '1203', '1204', '1211'],
+    category: 'cardiac'
+  },
+  'BRADYCARDIA': {
+    expansion: 'Bradycardia',
+    synonyms: ['slow heart rate', 'heart block', 'symptomatic bradycardia', 'sinus bradycardia', 'rate less than 60'],
+    relatedProtocols: ['505', '1212'],
+    category: 'cardiac'
+  },
+  'TACHYCARDIA': {
+    expansion: 'Tachycardia',
+    synonyms: ['fast heart rate', 'rapid heart rate', 'SVT', 'supraventricular tachycardia', 'rate greater than 100'],
+    relatedProtocols: ['505', '1213'],
+    category: 'cardiac'
+  },
+  'DYSRHYTHMIA': {
+    expansion: 'Cardiac Dysrhythmia',
+    synonyms: ['arrhythmia', 'irregular heartbeat', 'abnormal rhythm', 'cardiac rhythm disturbance'],
+    relatedProtocols: ['505', '1212', '1213'],
     category: 'cardiac'
   },
   'NSTEMI': {
@@ -125,14 +143,14 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   // Trauma Centers
   'PTC': {
     expansion: 'Pediatric Trauma Center',
-    synonyms: ['pediatric trauma', 'childrens hospital', 'pediatric injury center'],
-    relatedProtocols: ['506', '830', '831'],
+    synonyms: ['pediatric trauma', 'childrens hospital', 'pediatric injury center', 'pediatric level I', 'pediatric level II'],
+    relatedProtocols: ['510', '506', '830', '831'],
     category: 'trauma'
   },
   'PMC': {
     expansion: 'Pediatric Medical Center',
-    synonyms: ['pediatric hospital', 'childrens medical', 'pediatric emergency'],
-    relatedProtocols: ['506', '830'],
+    synonyms: ['pediatric hospital', 'childrens medical', 'pediatric emergency', 'pediatric receiving center'],
+    relatedProtocols: ['510', '506', '830'],
     category: 'pediatric'
   },
   'SRC': {
@@ -168,9 +186,9 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     category: 'trauma'
   },
   'PSI': {
-    expansion: 'Penetrating Stab Injury',
-    synonyms: ['stab wound', 'stabbing', 'penetrating trauma', 'knife wound', 'puncture wound'],
-    relatedProtocols: ['805', '806', '1260'],
+    expansion: 'Passenger Space Intrusion',
+    synonyms: ['compartment intrusion', 'vehicle intrusion', 'cabin intrusion', 'dash displacement', 'steering wheel deformity', 'intrusion 12 inches', 'intrusion 18 inches'],
+    relatedProtocols: ['506', '1244'],
     category: 'trauma'
   },
 

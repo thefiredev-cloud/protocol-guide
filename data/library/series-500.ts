@@ -274,9 +274,9 @@ export const series500: Protocol[] = [
         { type: "section", title: "LAMS - Los Angeles Motor Scale" },
         { type: "text", content: "Score each component (Total 0-5):" },
         { type: "list", title: "LAMS Components", items: [
-            { title: "Facial Droop (0-1)", content: "<b>0</b> = Absent (symmetrical smile)<br><b>1</b> = Present (ask patient to smile or grimace - look for asymmetry)" },
-            { title: "Arm Drift (0-2)", content: "<b>0</b> = Absent (both arms stay up for 10 seconds)<br><b>1</b> = Drifts down (one arm drifts lower)<br><b>2</b> = Falls rapidly (arm falls rapidly or cannot be raised)" },
-            { title: "Grip Strength (0-2)", content: "<b>0</b> = Normal (equal bilateral grip)<br><b>1</b> = Weak grip (one side noticeably weaker)<br><b>2</b> = No grip (no grip strength on affected side)" }
+            { title: "Facial Droop (0-1)", content: "<b>0</b> = Absent (symmetrical smile)<br><b>1</b> = Present<br><br><b>HOW TO TEST:</b> Ask patient to smile, show teeth, or grimace. Look for asymmetry - one side of face droops or doesn't move as well." },
+            { title: "Arm Drift (0-2)", content: "<b>0</b> = Absent (both arms stay up for 10 seconds)<br><b>1</b> = Drifts down (one arm drifts lower)<br><b>2</b> = Falls rapidly (arm falls rapidly or cannot be raised)<br><br><b>HOW TO TEST:</b> Have patient extend <b>BOTH arms straight out</b>, palms DOWN, eyes CLOSED. Hold for 10 seconds. Watch for one arm drifting downward or falling." },
+            { title: "Grip Strength (0-2)", content: "<b>0</b> = Normal (equal bilateral grip)<br><b>1</b> = Weak grip (one side noticeably weaker)<br><b>2</b> = No grip (no grip strength on affected side)<br><br><b>HOW TO TEST:</b> Have patient squeeze your fingers with <b>BOTH hands simultaneously</b>. Compare grip strength between left and right sides." }
         ]},
         { type: "accordion", title: "LAMS Interpretation", items: [
             { title: "LAMS ≥4 (Score 4-5)", content: "<b>LVO LIKELY</b> - Large Vessel Occlusion suspected. Severe stroke requiring acute intervention.<br>→ Transport to <b>Comprehensive Stroke Center (CSC)</b> if ≤30 min transport time<br>→ If >30 min to CSC, transport to closest Primary Stroke Center" },
@@ -287,8 +287,10 @@ export const series500: Protocol[] = [
             { title: "Positive mLAPSS", content: "Transport to closest Stroke Center (Primary or Comprehensive)." },
             { title: "LAMS 4-5 (Suspected LVO)", content: "Transport directly to a <b>Comprehensive Stroke Center (CSC)</b> if transport time is ≤30 minutes. If >30 mins, go to closest Primary Stroke Center." },
             { title: "LAMS ≤3", content: "Transport to closest Primary Stroke Center (PSC)." },
-            { title: "LKWT Considerations", content: "Last Known Well Time (LKWT) affects treatment options. Document exact time patient was last seen normal. tPA window is generally ≤4.5 hours. Thrombectomy may be considered up to 24 hours in select patients." }
-        ]}
+            { title: "LKWT Considerations", content: "Last Known Well Time (LKWT) affects treatment options. Document exact time patient was last seen normal. tPA window is generally ≤4.5 hours. Thrombectomy may be considered up to 24 hours in select patients." },
+            { title: "Wake-Up Stroke", content: "If patient woke up with symptoms, LKWT = time patient was last seen normal BEFORE going to sleep. NOT the time they woke up." }
+        ]},
+        { type: "warning", content: "<b>TIME WINDOW LIMITS:</b> tPA ≤4.5 hours | Thrombectomy ≤24 hours. There is NO 36-hour treatment window. LKWT >24 hours generally excludes acute intervention." }
     ]
   },
   {
