@@ -203,7 +203,8 @@ function shouldDeclineToAnswer(
 
   // Lower threshold for queries with recognized medical acronyms
   // Acronyms like LAMS, ECMO, PTC have mapped protocol references
-  const confidenceThreshold = analysis.hasAcronyms ? 0.15 : 0.25;
+  // Lowered thresholds to improve recall (was 0.15/0.25)
+  const confidenceThreshold = analysis.hasAcronyms ? 0.08 : 0.12;
 
   // If acronym matched a related protocol, don't decline
   if (analysis.hasAcronyms && analysis.acronymExpansion) {
@@ -227,7 +228,8 @@ function shouldDeclineToAnswer(
   }
 
   // Top result has very low relevance (lowered for acronym queries)
-  const relevanceThreshold = analysis.hasAcronyms ? 0.01 : 0.02;
+  // Further lowered to prevent false declines
+  const relevanceThreshold = analysis.hasAcronyms ? 0.005 : 0.01;
   if (chunks[0].relevanceScore < relevanceThreshold) {
     return {
       decline: true,

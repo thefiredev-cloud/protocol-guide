@@ -17,6 +17,10 @@ const EMBEDDING_DIMENSIONS = 768;
 const MAX_TOKENS_PER_CHUNK = 2048;
 const BATCH_SIZE = 20;
 
+// Query embedding cache for performance
+const queryCache = new Map<string, { embedding: number[]; timestamp: number }>();
+const QUERY_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
 // ============================================
 // Types
 // ============================================
@@ -184,12 +188,36 @@ export async function embedAllChunks(): Promise<EmbeddingStats> {
 }
 
 /**
- * Generate embedding for a user query
+ * Generate embedding for a user query (with caching)
  */
 export async function embedQuery(query: string): Promise<number[]> {
+  // Check cache first
+  const cacheKey = query.toLowerCase().trim();
+  const cached = queryCache.get(cacheKey);
+
+  if (cached && Date.now() - cached.timestamp < QUERY_CACHE_TTL) {
+    console.log('[Embeddings] Cache hit for query');
+    return cached.embedding;
+  }
+
   // Add query prefix for better search alignment
   const prefixedQuery = `search_query: ${query}`;
-  return generateEmbedding(prefixedQuery);
+  const embedding = await generateEmbedding(prefixedQuery);
+
+  // Store in cache
+  queryCache.set(cacheKey, { embedding, timestamp: Date.now() });
+
+  // Clean old entries periodically (keep cache from growing unbounded)
+  if (queryCache.size > 100) {
+    const now = Date.now();
+    for (const [key, value] of queryCache.entries()) {
+      if (now - value.timestamp > QUERY_CACHE_TTL) {
+        queryCache.delete(key);
+      }
+    }
+  }
+
+  return embedding;
 }
 
 // ============================================

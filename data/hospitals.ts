@@ -121,7 +121,8 @@ export const hospitals: Hospital[] = [
     name: "St. Francis Medical Center",
     address: "3630 E Imperial Hwy, Lynwood, CA 90262",
     phone: "(310) 900-8900",
-    capabilities: ['Trauma Level II', 'STEMI', 'Stroke Primary', 'EDAP', 'Disaster Resource', 'Perinatal'],
+    // Updated Feb 2025: Now Comprehensive Stroke Center per LA County EMS Agency
+    capabilities: ['Trauma Level II', 'STEMI', 'Stroke Comprehensive', 'EDAP', 'Disaster Resource', 'Perinatal'],
     lat: 33.928, lng: -118.204
   },
   {

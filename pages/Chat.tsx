@@ -287,9 +287,9 @@ const Chat: React.FC = () => {
       // Format conversation facts for context
       const factsContext = formatFactsForPrompt(updatedFacts);
 
-      // Include follow-up suggestion if applicable
+      // Include follow-up suggestion if applicable - make it directive
       const followUpInstruction = followUpSuggestion
-        ? `\nSUGGESTED FOLLOW-UP: Consider asking "${followUpSuggestion.question}" (${followUpSuggestion.reason})\n`
+        ? `\nREQUIRED FOLLOW-UP: You MUST ask the user "${followUpSuggestion.question}" before providing specific protocol recommendations. Reason: ${followUpSuggestion.reason}. Do not skip this clarifying question.\n`
         : '';
 
       // Build recent conversation history (last 4 user messages for context)
@@ -517,8 +517,8 @@ const Chat: React.FC = () => {
 
         {isTyping && (
           <div className="flex gap-3 mb-4">
-            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#9B1B30]/10 dark:bg-[#9B1B30]/20 flex items-center justify-center self-start mt-4">
-              <span className="material-symbols-outlined text-primary text-[18px] filled">smart_toy</span>
+            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#9B1B30]/10 dark:bg-[#9B1B30]/20 flex items-center justify-center self-start mt-4 overflow-hidden">
+              <img src="/logo.png" alt="Protocol Guide" className="w-6 h-6" />
             </div>
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none px-5 py-4 shadow-soft">
               <div className="flex space-x-1.5">
