@@ -4,6 +4,7 @@ import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { useWidgetMode } from '../contexts/WidgetModeContext';
 import { useChat, type Message, type CitationLink } from '../contexts/ChatContext';
+import { useVoiceInput } from '../contexts/VoiceInputContext';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 import { QuickResults, extractRelevantSnippet, type LocalSearchResult } from '../components/QuickResults';
