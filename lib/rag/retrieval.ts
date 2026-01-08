@@ -134,7 +134,7 @@ function analyzeQuery(query: string): QueryAnalysis {
 
   const detectedRefs: string[] = [];
   for (const pattern of refPatterns) {
-    const matches = query.matchAll(pattern);
+    const matches = Array.from(query.matchAll(pattern));
     for (const match of matches) {
       if (match[1]) {
         detectedRefs.push(match[1]);
