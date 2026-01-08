@@ -196,7 +196,7 @@ const Chat: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey });
 
       chatSession.current = ai.chats.create({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.0-flash', // Stable model - gemini-3-flash-preview caused connection errors
         config: {
           systemInstruction: GROUNDED_SYSTEM_PROMPT,
           temperature: 0.1, // Low temperature for consistency and reduced hallucination
