@@ -93,6 +93,8 @@ Recommended actions:
 const Chat: React.FC = () => {
   // Local ephemeral state
   const [input, setInput] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSessionRef = useRef<GeminiChat | null>(null);
 
