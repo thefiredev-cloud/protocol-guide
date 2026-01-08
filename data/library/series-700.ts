@@ -39,7 +39,7 @@ export const series700: Protocol[] = [
         { type: "header", items: [{ title: "ALS Inventory", subtitle: "Ref. 703" }] },
         { type: "text", title: "Requirement", content: "ALS units must carry minimum equipment and medication inventory as specified by LA County EMS Agency." },
         { type: "accordion", title: "Required Equipment Categories", items: [
-            { title: "Airway", content: "OPA, NPA, BVM (adult/ped), suction, ETT, King/iGel airways, capnography, surgical airway kit." },
+            { title: "Airway", content: "OPA, NPA, BVM (adult/ped), suction, ETT, King/iGel airways, capnography. Note: Surgical airways NOT authorized for ground ALS field use." },
             { title: "Cardiac", content: "ALS monitor/defibrillator with 12-lead, AED (if monitor failure backup), TCP capability." },
             { title: "Vascular Access", content: "IV catheters (multiple sizes), IO device, IV fluids (NS, LR), administration sets." },
             { title: "Medications", content: "Full formulary per Ref. 1317 including cardiac drugs, analgesics, respiratory, antidotes." }
