@@ -302,7 +302,7 @@ export const series1000: Protocol[] = [
         content: "Continuing competency verification requirements:",
         items: [
           { title: "Annual Skills Review", subtitle: "All providers must complete annual skills review at employing agency" },
-          { title: "Low-Frequency Skills", subtitle: "Quarterly verification for skills performed <5 times/year (surgical airways, pacing, etc.)" },
+          { title: "Low-Frequency Skills", subtitle: "Quarterly verification for skills performed <5 times/year (pacing, cardioversion, etc.). Note: Surgical airways NOT authorized for ground ALS." },
           { title: "New Equipment", subtitle: "Competency training required within 30 days of new equipment deployment" },
           { title: "Protocol Changes", subtitle: "Skills verification required when protocols introduce new procedures or techniques" },
           { title: "Documentation", subtitle: "Agency maintains skills verification records for 4 years, available for audit" }
