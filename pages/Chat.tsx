@@ -362,6 +362,9 @@ const Chat: React.FC = () => {
       return;
     }
 
+    // Set streaming flag IMMEDIATELY to prevent race condition from rapid clicks
+    setIsStreaming(true);
+
     const originalInput = input; // Keep original for UI
 
     // Create fresh chat session for each message to avoid iterator state corruption
