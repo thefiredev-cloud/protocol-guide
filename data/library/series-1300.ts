@@ -571,7 +571,6 @@ export const series1300: Protocol[] = [
       ]},
       { type: "list", title: "Dosing", items: [
         { title: "Adult Pain Management", content: "1 mcg/kg (typical 50-100 mcg) slow IV/IO. May repeat 0.5-1 mcg/kg every 5-10 min. IN route: 1-2 mcg/kg." },
-        { title: "Adult RSI Adjunct", content: "3 mcg/kg IV 3 minutes before induction to blunt sympathetic response." },
         { title: "Pediatric Dose", content: "1 mcg/kg slow IV/IO or 1.5-2 mcg/kg IN. May repeat 0.5 mcg/kg." },
         { title: "Route", content: "IV/IO (titrate), IM, Intranasal (atomizer)" }
       ]},
