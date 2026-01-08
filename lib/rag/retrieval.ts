@@ -308,18 +308,35 @@ function shouldDeclineToAnswer(
 // ============================================
 
 /**
- * Perform hybrid search using Supabase RPC
+ * Perform hybrid search using Supabase RPC (with 4s timeout)
  */
 async function hybridSearch(
   queryText: string,
   queryEmbedding: number[],
   matchCount: number = 10
 ): Promise<RetrievedChunk[]> {
-  const { data, error } = await supabase.rpc('hybrid_search_protocols', {
+  const SEARCH_TIMEOUT = 4000; // 4 seconds
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('Supabase RPC timeout')), SEARCH_TIMEOUT);
+  });
+
+  const searchPromise = supabase.rpc('hybrid_search_protocols', {
     query_text: queryText,
     query_embedding: queryEmbedding,
     match_count: matchCount,
   });
+
+  let data, error;
+  try {
+    const result = await Promise.race([searchPromise, timeoutPromise]);
+    data = result.data;
+    error = result.error;
+  } catch (timeoutError) {
+    console.warn('[RAG] Hybrid search timeout, falling back to keyword-only search');
+    // Return empty to trigger fallback
+    return [];
+  }
 
   if (error) {
     console.error('Hybrid search error:', error);
