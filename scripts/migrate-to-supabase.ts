@@ -395,6 +395,9 @@ function generateProtocolChunks(protocol: Protocol): Array<{
       chunk_index: chunkIndex++,
       content: contextualContent,
       content_hash: generateContentHash(contextualContent),
+      // Source tracking - LA County DHS
+      source_url: AUTHORIZED_SOURCES.primary,
+      source_verified: true,
     });
   }
 
