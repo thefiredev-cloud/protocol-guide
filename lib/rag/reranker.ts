@@ -153,8 +153,12 @@ function tokenize(text: string): Set<string> {
  * Jaccard = |A ∩ B| / |A ∪ B|
  */
 function jaccardSimilarity(queryTokens: Set<string>, chunkTokens: Set<string>): number {
-  const intersection = new Set([...queryTokens].filter(t => chunkTokens.has(t)));
-  const union = new Set([...queryTokens, ...chunkTokens]);
+  // Convert Sets to Arrays for iteration compatibility
+  const queryArray = Array.from(queryTokens);
+  const chunkArray = Array.from(chunkTokens);
+
+  const intersection = new Set(queryArray.filter(t => chunkTokens.has(t)));
+  const union = new Set([...queryArray, ...chunkArray]);
 
   if (union.size === 0) return 0;
   return intersection.size / union.size;
