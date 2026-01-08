@@ -710,10 +710,7 @@ const Chat: React.FC = () => {
               setInput(query);
               // Trigger send after state update
               setTimeout(() => {
-                const form = document.querySelector('input[type="text"]') as HTMLInputElement;
-                if (form) {
-                  form.form?.requestSubmit?.() || handleSend();
-                }
+                handleSend();
               }, 100);
             }}
             disabled={isTyping || isStreaming}
