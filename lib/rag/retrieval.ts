@@ -336,6 +336,8 @@ async function hybridSearch(
     content: string;
     relevance_score: number;
     match_type: string;
+    source_url?: string | null;
+    source_verified?: boolean;
   }) => ({
     chunkId: row.chunk_id,
     protocolId: row.protocol_id,
@@ -346,6 +348,8 @@ async function hybridSearch(
     content: row.content,
     relevanceScore: row.relevance_score,
     matchType: row.match_type as 'keyword' | 'semantic' | 'both',
+    sourceUrl: row.source_url,
+    sourceVerified: row.source_verified,
   }));
 }
 
