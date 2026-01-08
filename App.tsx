@@ -157,34 +157,36 @@ const App: React.FC = () => {
         <AuthProvider>
           <ChatProvider>
             <HashRouter>
-            <ScrollToTop />
-            <WidgetLayout>
-              <Routes>
-                {/* Login route - no MainLayout */}
-                <Route path="/login" element={<Login />} />
+              <VoiceInputProvider>
+                <ScrollToTop />
+                <WidgetLayout>
+                  <Routes>
+                    {/* Login route - no MainLayout */}
+                    <Route path="/login" element={<Login />} />
 
-                {/* Protected routes with MainLayout */}
-                <Route path="/*" element={
-                  <ProtectedRoute>
-                    <MainLayout>
-                      <Routes>
-                        <Route path="/" element={<Browse />} />
-                        <Route path="/protocol/:id" element={<ProtocolDetail />} />
-                        <Route path="/chat" element={<Chat />} />
-                        <Route path="/account" element={<Account />} />
-                        <Route path="/hospitals" element={<Hospitals />} />
-                        <Route path="/admin" element={
-                          <AdminRoute>
-                            <Admin />
-                          </AdminRoute>
-                        } />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </MainLayout>
-                  </ProtectedRoute>
-                } />
-              </Routes>
-            </WidgetLayout>
+                    {/* Protected routes with MainLayout */}
+                    <Route path="/*" element={
+                      <ProtectedRoute>
+                        <MainLayout>
+                          <Routes>
+                            <Route path="/" element={<Browse />} />
+                            <Route path="/protocol/:id" element={<ProtocolDetail />} />
+                            <Route path="/chat" element={<Chat />} />
+                            <Route path="/account" element={<Account />} />
+                            <Route path="/hospitals" element={<Hospitals />} />
+                            <Route path="/admin" element={
+                              <AdminRoute>
+                                <Admin />
+                              </AdminRoute>
+                            } />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </MainLayout>
+                      </ProtectedRoute>
+                    } />
+                  </Routes>
+                </WidgetLayout>
+              </VoiceInputProvider>
             </HashRouter>
           </ChatProvider>
         </AuthProvider>
