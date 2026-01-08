@@ -667,6 +667,7 @@ const Chat: React.FC = () => {
       }]);
     } finally {
       setTyping(false);
+      setIsStreaming(false);
     }
   };
 
