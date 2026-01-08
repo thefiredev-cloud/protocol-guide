@@ -402,6 +402,9 @@ const Chat: React.FC = () => {
       };
       setMessages(prev => [...prev, botMsg]);
       setIsStreaming(true);
+
+      // Hide quick results when AI starts responding
+      setShowQuickResults(false);
       setStreamingMessageId(botMsgId);
 
       // Stream response from AI for faster first-token time
