@@ -306,31 +306,9 @@ const Chat: React.FC = () => {
       }));
   };
 
+  // Initialize with welcome message
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-    if (!apiKey) {
-      console.error('GEMINI_API_KEY not configured');
-      setMessages([{
-        id: 'init-error',
-        role: 'assistant',
-        content: 'AI service not configured. Protocol browsing is still available.',
-        timestamp: new Date()
-      }]);
-      return;
-    }
-
-    try {
-      const ai = new GoogleGenAI({ apiKey });
-
-      chatSessionRef.current = ai.chats.create({
-        model: 'gemini-3-flash-preview',
-        config: {
-          systemInstruction: GROUNDED_SYSTEM_PROMPT,
-          temperature: 0.1, // Low temperature for consistency and reduced hallucination
-        },
-      });
-
+    if (messages.length === 0) {
       const initMessage = useRAG
         ? 'LA County protocols indexed. Ready for field reference.'
         : 'Protocol-Guide Active. Ready for rapid retrieval.';
@@ -339,14 +317,6 @@ const Chat: React.FC = () => {
         id: 'init-1',
         role: 'assistant',
         content: initMessage,
-        timestamp: new Date()
-      }]);
-    } catch (err) {
-      console.error('Failed to initialize AI:', err);
-      setMessages([{
-        id: 'init-error',
-        role: 'assistant',
-        content: 'Failed to initialize AI service. Please refresh and try again.',
         timestamp: new Date()
       }]);
     }
