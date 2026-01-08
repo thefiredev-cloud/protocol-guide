@@ -1,5 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { GoogleGenAI } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { useWidgetMode } from '../contexts/WidgetModeContext';
 import { useChat, type Message, type CitationLink } from '../contexts/ChatContext';
@@ -9,6 +10,10 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 import { QuickResults, extractRelevantSnippet, type LocalSearchResult } from '../components/QuickResults';
 import { QuickActions } from '../components/QuickActions';
+
+// Dev mode detection - use direct API on localhost
+const isDevMode = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
 // Persistence imports for QA/QI tracking
 import {
