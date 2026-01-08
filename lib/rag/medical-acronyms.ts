@@ -10,7 +10,8 @@ export interface AcronymEntry {
   expansion: string;
   synonyms: string[];
   relatedProtocols: string[];
-  category?: 'cardiac' | 'stroke' | 'trauma' | 'respiratory' | 'pediatric' | 'general';
+  category?: 'cardiac' | 'stroke' | 'trauma' | 'respiratory' | 'pediatric' | 'general' | 'assessment' | 'medication';
+  dosingInfo?: string; // For medication acronyms
 }
 
 export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
