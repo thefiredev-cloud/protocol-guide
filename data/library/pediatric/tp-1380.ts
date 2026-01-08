@@ -27,10 +27,10 @@ export const tp1380: Protocol = {
       type: "accordion",
       title: "Authorized Interventions",
       items: [
-        { 
-            title: "Advanced Airway Management", 
-            content: "Authorization for early endotracheal intubation or supraglottic airway if signs of airway burns (stridor, soot, singed hairs) or impending airway obstruction are present.", 
-            icon: "pulmonology" 
+        {
+            title: "Advanced Airway Management",
+            content: "Authorization for early endotracheal intubation or supraglottic airway if signs of airway burns (stridor, soot, singed hairs) or impending airway obstruction are present. <b>Use Broselow tape for ETT sizing:</b> 3.0-3.5mm (infant), 4.0-4.5mm (toddler), 5.0-6.5mm (child). Consider one size smaller ETT due to potential airway edema.",
+            icon: "pulmonology"
         },
         { 
             title: "Fluid Resuscitation Adjustments", 
