@@ -763,7 +763,7 @@ export const series1000: Protocol[] = [
         items: [
           { title: "Core Topics", subtitle: "Cardiac, trauma, medical emergencies, pediatrics, geriatrics, airway management" },
           { title: "Protocol Updates", subtitle: "County protocol changes, new treatment guidelines, medication updates (mandatory)" },
-          { title: "Skills Maintenance", subtitle: "Low-frequency skills like surgical airways, cardioversion, RSI review" },
+          { title: "Skills Maintenance", subtitle: "Low-frequency skills: cardioversion, transcutaneous pacing, needle decompression" },
           { title: "Special Topics", subtitle: "Behavioral emergencies, disaster response, mass casualty, tactical EMS" },
           { title: "Professional Development", subtitle: "Communication, ethics, cultural competency, wellness/resilience" },
           { title: "Documentation", subtitle: "PCR completion, legal aspects, base hospital contact procedures" }
