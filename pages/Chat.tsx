@@ -29,21 +29,7 @@ import {
   type ConversationFacts,
 } from '../lib/conversation';
 
-interface CitationLink {
-  ref: string;
-  title: string;
-  protocolId: string;
-}
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-  citations?: CitationLink[];
-  confidence?: 'HIGH' | 'MEDIUM' | 'LOW';
-  isWarning?: boolean;
-}
+// Message and CitationLink interfaces imported from ChatContext
 
 // Grounded System Prompt for Zero Hallucination
 const GROUNDED_SYSTEM_PROMPT = `ROLE: Protocol-Guide (LA County Fire EMS Medical Reference)
