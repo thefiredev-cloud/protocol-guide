@@ -585,6 +585,19 @@ export async function retrieveContext(
   // Take top results
   const topChunks = uniqueChunks.slice(0, maxChunks);
 
+  // Step 4b: Filter by authorized source (LA County DHS only)
+  const { validChunks, violations } = filterAuthorizedChunks(topChunks);
+
+  // Log any source violations detected during retrieval
+  if (violations.length > 0) {
+    console.error(`[RAG] Filtered ${violations.length} chunks from unauthorized sources`);
+    // Log each violation asynchronously (don't block retrieval)
+    violations.forEach(v => logSourceViolation(v));
+  }
+
+  // Use validChunks for the rest of the function
+  const filteredChunks = validChunks;
+
   // Step 5: Calculate confidence
   const confidence = calculateConfidence(topChunks, analysis);
 
