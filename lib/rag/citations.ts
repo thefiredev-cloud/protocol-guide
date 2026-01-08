@@ -62,14 +62,14 @@ export function extractSourceReferences(response: string): number[] {
   const pattern = /\[SOURCE\s*(\d+)\]/gi;
   const sources: number[] = [];
 
-  const matches = response.matchAll(pattern);
+  const matches = Array.from(response.matchAll(pattern));
   for (const match of matches) {
     if (match[1]) {
       sources.push(parseInt(match[1], 10));
     }
   }
 
-  return [...new Set(sources)];
+  return Array.from(new Set(sources));
 }
 
 /**
