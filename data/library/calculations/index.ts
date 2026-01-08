@@ -246,7 +246,7 @@ export const pediatricWeight: Protocol = {
     },
     {
       type: "warning",
-      content: "<b>Limitations of Weight Estimation:</b><br>• Formulas based on average weights - individual variation<br>• Obesity/underweight not accounted for<br>• Prematurity affects infant weights<br>• Always use actual weight if available<br>• When in doubt, estimate conservatively (lower dose safer)<br><br><b>Critical medications (narrow therapeutic index):</b><br>• Electricity (defibrillation/cardioversion)<br>• Sedatives/paralytics<br>• Vasopressors<br><br>Extra caution with dosing estimates"
+      content: "<b>Limitations of Weight Estimation:</b><br>• Formulas based on average weights - individual variation<br>• Obesity/underweight not accounted for<br>• Prematurity affects infant weights<br>• Always use actual weight if available<br>• When in doubt, estimate conservatively (lower dose safer)<br><br><b>Critical medications (narrow therapeutic index):</b><br>• Electricity (defibrillation/cardioversion)<br>• Sedatives (Midazolam)<br>• Vasopressors<br><br>Extra caution with dosing estimates. Note: Paralytics NOT in LA County formulary."
     },
     {
       type: "list",
