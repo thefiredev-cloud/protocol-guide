@@ -46,7 +46,7 @@ export const series1300: Protocol[] = [
     id: "1303", refNo: "Ref. 1303", title: "Airway Management Medical Control", category: "General Medical", type: "Medical Control", lastUpdated: "2024", icon: "pulmonology", color: "blue",
     sections: [
       { type: "header", items: [{ title: "Airway Management MCG", subtitle: "Ref. 1303" }] },
-      { type: "text", title: "Purpose", content: "Replaces previous 1303. Medical control guidelines for advanced airway management including endotracheal intubation, supraglottic airways, surgical airways, and RSI procedures." },
+      { type: "text", title: "Purpose", content: "Replaces previous 1303. Medical control guidelines for advanced airway management including endotracheal intubation and supraglottic airways. Note: Surgical airways are NOT authorized for ground ALS in LA County." },
       { type: "list", title: "Indications for Advanced Airway", items: [
         { title: "Cardiac Arrest", content: "After initial BVM ventilation and CPR established. Do not delay compressions for intubation." },
         { title: "Respiratory Failure", content: "Inadequate oxygenation/ventilation despite BVM, anticipated deterioration during transport." },
