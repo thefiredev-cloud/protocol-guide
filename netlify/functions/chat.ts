@@ -67,13 +67,53 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     };
   }
 
-  // Verify authentication (check for Supabase JWT)
+  // Verify authentication (validate Supabase JWT)
   const authHeader = event.headers['authorization'];
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return {
       statusCode: 401,
       headers,
       body: JSON.stringify({ error: 'Authentication required' }),
+    };
+  }
+
+  // Extract and validate the JWT token
+  const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+  if (!token || token.length < 10) {
+    return {
+      statusCode: 401,
+      headers,
+      body: JSON.stringify({ error: 'Invalid token format' }),
+    };
+  }
+
+  // Validate JWT structure (header.payload.signature)
+  const jwtParts = token.split('.');
+  if (jwtParts.length !== 3) {
+    return {
+      statusCode: 401,
+      headers,
+      body: JSON.stringify({ error: 'Malformed token' }),
+    };
+  }
+
+  // Decode and check expiration (basic validation without full signature verification)
+  // Full verification would require Supabase JWT secret
+  try {
+    const payload = JSON.parse(Buffer.from(jwtParts[1], 'base64').toString());
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Token expired' }),
+      };
+    }
+  } catch {
+    return {
+      statusCode: 401,
+      headers,
+      body: JSON.stringify({ error: 'Invalid token' }),
     };
   }
 
