@@ -110,9 +110,14 @@ const Chat: React.FC = () => {
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [quickResults, setQuickResults] = useState<LocalSearchResult[]>([]);
   const [showQuickResults, setShowQuickResults] = useState(false);
+  const [dbSessionId, setDbSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSessionRef = useRef<GeminiChat | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sessionCreatedRef = useRef(false);
+
+  // Auth context for user info
+  const { user, isAuthenticated } = useAuth();
 
   // Persistent state from ChatContext (survives route changes)
   const {
@@ -128,6 +133,41 @@ const Chat: React.FC = () => {
   } = useChat();
 
   const { patientContext, isWidgetMode } = useWidgetMode();
+
+  // Create Supabase session on mount when user is authenticated
+  useEffect(() => {
+    const initDbSession = async () => {
+      if (!isAuthenticated || !user || sessionCreatedRef.current || !isSupabaseConfigured()) {
+        return;
+      }
+
+      sessionCreatedRef.current = true;
+
+      const metadata: SessionMetadata = {
+        userId: user.email,
+        userEmail: user.email,
+        station: user.station,
+        department: user.department,
+        patientContextActive: !!patientContext,
+      };
+
+      const sessionId = await createChatSession(metadata);
+      if (sessionId) {
+        setDbSessionId(sessionId);
+      }
+    };
+
+    initDbSession();
+  }, [isAuthenticated, user, patientContext]);
+
+  // End session on unmount
+  useEffect(() => {
+    return () => {
+      if (dbSessionId) {
+        endSession(dbSessionId);
+      }
+    };
+  }, [dbSessionId]);
 
   // Voice input integration
   const { transcript, interimTranscript, isListening, clearTranscript } = useVoiceInput();
