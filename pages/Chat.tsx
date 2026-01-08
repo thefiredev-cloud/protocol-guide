@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { useWidgetMode } from '../contexts/WidgetModeContext';
+import { useChat, type Message, type CitationLink } from '../contexts/ChatContext';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 
