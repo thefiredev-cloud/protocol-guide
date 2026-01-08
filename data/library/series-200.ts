@@ -542,7 +542,7 @@ export const series200: Protocol[] = [
     sections: [
       { type: "header", items: [{ title: "Credentialing", subtitle: "Ref. 238" }] },
       { type: "text", content: "Paramedics practicing in LA County must hold both State certification and LA County accreditation." },
-      { type: "text", title: "Scope of Practice", content: "Privileges are defined by the paramedic scope of practice and treatment protocols. Additional skills (RSI, ultrasound) require special authorization." }
+      { type: "text", title: "Scope of Practice", content: "Privileges are defined by the paramedic scope of practice and treatment protocols. Note: RSI is NOT authorized in LA County. Additional skills like point-of-care ultrasound require special authorization where approved." }
     ]
   },
   {
