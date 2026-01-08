@@ -323,6 +323,7 @@ function transformMedication(protocol: Protocol) {
 
 /**
  * Generate chunks for vector embeddings
+ * Includes source_url for DHS compliance tracking
  */
 function generateProtocolChunks(protocol: Protocol): Array<{
   protocol_id: string;
@@ -334,6 +335,8 @@ function generateProtocolChunks(protocol: Protocol): Array<{
   chunk_index: number;
   content: string;
   content_hash: string;
+  source_url: string;
+  source_verified: boolean;
 }> {
   const chunks: Array<{
     protocol_id: string;
@@ -345,6 +348,8 @@ function generateProtocolChunks(protocol: Protocol): Array<{
     chunk_index: number;
     content: string;
     content_hash: string;
+    source_url: string;
+    source_verified: boolean;
   }> = [];
   let chunkIndex = 0;
 
