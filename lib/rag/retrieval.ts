@@ -180,7 +180,7 @@ function analyzeQuery(query: string): QueryAnalysis {
   return {
     originalQuery: query,
     expandedQuery: acronymExpansion.expandedQuery,
-    detectedProtocolRefs: [...new Set(detectedRefs)],
+    detectedProtocolRefs: Array.from(new Set(detectedRefs)),
     medicalTerms,
     queryType,
     acronymExpansion: queryHasAcronyms ? acronymExpansion : null,
