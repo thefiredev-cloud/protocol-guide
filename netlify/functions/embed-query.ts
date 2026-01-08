@@ -109,11 +109,11 @@ function cleanupCache(): void {
   const now = Date.now();
   const entriesToDelete: string[] = [];
 
-  for (const [key, value] of embeddingCache.entries()) {
+  embeddingCache.forEach((value, key) => {
     if (now - value.timestamp > CACHE_TTL_MS) {
       entriesToDelete.push(key);
     }
-  }
+  });
 
   entriesToDelete.forEach(key => embeddingCache.delete(key));
 }
