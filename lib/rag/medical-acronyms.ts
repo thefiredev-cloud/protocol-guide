@@ -348,19 +348,22 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     expansion: 'Epinephrine',
     synonyms: ['adrenaline', 'epi 1:1000', 'epi 1:10000'],
     relatedProtocols: ['1317.6', '518', '507'],
-    category: 'general'
+    category: 'medication',
+    dosingInfo: 'Cardiac arrest: 1mg (1:10,000) IV/IO q3-5min; Anaphylaxis: 0.3mg (1:1,000) IM; Severe asthma: 0.3-0.5mg (1:1,000) IM'
   },
   'NTG': {
     expansion: 'Nitroglycerin',
     synonyms: ['nitro', 'glyceryl trinitrate', 'nitrostat'],
     relatedProtocols: ['1317.12', '503'],
-    category: 'cardiac'
+    category: 'medication',
+    dosingInfo: '0.4mg SL q3-5min up to 3 doses; Contraindicated with SBP <100, RV infarct, PDE5 inhibitors'
   },
   'ASA': {
     expansion: 'Aspirin',
     synonyms: ['acetylsalicylic acid', 'baby aspirin'],
     relatedProtocols: ['1317.3', '503'],
-    category: 'cardiac'
+    category: 'medication',
+    dosingInfo: '324mg PO (chewed) for suspected ACS/STEMI; Contraindicated with active GI bleed'
   },
 
   // Transport
