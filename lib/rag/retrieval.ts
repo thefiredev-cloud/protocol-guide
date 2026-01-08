@@ -870,7 +870,7 @@ export async function retrieveContext(
 
   // 3a: Hybrid search
   if (queryEmbedding.length > 0) {
-    const hybridResults = await hybridSearch(query, queryEmbedding, maxChunks * 2);
+    const hybridResults = await hybridSearch(query, queryEmbedding, analysis, maxChunks * 2);
     allChunks.push(...hybridResults);
   }
 
