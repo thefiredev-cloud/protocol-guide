@@ -366,6 +366,12 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     relatedProtocols: ['100', '101'],
     category: 'general'
   },
+  'OD': {
+    expansion: 'Overdose',
+    synonyms: ['drug overdose', 'narcotic overdose', 'poisoning', 'toxic ingestion', 'opioid overdose'],
+    relatedProtocols: ['514', '515', '1221', '1222'],
+    category: 'general'
+  },
 
   // Medications (common abbreviations)
   'EPI': {
