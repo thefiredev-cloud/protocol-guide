@@ -52,3 +52,10 @@ export {
   type SourceValidationResult,
   type SourceViolation,
 } from './source-validation';
+
+// Reranker exports - cross-encoder style reranking for medical protocols
+export {
+  rerankChunks,
+  DEFAULT_RERANKER_CONFIG,
+  type RerankerConfig,
+} from './reranker';
