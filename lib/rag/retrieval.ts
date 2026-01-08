@@ -245,6 +245,7 @@ function calculateConfidence(
 
 /**
  * Determine if we should decline to answer
+ * Enhanced with query complexity adjustments and safety checks
  */
 function shouldDeclineToAnswer(
   chunks: RetrievedChunk[],
@@ -265,6 +266,20 @@ function shouldDeclineToAnswer(
     return { decline: false };
   }
 
+  // CRITICAL: Never decline if explicit protocol reference detected
+  if (analysis.detectedProtocolRefs.length > 0 && chunks.length > 0) {
+    console.log('[RAG] Explicit protocol reference detected - bypassing decline checks');
+    return { decline: false };
+  }
+
+  // CRITICAL: Never decline if we have multiple high-quality chunks
+  // At least 3 chunks with relevance > 0.1 indicates strong match
+  const highQualityChunks = chunks.filter(c => c.relevanceScore > 0.1);
+  if (highQualityChunks.length >= 3) {
+    console.log('[RAG] Multiple high-quality chunks found - bypassing decline checks');
+    return { decline: false };
+  }
+
   // No results at all
   if (chunks.length === 0) {
     return {
@@ -273,10 +288,18 @@ function shouldDeclineToAnswer(
     };
   }
 
-  // Lower threshold for queries with recognized medical acronyms
-  // Acronyms like LAMS, ECMO, PTC have mapped protocol references
-  // Lowered thresholds to improve recall (was 0.15/0.25)
-  const confidenceThreshold = analysis.hasAcronyms ? 0.08 : 0.12;
+  // Query complexity adjustment - longer queries should have lower thresholds
+  // Medical queries often have 10+ words with context
+  const queryWords = analysis.originalQuery.split(/\s+/).length;
+  const complexityAdjustment = queryWords > 10 ? 0.02 : 0; // Lower thresholds for complex queries
+
+  // New decline thresholds - lowered to improve recall for medical queries
+  const DECLINE_THRESHOLDS = {
+    minConfidenceWithAcronyms: 0.05 - complexityAdjustment,  // Was 0.08
+    minConfidenceGeneral: 0.08 - complexityAdjustment,       // Was 0.12
+    minTopRelevanceAcronyms: 0.003,   // Was 0.005
+    minTopRelevanceGeneral: 0.005     // Was 0.01
+  };
 
   // If acronym matched a related protocol, don't decline
   if (analysis.hasAcronyms && analysis.acronymExpansion) {
@@ -291,6 +314,11 @@ function shouldDeclineToAnswer(
     }
   }
 
+  // Check confidence threshold
+  const confidenceThreshold = analysis.hasAcronyms
+    ? DECLINE_THRESHOLDS.minConfidenceWithAcronyms
+    : DECLINE_THRESHOLDS.minConfidenceGeneral;
+
   // Very low confidence without explicit reference
   if (confidence < confidenceThreshold && analysis.detectedProtocolRefs.length === 0) {
     return {
@@ -299,9 +327,12 @@ function shouldDeclineToAnswer(
     };
   }
 
-  // Top result has very low relevance (lowered for acronym queries)
-  // Further lowered to prevent false declines
-  const relevanceThreshold = analysis.hasAcronyms ? 0.005 : 0.01;
+  // Check top relevance threshold
+  const relevanceThreshold = analysis.hasAcronyms
+    ? DECLINE_THRESHOLDS.minTopRelevanceAcronyms
+    : DECLINE_THRESHOLDS.minTopRelevanceGeneral;
+
+  // Top result has very low relevance
   if (chunks[0].relevanceScore < relevanceThreshold) {
     return {
       decline: true,
