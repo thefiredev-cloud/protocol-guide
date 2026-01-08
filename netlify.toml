@@ -7,10 +7,8 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--include=dev"
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  # Disable secrets scanning - VITE_ vars are intentionally client-exposed
-  # Gemini API keys (AIza*) are browser-safe publishable keys
-  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY,VITE_SUPABASE_ANON_KEY"
-  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  # VITE_SUPABASE_ANON_KEY is a publishable key by design (Supabase Row Level Security)
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_ANON_KEY"
 
 [[redirects]]
   from = "/*"
