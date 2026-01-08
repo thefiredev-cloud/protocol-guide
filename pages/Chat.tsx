@@ -550,6 +550,16 @@ const Chat: React.FC = () => {
           )}
         </div>
 
+        {/* Quick Results - instant local protocol matches while AI processes */}
+        <QuickResults
+          results={quickResults}
+          isVisible={showQuickResults}
+          onProtocolClick={(ref) => {
+            // Navigate to protocol detail
+            window.location.href = `/browse?protocol=${ref}`;
+          }}
+        />
+
         {messages.map((msg) => (
           <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
              {msg.role === 'assistant' && (
