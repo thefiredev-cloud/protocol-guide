@@ -28,6 +28,8 @@ export interface RetrievedChunk {
   content: string;
   relevanceScore: number;
   matchType: 'keyword' | 'semantic' | 'both';
+  sourceUrl?: string | null;
+  sourceVerified?: boolean;
 }
 
 export interface QueryAnalysis {
