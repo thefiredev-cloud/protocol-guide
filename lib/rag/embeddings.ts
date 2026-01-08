@@ -2,10 +2,16 @@
  * Protocol Guide - Embedding Pipeline
  *
  * Handles vector embedding generation using server-side Netlify function.
+ * Falls back to direct API in dev mode.
  * Embeddings are stored in Supabase pgvector for semantic search.
  */
 
+import { GoogleGenAI } from '@google/genai';
 import { supabase } from '../supabase';
+
+// Dev mode detection - use direct API on localhost
+const isDevMode = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
 // ============================================
 // Configuration
