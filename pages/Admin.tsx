@@ -27,9 +27,29 @@ import { ExportPanel } from '../components/admin/ExportPanel';
 
 type TabType = 'overview' | 'qa-dashboard' | 'users';
 
+// Authorized admin emails (should match RLS policy in database)
+const ADMIN_EMAILS = ['tanner@thefiredev.com', 'christiansafina@gmail.com'];
+
 const Admin: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+
+  // Authorization check - redirect non-admins
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    if (user && !ADMIN_EMAILS.includes(user.email || '')) {
+      console.warn('Unauthorized admin access attempt:', user.email);
+      navigate('/');
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  // Don't render anything if not authorized
+  if (!isAuthenticated || !user || !ADMIN_EMAILS.includes(user.email || '')) {
+    return null;
+  }
 
   // Tab state
   const [activeTab, setActiveTab] = useState<TabType>('overview');
