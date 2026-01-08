@@ -330,10 +330,14 @@ async function hybridSearch(
   let data, error;
   try {
     const result = await Promise.race([searchPromise, timeoutPromise]);
-    data = result.data;
-    error = result.error;
-  } catch (timeoutError) {
-    console.warn('[RAG] Hybrid search timeout, falling back to keyword-only search');
+    // Result is only defined if searchPromise wins the race
+    // If timeoutPromise wins, it rejects and we go to catch block
+    data = result?.data;
+    error = result?.error;
+  } catch (raceError) {
+    // Handle both timeout and other errors
+    const errorMessage = raceError instanceof Error ? raceError.message : 'Unknown error';
+    console.warn(`[RAG] Hybrid search failed: ${errorMessage}, falling back to keyword-only search`);
     // Return empty to trigger fallback
     return [];
   }
