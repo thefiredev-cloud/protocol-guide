@@ -298,12 +298,9 @@ const Chat: React.FC = () => {
         ? `\nREQUIRED FOLLOW-UP: You MUST ask the user "${followUpSuggestion.question}" before providing specific protocol recommendations. Reason: ${followUpSuggestion.reason}. Do not skip this clarifying question.\n`
         : '';
 
-      // Build recent conversation history (last 4 user messages for context)
-      const recentHistory = messages
-        .filter(m => m.role === 'user')
-        .slice(-4)
-        .map(m => `Previous query: ${m.content}`)
-        .join('\n');
+      // NOTE: Raw conversation history removed to prevent context bleeding.
+      // Clinical facts are preserved via factsContext (extracted structured data).
+      // This prevents unrelated queries (e.g., GSW then Narcan) from mixing.
 
       let augmentedPrompt = originalInput;
       const contextParts: string[] = [confidenceInstruction];
@@ -311,7 +308,6 @@ const Chat: React.FC = () => {
       if (factsContext) contextParts.push(factsContext);
       if (followUpInstruction) contextParts.push(followUpInstruction);
       if (patientInfo) contextParts.push(patientInfo);
-      if (recentHistory && messages.length > 2) contextParts.push(`CONVERSATION HISTORY:\n${recentHistory}`);
       if (context) contextParts.push(`PROTOCOL CONTEXT:\n${context}`);
 
       augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
