@@ -148,7 +148,7 @@ export const series1300: Protocol[] = [
       ]},
       { type: "list", title: "Medication Dosing", items: [
         { title: "Weight-Based Dosing", content: "Most pediatric medications dosed per kg. Maximum dose caps prevent overdose. Use Broselow tape or length-based dosing guide." },
-        { title: "High-Risk Medications", content: "Epinephrine, RSI drugs, sedatives require double-check of weight and calculation. Pre-calculated doses reduce errors." }
+        { title: "High-Risk Medications", content: "Epinephrine, sedatives, opioids require double-check of weight and calculation. Pre-calculated doses reduce errors." }
       ]},
       { type: "text", title: "Family-Centered Care", content: "Allow parent presence during procedures when safe. Explain procedures in age-appropriate language. Minimize parent-child separation. Consider child life specialist at receiving facility." }
     ]
