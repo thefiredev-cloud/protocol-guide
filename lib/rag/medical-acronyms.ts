@@ -366,18 +366,54 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     dosingInfo: '324mg PO (chewed) for suspected ACS/STEMI; Contraindicated with active GI bleed'
   },
 
-  // Transport
+  // Transport & EMS Operations
   'ALS': {
     expansion: 'Advanced Life Support',
-    synonyms: ['paramedic', 'advanced care', 'ALS unit'],
+    synonyms: ['paramedic', 'advanced care', 'ALS unit', 'ALS transport', 'paramedic level'],
     relatedProtocols: ['200', '201'],
     category: 'general'
   },
   'BLS': {
     expansion: 'Basic Life Support',
-    synonyms: ['EMT', 'basic care', 'BLS unit'],
+    synonyms: ['EMT', 'basic care', 'BLS unit', 'BLS transport', 'EMT level'],
     relatedProtocols: ['200', '201'],
     category: 'general'
+  },
+  'BASE': {
+    expansion: 'Base Hospital',
+    synonyms: ['base station', 'medical control', 'OLMC', 'base hospital contact', 'physician consult', 'base hospital orders'],
+    relatedProtocols: ['200', '506'],
+    category: 'general'
+  },
+  'FDLA': {
+    expansion: 'Los Angeles County Fire Department',
+    synonyms: ['LA County Fire', 'LACFD', 'county fire', 'fire department'],
+    relatedProtocols: [],
+    category: 'general'
+  },
+  'IFT': {
+    expansion: 'Interfacility Transfer',
+    synonyms: ['hospital transfer', 'facility transfer', 'inter-hospital transfer', 'transfer patient'],
+    relatedProtocols: ['200', '506'],
+    category: 'general'
+  },
+  'PT': {
+    expansion: 'Patient',
+    synonyms: ['victim', 'individual', 'person', 'casualty', 'injured party'],
+    relatedProtocols: [],
+    category: 'general'
+  },
+  'ETA': {
+    expansion: 'Estimated Time of Arrival',
+    synonyms: ['arrival time', 'expected arrival', 'time to hospital', 'transport time'],
+    relatedProtocols: [],
+    category: 'general'
+  },
+  'MCI': {
+    expansion: 'Mass Casualty Incident',
+    synonyms: ['multiple casualties', 'mass casualty', 'multi-casualty', 'MCI triage', 'disaster', 'multiple patients'],
+    relatedProtocols: ['900', '901', '902'],
+    category: 'trauma'
   },
 
   // Pediatric
