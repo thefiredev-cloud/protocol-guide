@@ -154,7 +154,8 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <WidgetModeProvider>
         <AuthProvider>
-          <HashRouter>
+          <ChatProvider>
+            <HashRouter>
             <ScrollToTop />
             <WidgetLayout>
               <Routes>
