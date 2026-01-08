@@ -268,6 +268,48 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     relatedProtocols: ['810', '1253'],
     category: 'trauma'
   },
+  'AVPU': {
+    expansion: 'Alert Verbal Pain Unresponsive',
+    synonyms: ['consciousness assessment', 'AVPU scale', 'neurological assessment', 'mental status', 'responsiveness scale', 'alert to voice', 'responsive to pain'],
+    relatedProtocols: ['520', '810', '1231'],
+    category: 'assessment'
+  },
+  'APGAR': {
+    expansion: 'Appearance Pulse Grimace Activity Respiration',
+    synonyms: ['newborn assessment', 'APGAR score', 'neonatal assessment', 'baby assessment', 'birth assessment'],
+    relatedProtocols: ['817', '1267'],
+    category: 'pediatric'
+  },
+  'PEARL': {
+    expansion: 'Pupils Equal And Reactive to Light',
+    synonyms: ['pupil assessment', 'pupil check', 'pupillary response', 'neurological exam', 'eye exam', 'pupils equal reactive'],
+    relatedProtocols: ['810', '520', '1231'],
+    category: 'assessment'
+  },
+  'PMS': {
+    expansion: 'Pulse Motor Sensory',
+    synonyms: ['neurovascular check', 'circulation check', 'distal pulse', 'motor function', 'sensory function', 'extremity assessment'],
+    relatedProtocols: ['801', '802', '1241'],
+    category: 'assessment'
+  },
+  'MAE': {
+    expansion: 'Moves All Extremities',
+    synonyms: ['motor function', 'extremity movement', 'motor assessment', 'four extremity movement', 'motor exam'],
+    relatedProtocols: ['810', '801', '1253'],
+    category: 'assessment'
+  },
+  'VS': {
+    expansion: 'Vital Signs',
+    synonyms: ['vitals', 'blood pressure', 'pulse', 'respirations', 'temperature', 'BP HR RR', 'hemodynamics', 'vital statistics'],
+    relatedProtocols: ['200', '1100'],
+    category: 'assessment'
+  },
+  'WNL': {
+    expansion: 'Within Normal Limits',
+    synonyms: ['normal', 'unremarkable', 'no abnormalities', 'normal findings', 'normal exam'],
+    relatedProtocols: [],
+    category: 'assessment'
+  },
 
   // End of Life
   'DNR': {
