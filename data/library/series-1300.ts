@@ -116,7 +116,7 @@ export const series1300: Protocol[] = [
         { title: "Right Time", content: "Administer at appropriate interval. Monitor for onset and duration of effect." },
         { title: "Right Documentation", content: "Document medication, dose, route, time, patient response. Include vital signs before and after." }
       ]},
-      { type: "warning", content: "High-risk medications require independent double-check: Epinephrine concentrations (1:1000 vs 1:10,000), paralytics, pediatric doses." }
+      { type: "warning", content: "High-risk medications require independent double-check: Epinephrine concentrations (1:1000 vs 1:10,000), sedatives, pediatric doses." }
     ]
   },
   {
