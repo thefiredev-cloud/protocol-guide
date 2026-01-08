@@ -417,7 +417,9 @@ const Chat: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-[#9B1B30]/20 dark:bg-[#9B1B30]/30 flex items-center justify-center text-primary border border-[#9B1B30]/30 dark:border-[#9B1B30]/50 overflow-hidden">
-                <img src="/logo.png" alt="Protocol Guide" className="w-9 h-9" />
+                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center">
+                  <img src="/logo.png" alt="Protocol Guide" className="w-7 h-7" />
+                </div>
               </div>
               <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
             </div>
