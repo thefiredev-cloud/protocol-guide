@@ -551,6 +551,23 @@ const Chat: React.FC = () => {
           )}
         </div>
 
+        {/* Quick Actions - shown when conversation is empty */}
+        {messages.length <= 1 && !isTyping && !isStreaming && (
+          <QuickActions
+            onSelect={(query) => {
+              setInput(query);
+              // Trigger send after state update
+              setTimeout(() => {
+                const form = document.querySelector('input[type="text"]') as HTMLInputElement;
+                if (form) {
+                  form.form?.requestSubmit?.() || handleSend();
+                }
+              }, 100);
+            }}
+            disabled={isTyping || isStreaming}
+          />
+        )}
+
         {/* Quick Results - instant local protocol matches while AI processes */}
         <QuickResults
           results={quickResults}
