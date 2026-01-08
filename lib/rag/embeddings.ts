@@ -189,7 +189,7 @@ export async function embedAllChunks(): Promise<EmbeddingStats> {
 }
 
 /**
- * Generate embedding for a user query (with caching)
+ * Generate embedding for a user query (with caching and timeout protection)
  */
 export async function embedQuery(query: string): Promise<number[]> {
   // Check cache first
@@ -203,7 +203,25 @@ export async function embedQuery(query: string): Promise<number[]> {
 
   // Add query prefix for better search alignment
   const prefixedQuery = `search_query: ${query}`;
-  const embedding = await generateEmbedding(prefixedQuery);
+
+  // Timeout protection: 3 seconds max for embedding generation
+  const EMBEDDING_TIMEOUT = 3000;
+  let embedding: number[];
+
+  try {
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Embedding timeout')), EMBEDDING_TIMEOUT);
+    });
+
+    embedding = await Promise.race([
+      generateEmbedding(prefixedQuery),
+      timeoutPromise
+    ]);
+  } catch (error) {
+    console.warn('[Embeddings] Timeout or error, returning empty embedding for keyword-only search');
+    // Return empty embedding to allow fallback to keyword search
+    return [];
+  }
 
   // Store in cache
   queryCache.set(cacheKey, { embedding, timestamp: Date.now() });
