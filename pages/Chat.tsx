@@ -370,16 +370,31 @@ const Chat: React.FC = () => {
 
     } catch (error: any) {
       console.error('Chat error:', error);
+      console.error('Error details:', {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack?.slice(0, 500),
+      });
 
       let errorMessage = "Connection error. Please try again.";
 
-      if (error?.message?.includes('API key')) {
+      // Specific error detection for better debugging
+      const errMsg = error?.message?.toLowerCase() || '';
+      const errName = error?.name || '';
+
+      if (errMsg.includes('api key') || errMsg.includes('api_key') || errMsg.includes('unauthorized')) {
         errorMessage = "Authentication error. Please check API configuration.";
-      } else if (error?.message?.includes('quota') || error?.message?.includes('rate')) {
+      } else if (errMsg.includes('quota') || errMsg.includes('rate') || errMsg.includes('429')) {
         errorMessage = "Rate limit exceeded. Please wait a moment and try again.";
-      } else if (error?.message?.includes('network') || error?.name === 'TypeError') {
+      } else if (errMsg.includes('embedding') || errMsg.includes('embed')) {
+        errorMessage = "Embedding service error. Retrying with keyword search...";
+      } else if (errMsg.includes('supabase') || errMsg.includes('rpc') || errMsg.includes('database')) {
+        errorMessage = "Database connection error. Please try again.";
+      } else if (errMsg.includes('timeout') || errName === 'AbortError') {
+        errorMessage = "Request timed out. The server may be busy. Please try again.";
+      } else if (errMsg.includes('network') || errName === 'TypeError' || errMsg.includes('fetch')) {
         errorMessage = "Network error. Please check your connection.";
-      } else if (error?.message?.includes('model')) {
+      } else if (errMsg.includes('model') || errMsg.includes('404') || errMsg.includes('not found')) {
         errorMessage = "AI model unavailable. Please try again later.";
       }
 
