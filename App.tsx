@@ -14,6 +14,7 @@ import AdminRoute from './components/AdminRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import { ChatProvider } from './contexts/ChatContext';
 import { WidgetModeProvider, useWidgetMode } from './contexts/WidgetModeContext';
+import { VoiceInputProvider } from './contexts/VoiceInputContext';
 import { WidgetButton, WidgetContainer } from './components/Widget';
 import OfflineIndicator from './components/OfflineIndicator';
 
