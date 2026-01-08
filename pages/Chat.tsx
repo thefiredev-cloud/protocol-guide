@@ -91,13 +91,24 @@ Recommended actions:
 • Contact Base Hospital for real-time medical direction`;
 
 const Chat: React.FC = () => {
+  // Local ephemeral state
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [useRAG, setUseRAG] = useState(false);
-  const [conversationFacts, setConversationFacts] = useState<ConversationFacts>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatSession = useRef<GeminiChat | null>(null);
+  const chatSessionRef = useRef<GeminiChat | null>(null);
+
+  // Persistent state from ChatContext (survives route changes)
+  const {
+    messages,
+    setMessages,
+    conversationFacts,
+    updateFacts,
+    isTyping,
+    setTyping,
+    useRAG,
+    setUseRAG,
+    addMessage,
+  } = useChat();
+
   const { patientContext, isWidgetMode } = useWidgetMode();
 
   // Check if RAG is available (Supabase configured)
