@@ -533,7 +533,9 @@ const Chat: React.FC = () => {
         {isTyping && (
           <div className="flex gap-3 mb-4">
             <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#9B1B30]/10 dark:bg-[#9B1B30]/20 flex items-center justify-center self-start mt-4 overflow-hidden">
-              <img src="/logo.png" alt="Protocol Guide" className="w-6 h-6" />
+              <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
+                <img src="/logo.png" alt="Protocol Guide" className="w-5 h-5" />
+              </div>
             </div>
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none px-5 py-4 shadow-soft">
               <div className="flex space-x-1.5">
