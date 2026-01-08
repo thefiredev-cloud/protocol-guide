@@ -746,7 +746,7 @@ export const series1300: Protocol[] = [
       { type: "list", title: "Drug Information", items: [
         { title: "Class", content: "Benzodiazepine, sedative-hypnotic, anticonvulsant" },
         { title: "Mechanism", content: "GABA agonist causing CNS depression. Provides sedation, anxiolysis, amnesia, muscle relaxation, and anticonvulsant effects." },
-        { title: "Indications", content: "Seizures (status epilepticus), sedation for agitation, RSI facilitation, procedural sedation, cardioversion" },
+        { title: "Indications", content: "Seizures (status epilepticus), sedation for agitation, ETT sedation, procedural sedation, cardioversion" },
         { title: "Contraindications", content: "Known allergy, acute narrow angle glaucoma (relative)" }
       ]},
       { type: "list", title: "Dosing", items: [
