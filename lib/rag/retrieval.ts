@@ -664,7 +664,7 @@ export async function retrieveContext(
   const confidence = calculateConfidence(filteredChunks, analysis);
 
   // Step 6: Check if we should decline
-  const declineCheck = shouldDeclineToAnswer(filteredChunks, analysis, confidence);
+  const declineCheck = shouldDeclineToAnswer(filteredChunks, analysis, confidence, criteriaInfo);
 
   // Step 7: Build protocol map (using filtered chunks)
   const protocols = new Map<string, { ref: string; title: string; category: string }>();
