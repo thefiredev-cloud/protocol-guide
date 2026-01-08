@@ -641,7 +641,7 @@ const Chat: React.FC = () => {
           sessionId: dbSessionId,
           role: 'assistant',
           content: responseText,
-          retrievedChunkIds: retrieval?.chunks?.map(c => c.id),
+          retrievedChunkIds: retrieval?.chunks?.map(c => c.chunkId),
           confidence: retrieval?.confidence,
           confidenceLevel,
           citations: citations.map(c => ({ ref: c.ref, title: c.title, protocolId: c.protocolId })),
