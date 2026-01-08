@@ -96,6 +96,8 @@ const Chat: React.FC = () => {
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
+  const [quickResults, setQuickResults] = useState<LocalSearchResult[]>([]);
+  const [showQuickResults, setShowQuickResults] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSessionRef = useRef<GeminiChat | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
