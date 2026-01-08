@@ -348,43 +348,20 @@ function shouldDeclineToAnswer(
 // ============================================
 
 /**
- * Perform hybrid search using Supabase RPC (with 4s timeout)
+ * Perform keyword (full-text) search using Supabase RPC
  */
-async function hybridSearch(
+async function keywordSearch(
   queryText: string,
-  queryEmbedding: number[],
-  matchCount: number = 10
-): Promise<RetrievedChunk[]> {
-  const SEARCH_TIMEOUT = 4000; // 4 seconds
-
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('Supabase RPC timeout')), SEARCH_TIMEOUT);
-  });
-
-  const searchPromise = supabase.rpc('hybrid_search_protocols', {
+  matchCount: number = 20
+): Promise<Array<RetrievedChunk & { rank: number }>> {
+  const { data, error } = await supabase.rpc('keyword_search_protocols', {
     query_text: queryText,
-    query_embedding: queryEmbedding,
     match_count: matchCount,
   });
 
-  let data, error;
-  try {
-    const result = await Promise.race([searchPromise, timeoutPromise]);
-    // Result is only defined if searchPromise wins the race
-    // If timeoutPromise wins, it rejects and we go to catch block
-    data = result?.data;
-    error = result?.error;
-  } catch (raceError) {
-    // Handle both timeout and other errors
-    const errorMessage = raceError instanceof Error ? raceError.message : 'Unknown error';
-    console.warn(`[RAG] Hybrid search failed: ${errorMessage}, falling back to keyword-only search`);
-    // Return empty to trigger fallback
-    return [];
-  }
-
   if (error) {
-    console.error('Hybrid search error:', error);
-    throw error;
+    console.error('[RAG] Keyword search error:', error);
+    return [];
   }
 
   return (data || []).map((row: {
@@ -395,8 +372,7 @@ async function hybridSearch(
     category: string;
     section_title: string | null;
     content: string;
-    relevance_score: number;
-    match_type: string;
+    rank: number;
     source_url?: string | null;
     source_verified?: boolean;
   }) => ({
@@ -407,11 +383,281 @@ async function hybridSearch(
     category: row.category,
     sectionTitle: row.section_title,
     content: row.content,
-    relevanceScore: row.relevance_score,
-    matchType: row.match_type as 'keyword' | 'semantic' | 'both',
+    relevanceScore: 1 / (row.rank || 1), // Initial score (will be replaced by RRF)
+    matchType: 'keyword' as const,
     sourceUrl: row.source_url,
     sourceVerified: row.source_verified,
+    rank: row.rank,
   }));
+}
+
+/**
+ * Perform semantic (vector) search using Supabase RPC
+ */
+async function semanticSearch(
+  queryEmbedding: number[],
+  matchCount: number = 20
+): Promise<Array<RetrievedChunk & { similarity: number }>> {
+  const { data, error } = await supabase.rpc('semantic_search_protocols', {
+    query_embedding: queryEmbedding,
+    match_count: matchCount,
+    similarity_threshold: 0.5, // Minimum cosine similarity
+  });
+
+  if (error) {
+    console.error('[RAG] Semantic search error:', error);
+    return [];
+  }
+
+  return (data || []).map((row: {
+    chunk_id: string;
+    protocol_id: string;
+    protocol_ref: string;
+    protocol_title: string;
+    category: string;
+    section_title: string | null;
+    content: string;
+    similarity: number;
+    source_url?: string | null;
+    source_verified?: boolean;
+  }) => ({
+    chunkId: row.chunk_id,
+    protocolId: row.protocol_id,
+    protocolRef: row.protocol_ref,
+    protocolTitle: row.protocol_title,
+    category: row.category,
+    sectionTitle: row.section_title,
+    content: row.content,
+    relevanceScore: row.similarity, // Initial score (will be replaced by RRF)
+    matchType: 'semantic' as const,
+    sourceUrl: row.source_url,
+    sourceVerified: row.source_verified,
+    similarity: row.similarity,
+  }));
+}
+
+/**
+ * Determine adaptive weights based on query type
+ * Medical domain: exact protocol refs favor keyword, symptom queries favor semantic
+ */
+function getAdaptiveWeights(analysis: QueryAnalysis): { keyword: number; semantic: number } {
+  // Exact protocol references should heavily favor keyword search
+  // E.g., "TP-1201", "protocol 1210", "MCG 502"
+  if (analysis.detectedProtocolRefs.length > 0) {
+    console.log('[RRF] Using protocol-ref weights (keyword-heavy)');
+    return { keyword: 2.0, semantic: 0.8 };
+  }
+
+  // Medication/dosage queries favor keyword (exact doses, drug names matter)
+  // E.g., "epinephrine dose", "how much adenosine", "fentanyl dosing"
+  if (analysis.queryType === 'medication') {
+    console.log('[RRF] Using medication weights (keyword-heavy)');
+    return { keyword: 1.8, semantic: 1.0 };
+  }
+
+  // Procedural queries balance both (steps + conceptual understanding)
+  // E.g., "how to intubate", "RSI procedure", "defibrillation steps"
+  if (analysis.queryType === 'procedural') {
+    console.log('[RRF] Using procedural weights (balanced)');
+    return { keyword: 1.2, semantic: 1.3 };
+  }
+
+  // General/symptom queries favor semantic (conceptual matching)
+  // E.g., "chest pain", "difficulty breathing", "altered mental status"
+  console.log('[RRF] Using general/symptom weights (semantic-heavy)');
+  return { keyword: 1.0, semantic: 1.6 };
+}
+
+/**
+ * Reciprocal Rank Fusion (RRF) with adaptive weighting
+ * Optimized k=30 for medical domain (lower k = more emphasis on top ranks)
+ *
+ * Formula: RRF_score = Σ (weight_i / (k + rank_i))
+ * where:
+ * - k = 30 (tuned for medical/EMS domain, down from typical 60)
+ * - weight_i = adaptive weight based on query type
+ * - rank_i = position in result list (1-indexed)
+ */
+function reciprocalRankFusion(
+  keywordResults: Array<RetrievedChunk & { rank: number }>,
+  semanticResults: Array<RetrievedChunk & { similarity: number }>,
+  analysis: QueryAnalysis,
+  k: number = 30 // Lowered from 60 for medical domain
+): RetrievedChunk[] {
+  const weights = getAdaptiveWeights(analysis);
+
+  console.log('[RRF] Configuration:', {
+    k,
+    keywordWeight: weights.keyword,
+    semanticWeight: weights.semantic,
+    queryType: analysis.queryType
+  });
+
+  // Minimum relevance thresholds before fusion
+  const KEYWORD_MIN_RANK = 100; // Drop results ranked > 100
+  const SEMANTIC_MIN_SIMILARITY = 0.5; // Drop results with similarity < 0.5
+
+  // Filter results by minimum thresholds
+  const filteredKeyword = keywordResults.filter(
+    chunk => chunk.rank <= KEYWORD_MIN_RANK
+  );
+  const filteredSemantic = semanticResults.filter(
+    chunk => chunk.similarity >= SEMANTIC_MIN_SIMILARITY
+  );
+
+  console.log('[RRF] Threshold filtering:', {
+    keyword: `${filteredKeyword.length}/${keywordResults.length} passed (rank ≤ ${KEYWORD_MIN_RANK})`,
+    semantic: `${filteredSemantic.length}/${semanticResults.length} passed (similarity ≥ ${SEMANTIC_MIN_SIMILARITY})`
+  });
+
+  // Build rank maps for RRF scoring
+  const keywordRanks = new Map<string, number>();
+  filteredKeyword.forEach((chunk, idx) => {
+    keywordRanks.set(chunk.chunkId, idx + 1); // 1-indexed rank
+  });
+
+  const semanticRanks = new Map<string, number>();
+  filteredSemantic.forEach((chunk, idx) => {
+    semanticRanks.set(chunk.chunkId, idx + 1); // 1-indexed rank
+  });
+
+  // Build chunk map for deduplication
+  // Strategy: Preserve the variant with the best original score
+  const chunkMap = new Map<string, RetrievedChunk>();
+
+  // Add all keyword results
+  for (const chunk of filteredKeyword) {
+    chunkMap.set(chunk.chunkId, chunk);
+  }
+
+  // Add semantic results, preserving best-scoring variant
+  for (const chunk of filteredSemantic) {
+    const existing = chunkMap.get(chunk.chunkId);
+    if (!existing) {
+      // New chunk, add it
+      chunkMap.set(chunk.chunkId, chunk);
+    } else {
+      // Chunk exists from keyword search
+      // Keep the one with better semantic similarity if available
+      if (chunk.similarity > (existing as any).similarity || 0) {
+        // Preserve keyword rank info but update with better semantic data
+        chunkMap.set(chunk.chunkId, {
+          ...existing,
+          matchType: 'both', // Mark as appearing in both
+        });
+      }
+    }
+  }
+
+  // Calculate RRF scores for all unique chunks
+  const scoredChunks: Array<RetrievedChunk & { rrfScore: number; debugInfo?: any }> = [];
+
+  for (const [chunkId, chunk] of chunkMap.entries()) {
+    const keywordRank = keywordRanks.get(chunkId);
+    const semanticRank = semanticRanks.get(chunkId);
+
+    // RRF formula: score = Σ weight_i / (k + rank_i)
+    let rrfScore = 0;
+    let matchType: 'keyword' | 'semantic' | 'both' = chunk.matchType;
+    const debugInfo: any = {};
+
+    if (keywordRank !== undefined) {
+      const keywordContribution = weights.keyword / (k + keywordRank);
+      rrfScore += keywordContribution;
+      debugInfo.keywordRank = keywordRank;
+      debugInfo.keywordContribution = keywordContribution.toFixed(4);
+    }
+
+    if (semanticRank !== undefined) {
+      const semanticContribution = weights.semantic / (k + semanticRank);
+      rrfScore += semanticContribution;
+      debugInfo.semanticRank = semanticRank;
+      debugInfo.semanticContribution = semanticContribution.toFixed(4);
+    }
+
+    // Update match type if appears in both
+    if (keywordRank !== undefined && semanticRank !== undefined) {
+      matchType = 'both';
+    }
+
+    scoredChunks.push({
+      ...chunk,
+      matchType,
+      relevanceScore: rrfScore, // Replace with RRF score
+      rrfScore,
+      debugInfo,
+    });
+  }
+
+  // Sort by RRF score (descending)
+  scoredChunks.sort((a, b) => b.rrfScore - a.rrfScore);
+
+  // Log top results for debugging
+  console.log('[RRF] Top 5 fused results:', scoredChunks.slice(0, 5).map(c => ({
+    ref: c.protocolRef,
+    score: c.rrfScore.toFixed(4),
+    type: c.matchType,
+    debug: c.debugInfo
+  })));
+
+  return scoredChunks;
+}
+
+/**
+ * Perform hybrid search with RRF fusion (with 4s timeout)
+ * Combines keyword and semantic search using Reciprocal Rank Fusion
+ */
+async function hybridSearch(
+  queryText: string,
+  queryEmbedding: number[],
+  analysis: QueryAnalysis,
+  matchCount: number = 10
+): Promise<RetrievedChunk[]> {
+  const SEARCH_TIMEOUT = 4000; // 4 seconds
+
+  // Run keyword and semantic searches in parallel
+  const keywordPromise = keywordSearch(queryText, matchCount * 2);
+  const semanticPromise = semanticSearch(queryEmbedding, matchCount * 2);
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('Search timeout')), SEARCH_TIMEOUT);
+  });
+
+  try {
+    const [keywordResults, semanticResults] = await Promise.race([
+      Promise.all([keywordPromise, semanticPromise]),
+      timeoutPromise
+    ]);
+
+    console.log('[Hybrid Search] Raw results:', {
+      keyword: keywordResults.length,
+      semantic: semanticResults.length
+    });
+
+    // Perform RRF fusion with adaptive weighting
+    const fusedResults = reciprocalRankFusion(
+      keywordResults,
+      semanticResults,
+      analysis
+    );
+
+    console.log('[Hybrid Search] Fused results:', fusedResults.length);
+
+    return fusedResults.slice(0, matchCount);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.warn(`[RAG] Hybrid search failed: ${errorMessage}, falling back to keyword-only search`);
+
+    // Fallback to keyword-only
+    try {
+      const fallbackResults = await keywordSearch(queryText, matchCount);
+      console.log('[RAG] Fallback keyword search returned:', fallbackResults.length);
+      return fallbackResults.slice(0, matchCount);
+    } catch (fallbackError) {
+      console.error('[RAG] Fallback search also failed:', fallbackError);
+      return [];
+    }
+  }
 }
 
 /**
