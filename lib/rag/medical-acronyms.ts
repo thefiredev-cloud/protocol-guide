@@ -254,6 +254,24 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     relatedProtocols: ['511', '1211'],
     category: 'respiratory'
   },
+  'NRB': {
+    expansion: 'Non-Rebreather Mask',
+    synonyms: ['non-rebreather', 'oxygen mask', 'high flow oxygen', 'reservoir mask', '15L oxygen'],
+    relatedProtocols: ['511', '1100'],
+    category: 'respiratory'
+  },
+  'SOB': {
+    expansion: 'Shortness of Breath',
+    synonyms: ['dyspnea', 'respiratory distress', 'difficulty breathing', 'breathing difficulty', 'air hunger', 'labored breathing'],
+    relatedProtocols: ['511', '512', '1211'],
+    category: 'respiratory'
+  },
+  'LPM': {
+    expansion: 'Liters Per Minute',
+    synonyms: ['oxygen flow rate', 'flow rate', 'L/min', 'oxygen liters', 'oxygen delivery'],
+    relatedProtocols: ['511', '1100'],
+    category: 'respiratory'
+  },
 
   // Assessment
   'AMS': {
