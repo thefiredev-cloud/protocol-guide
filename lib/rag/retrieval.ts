@@ -598,6 +598,34 @@ export async function retrieveContext(
     }
   }
 
+  // 3c: Criteria-specific protocol search (PMC, PTC, Stroke, etc.)
+  if (criteriaInfo.isCriteriaQuery && criteriaInfo.criteriaType) {
+    const criteriaProtocolMap: Record<string, string[]> = {
+      'PMC': ['510', '507', '318', '310'],  // Pediatric destination/medical center refs
+      'PTC': ['506', '510'],                 // Pediatric trauma refs
+      'Stroke': ['1210', '503'],             // Stroke protocol refs
+      'ECMO': ['1207', '503'],               // ECMO/cardiac refs
+      'Trauma': ['506', '502'],              // Trauma triage refs
+      'Burn': ['506', '1228'],               // Burn criteria refs
+      'STEMI': ['1211', '503'],              // STEMI/cardiac refs
+      'Perinatal': ['510', '507'],           // Perinatal/newborn refs
+      'Neonate': ['510', '507'],             // Neonate refs
+    };
+
+    const relatedRefs = criteriaProtocolMap[criteriaInfo.criteriaType] || [];
+    console.log(`[RAG] Searching criteria-related protocols:`, relatedRefs);
+
+    for (const ref of relatedRefs) {
+      const refResults = await searchByRef(ref);
+      // Boost criteria-related results
+      const boostedResults = refResults.map(r => ({
+        ...r,
+        relevanceScore: Math.min(r.relevanceScore + 0.4, 1.4),
+      }));
+      allChunks.push(...boostedResults);
+    }
+  }
+
   // Step 4: Deduplicate and rank
   const seen = new Set<string>();
   const uniqueChunks = allChunks.filter(chunk => {
