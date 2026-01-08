@@ -44,7 +44,7 @@ export function extractMentionedRefs(response: string): string[] {
   const refs: string[] = [];
 
   for (const pattern of patterns) {
-    const matches = response.matchAll(pattern);
+    const matches = Array.from(response.matchAll(pattern));
     for (const match of matches) {
       if (match[1]) {
         refs.push(match[1]);
@@ -52,7 +52,7 @@ export function extractMentionedRefs(response: string): string[] {
     }
   }
 
-  return [...new Set(refs)];
+  return Array.from(new Set(refs));
 }
 
 /**
