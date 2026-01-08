@@ -598,15 +598,15 @@ export async function retrieveContext(
   // Use validChunks for the rest of the function
   const filteredChunks = validChunks;
 
-  // Step 5: Calculate confidence
-  const confidence = calculateConfidence(topChunks, analysis);
+  // Step 5: Calculate confidence (using filtered chunks)
+  const confidence = calculateConfidence(filteredChunks, analysis);
 
   // Step 6: Check if we should decline
-  const declineCheck = shouldDeclineToAnswer(topChunks, analysis, confidence);
+  const declineCheck = shouldDeclineToAnswer(filteredChunks, analysis, confidence);
 
-  // Step 7: Build protocol map
+  // Step 7: Build protocol map (using filtered chunks)
   const protocols = new Map<string, { ref: string; title: string; category: string }>();
-  for (const chunk of topChunks) {
+  for (const chunk of filteredChunks) {
     if (!protocols.has(chunk.protocolId)) {
       protocols.set(chunk.protocolId, {
         ref: chunk.protocolRef,
@@ -617,7 +617,7 @@ export async function retrieveContext(
   }
 
   return {
-    chunks: topChunks,
+    chunks: filteredChunks,
     protocols,
     confidence,
     queryAnalysis: analysis,
