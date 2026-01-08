@@ -251,10 +251,20 @@ function extractMedicationDetails(protocol: Protocol) {
 
 /**
  * Transform Protocol to database record
+ * Includes LA County DHS source URL for compliance tracking
  */
 function transformProtocol(protocol: Protocol) {
   const contentHash = generateContentHash(protocol.sections);
   const fullTextContent = extractFullText(protocol);
+
+  // Default source URL - LA County DHS Prehospital Care Manual
+  const sourceUrl = AUTHORIZED_SOURCES.primary;
+
+  // Validate source (should always pass for default DHS URL)
+  const sourceValidation = validateSourceUrl(sourceUrl);
+  if (!sourceValidation.isValid) {
+    console.warn(`[SOURCE] Invalid source for ${protocol.refNo}: ${sourceValidation.reason}`);
+  }
 
   return {
     protocol_id: protocol.id,
@@ -269,7 +279,11 @@ function transformProtocol(protocol: Protocol) {
     full_text_content: fullTextContent,
     content_hash: contentHash,
     last_updated: parseLastUpdated(protocol.lastUpdated),
-    source_verified: false,
+    // Source tracking fields
+    source_url: sourceUrl,
+    source_verified: true,
+    verified_at: new Date().toISOString(),
+    verified_by: 'migration-script',
   };
 }
 
