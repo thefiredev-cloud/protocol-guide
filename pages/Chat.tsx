@@ -538,6 +538,10 @@ const Chat: React.FC = () => {
                }`}>
                  <div className="text-[15px] leading-relaxed whitespace-pre-wrap font-medium">
                    {msg.content}
+                   {/* Streaming cursor */}
+                   {isStreaming && streamingMessageId === msg.id && (
+                     <span className="inline-block w-2 h-5 bg-primary ml-0.5 animate-pulse" />
+                   )}
                  </div>
 
                  {/* Citations Section */}
