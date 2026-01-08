@@ -540,6 +540,30 @@ const Chat: React.FC = () => {
           : msg
       ));
 
+      // Persist assistant message to Supabase with QA/QI metrics
+      if (dbSessionId) {
+        const responseTimeMs = Date.now() - requestStartTime;
+        const protocolsReferenced = citations.map(c => c.ref);
+        const declineResponse = isDeclineResponse(responseText);
+
+        const persistData: MessagePersistenceData = {
+          sessionId: dbSessionId,
+          role: 'assistant',
+          content: responseText,
+          retrievedChunkIds: retrieval?.chunks?.map(c => c.id),
+          confidence: retrieval?.confidence,
+          confidenceLevel,
+          citations: citations.map(c => ({ ref: c.ref, title: c.title, protocolId: c.protocolId })),
+          groundingScore: retrieval?.confidence,
+          responseTimeMs,
+          protocolsReferenced: protocolsReferenced.length > 0 ? protocolsReferenced : undefined,
+          isDeclineResponse: declineResponse,
+          hasWarning: isWarning,
+        };
+
+        persistMessage(persistData);
+      }
+
     } catch (error: any) {
       console.error('Chat error:', error);
       console.error('Error details:', {
