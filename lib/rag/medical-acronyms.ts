@@ -556,9 +556,14 @@ export interface ExpandedQueryResult {
     acronym: string;
     expansion: string;
     synonyms: string[];
+    dosingInfo?: string;
   }>;
   relatedProtocols: string[];
   categories: string[];
+  medications: Array<{
+    name: string;
+    dosingInfo: string;
+  }>;
 }
 
 /**
