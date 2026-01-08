@@ -98,6 +98,7 @@ const Chat: React.FC = () => {
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatSessionRef = useRef<GeminiChat | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Persistent state from ChatContext (survives route changes)
   const {
@@ -113,6 +114,30 @@ const Chat: React.FC = () => {
   } = useChat();
 
   const { patientContext, isWidgetMode } = useWidgetMode();
+
+  // Voice input integration
+  const { transcript, interimTranscript, isListening, clearTranscript } = useVoiceInput();
+
+  // Auto-fill input when voice transcript changes
+  useEffect(() => {
+    if (transcript) {
+      setInput(transcript);
+      // Focus input after voice transcription
+      inputRef.current?.focus();
+    }
+  }, [transcript]);
+
+  // Show interim transcript while listening
+  useEffect(() => {
+    if (isListening && interimTranscript) {
+      setInput(interimTranscript);
+    }
+  }, [interimTranscript, isListening]);
+
+  // Clear transcript after sending
+  const handleClearVoice = () => {
+    clearTranscript();
+  };
 
   // Check if RAG is available (Supabase configured)
   useEffect(() => {
