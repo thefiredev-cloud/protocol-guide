@@ -404,6 +404,8 @@ async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
     content: string;
     chunk_index: number;
     match_quality: string;
+    source_url?: string | null;
+    source_verified?: boolean;
   }) => ({
     chunkId: row.chunk_id,
     protocolId: row.protocol_id,
@@ -417,6 +419,8 @@ async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
                    row.match_quality === 'tp_prefix' || row.match_quality === 'ref_prefix' ? 1.3 :
                    row.match_quality === 'mcg_prefix' ? 1.2 : 1.0,
     matchType: 'keyword' as const,
+    sourceUrl: row.source_url,
+    sourceVerified: row.source_verified,
   }));
 }
 
