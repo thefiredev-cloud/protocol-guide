@@ -351,7 +351,7 @@ export const series600: Protocol[] = [
         { type: "header", items: [{ title: "Adverse Events", subtitle: "Ref. 619" }] },
         { type: "text", title: "Purpose", content: "Complications and adverse events during EMS care must be reported for patient safety and quality improvement." },
         { type: "list", title: "Reportable Events", items: [
-            { title: "Procedure Complications", content: "Failed airway requiring surgical airway, pneumothorax from needle decompression, IV infiltration/extravasation." },
+            { title: "Procedure Complications", content: "Failed airway (transport for hospital definitive airway), pneumothorax from needle decompression, IV infiltration/extravasation. Note: Surgical airways NOT authorized for ground ALS - transport immediately." },
             { title: "Medication Reactions", content: "Allergic reaction, adverse drug reaction, medication error." },
             { title: "Equipment Failure", content: "Defibrillator failure during arrest, monitor malfunction, IV pump error." },
             { title: "Patient Deterioration", content: "Unexpected deterioration after EMS intervention." }
