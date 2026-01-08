@@ -32,8 +32,31 @@ export interface Medication {
 }
 
 export interface Equipment {
+  // Airway - Supraglottic
   iGel: string;
+  lmaClassic?: string;
+
+  // Airway - ETT
+  ettCuffed: string;
+  ettUncuffed: string;
+
+  // Laryngoscope Blades
+  millerBlade: string;
+  macBlade?: string;  // Not available for smallest sizes
+
+  // IV Access
+  ivCatheter: string;
+
+  // Suction
   suctionCatheter: string;
+
+  // Chest/Tubes
+  chestTube: string;
+  ngOgTube: string;
+  foleyCatheter: string;
+
+  // Monitoring
+  bpCuff: string;
 }
 
 export interface BroselowZoneData {
