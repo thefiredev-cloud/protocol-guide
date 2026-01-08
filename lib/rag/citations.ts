@@ -144,7 +144,7 @@ export function validateGrounding(
 
   // Look for dosage mentions not in context
   const dosagePattern = /(\d+(?:\.\d+)?)\s*(mg|mcg|ml|g|units?)\b/gi;
-  const responseDosages = [...response.matchAll(dosagePattern)];
+  const responseDosages = Array.from(response.matchAll(dosagePattern));
   const contextText = retrieval.chunks.map(c => c.content).join(' ');
 
   for (const match of responseDosages) {
