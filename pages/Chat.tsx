@@ -384,16 +384,17 @@ const Chat: React.FC = () => {
         }
       }
 
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: responseText,
-        timestamp: new Date(),
-        citations: citations.length > 0 ? citations : undefined,
-        confidence: confidenceLevel,
-        isWarning,
-      };
-      setMessages(prev => [...prev, botMsg]);
+      // Update the streamed message with final content, citations, and warnings
+      setMessages(prev => prev.map(msg =>
+        msg.id === botMsgId
+          ? {
+              ...msg,
+              content: responseText,
+              citations: citations.length > 0 ? citations : undefined,
+              isWarning,
+            }
+          : msg
+      ));
 
     } catch (error: any) {
       console.error('Chat error:', error);
