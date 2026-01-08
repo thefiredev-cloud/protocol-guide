@@ -211,11 +211,11 @@ export async function embedQuery(query: string): Promise<number[]> {
   // Clean old entries periodically (keep cache from growing unbounded)
   if (queryCache.size > 100) {
     const now = Date.now();
-    for (const [key, value] of queryCache.entries()) {
+    Array.from(queryCache.entries()).forEach(([key, value]) => {
       if (now - value.timestamp > QUERY_CACHE_TTL) {
         queryCache.delete(key);
       }
-    }
+    });
   }
 
   return embedding;
