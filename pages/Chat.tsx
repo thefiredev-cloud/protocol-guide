@@ -516,7 +516,7 @@ const Chat: React.FC = () => {
         confidence: confidenceLevel,
       };
       setMessages(prev => [...prev, botMsg]);
-      setIsStreaming(true);
+      // Note: isStreaming already set at start of handleSend to prevent race conditions
 
       // Hide quick results when AI starts responding
       setShowQuickResults(false);
