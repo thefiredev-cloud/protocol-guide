@@ -242,7 +242,7 @@ const Chat: React.FC = () => {
 
     // Extract clinical facts from user message for conversation context
     const updatedFacts = extractFactsFromMessage(originalInput, conversationFacts);
-    setConversationFacts(updatedFacts);
+    updateFacts(updatedFacts);
 
     // Check if we should suggest a follow-up question
     const followUpSuggestion = suggestFollowUp(updatedFacts);
