@@ -59,3 +59,12 @@ export {
   DEFAULT_RERANKER_CONFIG,
   type RerankerConfig,
 } from './reranker';
+
+// Query preprocessing exports - comprehensive EMS query analysis
+export {
+  processQuery,
+  isSimpleProtocolLookup,
+  extractPrimaryProtocol,
+  enhanceQueryWithContext,
+  type ProcessedQuery,
+} from './query-processor';
