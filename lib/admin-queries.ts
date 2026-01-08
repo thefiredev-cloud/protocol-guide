@@ -264,3 +264,426 @@ export async function getFeedbackAnalytics() {
     return null;
   }
 }
+
+// ============================================
+// QA/QI ANALYTICS FUNCTIONS
+// ============================================
+
+export interface DateRange {
+  startDate: Date;
+  endDate: Date;
+}
+
+export interface DailyMetrics {
+  queryDate: string;
+  station: string | null;
+  department: string | null;
+  userQueries: number;
+  aiResponses: number;
+  avgConfidence: number | null;
+  highConfidenceCount: number;
+  mediumConfidenceCount: number;
+  lowConfidenceCount: number;
+  declineCount: number;
+  warningCount: number;
+  avgResponseTimeMs: number | null;
+  uniqueSessions: number;
+  uniqueUsers: number;
+}
+
+export interface StationMetrics {
+  station: string;
+  totalSessions: number;
+  totalQueries: number;
+  avgConfidence: number | null;
+  highConfidenceCount: number;
+  lowConfidenceCount: number;
+  declineCount: number;
+  positiveFeedback: number;
+  negativeFeedback: number;
+  lastActivity: string | null;
+}
+
+export interface QAQueueItem {
+  messageId: string;
+  sessionId: string;
+  userEmail: string | null;
+  station: string | null;
+  department: string | null;
+  content: string;
+  confidence: number | null;
+  confidenceLevel: string | null;
+  groundingScore: number | null;
+  isDeclineResponse: boolean;
+  hasWarning: boolean;
+  protocolsReferenced: string[] | null;
+  responseTimeMs: number | null;
+  qaStatus: string;
+  createdAt: string;
+  feedbackRating: string | null;
+  feedbackIssue: string | null;
+  feedbackText: string | null;
+}
+
+export interface ConfidenceDistribution {
+  high: number;
+  medium: number;
+  low: number;
+  total: number;
+}
+
+/**
+ * Get daily chat metrics from the pre-computed view.
+ */
+export async function getDailyMetrics(dateRange?: DateRange): Promise<DailyMetrics[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    let query = supabase
+      .from('daily_chat_metrics')
+      .select('*')
+      .order('query_date', { ascending: false });
+
+    if (dateRange) {
+      query = query
+        .gte('query_date', dateRange.startDate.toISOString().split('T')[0])
+        .lte('query_date', dateRange.endDate.toISOString().split('T')[0]);
+    }
+
+    const { data, error } = await query.limit(90);
+
+    if (error) {
+      console.error('Failed to fetch daily metrics:', error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      queryDate: row.query_date,
+      station: row.station,
+      department: row.department,
+      userQueries: row.user_queries || 0,
+      aiResponses: row.ai_responses || 0,
+      avgConfidence: row.avg_confidence,
+      highConfidenceCount: row.high_confidence_count || 0,
+      mediumConfidenceCount: row.medium_confidence_count || 0,
+      lowConfidenceCount: row.low_confidence_count || 0,
+      declineCount: row.decline_count || 0,
+      warningCount: row.warning_count || 0,
+      avgResponseTimeMs: row.avg_response_time_ms,
+      uniqueSessions: row.unique_sessions || 0,
+      uniqueUsers: row.unique_users || 0,
+    }));
+  } catch (err) {
+    console.error('Error fetching daily metrics:', err);
+    return [];
+  }
+}
+
+/**
+ * Get station-level performance metrics.
+ */
+export async function getStationMetrics(): Promise<StationMetrics[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('station_performance')
+      .select('*')
+      .order('total_queries', { ascending: false });
+
+    if (error) {
+      console.error('Failed to fetch station metrics:', error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      station: row.station,
+      totalSessions: row.total_sessions || 0,
+      totalQueries: row.total_queries || 0,
+      avgConfidence: row.avg_confidence,
+      highConfidenceCount: row.high_confidence_count || 0,
+      lowConfidenceCount: row.low_confidence_count || 0,
+      declineCount: row.decline_count || 0,
+      positiveFeedback: row.positive_feedback || 0,
+      negativeFeedback: row.negative_feedback || 0,
+      lastActivity: row.last_activity,
+    }));
+  } catch (err) {
+    console.error('Error fetching station metrics:', err);
+    return [];
+  }
+}
+
+/**
+ * Get messages requiring QA review.
+ */
+export async function getQAValidationQueue(limit = 50): Promise<QAQueueItem[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('qa_validation_queue')
+      .select('*')
+      .limit(limit);
+
+    if (error) {
+      console.error('Failed to fetch QA queue:', error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      messageId: row.message_id,
+      sessionId: row.session_id,
+      userEmail: row.user_email,
+      station: row.station,
+      department: row.department,
+      content: row.content,
+      confidence: row.confidence,
+      confidenceLevel: row.confidence_level,
+      groundingScore: row.grounding_score,
+      isDeclineResponse: row.is_decline_response || false,
+      hasWarning: row.has_warning || false,
+      protocolsReferenced: row.protocols_referenced,
+      responseTimeMs: row.response_time_ms,
+      qaStatus: row.qa_status || 'pending',
+      createdAt: row.created_at,
+      feedbackRating: row.feedback_rating,
+      feedbackIssue: row.feedback_issue,
+      feedbackText: row.feedback_text,
+    }));
+  } catch (err) {
+    console.error('Error fetching QA queue:', err);
+    return [];
+  }
+}
+
+/**
+ * Get confidence level distribution.
+ */
+export async function getConfidenceDistribution(): Promise<ConfidenceDistribution> {
+  if (!isSupabaseConfigured()) {
+    return { high: 0, medium: 0, low: 0, total: 0 };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select('confidence_level')
+      .eq('role', 'assistant')
+      .not('confidence_level', 'is', null);
+
+    if (error) {
+      console.error('Failed to fetch confidence distribution:', error);
+      return { high: 0, medium: 0, low: 0, total: 0 };
+    }
+
+    const distribution = {
+      high: 0,
+      medium: 0,
+      low: 0,
+      total: data?.length || 0,
+    };
+
+    for (const row of data || []) {
+      if (row.confidence_level === 'HIGH') distribution.high++;
+      else if (row.confidence_level === 'MEDIUM') distribution.medium++;
+      else if (row.confidence_level === 'LOW') distribution.low++;
+    }
+
+    return distribution;
+  } catch (err) {
+    console.error('Error fetching confidence distribution:', err);
+    return { high: 0, medium: 0, low: 0, total: 0 };
+  }
+}
+
+/**
+ * Update QA review status for a message.
+ */
+export async function updateQAStatus(
+  messageId: string,
+  status: 'approved' | 'flagged' | 'escalated',
+  reviewedBy: string,
+  notes?: string
+): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
+
+  try {
+    const { error } = await supabase
+      .from('chat_messages')
+      .update({
+        qa_status: status,
+        qa_reviewed: true,
+        qa_reviewed_by: reviewedBy,
+        qa_reviewed_at: new Date().toISOString(),
+        qa_notes: notes || null,
+      })
+      .eq('id', messageId);
+
+    if (error) {
+      console.error('Failed to update QA status:', error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Error updating QA status:', err);
+    return false;
+  }
+}
+
+/**
+ * Get protocol usage statistics.
+ */
+export async function getProtocolUsageStats(limit = 20): Promise<Array<{
+  protocolId: string;
+  protocolRef: string;
+  protocolTitle: string | null;
+  queryCount: number;
+  avgConfidence: number | null;
+  positiveFeedback: number;
+  negativeFeedback: number;
+}>> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('protocol_usage_stats')
+      .select('*')
+      .order('query_count', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('Failed to fetch protocol usage:', error);
+      return [];
+    }
+
+    // Aggregate by protocol_id (across dates)
+    const aggregated = new Map<string, {
+      protocolId: string;
+      protocolRef: string;
+      protocolTitle: string | null;
+      queryCount: number;
+      totalConfidence: number;
+      confidenceCount: number;
+      positiveFeedback: number;
+      negativeFeedback: number;
+    }>();
+
+    for (const row of data || []) {
+      const existing = aggregated.get(row.protocol_id);
+      if (existing) {
+        existing.queryCount += row.query_count || 0;
+        if (row.avg_confidence) {
+          existing.totalConfidence += row.avg_confidence;
+          existing.confidenceCount++;
+        }
+        existing.positiveFeedback += row.positive_feedback_count || 0;
+        existing.negativeFeedback += row.negative_feedback_count || 0;
+      } else {
+        aggregated.set(row.protocol_id, {
+          protocolId: row.protocol_id,
+          protocolRef: row.protocol_ref,
+          protocolTitle: row.protocol_title,
+          queryCount: row.query_count || 0,
+          totalConfidence: row.avg_confidence || 0,
+          confidenceCount: row.avg_confidence ? 1 : 0,
+          positiveFeedback: row.positive_feedback_count || 0,
+          negativeFeedback: row.negative_feedback_count || 0,
+        });
+      }
+    }
+
+    return Array.from(aggregated.values())
+      .map(p => ({
+        protocolId: p.protocolId,
+        protocolRef: p.protocolRef,
+        protocolTitle: p.protocolTitle,
+        queryCount: p.queryCount,
+        avgConfidence: p.confidenceCount > 0 ? p.totalConfidence / p.confidenceCount : null,
+        positiveFeedback: p.positiveFeedback,
+        negativeFeedback: p.negativeFeedback,
+      }))
+      .sort((a, b) => b.queryCount - a.queryCount);
+  } catch (err) {
+    console.error('Error fetching protocol usage:', err);
+    return [];
+  }
+}
+
+/**
+ * Export conversations to CSV format.
+ */
+export async function exportConversationsCSV(dateRange: DateRange): Promise<string> {
+  if (!isSupabaseConfigured()) return '';
+
+  try {
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select(`
+        id,
+        session_id,
+        role,
+        content,
+        confidence,
+        confidence_level,
+        protocols_referenced,
+        is_decline_response,
+        has_warning,
+        qa_status,
+        created_at,
+        chat_sessions!inner(user_email, station, department)
+      `)
+      .gte('created_at', dateRange.startDate.toISOString())
+      .lte('created_at', dateRange.endDate.toISOString())
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('Failed to export conversations:', error);
+      return '';
+    }
+
+    // Build CSV
+    const headers = [
+      'Message ID',
+      'Session ID',
+      'User Email',
+      'Station',
+      'Department',
+      'Role',
+      'Content',
+      'Confidence',
+      'Confidence Level',
+      'Protocols Referenced',
+      'Is Decline',
+      'Has Warning',
+      'QA Status',
+      'Created At',
+    ];
+
+    const rows = (data || []).map(row => {
+      const session = row.chat_sessions as any;
+      return [
+        row.id,
+        row.session_id,
+        session?.user_email || '',
+        session?.station || '',
+        session?.department || '',
+        row.role,
+        `"${(row.content || '').replace(/"/g, '""').substring(0, 500)}"`,
+        row.confidence || '',
+        row.confidence_level || '',
+        (row.protocols_referenced || []).join('; '),
+        row.is_decline_response ? 'Yes' : 'No',
+        row.has_warning ? 'Yes' : 'No',
+        row.qa_status || '',
+        row.created_at,
+      ].join(',');
+    });
+
+    return [headers.join(','), ...rows].join('\n');
+  } catch (err) {
+    console.error('Error exporting conversations:', err);
+    return '';
+  }
+}
