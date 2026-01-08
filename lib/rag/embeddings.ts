@@ -58,7 +58,8 @@ interface EmbedQueryResponse {
 // ============================================
 
 /**
- * Generate embedding for a single text string using server-side function
+ * Generate embedding for a single text string
+ * Uses direct API in dev mode, Netlify function in production
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
   // Truncate if too long (rough estimate: 4 chars per token)
@@ -66,26 +67,48 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   const truncatedText = text.length > maxChars ? text.substring(0, maxChars) : text;
 
   try {
-    const response = await fetch('/.netlify/functions/embed-query', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: truncatedText }),
-    });
+    if (isDevMode) {
+      // DEV MODE: Use direct Gemini API
+      // @ts-expect-error - Vite provides import.meta.env at runtime
+      const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string;
+      if (!apiKey) {
+        throw new Error('VITE_GEMINI_API_KEY not configured for dev mode');
+      }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new Error(errorData.error || `Server error: ${response.status}`);
+      const ai = new GoogleGenAI({ apiKey });
+      const result = await ai.models.embedContent({
+        model: EMBEDDING_MODEL,
+        contents: truncatedText,
+      });
+
+      if (!result.embeddings || result.embeddings.length === 0) {
+        throw new Error('No embedding returned from API');
+      }
+
+      return result.embeddings[0].values || [];
+    } else {
+      // PRODUCTION: Use Netlify function
+      const response = await fetch('/.netlify/functions/embed-query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: truncatedText }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
+      const data: EmbedQueryResponse = await response.json();
+
+      if (!data.embedding || data.embedding.length === 0) {
+        throw new Error('No embedding returned from server');
+      }
+
+      return data.embedding;
     }
-
-    const data: EmbedQueryResponse = await response.json();
-
-    if (!data.embedding || data.embedding.length === 0) {
-      throw new Error('No embedding returned from server');
-    }
-
-    return data.embedding;
   } catch (error) {
     console.error('Error generating embedding:', error);
     throw error;
