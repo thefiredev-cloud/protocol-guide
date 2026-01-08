@@ -4,11 +4,21 @@ import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
 import { protocols } from '../data/protocols';
 import { useWidgetMode } from '../contexts/WidgetModeContext';
 import { useChat, type Message, type CitationLink } from '../contexts/ChatContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useVoiceInput } from '../contexts/VoiceInputContext';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 import { QuickResults, extractRelevantSnippet, type LocalSearchResult } from '../components/QuickResults';
 import { QuickActions } from '../components/QuickActions';
+
+// Persistence imports for QA/QI tracking
+import {
+  createChatSession,
+  persistMessage,
+  endSession,
+  type SessionMetadata,
+  type MessagePersistenceData,
+} from '../lib/chat-persistence';
 
 // RAG imports - use when Supabase is configured
 import {
