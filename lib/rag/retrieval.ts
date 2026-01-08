@@ -13,6 +13,8 @@ import {
   logSourceViolation,
   type SourceViolation,
 } from './source-validation';
+import { rerankChunks } from './reranker';
+import { processQuery, type ProcessedQuery } from './query-processor';
 
 // ============================================
 // Types
