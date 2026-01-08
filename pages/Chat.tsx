@@ -214,6 +214,47 @@ const Chat: React.FC = () => {
     }).join('\n\n');
   };
 
+  // Get local search results for QuickResults preview
+  const getLocalSearchResults = (query: string): LocalSearchResult[] => {
+    if (!query.trim()) return [];
+
+    const terms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+    if (terms.length === 0) return [];
+
+    const scored = protocols.map(p => {
+      let score = 0;
+      const searchableString = JSON.stringify(p).toLowerCase();
+      const titleLower = p.title.toLowerCase();
+      const refNoLower = p.refNo.toLowerCase();
+
+      if (refNoLower === query.toLowerCase() || titleLower === query.toLowerCase()) score += 500;
+      if (refNoLower.includes(query.toLowerCase())) score += 200;
+      if (titleLower.includes(query.toLowerCase())) score += 150;
+
+      terms.forEach(term => {
+        if (titleLower === term) score += 100;
+        if (titleLower.includes(term)) score += 40;
+        if (refNoLower.includes(term)) score += 30;
+        if (p.category.toLowerCase().includes(term)) score += 10;
+        if (searchableString.includes(term)) score += 2;
+      });
+
+      return { p, score };
+    });
+
+    return scored
+      .filter(x => x.score > 10)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map(x => ({
+        protocolRef: x.p.refNo,
+        title: x.p.title,
+        category: x.p.category,
+        matchedContent: extractRelevantSnippet(x.p, query),
+        score: x.score,
+      }));
+  };
+
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
