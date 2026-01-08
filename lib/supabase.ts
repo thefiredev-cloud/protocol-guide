@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// @ts-expect-error - Vite provides import.meta.env at runtime
+const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL as string | undefined;
+// @ts-expect-error - Vite provides import.meta.env at runtime
+const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY as string | undefined;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase credentials not configured. Running in offline mode.');
