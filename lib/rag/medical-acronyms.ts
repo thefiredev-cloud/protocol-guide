@@ -567,7 +567,17 @@ export interface ExpandedQueryResult {
 }
 
 /**
+ * Normalizes acronym for matching (removes plural 's', possessive "'s")
+ */
+function normalizeAcronym(acronym: string): string {
+  return acronym
+    .replace(/['']s$/i, '') // Remove possessive
+    .replace(/s$/i, '');     // Remove plural
+}
+
+/**
  * Expands medical acronyms in a query to improve semantic search
+ * Handles plural forms (STEMIs, PEAs) and possessive forms (patient's LAMS)
  * @param query - The user's search query
  * @returns Expanded query with acronym information
  */
@@ -576,19 +586,31 @@ export function expandQuery(query: string): ExpandedQueryResult {
   const detectedAcronyms: ExpandedQueryResult['detectedAcronyms'] = [];
   const relatedProtocols = new Set<string>();
   const categories = new Set<string>();
+  const medications: Array<{ name: string; dosingInfo: string }> = [];
 
   let expandedQuery = query;
 
   // Check for each acronym in the query
   for (const [acronym, entry] of Object.entries(MEDICAL_ACRONYMS)) {
-    // Match whole word only (with word boundaries)
-    const regex = new RegExp(`\\b${acronym}\\b`, 'gi');
+    // Create regex patterns for:
+    // 1. Exact match: STEMI
+    // 2. Plural: STEMIs
+    // 3. Possessive: STEMI's or patient's STEMI
+    const patterns = [
+      new RegExp(`\\b${acronym}\\b`, 'gi'),           // Exact
+      new RegExp(`\\b${acronym}s\\b`, 'gi'),          // Plural
+      new RegExp(`\\b${acronym}'s\\b`, 'gi'),         // Possessive with apostrophe
+      new RegExp(`\\b${acronym}'s\\b`, 'gi')          // Possessive with curly apostrophe
+    ];
 
-    if (regex.test(upperQuery)) {
+    const matched = patterns.some(regex => regex.test(upperQuery));
+
+    if (matched) {
       detectedAcronyms.push({
         acronym,
         expansion: entry.expansion,
-        synonyms: entry.synonyms
+        synonyms: entry.synonyms,
+        dosingInfo: entry.dosingInfo
       });
 
       // Add related protocols
@@ -599,6 +621,14 @@ export function expandQuery(query: string): ExpandedQueryResult {
         categories.add(entry.category);
       }
 
+      // Track medications with dosing info
+      if (entry.category === 'medication' && entry.dosingInfo) {
+        medications.push({
+          name: entry.expansion,
+          dosingInfo: entry.dosingInfo
+        });
+      }
+
       // Expand the query with the full term and key synonyms
       // Only add if not already present in query
       const expansionLower = entry.expansion.toLowerCase();
@@ -606,8 +636,8 @@ export function expandQuery(query: string): ExpandedQueryResult {
         expandedQuery += ` ${entry.expansion}`;
       }
 
-      // Add top 2 most relevant synonyms
-      const topSynonyms = entry.synonyms.slice(0, 2);
+      // Add top 3 most relevant synonyms (increased from 2 for better matching)
+      const topSynonyms = entry.synonyms.slice(0, 3);
       topSynonyms.forEach(syn => {
         if (!expandedQuery.toLowerCase().includes(syn.toLowerCase())) {
           expandedQuery += ` ${syn}`;
@@ -621,7 +651,8 @@ export function expandQuery(query: string): ExpandedQueryResult {
     originalQuery: query,
     detectedAcronyms,
     relatedProtocols: Array.from(relatedProtocols),
-    categories: Array.from(categories)
+    categories: Array.from(categories),
+    medications
   };
 }
 
