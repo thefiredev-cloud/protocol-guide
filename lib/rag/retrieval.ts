@@ -552,7 +552,10 @@ function reciprocalRankFusion(
   // Calculate RRF scores for all unique chunks
   const scoredChunks: Array<RetrievedChunk & { rrfScore: number; debugInfo?: any }> = [];
 
-  for (const [chunkId, chunk] of chunkMap.entries()) {
+  // Convert Map.entries() to array for iteration (TypeScript compatibility)
+  const chunkEntries = Array.from(chunkMap.entries());
+
+  for (const [chunkId, chunk] of chunkEntries) {
     const keywordRank = keywordRanks.get(chunkId);
     const semanticRank = semanticRanks.get(chunkId);
 
