@@ -894,7 +894,7 @@ export const series1300: Protocol[] = [
         { title: "Duration", content: "2-4 hours" },
         { title: "Side Effects", content: "Sedation, hypotension (orthostatic), tachycardia, dizziness, akathisia, dry mouth, extrapyramidal symptoms (less than typical antipsychotics)" }
       ]},
-      { type: "warning", content: "DO NOT mix with benzodiazepines in same syringe or give concurrently IM - increased risk of excessive sedation and respiratory depression. Monitor for hypotension. Patient should remain supine/seated for 30 minutes after administration. Less respiratory depression than sedatives. Slower onset than ketamine/midazolam but longer duration." },
+      { type: "warning", content: "DO NOT mix with benzodiazepines in same syringe or give concurrently IM - increased risk of excessive sedation and respiratory depression. Monitor for hypotension. Patient should remain supine/seated for 30 minutes after administration. Less respiratory depression than sedatives. Slower onset than midazolam but longer duration." },
       { type: "text", title: "Preparation", content: "10 mg vial as powder for IM injection only. Reconstitute with 2.1 mL sterile water to yield 5 mg/mL. Use within 1 hour of reconstitution. IM injection only - deep muscle injection. Good option for agitation when longer duration desired. Monitor vital signs after administration." }
     ]
   },
