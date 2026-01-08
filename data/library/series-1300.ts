@@ -566,7 +566,7 @@ export const series1300: Protocol[] = [
       { type: "list", title: "Drug Information", items: [
         { title: "Class", content: "Synthetic opioid analgesic, mu-receptor agonist" },
         { title: "Mechanism", content: "Binds mu-opioid receptors in CNS and peripheral nervous system, altering pain perception and emotional response to pain." },
-        { title: "Indications", content: "Moderate to severe pain, adjunct for RSI, pain management in chest pain protocols" },
+        { title: "Indications", content: "Moderate to severe pain, pain management in chest pain protocols, trauma analgesia" },
         { title: "Contraindications", content: "Known allergy, respiratory depression, hypotension (relative)" }
       ]},
       { type: "list", title: "Dosing", items: [
