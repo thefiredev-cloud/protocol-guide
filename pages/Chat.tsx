@@ -521,12 +521,33 @@ const Chat: React.FC = () => {
 
       // Stream response from AI for faster first-token time
       let responseText = '';
+      let streamAborted = false;
+
+      // Timeout: abort stream after 30 seconds of no response
+      const STREAM_TIMEOUT_MS = 30000;
+      let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+      const resetTimeout = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          streamAborted = true;
+          console.warn('Stream timeout after 30s');
+        }, STREAM_TIMEOUT_MS);
+      };
+
       try {
         const stream = await chatSessionRef.current!.sendMessageStream({ message: augmentedPrompt });
+        resetTimeout();
 
         for await (const chunk of stream) {
+          if (streamAborted) {
+            console.warn('Stream aborted, breaking loop');
+            break;
+          }
+
           const chunkText = chunk.text || '';
           responseText += chunkText;
+          resetTimeout(); // Reset timeout on each chunk received
 
           // Update message progressively as tokens arrive
           setMessages(prev => prev.map(msg =>
@@ -535,14 +556,36 @@ const Chat: React.FC = () => {
               : msg
           ));
         }
+
+        if (timeoutId) clearTimeout(timeoutId);
+
+        // If timed out with no content, trigger fallback
+        if (streamAborted && !responseText) {
+          throw new Error('Stream timeout - no response received');
+        }
       } catch (streamError: any) {
+        if (timeoutId) clearTimeout(timeoutId);
+
         // Fallback to non-streaming if stream fails
         console.warn('Streaming failed, falling back to standard request:', streamError?.message);
-        setIsStreaming(false);
-        setStreamingMessageId(null);
 
-        const result = await chatSessionRef.current!.sendMessage({ message: augmentedPrompt });
-        responseText = result.text || "No response generated.";
+        // Create new session for fallback (avoid corrupted state)
+        try {
+          const ai = new GoogleGenAI({ apiKey });
+          const fallbackSession = ai.chats.create({
+            model: 'gemini-3-flash-preview',
+            config: {
+              systemInstruction: GROUNDED_SYSTEM_PROMPT,
+              temperature: 0.1,
+            },
+          });
+
+          const result = await fallbackSession.sendMessage({ message: augmentedPrompt });
+          responseText = result.text || "No response generated.";
+        } catch (fallbackError: any) {
+          console.error('Fallback also failed:', fallbackError?.message);
+          responseText = "Request timed out. Please try again.";
+        }
 
         // Update the placeholder message with full response
         setMessages(prev => prev.map(msg =>
@@ -550,10 +593,10 @@ const Chat: React.FC = () => {
             ? { ...msg, content: responseText }
             : msg
         ));
+      } finally {
+        setIsStreaming(false);
+        setStreamingMessageId(null);
       }
-
-      setIsStreaming(false);
-      setStreamingMessageId(null);
 
       if (!responseText) {
         responseText = "No response generated.";
