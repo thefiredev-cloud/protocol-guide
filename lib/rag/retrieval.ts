@@ -247,12 +247,19 @@ function calculateConfidence(
 function shouldDeclineToAnswer(
   chunks: RetrievedChunk[],
   analysis: QueryAnalysis,
-  confidence: number
+  confidence: number,
+  criteriaInfo?: { isCriteriaQuery: boolean; criteriaType: string | null }
 ): { decline: boolean; reason?: string } {
   // CRITICAL: Known medical acronym = NEVER decline, always try to answer
   // This ensures ECMO, LAMS, mLAPSS, PSI, etc. always get a response
   if (analysis.hasAcronyms && analysis.acronymExpansion) {
     console.log('[RAG] Known medical acronym detected - bypassing ALL decline checks');
+    return { decline: false };
+  }
+
+  // CRITICAL: Criteria queries (PMC, PTC, Stroke, etc.) = NEVER decline if chunks found
+  if (criteriaInfo?.isCriteriaQuery && chunks.length > 0) {
+    console.log('[RAG] Criteria query with results - bypassing decline checks');
     return { decline: false };
   }
 
