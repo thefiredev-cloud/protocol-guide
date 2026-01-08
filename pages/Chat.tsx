@@ -405,6 +405,7 @@ const Chat: React.FC = () => {
           }
 
           setTyping(false);
+          setIsStreaming(false);
           return;
         }
 
@@ -457,89 +458,117 @@ const Chat: React.FC = () => {
         confidence: confidenceLevel,
       };
       setMessages(prev => [...prev, botMsg]);
-      // Note: isStreaming already set at start of handleSend to prevent race conditions
 
       // Hide quick results when AI starts responding
       setShowQuickResults(false);
       setStreamingMessageId(botMsgId);
 
-      // Stream response from AI for faster first-token time
+      // Get auth token for server-side request
+      const authToken = await supabase.auth.getSession().then(res => res.data.session?.access_token);
+
+      // Create abort controller for timeout/cancellation
+      abortControllerRef.current = new AbortController();
+      const timeoutId = setTimeout(() => abortControllerRef.current?.abort(), 30000);
+
+      // Stream response from Netlify function
       let responseText = '';
-      let streamAborted = false;
-
-      // Timeout: abort stream after 30 seconds of no response
-      const STREAM_TIMEOUT_MS = 30000;
-      let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-      const resetTimeout = () => {
-        if (timeoutId) clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          streamAborted = true;
-          console.warn('Stream timeout after 30s');
-        }, STREAM_TIMEOUT_MS);
-      };
 
       try {
-        const stream = await chatSessionRef.current!.sendMessageStream({ message: augmentedPrompt });
-        resetTimeout();
+        const response = await fetch('/.netlify/functions/chat-stream', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+          },
+          body: JSON.stringify({
+            prompt: augmentedPrompt,
+            context: context,
+            systemPrompt: GROUNDED_SYSTEM_PROMPT,
+          }),
+          signal: abortControllerRef.current.signal,
+        });
 
-        for await (const chunk of stream) {
-          if (streamAborted) {
-            console.warn('Stream aborted, breaking loop');
-            break;
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Read response as SSE stream
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+
+        if (!reader) {
+          throw new Error('Response body is not readable');
+        }
+
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+
+              if (data === '[DONE]') {
+                break;
+              }
+
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.text) {
+                  responseText += parsed.text;
+
+                  // Update message progressively as tokens arrive
+                  setMessages(prev => prev.map(msg =>
+                    msg.id === botMsgId
+                      ? { ...msg, content: responseText }
+                      : msg
+                  ));
+                }
+
+                if (parsed.error) {
+                  throw new Error(parsed.error);
+                }
+              } catch (parseError) {
+                console.warn('Failed to parse SSE data:', parseError);
+              }
+            }
           }
-
-          const chunkText = chunk.text || '';
-          responseText += chunkText;
-          resetTimeout(); // Reset timeout on each chunk received
-
-          // Update message progressively as tokens arrive
-          setMessages(prev => prev.map(msg =>
-            msg.id === botMsgId
-              ? { ...msg, content: responseText }
-              : msg
-          ));
         }
 
-        if (timeoutId) clearTimeout(timeoutId);
-
-        // If timed out with no content, trigger fallback
-        if (streamAborted && !responseText) {
-          throw new Error('Stream timeout - no response received');
-        }
       } catch (streamError: any) {
-        if (timeoutId) clearTimeout(timeoutId);
+        clearTimeout(timeoutId);
+        console.error('Streaming failed:', streamError);
 
-        // Fallback to non-streaming if stream fails
-        console.warn('Streaming failed, falling back to standard request:', streamError?.message);
-
-        // Create new session for fallback (avoid corrupted state)
-        try {
-          const ai = new GoogleGenAI({ apiKey });
-          const fallbackSession = ai.chats.create({
-            model: 'gemini-3-flash-preview',
-            config: {
-              systemInstruction: GROUNDED_SYSTEM_PROMPT,
-              temperature: 0.1,
-            },
-          });
-
-          const result = await fallbackSession.sendMessage({ message: augmentedPrompt });
-          responseText = result.text || "No response generated.";
-        } catch (fallbackError: any) {
-          console.error('Fallback also failed:', fallbackError?.message);
+        // Handle specific error types
+        if (streamError.name === 'AbortError') {
           responseText = "Request timed out. Please try again.";
+        } else if (streamError.message.includes('HTTP 401') || streamError.message.includes('Unauthorized')) {
+          responseText = "Authentication error. Please sign in and try again.";
+        } else if (streamError.message.includes('HTTP 429')) {
+          responseText = "Rate limit exceeded. Please wait a moment and try again.";
+        } else {
+          responseText = "Connection error. Please try again.";
         }
 
-        // Update the placeholder message with full response
+        // Update the placeholder message with error
         setMessages(prev => prev.map(msg =>
           msg.id === botMsgId
-            ? { ...msg, content: responseText }
+            ? { ...msg, content: responseText, isWarning: true }
             : msg
         ));
       } finally {
         setIsStreaming(false);
         setStreamingMessageId(null);
+        abortControllerRef.current = null;
       }
 
       if (!responseText) {
