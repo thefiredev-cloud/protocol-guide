@@ -201,7 +201,7 @@ const Chat: React.FC = () => {
     try {
       const ai = new GoogleGenAI({ apiKey });
 
-      chatSession.current = ai.chats.create({
+      chatSessionRef.current = ai.chats.create({
         model: 'gemini-3-flash-preview',
         config: {
           systemInstruction: GROUNDED_SYSTEM_PROMPT,
@@ -231,7 +231,7 @@ const Chat: React.FC = () => {
   }, [useRAG]);
 
   const handleSend = async () => {
-    if (!input.trim() || !chatSession.current) return;
+    if (!input.trim() || !chatSessionRef.current) return;
 
     const originalInput = input; // Keep original for UI
 
@@ -331,7 +331,7 @@ const Chat: React.FC = () => {
               setTimeout(() => reject(new Error('Request timed out')), timeouts[attempt])
             );
             const result = await Promise.race([
-              chatSession.current!.sendMessage({ message }),
+              chatSessionRef.current!.sendMessage({ message }),
               timeoutPromise
             ]);
             return result;
