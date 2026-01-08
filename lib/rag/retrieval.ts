@@ -482,6 +482,12 @@ export async function retrieveContext(
   // Step 1: Analyze query
   const analysis = analyzeQuery(query);
 
+  // Step 1b: Detect criteria queries (PMC, PTC, Stroke, etc.)
+  const criteriaInfo = detectCriteriaQuery(query);
+  if (criteriaInfo.isCriteriaQuery) {
+    console.log('[RAG] Criteria query detected:', criteriaInfo.criteriaType);
+  }
+
   // FAST PATH: For numeric protocol queries, skip hybrid search entirely
   // This ensures "1201" returns TP-1201 with 100% confidence
   if (isNumericProtocolQuery(query)) {
