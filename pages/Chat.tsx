@@ -371,6 +371,7 @@ const Chat: React.FC = () => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
       console.error('GEMINI_API_KEY not configured');
+      setIsStreaming(false); // Reset on early return
       return;
     }
 
