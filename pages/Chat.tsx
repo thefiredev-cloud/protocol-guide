@@ -412,6 +412,20 @@ const Chat: React.FC = () => {
             isWarning: true,
           };
           setMessages(prev => [...prev, declineMsg]);
+
+          // Persist decline response for QA/QI tracking
+          if (dbSessionId) {
+            persistMessage({
+              sessionId: dbSessionId,
+              role: 'assistant',
+              content: DECLINE_RESPONSE,
+              confidenceLevel: 'LOW',
+              responseTimeMs: Date.now() - requestStartTime,
+              isDeclineResponse: true,
+              hasWarning: true,
+            });
+          }
+
           setTyping(false);
           return;
         }
