@@ -324,6 +324,24 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     relatedProtocols: ['100', '101'],
     category: 'general'
   },
+  'AMA': {
+    expansion: 'Against Medical Advice',
+    synonyms: ['refused care', 'refused transport', 'left AMA', 'patient refusal', 'declined treatment'],
+    relatedProtocols: ['106', '200'],
+    category: 'general'
+  },
+  'RMA': {
+    expansion: 'Refusal of Medical Aid',
+    synonyms: ['refused care', 'refused transport', 'patient refusal', 'declined treatment', 'AMA', 'signed refusal'],
+    relatedProtocols: ['106', '200'],
+    category: 'general'
+  },
+  'DOA': {
+    expansion: 'Dead On Arrival',
+    synonyms: ['deceased on arrival', 'obvious death', 'death determination', 'dead at scene'],
+    relatedProtocols: ['100', '101'],
+    category: 'general'
+  },
 
   // Medications (common abbreviations)
   'EPI': {
