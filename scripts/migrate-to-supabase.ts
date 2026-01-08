@@ -580,6 +580,8 @@ async function runMigration(config: MigrationConfig): Promise<MigrationStats> {
   console.log(`\nSource Data:`);
   console.log(`  Total Protocols: ${protocols.length}`);
   console.log(`  Total Medications: ${medications.length}`);
+  console.log(`\nAuthorized Source:`);
+  console.log(`  ${AUTHORIZED_SOURCES.primary}`);
 
   // Create Supabase client with service role key
   const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey, {
