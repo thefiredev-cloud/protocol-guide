@@ -1,11 +1,10 @@
 /**
  * Protocol Guide - Embedding Pipeline
  *
- * Handles vector embedding generation using Google's text-embedding API.
+ * Handles vector embedding generation using server-side Netlify function.
  * Embeddings are stored in Supabase pgvector for semantic search.
  */
 
-import { GoogleGenAI } from '@google/genai';
 import { supabase } from '../supabase';
 
 // ============================================
@@ -43,25 +42,9 @@ export interface EmbeddingStats {
   errors: Array<{ chunkId: string; error: string }>;
 }
 
-// ============================================
-// Embedding Client
-// ============================================
-
-let genAI: GoogleGenAI | null = null;
-
-/**
- * Initialize Google GenAI client
- */
-function getGenAIClient(): GoogleGenAI {
-  if (!genAI) {
-    // @ts-expect-error - Vite provides import.meta.env at runtime
-    const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string | undefined;
-    if (!apiKey) {
-      throw new Error('VITE_GEMINI_API_KEY not configured');
-    }
-    genAI = new GoogleGenAI({ apiKey });
-  }
-  return genAI;
+interface EmbedQueryResponse {
+  embedding: number[];
+  dimensions: number;
 }
 
 // ============================================
@@ -69,26 +52,34 @@ function getGenAIClient(): GoogleGenAI {
 // ============================================
 
 /**
- * Generate embedding for a single text string
+ * Generate embedding for a single text string using server-side function
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
-  const client = getGenAIClient();
-
   // Truncate if too long (rough estimate: 4 chars per token)
   const maxChars = MAX_TOKENS_PER_CHUNK * 4;
   const truncatedText = text.length > maxChars ? text.substring(0, maxChars) : text;
 
   try {
-    const result = await client.models.embedContent({
-      model: EMBEDDING_MODEL,
-      contents: truncatedText,
+    const response = await fetch('/.netlify/functions/embed-query', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: truncatedText }),
     });
 
-    if (!result.embeddings || result.embeddings.length === 0) {
-      throw new Error('No embedding returned from API');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || `Server error: ${response.status}`);
     }
 
-    return result.embeddings[0].values || [];
+    const data: EmbedQueryResponse = await response.json();
+
+    if (!data.embedding || data.embedding.length === 0) {
+      throw new Error('No embedding returned from server');
+    }
+
+    return data.embedding;
   } catch (error) {
     console.error('Error generating embedding:', error);
     throw error;
