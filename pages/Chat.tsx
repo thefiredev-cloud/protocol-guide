@@ -314,35 +314,58 @@ const Chat: React.FC = () => {
 
       augmentedPrompt = `${contextParts.join('\n\n')}\n\nUSER QUERY:\n${originalInput}`;
 
-      // Send to AI with retry logic and timeout protection
-      const sendWithRetry = async (message: string, maxAttempts = 3): Promise<{ text: string }> => {
-        const timeouts = [15000, 20000, 30000]; // Exponential backoff timeouts
-        const delays = [0, 2000, 4000]; // Delays between retries
-
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          if (attempt > 0) {
-            await new Promise(r => setTimeout(r, delays[attempt]));
-            console.log(`Retry attempt ${attempt + 1}...`);
-          }
-          try {
-            const timeoutPromise = new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error('Request timed out')), timeouts[attempt])
-            );
-            const result = await Promise.race([
-              chatSessionRef.current!.sendMessage({ message }),
-              timeoutPromise
-            ]);
-            return result;
-          } catch (error: any) {
-            if (attempt === maxAttempts - 1) throw error;
-            console.warn(`Attempt ${attempt + 1} failed:`, error?.message);
-          }
-        }
-        throw new Error('All retry attempts failed');
+      // Create placeholder message for streaming response
+      const botMsgId = (Date.now() + 1).toString();
+      const botMsg: Message = {
+        id: botMsgId,
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+        confidence: confidenceLevel,
       };
+      setMessages(prev => [...prev, botMsg]);
+      setIsStreaming(true);
+      setStreamingMessageId(botMsgId);
 
-      const result = await sendWithRetry(augmentedPrompt);
-      let responseText = result.text || "No response generated.";
+      // Stream response from AI for faster first-token time
+      let responseText = '';
+      try {
+        const stream = await chatSessionRef.current!.sendMessageStream({ message: augmentedPrompt });
+
+        for await (const chunk of stream) {
+          const chunkText = chunk.text || '';
+          responseText += chunkText;
+
+          // Update message progressively as tokens arrive
+          setMessages(prev => prev.map(msg =>
+            msg.id === botMsgId
+              ? { ...msg, content: responseText }
+              : msg
+          ));
+        }
+      } catch (streamError: any) {
+        // Fallback to non-streaming if stream fails
+        console.warn('Streaming failed, falling back to standard request:', streamError?.message);
+        setIsStreaming(false);
+        setStreamingMessageId(null);
+
+        const result = await chatSessionRef.current!.sendMessage({ message: augmentedPrompt });
+        responseText = result.text || "No response generated.";
+
+        // Update the placeholder message with full response
+        setMessages(prev => prev.map(msg =>
+          msg.id === botMsgId
+            ? { ...msg, content: responseText }
+            : msg
+        ));
+      }
+
+      setIsStreaming(false);
+      setStreamingMessageId(null);
+
+      if (!responseText) {
+        responseText = "No response generated.";
+      }
 
       // Validate grounding and extract citations
       let citations: CitationLink[] = [];
