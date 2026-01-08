@@ -752,8 +752,7 @@ export const series1300: Protocol[] = [
       { type: "list", title: "Dosing", items: [
         { title: "Seizures (Adult)", content: "5-10 mg IN/IM or 2-5 mg slow IV. May repeat once." },
         { title: "Seizures (Pediatric)", content: "0.2 mg/kg IN/IM/IV (max 10 mg). Intranasal: 0.2-0.3 mg/kg (5 mg <6 years, 10 mg >6 years)" },
-        { title: "Sedation (Adult)", content: "1-2.5 mg slow IV, titrate to effect. IM: 5 mg." },
-        { title: "RSI Premedication", content: "0.03 mg/kg IV (2-3 mg typical) for amnesia" },
+        { title: "Sedation (Adult)", content: "1-2.5 mg slow IV, titrate to effect. IM: 5 mg. Max 10 mg before base contact per Ref. 1317.25." },
         { title: "Route", content: "IV/IO/IM/IN (atomizer)" }
       ]},
       { type: "list", title: "Pharmacokinetics", items: [
