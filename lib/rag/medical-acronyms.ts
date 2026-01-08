@@ -657,19 +657,53 @@ export function expandQuery(query: string): ExpandedQueryResult {
 }
 
 /**
- * Get acronym entry by name
+ * Get acronym entry by name (handles plural and possessive forms)
  */
 export function getAcronymInfo(acronym: string): AcronymEntry | undefined {
-  return MEDICAL_ACRONYMS[acronym.toUpperCase()];
+  const normalized = normalizeAcronym(acronym);
+  return MEDICAL_ACRONYMS[normalized.toUpperCase()];
 }
 
 /**
- * Check if a query contains any medical acronyms
+ * Get medication dosing information for a given medication acronym
+ */
+export function getMedicationDosing(acronym: string): string | undefined {
+  const entry = getAcronymInfo(acronym);
+  if (entry && entry.category === 'medication') {
+    return entry.dosingInfo;
+  }
+  return undefined;
+}
+
+/**
+ * Get all medications from detected acronyms
+ */
+export function getMedicationsFromQuery(query: string): Array<{ name: string; dosingInfo: string }> {
+  const result = expandQuery(query);
+  return result.medications;
+}
+
+/**
+ * Check if a query contains any medical acronyms (handles plurals and possessives)
  */
 export function hasAcronyms(query: string): boolean {
   const upperQuery = query.toUpperCase();
   return Object.keys(MEDICAL_ACRONYMS).some(acronym => {
-    const regex = new RegExp(`\\b${acronym}\\b`, 'i');
-    return regex.test(upperQuery);
+    const patterns = [
+      new RegExp(`\\b${acronym}\\b`, 'i'),
+      new RegExp(`\\b${acronym}s\\b`, 'i'),
+      new RegExp(`\\b${acronym}'s\\b`, 'i'),
+      new RegExp(`\\b${acronym}'s\\b`, 'i')
+    ];
+    return patterns.some(regex => regex.test(upperQuery));
   });
+}
+
+/**
+ * Get acronyms by category
+ */
+export function getAcronymsByCategory(category: AcronymEntry['category']): Record<string, AcronymEntry> {
+  return Object.entries(MEDICAL_ACRONYMS)
+    .filter(([_, entry]) => entry.category === category)
+    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 }
