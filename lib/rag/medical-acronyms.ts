@@ -532,6 +532,20 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     synonyms: ['Ringers lactate', 'RL', 'crystalloid', 'Hartmanns solution'],
     relatedProtocols: ['1317.15', '805', '806'],
     category: 'general'
+  },
+  'KVO': {
+    expansion: 'Keep Vein Open',
+    synonyms: ['TKO', 'keep open', 'minimal IV rate', 'maintenance rate', 'slow drip', '10-30 mL/hr'],
+    relatedProtocols: ['1102', '1317.15'],
+    category: 'general',
+    dosingInfo: 'Typical rate: 10-30 mL/hr to maintain IV access without fluid overload'
+  },
+  'TKO': {
+    expansion: 'To Keep Open',
+    synonyms: ['KVO', 'keep open', 'minimal IV rate', 'maintenance rate', 'slow drip', '10-30 mL/hr'],
+    relatedProtocols: ['1102', '1317.15'],
+    category: 'general',
+    dosingInfo: 'Typical rate: 10-30 mL/hr to maintain IV access without fluid overload'
   }
 };
 
