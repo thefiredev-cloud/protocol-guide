@@ -468,103 +468,123 @@ const Chat: React.FC = () => {
       setShowQuickResults(false);
       setStreamingMessageId(botMsgId);
 
-      // Get auth token for server-side request
-      const authToken = await supabase.auth.getSession().then(res => res.data.session?.access_token);
-
-      // Create abort controller for timeout/cancellation
-      abortControllerRef.current = new AbortController();
-      const timeoutId = setTimeout(() => abortControllerRef.current?.abort(), 30000);
-
-      // Stream response from Netlify function
+      // Stream response - use direct API in dev mode, Netlify function in production
       let responseText = '';
 
       try {
-        const response = await fetch('/.netlify/functions/chat-stream', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
-          },
-          body: JSON.stringify({
-            prompt: augmentedPrompt,
-            context: context,
-            systemPrompt: GROUNDED_SYSTEM_PROMPT,
-          }),
-          signal: abortControllerRef.current.signal,
-        });
+        if (isDevMode) {
+          // DEV MODE: Use direct Gemini API
+          // @ts-expect-error - Vite provides import.meta.env at runtime
+          const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string;
+          if (!apiKey) {
+            throw new Error('VITE_GEMINI_API_KEY not configured for dev mode');
+          }
 
-        clearTimeout(timeoutId);
+          const ai = new GoogleGenAI({ apiKey });
+          const chat = ai.chats.create({
+            model: 'gemini-2.0-flash',
+            config: {
+              systemInstruction: GROUNDED_SYSTEM_PROMPT,
+              temperature: 0.1,
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+          const fullPrompt = context
+            ? `PROTOCOL CONTEXT:\n${context}\n\nUSER QUERY:\n${augmentedPrompt}`
+            : augmentedPrompt;
 
-        // Read response as SSE stream
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
+          const stream = await chat.sendMessageStream({ message: fullPrompt });
 
-        if (!reader) {
-          throw new Error('Response body is not readable');
-        }
+          for await (const chunk of stream) {
+            const chunkText = chunk.text || '';
+            responseText += chunkText;
 
-        let buffer = '';
+            setMessages(prev => prev.map(msg =>
+              msg.id === botMsgId
+                ? { ...msg, content: responseText }
+                : msg
+            ));
+          }
+        } else {
+          // PRODUCTION: Use Netlify function
+          const authToken = await supabase.auth.getSession().then(res => res.data.session?.access_token);
 
-        while (true) {
-          const { done, value } = await reader.read();
+          abortControllerRef.current = new AbortController();
+          const timeoutId = setTimeout(() => abortControllerRef.current?.abort(), 30000);
 
-          if (done) break;
+          const response = await fetch('/.netlify/functions/chat-stream', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+            },
+            body: JSON.stringify({
+              prompt: augmentedPrompt,
+              context: context,
+              systemPrompt: GROUNDED_SYSTEM_PROMPT,
+            }),
+            signal: abortControllerRef.current.signal,
+          });
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+          clearTimeout(timeoutId);
 
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
-              if (data === '[DONE]') {
-                break;
-              }
+          const reader = response.body?.getReader();
+          const decoder = new TextDecoder();
 
-              try {
-                const parsed = JSON.parse(data);
-                if (parsed.text) {
-                  responseText += parsed.text;
+          if (!reader) {
+            throw new Error('Response body is not readable');
+          }
 
-                  // Update message progressively as tokens arrive
-                  setMessages(prev => prev.map(msg =>
-                    msg.id === botMsgId
-                      ? { ...msg, content: responseText }
-                      : msg
-                  ));
+          let buffer = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') break;
+
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.text) {
+                    responseText += parsed.text;
+                    setMessages(prev => prev.map(msg =>
+                      msg.id === botMsgId
+                        ? { ...msg, content: responseText }
+                        : msg
+                    ));
+                  }
+                  if (parsed.error) throw new Error(parsed.error);
+                } catch (parseError) {
+                  console.warn('Failed to parse SSE data:', parseError);
                 }
-
-                if (parsed.error) {
-                  throw new Error(parsed.error);
-                }
-              } catch (parseError) {
-                console.warn('Failed to parse SSE data:', parseError);
               }
             }
           }
         }
-
       } catch (streamError: any) {
-        clearTimeout(timeoutId);
         console.error('Streaming failed:', streamError);
 
-        // Handle specific error types
         if (streamError.name === 'AbortError') {
           responseText = "Request timed out. Please try again.";
-        } else if (streamError.message.includes('HTTP 401') || streamError.message.includes('Unauthorized')) {
+        } else if (streamError.message?.includes('401') || streamError.message?.includes('Unauthorized')) {
           responseText = "Authentication error. Please sign in and try again.";
-        } else if (streamError.message.includes('HTTP 429')) {
+        } else if (streamError.message?.includes('429')) {
           responseText = "Rate limit exceeded. Please wait a moment and try again.";
         } else {
-          responseText = "Connection error. Please try again.";
+          responseText = `Connection error: ${streamError.message || 'Please try again.'}`;
         }
 
-        // Update the placeholder message with error
         setMessages(prev => prev.map(msg =>
           msg.id === botMsgId
             ? { ...msg, content: responseText, isWarning: true }
