@@ -54,7 +54,8 @@ let genAI: GoogleGenAI | null = null;
  */
 function getGenAIClient(): GoogleGenAI {
   if (!genAI) {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    // @ts-expect-error - Vite provides import.meta.env at runtime
+    const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string | undefined;
     if (!apiKey) {
       throw new Error('VITE_GEMINI_API_KEY not configured');
     }
