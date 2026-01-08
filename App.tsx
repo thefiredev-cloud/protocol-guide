@@ -184,7 +184,8 @@ const App: React.FC = () => {
                 } />
               </Routes>
             </WidgetLayout>
-          </HashRouter>
+            </HashRouter>
+          </ChatProvider>
         </AuthProvider>
       </WidgetModeProvider>
     </ErrorBoundary>
