@@ -336,36 +336,6 @@ const Chat: React.FC = () => {
 
     const originalInput = input; // Keep original for UI
 
-    // Create fresh chat session for each message to avoid iterator state corruption
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) {
-      console.error('GEMINI_API_KEY not configured');
-      setIsStreaming(false); // Reset on early return
-      return;
-    }
-
-    try {
-      const ai = new GoogleGenAI({ apiKey });
-      chatSessionRef.current = ai.chats.create({
-        model: 'gemini-3-flash-preview',
-        config: {
-          systemInstruction: GROUNDED_SYSTEM_PROMPT,
-          temperature: 0.1,
-        },
-      });
-    } catch (err) {
-      console.error('Failed to create chat session:', err);
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: 'Failed to initialize AI service. Please try again.',
-        timestamp: new Date(),
-        isWarning: true,
-      }]);
-      setIsStreaming(false); // Reset on early return
-      return;
-    }
-
     // Show quick results immediately (0-200ms) while AI processes
     const localResults = getLocalSearchResults(originalInput);
     if (localResults.length > 0) {
