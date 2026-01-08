@@ -306,6 +306,13 @@ const Chat: React.FC = () => {
 
     const originalInput = input; // Keep original for UI
 
+    // Show quick results immediately (0-200ms) while AI processes
+    const localResults = getLocalSearchResults(originalInput);
+    if (localResults.length > 0) {
+      setQuickResults(localResults);
+      setShowQuickResults(true);
+    }
+
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: originalInput, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
