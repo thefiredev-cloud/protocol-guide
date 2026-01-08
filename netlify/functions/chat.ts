@@ -67,8 +67,11 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     };
   }
 
-  // Rate limiting
-  const clientIP = event.headers['x-forwarded-for']?.split(',')[0] || 'unknown';
+  // Rate limiting - use Netlify's trusted client IP header (cannot be spoofed)
+  const clientIP = event.headers['x-nf-client-connection-ip']
+    || event.headers['client-ip']
+    || event.headers['x-forwarded-for']?.split(',')[0]
+    || 'unknown';
   if (!checkRateLimit(clientIP)) {
     return {
       statusCode: 429,
