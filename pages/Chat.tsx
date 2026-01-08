@@ -238,7 +238,7 @@ const Chat: React.FC = () => {
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: originalInput, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-    setIsTyping(true);
+    setTyping(true);
 
     // Extract clinical facts from user message for conversation context
     const updatedFacts = extractFactsFromMessage(originalInput, conversationFacts);
@@ -269,7 +269,7 @@ const Chat: React.FC = () => {
             isWarning: true,
           };
           setMessages(prev => [...prev, declineMsg]);
-          setIsTyping(false);
+          setTyping(false);
           return;
         }
 
@@ -412,7 +412,7 @@ const Chat: React.FC = () => {
         isWarning: true,
       }]);
     } finally {
-      setIsTyping(false);
+      setTyping(false);
     }
   };
 
