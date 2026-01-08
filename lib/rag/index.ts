@@ -38,3 +38,17 @@ export {
   type Citation,
   type CitationValidation,
 } from './citations';
+
+// Source validation exports - ensures only LA County DHS content
+export {
+  validateSourceUrl,
+  validateProtocolSources,
+  logSourceViolation,
+  filterAuthorizedChunks,
+  assertValidSource,
+  getDefaultSourceUrl,
+  AUTHORIZED_SOURCES,
+  DHS_SOURCE_URL_PATTERN,
+  type SourceValidationResult,
+  type SourceViolation,
+} from './source-validation';
