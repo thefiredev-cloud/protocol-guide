@@ -7,6 +7,7 @@ import { useChat, type Message, type CitationLink } from '../contexts/ChatContex
 import { isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 import { QuickResults, extractRelevantSnippet, type LocalSearchResult } from '../components/QuickResults';
+import { QuickActions } from '../components/QuickActions';
 
 // RAG imports - use when Supabase is configured
 import {
