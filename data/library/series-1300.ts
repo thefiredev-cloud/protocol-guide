@@ -580,7 +580,7 @@ export const series1300: Protocol[] = [
         { title: "Duration", content: "30-60 minutes (single dose)" },
         { title: "Side Effects", content: "Respiratory depression, hypotension, bradycardia, nausea, chest wall rigidity (high dose), sedation" }
       ]},
-      { type: "warning", content: "Monitor respiratory rate and SpO2. Naloxone must be immediately available. Chest wall rigidity can occur with rapid high-dose IV push - treat with paralytic if occurs during RSI. Use caution in elderly, COPD, head injury. Potent - 100x morphine potency." },
+      { type: "warning", content: "Monitor respiratory rate and SpO2. Naloxone must be immediately available. Chest wall rigidity can occur with rapid high-dose IV push - stop administration and support ventilation if occurs. Use caution in elderly, COPD, head injury. Potent - 100x morphine potency." },
       { type: "text", title: "Preparation", content: "50 mcg/mL (0.05 mg/mL) in 2 mL or 5 mL vials. For IN administration, use MAD atomizer. Titrate to pain relief, not to zero pain. Goal: Comfort without respiratory depression." }
     ]
   },
