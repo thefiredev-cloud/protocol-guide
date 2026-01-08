@@ -566,7 +566,17 @@ export const BROSELOW_DATA: Record<BroselowColorZone, BroselowZoneData> = {
     ],
     equipment: {
       iGel: 'Size 2',
-      suctionCatheter: '10 Fr'
+      lmaClassic: 'Size 2',
+      ettCuffed: '4.5 mm',
+      ettUncuffed: '4.5 mm',
+      millerBlade: '2',
+      macBlade: '2',
+      ivCatheter: '22G',
+      suctionCatheter: '10 Fr',
+      chestTube: '16-20 Fr',
+      ngOgTube: '10 Fr',
+      foleyCatheter: '10 Fr',
+      bpCuff: 'Child Small'
     },
     colorClass: 'bg-yellow-400',
     textClass: 'text-black'
