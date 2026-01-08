@@ -194,6 +194,7 @@ function analyzeQuery(query: string): QueryAnalysis {
 
 /**
  * Calculate retrieval confidence based on results
+ * Optimized for medical RAG queries
  */
 function calculateConfidence(
   chunks: RetrievedChunk[],
@@ -201,11 +202,12 @@ function calculateConfidence(
 ): number {
   if (chunks.length === 0) return 0;
 
-  const factors = {
-    topScoreWeight: 0.4,
-    matchTypeWeight: 0.3,
-    explicitRefWeight: 0.2,
-    coverageWeight: 0.1,
+  // New weights optimized for medical RAG
+  const CONFIDENCE_WEIGHTS = {
+    topScore: 0.35,        // Reduced from 0.4 - reduce impact of single chunk
+    matchTypeQuality: 0.25, // Reduced from 0.3
+    explicitRefMatch: 0.25, // Increased from 0.2 - increase for explicit refs
+    protocolCoverage: 0.15  // Increased from 0.1 - multiple sources = better
   };
 
   // Factor 1: Top chunk relevance (normalize to 0-1)
@@ -234,10 +236,10 @@ function calculateConfidence(
   const coverageScore = Math.min(uniqueProtocols / 3, 1);
 
   return (
-    topScore * factors.topScoreWeight +
-    avgMatchType * factors.matchTypeWeight +
-    explicitScore * factors.explicitRefWeight +
-    coverageScore * factors.coverageWeight
+    topScore * CONFIDENCE_WEIGHTS.topScore +
+    avgMatchType * CONFIDENCE_WEIGHTS.matchTypeQuality +
+    explicitScore * CONFIDENCE_WEIGHTS.explicitRefMatch +
+    coverageScore * CONFIDENCE_WEIGHTS.protocolCoverage
   );
 }
 
