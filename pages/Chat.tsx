@@ -371,6 +371,18 @@ const Chat: React.FC = () => {
     handleClearVoice(); // Clear voice transcript after sending
     setTyping(true);
 
+    // Track request start time for response time metrics
+    const requestStartTime = Date.now();
+
+    // Persist user message to Supabase for QA/QI tracking
+    if (dbSessionId) {
+      persistMessage({
+        sessionId: dbSessionId,
+        role: 'user',
+        content: originalInput,
+      });
+    }
+
     // Extract clinical facts from user message for conversation context
     const updatedFacts = extractFactsFromMessage(originalInput, conversationFacts);
     updateFacts(updatedFacts);
