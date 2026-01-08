@@ -111,9 +111,9 @@ const Chat: React.FC = () => {
   const [showQuickResults, setShowQuickResults] = useState(false);
   const [dbSessionId, setDbSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatSessionRef = useRef<GeminiChat | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sessionCreatedRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Auth context for user info
   const { user, isAuthenticated } = useAuth();
