@@ -227,15 +227,60 @@ export const IconTraffic: React.FC<IconProps> = ({ className, strokeWidth = 1.5 
 
 // --- Navigation / App Icons ---
 
+// Original stroke-based chat (kept for backward compatibility)
 export const IconChat: React.FC<IconProps> = ({ className, strokeWidth = 1.5 }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
   </svg>
 );
 
+// NEW: Filled Assistant icon with red background (matches screenshot design)
+export const IconAssistant: React.FC<IconProps> = ({ className }) => (
+  <svg viewBox="0 0 24 24" className={className}>
+    {/* Red rounded rectangle background */}
+    <rect x="2" y="4" width="20" height="16" rx="3" fill="#9B1B30"/>
+    {/* White chat bubble shape */}
+    <path
+      d="M6 8h8a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8l-2 2v-2H6a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
+      fill="white"
+    />
+    {/* Three dots inside bubble */}
+    <circle cx="8" cy="11.5" r="0.75" fill="#9B1B30"/>
+    <circle cx="10.5" cy="11.5" r="0.75" fill="#9B1B30"/>
+    <circle cx="13" cy="11.5" r="0.75" fill="#9B1B30"/>
+  </svg>
+);
+
+// Original book icon (kept for backward compatibility)
 export const IconBook: React.FC<IconProps> = ({ className, strokeWidth = 1.5 }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+  </svg>
+);
+
+// NEW: Simplified tablet/document icon for Protocols (matches screenshot)
+export const IconProtocols: React.FC<IconProps> = ({ className, strokeWidth = 1.5 }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
+    {/* Tablet/document outline */}
+    <rect x="5" y="2" width="14" height="20" rx="2"/>
+    {/* Top line suggesting screen/content */}
+    <line x1="9" y1="6" x2="15" y2="6"/>
+  </svg>
+);
+
+// NEW: Simplified hospital building with cross (matches screenshot)
+export const IconHospitals: React.FC<IconProps> = ({ className, strokeWidth = 1.5 }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
+    {/* Main building */}
+    <rect x="4" y="6" width="16" height="16" rx="1"/>
+    {/* Medical cross on roof */}
+    <line x1="12" y1="2" x2="12" y2="6"/>
+    <line x1="10" y1="4" x2="14" y2="4"/>
+    {/* Windows */}
+    <rect x="7" y="10" width="3" height="3" rx="0.5"/>
+    <rect x="14" y="10" width="3" height="3" rx="0.5"/>
+    {/* Door */}
+    <rect x="10" y="16" width="4" height="6" rx="0.5"/>
   </svg>
 );
 
