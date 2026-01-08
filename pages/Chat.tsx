@@ -393,6 +393,7 @@ const Chat: React.FC = () => {
         timestamp: new Date(),
         isWarning: true,
       }]);
+      setIsStreaming(false); // Reset on early return
       return;
     }
 
