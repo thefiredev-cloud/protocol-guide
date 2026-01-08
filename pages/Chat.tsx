@@ -596,13 +596,14 @@ const Chat: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           <div className="relative flex items-center gap-3">
             <div className="flex-1 bg-white dark:bg-slate-800 rounded-full shadow-2xl border border-slate-200 dark:border-slate-700 flex items-center p-2 pl-6 transition-all focus-within:ring-2 focus-within:ring-primary/20">
-              <input 
+              <input
+                ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                className="w-full bg-transparent border-none p-0 py-3 text-[15px] font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:ring-0 focus:outline-none" 
-                placeholder="Query protocols (e.g. 'Sepsis fluids')" 
-                type="text" 
+                className="w-full bg-transparent border-none p-0 py-3 text-[15px] font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:ring-0 focus:outline-none"
+                placeholder={isListening ? "Listening..." : "Query protocols (e.g. 'Sepsis fluids')"}
+                type="text"
                 disabled={isTyping}
               />
             </div>
