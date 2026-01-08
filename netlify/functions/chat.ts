@@ -35,9 +35,19 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-  // CORS headers
+  // CORS headers - restrict to specific domain in production
+  const allowedOrigins = [
+    'https://protocol-guide.com',
+    'https://www.protocol-guide.com',
+    'https://protocol-guide.netlify.app',
+    process.env.URL, // Netlify deploy preview URL
+  ].filter(Boolean);
+
+  const origin = event.headers['origin'] || '';
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0] || '';
+
   const headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': corsOrigin,
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json',
