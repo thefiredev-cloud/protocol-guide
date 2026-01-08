@@ -928,8 +928,24 @@ export async function retrieveContext(
   // Sort by relevance
   uniqueChunks.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
-  // Take top results
-  const topChunks = uniqueChunks.slice(0, maxChunks);
+  // Take top results for reranking (2x maxChunks for reranker input)
+  const candidateChunks = uniqueChunks.slice(0, maxChunks * 2);
+
+  // Step 4a: Apply reranking for better precision
+  const rerankedChunks = await rerankChunks(query, candidateChunks, {
+    maxChunksToRerank: maxChunks * 2,
+    minRelevanceAfterRerank: 0.01,
+    boostFactors: {
+      exactProtocolMatch: criteriaInfo.isCriteriaQuery ? 0.2 : 0.3,
+      sectionTitleMatch: 0.2,
+      medicationMention: 0.15,
+      dosageMention: analysis.queryType === 'medication' ? 0.25 : 0.15,
+      criteriaMatch: criteriaInfo.isCriteriaQuery ? 0.35 : 0.25,
+    },
+  });
+
+  // Take top results after reranking
+  const topChunks = rerankedChunks.slice(0, maxChunks);
 
   // Step 4b: Filter by authorized source (LA County DHS only)
   const { validChunks, violations } = filterAuthorizedChunks(topChunks);
