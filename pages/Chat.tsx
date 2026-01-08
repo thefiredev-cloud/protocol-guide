@@ -266,6 +266,7 @@ const Chat: React.FC = () => {
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: originalInput, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
+    handleClearVoice(); // Clear voice transcript after sending
     setTyping(true);
 
     // Extract clinical facts from user message for conversation context
