@@ -17,6 +17,13 @@ import { protocols } from '../data/protocols';
 import { medications } from '../data/library/pharmacology/medications';
 import { Protocol, ProtocolSection, ProtocolSectionItem } from '../types';
 
+// Source validation - ensures only LA County DHS content
+import {
+  validateSourceUrl,
+  AUTHORIZED_SOURCES,
+  type SourceValidationResult,
+} from '../lib/rag/source-validation';
+
 // ============================================
 // Configuration
 // ============================================
