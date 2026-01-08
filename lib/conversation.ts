@@ -241,7 +241,8 @@ export function shouldRequireBaseContact(facts: ConversationFacts): BaseContactR
     // LKWT >24 hours with high LAMS - consult needed
     if (facts.lamsScore >= 4 && facts.lkwt) {
       const lkwtHours = parseLkwtToHours(facts.lkwt);
-      if (lkwtHours && lkwtHours > 24) {
+      // Use !== null to handle 0 hours correctly (0 is falsy but valid)
+      if (lkwtHours !== null && lkwtHours > 24) {
         reasons.push('LAMS ≥4 with LKWT >24 hours - transport destination consult');
       }
     }
