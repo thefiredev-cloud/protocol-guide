@@ -159,10 +159,13 @@ VERBATIM REQUIREMENTS (CRITICAL FOR CLINICAL ACCURACY):
     const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout for streaming
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}&alt=sse`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
+        },
         body: JSON.stringify({
           contents: messages,
           systemInstruction: { parts: [{ text: systemPrompt }] },
