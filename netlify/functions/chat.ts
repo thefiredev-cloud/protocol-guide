@@ -9,6 +9,7 @@ interface ChatRequest {
   prompt: string;
   context?: string;
   systemPrompt?: string;
+  priorContext?: string;  // For context-dependent follow-up responses (yes/no/confirmations)
 }
 
 interface GeminiMessage {
