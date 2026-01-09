@@ -153,8 +153,8 @@ const PROTOCOL_REF_PATTERNS = [
   /\bprotocol[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
   // Policy 830, policy 1317.6
   /\bpolicy[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
-  // Standalone 3-4 digit numbers (e.g., "1201", "521")
-  /\b(\d{3,4})\b/g,
+  // Standalone 3-4 digit numbers with optional decimal (e.g., "1201", "521", "1317.6")
+  /\b(\d{3,4}(?:\.\d+)?)\b/g,
 ];
 
 /**
