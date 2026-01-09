@@ -144,6 +144,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setSessionId(parsed.sessionId);
             setMessages(deserializeMessages(parsed.messages));
             setConversationFacts(parsed.conversationFacts || {});
+            setPendingClarificationState(parsed.pendingClarification || null);
           } else {
             // Session expired, clear it
             safeRemoveItem(CHAT_STORAGE_KEY);
