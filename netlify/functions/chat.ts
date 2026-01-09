@@ -34,7 +34,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
   // CORS headers - restrict to specific domain in production
   const allowedOrigins = [
     'https://protocol-guide.com',
