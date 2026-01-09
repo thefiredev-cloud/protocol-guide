@@ -80,6 +80,15 @@ export const FeedbackButtons: React.FC<FeedbackButtonsProps> = ({
     });
   };
 
+  if (submitError) {
+    return (
+      <div className="flex items-center gap-2 text-xs text-red-500 dark:text-red-400 mt-2">
+        <span className="material-symbols-outlined text-[14px]">error</span>
+        <span>Failed to submit feedback</span>
+      </div>
+    );
+  }
+
   if (submitted) {
     return (
       <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500 mt-2">
