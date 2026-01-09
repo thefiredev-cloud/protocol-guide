@@ -27,7 +27,22 @@ declare global {
 }
 
 const Hospitals: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [searchParams] = useSearchParams();
+  const filterParam = searchParams.get('filter');
+
+  // Initialize filter from URL param
+  const getInitialFilter = (): FilterType => {
+    if (!filterParam) return 'All';
+    const types = filterParam.toLowerCase().split(',');
+    if (types.includes('trauma')) return 'Trauma';
+    if (types.includes('stemi')) return 'STEMI';
+    if (types.includes('stroke')) return 'Stroke';
+    if (types.includes('pediatric') || types.includes('peds')) return 'Peds';
+    if (types.includes('ecmo')) return 'ECMO';
+    return 'All';
+  };
+
+  const [activeFilter, setActiveFilter] = useState<FilterType>(getInitialFilter);
   const [search, setSearch] = useState('');
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [sortedHospitals, setSortedHospitals] = useState<HospitalWithDistance[]>(hospitals);
