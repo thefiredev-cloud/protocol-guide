@@ -103,6 +103,45 @@ async function waitForResponse(page, timeout = RESPONSE_TIMEOUT) {
   return elapsed;
 }
 
+// Perform login
+async function performLogin(page, credentials) {
+  console.log('  Performing login...');
+  await page.goto(LOGIN_URL, { waitUntil: 'networkidle2', timeout: 10000 });
+  await delay(1000);
+
+  // Fill in email
+  const emailInput = await page.$('input[type="email"]');
+  if (!emailInput) throw new Error('Email input not found');
+  await emailInput.type(credentials.email);
+
+  // Fill in password
+  const passwordInput = await page.$('input[type="password"]');
+  if (!passwordInput) throw new Error('Password input not found');
+  await passwordInput.type(credentials.password);
+
+  // Click sign in button
+  const signInButton = await page.$('button:has-text("Sign In"), button::-p-text(Sign In)');
+  if (signInButton) {
+    await signInButton.click();
+  } else {
+    // Fallback: submit form by pressing Enter
+    await passwordInput.press('Enter');
+  }
+
+  // Wait for navigation
+  console.log('  Waiting for authentication...');
+  await delay(3000); // Wait for auth to complete
+
+  // Check if we're logged in (no longer on login page)
+  const currentUrl = page.url();
+  if (currentUrl.includes('/login')) {
+    throw new Error('Login failed - still on login page');
+  }
+
+  console.log('  Login successful!');
+  return true;
+}
+
 // Extract response data from page
 async function extractResponseData(page) {
   return await page.evaluate(() => {
