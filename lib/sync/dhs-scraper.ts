@@ -379,7 +379,7 @@ export class DHSScraper {
       }
     }
 
-    return [...new Set(medications)]; // Remove duplicates
+    return Array.from(new Set(medications)); // Remove duplicates
   }
 
   /**
