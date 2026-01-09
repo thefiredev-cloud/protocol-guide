@@ -30,6 +30,7 @@ export const FeedbackButtons: React.FC<FeedbackButtonsProps> = ({
   const [feedbackText, setFeedbackText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const submitFeedback = async (feedbackRating: 'positive' | 'negative', details?: { issueType?: string; text?: string }) => {
     setIsSubmitting(true);
