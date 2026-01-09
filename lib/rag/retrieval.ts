@@ -1019,7 +1019,7 @@ export async function retrieveContext(
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      queryEmbedding = await embedQuery(enhancedQuery);
+      queryEmbedding = await embedQuery(queryForEmbedding);
       console.log(`[RAG] Embedding SUCCESS on attempt ${attempt}`);
       break;
     } catch (error) {
