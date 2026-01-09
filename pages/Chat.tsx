@@ -43,7 +43,11 @@ import {
   extractFactsFromMessage,
   suggestFollowUp,
   formatFactsForPrompt,
+  isContextDependentMessage,
+  detectClarifyingQuestion,
+  formatPriorContext,
   type ConversationFacts,
+  type PendingClarification,
 } from '../lib/conversation';
 
 // Message and CitationLink interfaces imported from ChatContext
