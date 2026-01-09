@@ -23,7 +23,7 @@ export const tp1228: Protocol = {
       title: "Agitated Delirium / Severe Agitation",
       items: [
         { title: "Safety", content: "Use least restrictive means necessary. Do not restrain in prone position." },
-        { title: "Midazolam (Versed)", content: "<b>5mg</b> IM/IN/IV for severe agitation posing danger to self or others. May repeat x1 in 5 mins." },
+        { title: "Midazolam (Versed)", content: "<b>5mg IM/IN/IV</b> for severe agitation posing danger to self or others. May repeat x1 in 5 min (<b>up to 10mg total</b> prior to Base Contact).<br><br>For patients >100kg with severe agitation: May administer <b>10mg IM/IN</b> as single dose." },
         { title: "Cooling", content: "If hyperthermia suspected (excited delirium), active cooling measures are critical." }
       ]
     }
