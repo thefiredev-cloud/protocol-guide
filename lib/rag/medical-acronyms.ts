@@ -195,7 +195,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'TBI': {
     expansion: 'Traumatic Brain Injury',
     synonyms: ['head injury', 'head trauma', 'brain injury', 'closed head injury'],
-    relatedProtocols: ['810', '811', '1253'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + Trauma TP
     category: 'trauma'
   },
   'GSW': {
