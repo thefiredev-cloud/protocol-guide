@@ -56,6 +56,9 @@ export interface ProtocolSectionItem {
   listItems?: string[];
   icon?: string;
   color?: string; // Tailwind color name
+  imageUrl?: string; // URL to procedure/training image
+  imageAlt?: string; // Accessibility alt text
+  imageCaption?: string; // Optional caption below image
 }
 
 export interface ProtocolSection {
