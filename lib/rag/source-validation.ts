@@ -201,9 +201,6 @@ export function shouldFilterChunk(chunk: {
 
 /**
  * Filter chunks to only include those from authorized sources
- */
-/**
- * Filter chunks to only include those from authorized sources
  *
  * @param chunks - Array of chunks to filter
  * @param options - Filtering options
