@@ -55,6 +55,7 @@ export interface EmbeddingStats {
 
 interface EmbedQueryResponse {
   embedding: number[];
+  dimensions: number;
 }
 
 // ============================================
@@ -81,7 +82,7 @@ export class EmbeddingError extends Error {
     super(message);
     this.name = 'EmbeddingError';
     this.cause = cause;
-  dimensions: number;
+  }
 }
 
 // ============================================
