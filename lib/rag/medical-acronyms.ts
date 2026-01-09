@@ -167,7 +167,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
       'pediatric trauma criteria', 'pediatric trauma center criteria',
       'PTC referral', 'pediatric trauma destination'
     ],
-    relatedProtocols: ['510', '506', '830', '831', '504'],
+    relatedProtocols: ['506', '510'],  // Trauma Triage + Pediatric Destination
     category: 'trauma'
   },
   'PMC': {
