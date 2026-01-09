@@ -3508,6 +3508,16 @@ export const series1200: Protocol[] = [
       type: "accordion",
       title: "Note 1",
       items: [{ content: "Syncope can be benign (vasovagal) or life-threatening (cardiac). Cardiac syncope has high mortality risk and requires evaluation." }]
+    },
+    {
+      type: "accordion",
+      title: "San Francisco Syncope Rule (CHESS)",
+      items: [{ content: "<b>High-Risk Criteria (CHESS):</b><br>• <b>C</b>HF history<br>• <b>H</b>ematocrit < 30%<br>• <b>E</b>CG abnormal (non-sinus rhythm or new changes)<br>• <b>S</b>hortness of breath<br>• <b>S</b>ystolic BP < 90 mmHg at triage<br><br>Any positive criterion = high risk for adverse event within 7 days. Consider ALS transport and cardiac monitoring." }]
+    },
+    {
+      type: "accordion",
+      title: "ALS vs BLS Transport Criteria",
+      items: [{ content: "<b>ALS Transport Indicated:</b><br>• Any CHESS criterion positive<br>• Abnormal ECG/12-lead findings<br>• Syncope with exertion<br>• Syncope without prodrome (sudden onset)<br>• Associated chest pain or palpitations<br>• Age > 65 with first-time syncope<br>• Syncope with injury/trauma<br><br><b>BLS Transport May Be Appropriate:</b><br>• Vasovagal features (prodrome, situational trigger)<br>• Known history of similar episodes with benign workup<br>• Completely recovered with normal vitals and ECG<br>• All CHESS criteria negative" }]
     }
   ]
 },
