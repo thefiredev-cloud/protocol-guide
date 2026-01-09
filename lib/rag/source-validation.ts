@@ -202,39 +202,49 @@ export function shouldFilterChunk(chunk: {
 /**
  * Filter chunks to only include those from authorized sources
  */
+/**
+ * Filter chunks to only include those from authorized sources
+ *
+ * @param chunks - Array of chunks to filter
+ * @param options - Filtering options
+ * @param options.allowUnverified - If true, include chunks without source URLs (default: true for backwards compatibility)
+ */
 export function filterAuthorizedChunks<T extends {
   protocolId: string;
   protocolRef: string;
   sourceUrl?: string | null;
   sourceVerified?: boolean;
-}>(chunks: T[]): {
+}>(
+  chunks: T[],
+  options: { allowUnverified?: boolean } = {}
+): {
   validChunks: T[];
   violations: SourceViolation[];
 } {
+  // Default to allowing unverified for backwards compatibility
+  // Set to false in production when all chunks have source URLs
+  const { allowUnverified = true } = options;
+
   const validChunks: T[] = [];
   const violations: SourceViolation[] = [];
 
   for (const chunk of chunks) {
-    if (chunk.sourceUrl) {
-      const validation = validateSourceUrl(chunk.sourceUrl);
+    const validation = validateSourceUrl(chunk.sourceUrl, allowUnverified);
 
-      if (validation.isValid) {
-        validChunks.push(chunk);
-      } else {
-        violations.push({
-          protocolId: chunk.protocolId,
-          protocolRef: chunk.protocolRef,
-          sourceUrl: chunk.sourceUrl,
-          detectedAt: new Date(),
-          context: `Retrieved during query - ${validation.reason}`,
-        });
-      }
-    } else {
-      // Chunk without source_url - include but may log warning
-      if (chunk.sourceVerified === false) {
+    if (validation.isValid) {
+      // Log warning for unverified chunks that are being allowed
+      if (!chunk.sourceUrl && allowUnverified && chunk.sourceVerified === false) {
         console.warn(`[SOURCE] Including unverified chunk: ${chunk.protocolId}`);
       }
       validChunks.push(chunk);
+    } else {
+      violations.push({
+        protocolId: chunk.protocolId,
+        protocolRef: chunk.protocolRef,
+        sourceUrl: chunk.sourceUrl || null,
+        detectedAt: new Date(),
+        context: `Retrieved during query - ${validation.reason}`,
+      });
     }
   }
 
