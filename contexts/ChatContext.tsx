@@ -125,6 +125,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationFacts, setConversationFacts] = useState<ConversationFacts>({});
+  const [pendingClarification, setPendingClarificationState] = useState<PendingClarification | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [useRAG, setUseRAG] = useState(false);
   const chatSessionRef = useRef<GeminiChat | null>(null);
