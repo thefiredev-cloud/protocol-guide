@@ -4,14 +4,41 @@
  */
 
 import puppeteer from 'puppeteer';
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCREENSHOTS_DIR = join(__dirname, '../screenshots/smoke-test');
 const BASE_URL = 'http://localhost:3000/#/chat';
+const LOGIN_URL = 'http://localhost:3000/#/login';
 const RESPONSE_TIMEOUT = 15000; // 15 seconds
+
+// Load test credentials from environment or config file
+function loadCredentials() {
+  // Try environment variables first
+  if (process.env.TEST_EMAIL && process.env.TEST_PASSWORD) {
+    return {
+      email: process.env.TEST_EMAIL,
+      password: process.env.TEST_PASSWORD
+    };
+  }
+
+  // Try test-credentials.json file
+  const credentialsPath = join(__dirname, 'test-credentials.json');
+  if (existsSync(credentialsPath)) {
+    try {
+      const data = JSON.parse(readFileSync(credentialsPath, 'utf-8'));
+      if (data.email && data.password) {
+        return data;
+      }
+    } catch (err) {
+      console.warn('Failed to load test-credentials.json:', err.message);
+    }
+  }
+
+  return null;
+}
 
 // Ensure screenshots directory exists
 try {
