@@ -31,7 +31,23 @@ export type ProtocolCategory =
   | 'Medication'
   | 'Curriculum';
 
-export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert';
+export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert' | 'step-by-step' | 'facility-finder';
+
+// Facility finder types for hospital capability filtering
+export type FacilityFinderType = 'trauma' | 'pediatric' | 'stemi' | 'stroke' | 'burn' | 'ecmo';
+
+// Procedure step for step-by-step sections
+export interface ProcedureStep {
+  stepNumber: number;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  substeps?: string[];
+  warning?: string;
+  tip?: string;
+  duration?: string;
+}
 
 export interface ProtocolSectionItem {
   title?: string;
