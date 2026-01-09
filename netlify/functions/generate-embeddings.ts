@@ -62,10 +62,13 @@ const handler: Handler = async (event) => {
   for (const chunk of chunks) {
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1/models/${EMBEDDING_MODEL}:embedContent?key=${geminiKey}`,
+        `https://generativelanguage.googleapis.com/v1/models/${EMBEDDING_MODEL}:embedContent`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiKey,
+          },
           body: JSON.stringify({
             model: `models/${EMBEDDING_MODEL}`,
             content: { parts: [{ text: chunk.content.substring(0, 8000) }] }
