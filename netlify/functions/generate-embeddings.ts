@@ -38,15 +38,19 @@ const handler: Handler = async (event) => {
   }
 
   if (!chunks || chunks.length === 0) {
-    const { count } = await supabase
+    const { count, error: countError } = await supabase
       .from('protocol_chunks')
       .select('*', { count: 'exact', head: true });
+
+    if (countError) {
+      console.error('Failed to get chunk count:', countError);
+    }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: 'All chunks have embeddings',
-        totalChunks: count,
+        totalChunks: count ?? 0,
         remaining: 0
       })
     };
