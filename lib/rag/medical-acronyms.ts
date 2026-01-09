@@ -207,13 +207,13 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'MVC': {
     expansion: 'Motor Vehicle Collision',
     synonyms: ['car accident', 'vehicle accident', 'auto accident', 'traffic collision', 'MVA'],
-    relatedProtocols: ['801', '802', '830'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + MVC TP
     category: 'trauma'
   },
   'MVA': {
     expansion: 'Motor Vehicle Accident',
     synonyms: ['car accident', 'vehicle accident', 'auto accident', 'traffic collision', 'MVC'],
-    relatedProtocols: ['801', '802', '830'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + MVC TP
     category: 'trauma'
   },
   'PSI': {
