@@ -136,7 +136,7 @@ function analyzeQuery(query: string): QueryAnalysis {
     /(?:mcg[-\s]?)(\d{3,4}(?:\.\d+)?)/gi,
     /(?:protocol\s*)(\d{3,4}(?:\.\d+)?)/gi,
     /(?:policy\s*)(\d{3,4}(?:\.\d+)?)/gi,
-    /\b(\d{4})\b/g, // Standalone 4-digit numbers
+    /\b(\d{4}(?:\.\d+)?)\b/g, // Standalone 4-digit numbers (with optional decimal)
   ];
 
   const detectedRefs: string[] = [];
