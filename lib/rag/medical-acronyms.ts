@@ -225,7 +225,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'C-SPINE': {
     expansion: 'Cervical Spine',
     synonyms: ['neck', 'cervical spine injury', 'c-spine precautions', 'spinal immobilization', 'neck injury', 'cervical collar', 'c-collar'],
-    relatedProtocols: ['801', '802', '810', '1241'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + Trauma TP
     category: 'trauma'
   },
 
