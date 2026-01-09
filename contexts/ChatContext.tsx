@@ -214,6 +214,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSessionId(newSessionId);
     setMessages([]);
     setConversationFacts({});
+    setPendingClarificationState(null);
     setIsTyping(false);
     chatSessionRef.current = null;
   }, []);
@@ -223,6 +224,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSessionId(null);
     setMessages([]);
     setConversationFacts({});
+    setPendingClarificationState(null);
     setIsTyping(false);
     chatSessionRef.current = null;
   }, []);
