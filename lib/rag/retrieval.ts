@@ -969,7 +969,7 @@ export async function retrieveContext(
       // Boost criteria-related results
       const boostedResults = refResults.map(r => ({
         ...r,
-        relevanceScore: Math.min(r.relevanceScore + 0.4, 1.4),
+        relevanceScore: Math.min(r.relevanceScore + 0.8, 1.6),
       }));
       allChunks.push(...boostedResults);
     }
