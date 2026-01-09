@@ -82,9 +82,12 @@ function detectCriteriaQuery(query: string): {
   const normalizedQuery = query.toLowerCase();
 
   // Criteria-related terms
+  // Includes stroke assessment scales (LAMS, mLAPSS, LKWT, GCS) as implicit criteria indicators
   const criteriaTerms = [
     'criteria', 'eligibility', 'requirements', 'qualifications',
-    'indications', 'destination', 'referral', 'transport to'
+    'indications', 'destination', 'referral', 'transport to',
+    // Stroke assessment scales ARE destination criteria tools
+    'lams', 'mlapss', 'lapss', 'lkwt', 'last known well', 'gcs'
   ];
 
   const hasCriteriaTerm = criteriaTerms.some(term => normalizedQuery.includes(term));
@@ -93,9 +96,13 @@ function detectCriteriaQuery(query: string): {
   const criteriaTypes: Record<string, string[]> = {
     'PMC': ['pmc', 'pediatric medical center', 'pediatric medical'],
     'PTC': ['ptc', 'pediatric trauma center', 'pediatric trauma'],
-    'Stroke': ['stroke', 'csc', 'psc', 'lams', 'mlapss', 'stroke center'],
+    'Stroke': [
+      'stroke', 'csc', 'psc', 'lams', 'mlapss', 'lapss', 'stroke center',
+      'lkwt', 'last known well', 'lvo', 'large vessel occlusion',
+      'facial droop', 'arm drift', 'grip strength'
+    ],
     'ECMO': ['ecmo', 'ecpr', 'extracorporeal'],
-    'Trauma': ['trauma center', 'trauma triage', 'level i', 'level ii'],
+    'Trauma': ['trauma center', 'trauma triage', 'level i', 'level ii', 'gcs'],
     'Burn': ['burn center', 'burn criteria'],
     'STEMI': ['stemi', 'src', 'stemi receiving', 'cardiac cath'],
     'Perinatal': ['pregnancy', 'perinatal', 'ob', 'obstetric'],
