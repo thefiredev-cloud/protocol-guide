@@ -49,7 +49,8 @@ export const FeedbackButtons: React.FC<FeedbackButtonsProps> = ({
 
       if (error) {
         console.error('Failed to submit feedback:', error);
-        // Still show success to user - feedback will be logged
+        setSubmitError(true);
+        return;
       }
 
       setRating(feedbackRating);
@@ -57,6 +58,7 @@ export const FeedbackButtons: React.FC<FeedbackButtonsProps> = ({
       onFeedbackSubmit?.(feedbackRating);
     } catch (err) {
       console.error('Feedback submission error:', err);
+      setSubmitError(true);
     } finally {
       setIsSubmitting(false);
       setShowModal(false);
