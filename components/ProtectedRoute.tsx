@@ -6,8 +6,17 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
+// Dev mode bypass for localhost testing
+const isDevMode = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
+
+  // Allow unauthenticated access in dev mode for testing
+  if (isDevMode) {
+    return <>{children}</>;
+  }
 
   // Show loading spinner while checking auth state
   if (isLoading) {
