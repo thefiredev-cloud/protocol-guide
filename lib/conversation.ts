@@ -465,6 +465,8 @@ export interface PendingClarification {
   topic?: string;
   /** Protocol reference if mentioned in the question */
   protocolRef?: string;
+  /** Protocols that were retrieved and being discussed (for context-dependent follow-ups) */
+  retrievedProtocols?: Array<{ ref: string; title: string }>;
   /** Timestamp of when the question was asked */
   timestamp: number;
 }
