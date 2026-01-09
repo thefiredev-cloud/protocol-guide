@@ -313,7 +313,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'PMS': {
     expansion: 'Pulse Motor Sensory',
     synonyms: ['neurovascular check', 'circulation check', 'distal pulse', 'motor function', 'sensory function', 'extremity assessment'],
-    relatedProtocols: ['801', '802', '1241'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + Trauma TP
     category: 'assessment'
   },
   'MAE': {
