@@ -769,11 +769,19 @@ const Chat: React.FC = () => {
       // Detect if assistant asked a clarifying question for next turn
       const newClarification = detectClarifyingQuestion(responseText);
       if (newClarification) {
+        // Attach retrieved protocols so we know what was being discussed
+        if (retrieval?.protocols) {
+          newClarification.retrievedProtocols = Array.from(retrieval.protocols.values()).map(p => ({
+            ref: p.ref,
+            title: p.title,
+          }));
+        }
         setPendingClarification(newClarification);
         console.log('[Chat] New clarifying question detected:', {
           question: newClarification.question,
           topic: newClarification.topic,
           type: newClarification.clarificationType,
+          protocols: newClarification.retrievedProtocols?.length || 0,
         });
       } else {
         // Clear pending clarification if no question was asked
