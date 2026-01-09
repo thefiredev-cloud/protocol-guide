@@ -28,7 +28,8 @@ export type ProtocolCategory =
   | 'Calculations'
   | 'Medical Control'
   | 'OB'
-  | 'Medication';
+  | 'Medication'
+  | 'Curriculum';
 
 export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert';
 
