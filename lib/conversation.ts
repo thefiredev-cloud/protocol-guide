@@ -106,6 +106,54 @@ const LKWT_PATTERN = /\b(?:lkwt|last\s*known\s*well|onset|last\s*seen\s*normal)\
 const AGE_PATTERN = /\b(\d{1,3})\s*(?:y(?:ear)?s?|yo|y\/o|yr)(?:\s*old)?/i;
 
 // ============================================
+// Topic Change Detection
+// ============================================
+
+/**
+ * Check if the complaint category has changed, requiring a fact reset
+ */
+function hasTopicChanged(
+  newCategory: ConversationFacts['complaintCategory'] | undefined,
+  existingFacts: ConversationFacts
+): boolean {
+  // No change if no new category detected
+  if (!newCategory) return false;
+  // No change if no previous category
+  if (!existingFacts.complaintCategory) return false;
+  // Topic changed if categories differ
+  return newCategory !== existingFacts.complaintCategory;
+}
+
+/**
+ * Reset category-specific facts when topic changes
+ * Keeps patient demographics, clears clinical context
+ */
+function resetCategorySpecificFacts(facts: ConversationFacts): ConversationFacts {
+  return {
+    // Keep patient demographics
+    patientAge: facts.patientAge,
+    patientAgeUnit: facts.patientAgeUnit,
+    isPediatric: facts.isPediatric,
+    // Keep the NEW complaint category (already set)
+    complaintCategory: facts.complaintCategory,
+    // Clear everything else - will be re-extracted for new topic
+    injuryType: undefined,
+    injuryCause: undefined,
+    injuryLocation: undefined,
+    bodyPart: undefined,
+    isProximal: undefined,
+    woundType: undefined,
+    timeOfInjury: undefined,
+    symptomOnset: undefined,
+    lkwt: undefined,
+    lamsScore: undefined,
+    gcsScore: undefined,
+    requiresBaseContact: undefined,
+    baseContactReason: undefined,
+  };
+}
+
+// ============================================
 // Extraction Functions
 // ============================================
 
