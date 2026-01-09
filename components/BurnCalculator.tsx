@@ -39,7 +39,7 @@ export const BurnCalculator: React.FC = () => {
     setSelected(next);
   };
 
-  const totalTBSA = Array.from(selected).reduce((sum, id) => {
+  const totalTBSA: number = Array.from(selected).reduce<number>((sum, id) => {
     return sum + (sections.find(s => s.id === id)?.value || 0);
   }, 0);
 
