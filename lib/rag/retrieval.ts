@@ -940,10 +940,12 @@ export async function retrieveContext(
     allChunks.push(...hybridResults);
   }
 
-  // 3b: Explicit reference search (if detected)
+  // 3b: Explicit reference search (if detected) - run in parallel
   if (boostExplicitRefs && analysis.detectedProtocolRefs.length > 0) {
-    for (const ref of analysis.detectedProtocolRefs) {
-      const refResults = await searchByRef(ref);
+    const refSearchResults = await Promise.all(
+      analysis.detectedProtocolRefs.map(ref => searchByRef(ref))
+    );
+    for (const refResults of refSearchResults) {
       // Boost these results
       const boostedResults = refResults.map(r => ({
         ...r,
