@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode, useRef } from 'react';
 import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
-import type { ConversationFacts } from '../lib/conversation';
+import type { ConversationFacts, PendingClarification } from '../lib/conversation';
 
 const CHAT_STORAGE_KEY = 'protocolguide_chat';
 const SESSION_EXPIRY_MS = 4 * 60 * 60 * 1000; // 4 hours
