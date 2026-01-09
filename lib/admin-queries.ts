@@ -146,9 +146,10 @@ export async function getAllUsersWithMetrics(): Promise<UserMetrics[]> {
     // Convert to array
     const users: UserMetrics[] = [];
     for (const [email, metrics] of Array.from(userMap.entries())) {
+      const emailParts = email.split('@');
       users.push({
         email,
-        name: email.split('@')[0], // Extract name from email for now
+        name: emailParts.length > 0 ? emailParts[0] : email, // Extract name from email
         ...metrics
       });
     }
