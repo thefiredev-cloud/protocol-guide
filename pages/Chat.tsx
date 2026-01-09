@@ -138,6 +138,8 @@ const Chat: React.FC = () => {
     setMessages,
     conversationFacts,
     updateFacts,
+    pendingClarification,
+    setPendingClarification,
     isTyping,
     setTyping,
     useRAG,
