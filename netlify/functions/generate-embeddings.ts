@@ -100,19 +100,25 @@ const handler: Handler = async (event) => {
   }
 
   // Get remaining count
-  const { count: remaining } = await supabase
+  const { count: remaining, error: remainingError } = await supabase
     .from('protocol_chunks')
     .select('*', { count: 'exact', head: true })
     .is('embedding', null);
+
+  if (remainingError) {
+    console.error('Failed to get remaining count:', remainingError);
+  }
+
+  const remainingCount = remaining ?? 0;
 
   return {
     statusCode: 200,
     body: JSON.stringify({
       processed: chunks.length,
       successful: successCount,
-      remaining,
+      remaining: remainingCount,
       errors: errors.slice(0, 5),
-      message: remaining > 0 ? `Call again to process more. ${remaining} chunks remaining.` : 'Complete!'
+      message: remainingCount > 0 ? `Call again to process more. ${remainingCount} chunks remaining.` : 'Complete!'
     })
   };
 };
