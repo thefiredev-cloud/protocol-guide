@@ -39,32 +39,52 @@ export async function getOverviewStats(): Promise<OverviewStats | null> {
 
   try {
     // Get total users from auth (via distinct user_ids in sessions)
-    const { count: userCount } = await supabase
+    const { count: userCount, error: userCountError } = await supabase
       .from('chat_sessions')
       .select('user_id', { count: 'exact', head: true });
 
+    if (userCountError) {
+      console.error('Failed to get user count:', userCountError);
+    }
+
     // Get unique user count
-    const { data: uniqueUsers } = await supabase
+    const { data: uniqueUsers, error: uniqueUsersError } = await supabase
       .from('chat_sessions')
       .select('user_id')
       .limit(10000);
 
+    if (uniqueUsersError) {
+      console.error('Failed to get unique users:', uniqueUsersError);
+    }
+
     const uniqueUserIds = new Set(uniqueUsers?.map(u => u.user_id) || []);
 
     // Get total sessions
-    const { count: sessionCount } = await supabase
+    const { count: sessionCount, error: sessionCountError } = await supabase
       .from('chat_sessions')
       .select('*', { count: 'exact', head: true });
 
+    if (sessionCountError) {
+      console.error('Failed to get session count:', sessionCountError);
+    }
+
     // Get total messages
-    const { count: messageCount } = await supabase
+    const { count: messageCount, error: messageCountError } = await supabase
       .from('chat_messages')
       .select('*', { count: 'exact', head: true });
 
+    if (messageCountError) {
+      console.error('Failed to get message count:', messageCountError);
+    }
+
     // Get feedback breakdown
-    const { data: feedback } = await supabase
+    const { data: feedback, error: feedbackError } = await supabase
       .from('user_feedback')
       .select('rating');
+
+    if (feedbackError) {
+      console.error('Failed to get feedback:', feedbackError);
+    }
 
     const positiveRatings = feedback?.filter(f => f.rating === 'positive').length || 0;
     const negativeRatings = feedback?.filter(f => f.rating === 'negative').length || 0;
