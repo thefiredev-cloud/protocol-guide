@@ -165,6 +165,28 @@ async function runTests() {
     console.log('');
   }
 
+  // Test 4: Protocol Reference Search (direct lookup)
+  console.log('TEST 4: Protocol Reference Search (search_protocols_by_ref)');
+  console.log('-'.repeat(70));
+
+  const refTests = ['830', '1201', '1210', '521', '1317'];
+  for (const ref of refTests) {
+    console.log(`  Ref: "${ref}"`);
+    const result = await testProtocolRefSearch(ref);
+
+    if (result.error) {
+      console.log(`    ✗ Error: ${result.error}`);
+    } else if (result.count === 0) {
+      console.log(`    ⚠ No results`);
+    } else {
+      console.log(`    ✓ Found ${result.count} chunks`);
+      result.results.forEach(r => {
+        console.log(`      - ${r.protocol}: ${r.title} [${r.section}]`);
+      });
+    }
+    console.log('');
+  }
+
   console.log('='.repeat(70));
   console.log('Tests Complete');
   console.log('='.repeat(70));
