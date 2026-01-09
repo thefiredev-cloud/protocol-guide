@@ -343,6 +343,7 @@ function generateReport(results: QueryResult[]): ValidationReport {
 async function main() {
   console.log('='.repeat(60));
   console.log('Protocol Guide - Retrieval Validation');
+  console.log(`Mode: ${USE_FULL_RAG ? 'FULL RAG (embeddings + hybrid search)' : 'KEYWORD-ONLY'}`);
   console.log('='.repeat(60));
 
   // Load benchmark queries
