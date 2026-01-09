@@ -243,13 +243,6 @@ async function runSmokeTest() {
       process.exit(1);
     }
 
-    // Set up console logging
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        console.log(`  [Browser Error] ${msg.text()}`);
-      }
-    });
-
     for (let i = 0; i < TEST_QUERIES.length; i++) {
       const test = TEST_QUERIES[i];
       console.log(`Test ${i + 1}/${TEST_QUERIES.length}: ${test.query}`);
