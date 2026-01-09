@@ -643,15 +643,7 @@ const Chat: React.FC = () => {
             msg.id === botMsgId
               ? { ...msg, content: responseText }
               : msg
-                    ));
-                  }
-                  if (parsed.error) throw new Error(parsed.error);
-                } catch (parseError) {
-                  console.warn('Failed to parse SSE data:', parseError);
-                }
-              }
-            }
-          }
+          ));
         }
       } catch (streamError: any) {
         console.error('Streaming failed:', streamError);
