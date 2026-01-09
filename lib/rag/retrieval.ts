@@ -953,7 +953,7 @@ export async function retrieveContext(
       'PMC': ['510', '507', '508'],  // Pediatric Medical Center criteria (NOT 506 - that's Trauma)
       'PTC': ['506', '510'],                 // Pediatric trauma refs
       'Stroke': ['1210', '503'],             // Stroke protocol refs
-      'ECMO': ['1318', '1210'],              // MCG 1318 ECPR + Cardiac Arrest
+      'ECMO': ['MCG 1318', '1210'],           // MCG 1318 ECPR + Cardiac Arrest
       'Trauma': ['506', '502'],              // Trauma triage refs
       'Burn': ['506', '1228'],               // Burn criteria refs
       'STEMI': ['1211', '503'],              // STEMI/cardiac refs
