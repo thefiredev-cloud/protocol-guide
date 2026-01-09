@@ -189,6 +189,25 @@ async function runSmokeTest() {
   console.log('='.repeat(80));
   console.log('');
 
+  // Load credentials
+  const credentials = loadCredentials();
+  if (!credentials) {
+    console.error('ERROR: No test credentials found!');
+    console.error('');
+    console.error('Please provide credentials via one of these methods:');
+    console.error('  1. Environment variables: TEST_EMAIL and TEST_PASSWORD');
+    console.error('  2. Create tests/test-credentials.json with format:');
+    console.error('     {');
+    console.error('       "email": "your@email.com",');
+    console.error('       "password": "your-password"');
+    console.error('     }');
+    console.error('');
+    process.exit(1);
+  }
+
+  console.log(`Using test account: ${credentials.email}`);
+  console.log('');
+
   const browser = await puppeteer.launch({
     headless: false, // Show browser for debugging
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -202,6 +221,27 @@ async function runSmokeTest() {
 
   try {
     const page = await browser.newPage();
+
+    // Set up console logging
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        console.log(`  [Browser Error] ${msg.text()}`);
+      }
+    });
+
+    // Perform login once at the start
+    console.log('='.repeat(80));
+    console.log('Authenticating...');
+    console.log('='.repeat(80));
+    try {
+      await performLogin(page, credentials);
+      console.log('');
+    } catch (loginError) {
+      console.error(`Login failed: ${loginError.message}`);
+      console.error('Cannot proceed with tests without authentication.');
+      await browser.close();
+      process.exit(1);
+    }
 
     // Set up console logging
     page.on('console', msg => {
