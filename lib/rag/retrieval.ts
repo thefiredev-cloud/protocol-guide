@@ -939,8 +939,8 @@ export async function retrieveContext(
   // Step 1: Analyze the enhanced query
   const analysis = analyzeQuery(enhancedQuery);
 
-  // Step 1b: Detect criteria queries (PMC, PTC, Stroke, etc.)
-  const criteriaInfo = detectCriteriaQuery(query);
+  // Step 1b: Detect criteria queries (PMC, PTC, Stroke, etc.) - use enhanced query
+  const criteriaInfo = detectCriteriaQuery(enhancedQuery);
   if (criteriaInfo.isCriteriaQuery) {
     console.log('[RAG] Criteria query detected:', criteriaInfo.criteriaType);
   }
