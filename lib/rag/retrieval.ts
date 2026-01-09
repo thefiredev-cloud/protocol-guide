@@ -200,8 +200,40 @@ function analyzeQuery(query: string): QueryAnalysis {
 // ============================================
 
 /**
+ * Normalize RRF score to [0,1] range
+ *
+ * RRF scores with k=30 and adaptive weights (1.0-2.0) typically range:
+ * - Single source (keyword or semantic): ~0.03 (1/31)
+ * - Both sources at rank 1: ~0.065 (2/31)
+ * - Boosted scores (criteria/protocol match): up to ~1.5
+ *
+ * We use sigmoid-style normalization for more gradual scaling:
+ * - score < 0.03: low confidence (< 0.3)
+ * - score 0.03-0.06: medium confidence (0.3-0.7)
+ * - score 0.06-0.10: high confidence (0.7-0.9)
+ * - score > 0.10 or boosted: very high (> 0.9)
+ */
+function normalizeRelevanceScore(score: number): number {
+  // Handle boosted scores (criteria/protocol matches that exceed normal RRF range)
+  if (score > 0.5) {
+    return Math.min(0.95 + (score - 0.5) * 0.1, 1);
+  }
+
+  // Sigmoid-style normalization for standard RRF scores
+  // Maps ~0.05 to ~0.7 (center of sigmoid)
+  const center = 0.05;
+  const steepness = 30;
+  return 1 / (1 + Math.exp(-steepness * (score - center)));
+}
+
+/**
  * Calculate retrieval confidence based on results
  * Optimized for medical RAG queries
+ *
+ * Returns a score in [0,1] where:
+ * - 0.0-0.4: LOW confidence (may decline)
+ * - 0.4-0.7: MEDIUM confidence (answer with caveats)
+ * - 0.7-1.0: HIGH confidence (confident answer)
  */
 function calculateConfidence(
   chunks: RetrievedChunk[],
@@ -209,16 +241,16 @@ function calculateConfidence(
 ): number {
   if (chunks.length === 0) return 0;
 
-  // New weights optimized for medical RAG
+  // Weights for combining confidence factors
   const CONFIDENCE_WEIGHTS = {
-    topScore: 0.35,        // Reduced from 0.4 - reduce impact of single chunk
-    matchTypeQuality: 0.25, // Reduced from 0.3
-    explicitRefMatch: 0.25, // Increased from 0.2 - increase for explicit refs
-    protocolCoverage: 0.15  // Increased from 0.1 - multiple sources = better
+    topScore: 0.35,        // Top chunk relevance
+    matchTypeQuality: 0.25, // Both > semantic > keyword
+    explicitRefMatch: 0.25, // Explicit protocol reference found
+    protocolCoverage: 0.15  // Multiple relevant protocols
   };
 
-  // Factor 1: Top chunk relevance (normalize to 0-1)
-  const topScore = Math.min(chunks[0].relevanceScore * 20, 1);
+  // Factor 1: Top chunk relevance (properly normalized)
+  const topScore = normalizeRelevanceScore(chunks[0].relevanceScore);
 
   // Factor 2: Match type quality (both > semantic > keyword)
   const matchTypeScores = chunks.slice(0, 5).map(c =>
