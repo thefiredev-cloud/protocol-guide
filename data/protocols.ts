@@ -12,6 +12,11 @@ import { traumaProtocols } from './library/trauma';
 import { curriculumProtocolsList } from './library/curriculum';
 import { bulkProtocols } from './library/bulk-protocols';
 
+// New Content Categories
+import { quickReferenceList } from './library/quick-reference';
+import { clinicalPearlsList } from './library/clinical-pearls';
+import { lacofdProtocolsList } from './library/lacofd';
+
 // Detailed Series Imports
 import { series100 } from './library/series-100';
 import { series200 } from './library/series-200';
