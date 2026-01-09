@@ -10,6 +10,7 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { FeedbackButtons } from '../components/FeedbackButtons';
 import { QuickResults, extractRelevantSnippet, type LocalSearchResult } from '../components/QuickResults';
 import { QuickActions } from '../components/QuickActions';
+import { AnimatedText } from '../components/AnimatedText';
 
 // Dev mode detection - use direct API on localhost
 const isDevMode = typeof window !== 'undefined' &&
