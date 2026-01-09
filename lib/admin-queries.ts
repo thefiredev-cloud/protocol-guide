@@ -682,13 +682,14 @@ export async function exportConversationsCSV(dateRange: DateRange): Promise<stri
     ];
 
     const rows = (data || []).map(row => {
-      const session = row.chat_sessions as any;
+      // Type the joined session data from Supabase relationship
+      const session = row.chat_sessions as { user_email?: string; station?: string; department?: string } | null;
       return [
         row.id,
         row.session_id,
-        session?.user_email || '',
-        session?.station || '',
-        session?.department || '',
+        session?.user_email ?? '',
+        session?.station ?? '',
+        session?.department ?? '',
         row.role,
         `"${(row.content || '').replace(/"/g, '""').substring(0, 500)}"`,
         row.confidence || '',
