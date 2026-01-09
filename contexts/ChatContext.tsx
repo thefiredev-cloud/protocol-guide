@@ -178,11 +178,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       sessionId,
       messages: serializeMessages(messages),
       conversationFacts,
+      pendingClarification,
       expiresAt: Date.now() + SESSION_EXPIRY_MS,
     };
 
     safeSetItem(CHAT_STORAGE_KEY, JSON.stringify(sessionData));
-  }, [sessionId, messages, conversationFacts]);
+  }, [sessionId, messages, conversationFacts, pendingClarification]);
 
   const addMessage = useCallback((message: Message) => {
     setMessages(prev => [...prev, message]);
