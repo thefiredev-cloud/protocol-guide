@@ -546,6 +546,50 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
     relatedProtocols: ['1102', '1317.15'],
     category: 'general',
     dosingInfo: 'Typical rate: 10-30 mL/hr to maintain IV access without fluid overload'
+  },
+
+  // LACoFD-Specific & Additional Medical Acronyms
+  'LACOFD': {
+    expansion: 'Los Angeles County Fire Department',
+    synonyms: ['LA County Fire', 'county fire', 'fire department', 'LACFD', 'LACoFD'],
+    relatedProtocols: [],
+    category: 'general'
+  },
+  'EZ-IO': {
+    expansion: 'EZ-IO Intraosseous Device',
+    synonyms: ['IO drill', 'power IO', 'bone gun', 'intraosseous drill', 'EZ IO', 'EZIO'],
+    relatedProtocols: ['806', 'PROC-IO-VASCULAR'],
+    category: 'general'
+  },
+  'TBSA': {
+    expansion: 'Total Body Surface Area',
+    synonyms: ['body surface area', 'burn percentage', 'rule of nines', 'burn area', 'burn calculation'],
+    relatedProtocols: ['506', '1228'],
+    category: 'trauma'
+  },
+  'BRUE': {
+    expansion: 'Brief Resolved Unexplained Event',
+    synonyms: ['ALTE', 'apparent life threatening event', 'infant apnea', 'cyanotic spell', 'apneic episode'],
+    relatedProtocols: ['510', '507'],
+    category: 'pediatric'
+  },
+  'DKA': {
+    expansion: 'Diabetic Ketoacidosis',
+    synonyms: ['ketoacidosis', 'diabetic emergency', 'Kussmaul breathing', 'fruity breath', 'hyperglycemic crisis'],
+    relatedProtocols: ['1217', '510'],
+    category: 'general'
+  },
+  'IWMI': {
+    expansion: 'Inferior Wall Myocardial Infarction',
+    synonyms: ['inferior MI', 'inferior STEMI', 'RV infarct', 'right ventricular infarction', 'inferior wall MI'],
+    relatedProtocols: ['1211', '504', '503'],
+    category: 'cardiac'
+  },
+  'ETCO2': {
+    expansion: 'End-Tidal Carbon Dioxide',
+    synonyms: ['capnography', 'CO2 monitoring', 'waveform capnography', 'end tidal CO2', 'PETCO2'],
+    relatedProtocols: ['1320', '1100', '1210'],
+    category: 'respiratory'
   }
 };
 
