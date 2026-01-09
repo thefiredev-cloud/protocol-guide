@@ -94,9 +94,10 @@ const LOCATION_PATTERNS: Array<{ pattern: RegExp; location: string; isProximal: 
 
 const COMPLAINT_CATEGORY_PATTERNS: Array<{ pattern: RegExp; category: ConversationFacts['complaintCategory'] }> = [
   { pattern: /\b(mva|mvc|crash|collision|fall|trauma|injury|wound|bite|burn|assault|gsw)/i, category: 'trauma' },
-  { pattern: /\b(chest\s*pain|cardiac|heart|stemi|nstemi|acs|mi|angina)/i, category: 'cardiac' },
+  { pattern: /\b(chest\s*pain|cardiac|heart|stemi|nstemi|acs|mi|angina|pmc|dysrhythmia)/i, category: 'cardiac' },
   { pattern: /\b(stroke|cva|tia|lams|lapss|weakness|facial\s*droop|slurred)/i, category: 'stroke' },
   { pattern: /\b(dyspnea|sob|asthma|copd|respiratory|breathing)/i, category: 'respiratory' },
+  { pattern: /\b(sepsis|septic|infection|fever)/i, category: 'medical' },
 ];
 
 const LAMS_SCORE_PATTERN = /\blams\s*(?:of|score|=|:)?\s*(\d)/i;
