@@ -43,6 +43,7 @@ export interface ChatContextType {
   sessionId: string | null;
   messages: Message[];
   conversationFacts: ConversationFacts;
+  pendingClarification: PendingClarification | null;
   isTyping: boolean;
   chatSession: GeminiChat | null;
   useRAG: boolean;
@@ -51,6 +52,7 @@ export interface ChatContextType {
   addMessage: (message: Message) => void;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   updateFacts: (facts: ConversationFacts) => void;
+  setPendingClarification: (clarification: PendingClarification | null) => void;
   setTyping: (isTyping: boolean) => void;
   startNewSession: () => void;
   clearSession: () => void;
