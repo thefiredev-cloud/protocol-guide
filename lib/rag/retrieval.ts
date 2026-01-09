@@ -952,11 +952,11 @@ export async function retrieveContext(
     const criteriaProtocolMap: Record<string, string[]> = {
       'PMC': ['510', '507', '508'],  // Pediatric Medical Center criteria (NOT 506 - that's Trauma)
       'PTC': ['506', '510'],                 // Pediatric trauma refs
-      'Stroke': ['1210', '503'],             // Stroke protocol refs
-      'ECMO': ['Destination Criteria', 'MCG 1318', '1210'],  // ECPR criteria in Destination Criteria + MCG 1318
-      'Trauma': ['506', '502'],              // Trauma triage refs
-      'Burn': ['506', '1228'],               // Burn criteria refs
-      'STEMI': ['1211', '503'],              // STEMI/cardiac refs
+      'Stroke': ['Destination Criteria', '521', '522', '1232'],  // Stroke Assessment + Stroke TP
+      'ECMO': ['Destination Criteria', 'MCG 1318', '1210'],  // ECPR criteria
+      'Trauma': ['Destination Criteria', '506', '502'],      // Trauma triage refs
+      'Burn': ['Destination Criteria', '506', '1228'],       // Burn criteria refs
+      'STEMI': ['Destination Criteria', '1211', '504'],      // STEMI Receiving + ACS
       'Perinatal': ['510', '507'],           // Perinatal/newborn refs
       'Neonate': ['510', '507'],             // Neonate refs
     };
