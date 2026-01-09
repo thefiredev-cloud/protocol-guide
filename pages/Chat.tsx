@@ -444,7 +444,10 @@ const Chat: React.FC = () => {
       // Use RAG pipeline if available, otherwise fallback to local search
       if (useRAG) {
         // RAG Pipeline: Retrieve context from Supabase with vector search
-        retrieval = await retrieveContext(originalInput, patientContext as PatientContext);
+        // Pass conversation facts to enable query enhancement ("5" → "LAMS score 5 stroke...")
+        retrieval = await retrieveContext(originalInput, patientContext as PatientContext, {
+          conversationFacts: updatedFacts,
+        });
 
         // Check if we should decline to answer
         if (retrieval.shouldDecline) {
