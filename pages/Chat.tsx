@@ -1033,14 +1033,24 @@ const Chat: React.FC = () => {
                 disabled={isTyping}
               />
             </div>
-            <button 
+            <button
               onClick={handleSend}
-              disabled={!input.trim() || isTyping}
-              className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all active:scale-90 ${
-                !input.trim() || isTyping ? 'bg-slate-200 dark:bg-slate-700 text-slate-400' : 'bg-slate-900 dark:bg-[#9B1B30] text-white hover:bg-slate-800'
+              disabled={!input.trim() || isTyping || isStreaming}
+              className={`group relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ease-out active:scale-90 ${
+                !input.trim() || isTyping || isStreaming
+                  ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
+                  : 'bg-gradient-to-br from-[#B02040] to-[#9B1B30] text-white shadow-lg shadow-[#9B1B30]/25 hover:shadow-xl hover:shadow-[#9B1B30]/40 hover:scale-105 hover:from-[#C02848] hover:to-[#B02040]'
               }`}
             >
-              <span className="material-symbols-outlined text-[22px] ml-1">send</span>
+              {/* Glow ring on hover */}
+              <span className={`absolute inset-0 rounded-full transition-opacity duration-300 ring-4 ring-[#9B1B30]/20 ${
+                !input.trim() || isTyping || isStreaming ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'
+              }`} />
+              <span className={`material-symbols-outlined text-[24px] transition-transform duration-200 ${
+                !input.trim() || isTyping || isStreaming ? '' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
+              }`}>
+                {isStreaming ? 'stop_circle' : 'send'}
+              </span>
             </button>
           </div>
         </div>
