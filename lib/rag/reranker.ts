@@ -75,6 +75,14 @@ const CLINICAL_SECTIONS = [
   'precautions',
   'warnings',
   'adverse effects',
+  // Clinical Pearl and Quick Reference sections
+  'clinical pearl',
+  'field impression tip',
+  'high risk populations',
+  'atypical presentation',
+  'quick reference',
+  'job aid checklist',
+  'tailboard talk',
 ];
 
 /**
