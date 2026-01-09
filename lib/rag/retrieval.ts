@@ -983,8 +983,8 @@ export async function retrieveContext(
   let searchMode: 'hybrid' | 'keyword-only' = 'hybrid';
   let degradedReason: string | undefined;
 
-  // Build enhanced query first
-  let enhancedQuery = analysis.expandedQuery;
+  // Build final query for embedding (start with analysis.expandedQuery which includes acronym expansion)
+  let queryForEmbedding = analysis.expandedQuery;
 
   // Further enhance with patient context if available
   if (patientContext) {
@@ -1001,7 +1001,7 @@ export async function retrieveContext(
       contextParts.push(`chief complaint: ${patientContext.chiefComplaint}`);
     }
     if (contextParts.length > 0) {
-      enhancedQuery = `${enhancedQuery} ${contextParts.join(' ')}`;
+      queryForEmbedding = `${queryForEmbedding} ${contextParts.join(' ')}`;
     }
   }
 
