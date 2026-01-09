@@ -29,6 +29,7 @@ interface ErrorBoundaryProps {
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  declare props: ErrorBoundaryProps;
   state: ErrorBoundaryState = { hasError: false };
 
   constructor(props: ErrorBoundaryProps) {
