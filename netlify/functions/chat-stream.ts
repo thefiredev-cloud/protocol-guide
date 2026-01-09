@@ -126,6 +126,7 @@ const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) =
     // Sanitize and limit prompt length
     const prompt = body.prompt.slice(0, 4000);
     const context = body.context?.slice(0, 8000) || '';
+    const priorContext = body.priorContext?.slice(0, 1000) || '';  // Prior conversation context for follow-ups
 
     // Build the system prompt for medical reference
     const systemPrompt = body.systemPrompt || `ROLE: Protocol-Guide (LA County Fire EMS Medical Reference)
