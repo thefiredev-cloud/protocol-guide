@@ -894,7 +894,7 @@ const Chat: React.FC = () => {
                    {msg.content}
                    {/* Streaming cursor */}
                    {isStreaming && streamingMessageId === msg.id && (
-                     <span className="inline-block w-2 h-5 bg-primary ml-0.5 animate-pulse" />
+                     <span className="inline-block w-1.5 h-4 bg-primary/60 ml-1 animate-pulse rounded-sm align-middle" />
                    )}
                  </div>
 
