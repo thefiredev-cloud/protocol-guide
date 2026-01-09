@@ -301,7 +301,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'APGAR': {
     expansion: 'Appearance Pulse Grimace Activity Respiration',
     synonyms: ['newborn assessment', 'APGAR score', 'neonatal assessment', 'baby assessment', 'birth assessment'],
-    relatedProtocols: ['817', '1267'],
+    relatedProtocols: ['510', '507'],  // PMC criteria + Pediatric protocols
     category: 'pediatric'
   },
   'PEARL': {
