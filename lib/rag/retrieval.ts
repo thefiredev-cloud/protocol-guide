@@ -741,8 +741,8 @@ async function searchByRef(refNo: string): Promise<RetrievedChunk[]> {
  */
 function isNumericProtocolQuery(query: string): boolean {
   const trimmed = query.trim();
-  // Match: "1201", "TP-1201", "Ref 1201", "MCG 1302", "protocol 521"
-  return /^(?:tp[-\s]?|ref\.?\s*|mcg[-\s]?|protocol\s*)?(\d{3,4})$/i.test(trimmed);
+  // Match: "1201", "TP-1201", "Ref 1201", "MCG 1302", "protocol 521", "policy 830"
+  return /^(?:tp[-\s]?|ref\.?\s*|mcg[-\s]?|protocol\s*|policy\s*)?(\d{3,4}(?:\.\d+)?)$/i.test(trimmed);
 }
 
 /**
