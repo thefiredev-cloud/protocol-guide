@@ -53,6 +53,9 @@ const TEST_QUERIES = [
   }
 ];
 
+// Helper function to wait (replaces deprecated waitForTimeout)
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Utility to wait for response
 async function waitForResponse(page, timeout = RESPONSE_TIMEOUT) {
   const startTime = Date.now();
@@ -67,7 +70,7 @@ async function waitForResponse(page, timeout = RESPONSE_TIMEOUT) {
   }
 
   // Wait a bit for content to settle
-  await page.waitForTimeout(1000);
+  await delay(1000);
 
   const elapsed = Date.now() - startTime;
   return elapsed;

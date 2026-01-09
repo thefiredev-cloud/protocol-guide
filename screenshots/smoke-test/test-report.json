@@ -1,0 +1,67 @@
+[
+  {
+    "testId": "policy-830",
+    "query": "policy 830",
+    "description": "Should return exact protocol match",
+    "expected": "exact protocol match",
+    "status": "FAIL",
+    "error": "page.waitForTimeout is not a function",
+    "responseReceived": false,
+    "responseTime": 0,
+    "responsePreview": "",
+    "confidence": null,
+    "hasCitations": false
+  },
+  {
+    "testId": "lams",
+    "query": "LAMS",
+    "description": "Should return stroke scale protocols",
+    "expected": "stroke scale protocols (521/522)",
+    "status": "FAIL",
+    "error": "page.waitForTimeout is not a function",
+    "responseReceived": false,
+    "responseTime": 0,
+    "responsePreview": "",
+    "confidence": null,
+    "hasCitations": false
+  },
+  {
+    "testId": "epi-dose",
+    "query": "epi dose",
+    "description": "Should return epinephrine dosing info",
+    "expected": "epinephrine dosing info",
+    "status": "FAIL",
+    "error": "page.waitForTimeout is not a function",
+    "responseReceived": false,
+    "responseTime": 0,
+    "responsePreview": "",
+    "confidence": null,
+    "hasCitations": false
+  },
+  {
+    "testId": "chest-pain",
+    "query": "chest pain",
+    "description": "Should return cardiac protocols",
+    "expected": "cardiac protocols",
+    "status": "FAIL",
+    "error": "page.waitForTimeout is not a function",
+    "responseReceived": false,
+    "responseTime": 0,
+    "responsePreview": "",
+    "confidence": null,
+    "hasCitations": false
+  },
+  {
+    "testId": "tp-1201",
+    "query": "1201",
+    "description": "Should return TP-1201 General Assessment",
+    "expected": "TP-1201 General Assessment",
+    "status": "FAIL",
+    "error": "page.waitForTimeout is not a function",
+    "responseReceived": false,
+    "responseTime": 0,
+    "responsePreview": "",
+    "confidence": null,
+    "hasCitations": false
+  }
+]
