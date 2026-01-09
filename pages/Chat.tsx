@@ -134,7 +134,12 @@ const Chat: React.FC = () => {
     useRAG,
     setUseRAG,
     addMessage,
+    startNewSession,
   } = useChat();
+
+  // Menu dropdown state
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const { patientContext, isWidgetMode } = useWidgetMode();
 
