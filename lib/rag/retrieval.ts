@@ -811,6 +811,7 @@ export async function retrieveContext(
           confidence: 1.0, // Maximum confidence for exact protocol match
           queryAnalysis: analysis,
           shouldDecline: false,
+          searchMode: 'exact-match',
         };
       }
     }
@@ -818,6 +819,8 @@ export async function retrieveContext(
 
   // Step 2: Generate query embedding using expanded query with RETRY LOGIC
   let queryEmbedding: number[] = [];
+  let searchMode: 'hybrid' | 'keyword-only' = 'hybrid';
+  let degradedReason: string | undefined;
 
   // Build enhanced query first
   let enhancedQuery = analysis.expandedQuery;
