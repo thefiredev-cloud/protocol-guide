@@ -918,7 +918,7 @@ const Chat: React.FC = () => {
             key={msg.id}
             id={`msg-${msg.id}`}
             className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''} ${
-              streamingMessageId === msg.id ? '' : 'animate-slide-in-up'
+              msg.role === 'user' ? 'animate-slide-in-up' : ''
             }`}
           >
 >>>>>>> 48663ce (chore: Create Chat.tsx)
