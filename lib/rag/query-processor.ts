@@ -144,13 +144,15 @@ const COMMON_SYMPTOMS = [
  */
 const PROTOCOL_REF_PATTERNS = [
   // TP-1201, TP 1201, TP1201
-  /\btp[-\s]?(\d{3,4})\b/gi,
+  /\btp[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
   // Ref-1201, Ref 1201, Ref.1201
-  /\bref\.?[-\s]?(\d{3,4})\b/gi,
+  /\bref\.?[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
   // MCG-1302, MCG 1302
-  /\bmcg[-\s]?(\d{3,4})\b/gi,
+  /\bmcg[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
   // Protocol 1201
-  /\bprotocol[-\s]?(\d{3,4})\b/gi,
+  /\bprotocol[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
+  // Policy 830, policy 1317.6
+  /\bpolicy[-\s]?(\d{3,4}(?:\.\d+)?)\b/gi,
   // Standalone 3-4 digit numbers (e.g., "1201", "521")
   /\b(\d{3,4})\b/g,
 ];
