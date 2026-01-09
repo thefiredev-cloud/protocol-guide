@@ -249,28 +249,8 @@ async function runSmokeTest() {
       console.log('-'.repeat(80));
 
       try {
-        // Navigate to chat page
+        // Navigate to chat page (already authenticated)
         console.log(`  Navigating to ${BASE_URL}...`);
-        await page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 10000 });
-
-        // Inject authentication session into localStorage
-        console.log('  Injecting test authentication session...');
-        await page.evaluate(() => {
-          const session = {
-            user: {
-              email: 'tanner@thefiredev.com',
-              name: 'Tanner Osterkamp',
-              department: 'TheFireDev',
-              employeeId: 'TFD-001',
-              station: 'Remote'
-            },
-            expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours from now
-          };
-          localStorage.setItem('protocolguide_auth', JSON.stringify(session));
-        });
-
-        // Reload page to pick up the session
-        console.log('  Reloading to activate session...');
         await page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 10000 });
         await delay(2000); // Let page settle and React render
 
