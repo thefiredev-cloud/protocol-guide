@@ -500,8 +500,7 @@ const Chat: React.FC = () => {
       try {
         if (isDevMode) {
           // DEV MODE: Use direct Gemini API
-          // @ts-expect-error - Vite provides import.meta.env at runtime
-          const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string;
+          const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY as string;
           if (!apiKey) {
             throw new Error('VITE_GEMINI_API_KEY not configured for dev mode');
           }
