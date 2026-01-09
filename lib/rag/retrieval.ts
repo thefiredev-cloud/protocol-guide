@@ -747,10 +747,10 @@ function isNumericProtocolQuery(query: string): boolean {
 }
 
 /**
- * Extract protocol number from query
+ * Extract protocol number from query (supports decimals like 1317.6)
  */
 function extractProtocolNumber(query: string): string | null {
-  const match = query.match(/(\d{3,4})/);
+  const match = query.match(/(\d{3,4}(?:\.\d+)?)/);
   return match ? match[1] : null;
 }
 
