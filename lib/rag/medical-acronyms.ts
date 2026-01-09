@@ -504,19 +504,19 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'CPR': {
     expansion: 'Cardiopulmonary Resuscitation',
     synonyms: ['chest compressions', 'resuscitation', 'cardiac massage', 'basic life support'],
-    relatedProtocols: ['518', '1210', '830'],
+    relatedProtocols: ['1210', '1306'],  // Cardiac Arrest TP + Cardiac Drugs
     category: 'cardiac'
   },
   'ACLS': {
     expansion: 'Advanced Cardiac Life Support',
     synonyms: ['advanced resuscitation', 'cardiac arrest protocol', 'code management'],
-    relatedProtocols: ['518', '1210', '505'],
+    relatedProtocols: ['1210', '1306', '505'],  // Cardiac Arrest + Cardiovascular
     category: 'cardiac'
   },
   'AED': {
     expansion: 'Automated External Defibrillator',
     synonyms: ['defibrillator', 'shock', 'automatic defibrillator', 'AED pads'],
-    relatedProtocols: ['518', '1210'],
+    relatedProtocols: ['1210', '1306'],  // Cardiac Arrest TP + Cardiac Drugs
     category: 'cardiac'
   },
 
