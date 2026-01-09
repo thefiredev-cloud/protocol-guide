@@ -29,7 +29,9 @@ export type ProtocolCategory =
   | 'Medical Control'
   | 'OB'
   | 'Medication'
-  | 'Curriculum';
+  | 'Curriculum'
+  | 'Quick Reference'
+  | 'Clinical Pearls';
 
 export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert' | 'step-by-step' | 'facility-finder';
 
