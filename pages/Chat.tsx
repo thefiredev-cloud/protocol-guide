@@ -141,6 +141,27 @@ const Chat: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showMenu]);
+
+  const handleClearChat = () => {
+    if (messages.length > 1 && !confirm('Clear all messages and start a new conversation?')) {
+      return;
+    }
+    startNewSession();
+    setShowMenu(false);
+  };
+
   const { patientContext, isWidgetMode } = useWidgetMode();
 
   // Create Supabase session on mount when user is authenticated
