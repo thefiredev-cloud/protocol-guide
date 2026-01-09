@@ -130,25 +130,25 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'ROSC': {
     expansion: 'Return of Spontaneous Circulation',
     synonyms: ['pulse return', 'resuscitation success', 'post arrest', 'post cardiac arrest'],
-    relatedProtocols: ['518', '1210'],
+    relatedProtocols: ['1210', '1306'],  // Cardiac Arrest TP + Cardiac Drugs
     category: 'cardiac'
   },
   'PEA': {
     expansion: 'Pulseless Electrical Activity',
     synonyms: ['electrical activity without pulse', 'non-shockable rhythm'],
-    relatedProtocols: ['518', '1210'],
+    relatedProtocols: ['1210', '1306'],  // Cardiac Arrest TP + Cardiac Drugs
     category: 'cardiac'
   },
   'VF': {
     expansion: 'Ventricular Fibrillation',
     synonyms: ['v fib', 'shockable rhythm', 'defibrillation', 'cardiac arrest'],
-    relatedProtocols: ['518', '1210'],
+    relatedProtocols: ['1210', '1306'],  // Cardiac Arrest TP + Cardiac Drugs
     category: 'cardiac'
   },
   'VT': {
     expansion: 'Ventricular Tachycardia',
     synonyms: ['v tach', 'wide complex tachycardia', 'ventricular tachyarrhythmia'],
-    relatedProtocols: ['505', '518', '1205'],
+    relatedProtocols: ['505', '1213', '1210'],  // Cardiovascular + Tachycardia TP
     category: 'cardiac'
   },
   'TCP': {
