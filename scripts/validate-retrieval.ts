@@ -109,7 +109,27 @@ interface ValidationReport {
 // Search Functions
 // ============================================
 
-async function searchProtocols(query: string): Promise<SearchResult[]> {
+async function searchProtocolsWithRAG(query: string): Promise<SearchResult[]> {
+  try {
+    const result: RetrievalResult = await retrieveContext(query, null);
+
+    if (result.declined || result.chunks.length === 0) {
+      return [];
+    }
+
+    return result.chunks.map((chunk) => ({
+      protocol_id: chunk.protocolId,
+      protocol_ref: chunk.protocolRef,
+      content: chunk.content,
+      relevance_score: chunk.relevanceScore,
+    }));
+  } catch (error) {
+    console.error('RAG retrieval error:', error);
+    return [];
+  }
+}
+
+async function searchProtocolsKeywordOnly(query: string): Promise<SearchResult[]> {
   // Try exact search first for protocol numbers
   const numMatch = query.match(/(\d{3,4})/);
   if (numMatch) {
@@ -143,6 +163,13 @@ async function searchProtocols(query: string): Promise<SearchResult[]> {
   }
 
   return [];
+}
+
+async function searchProtocols(query: string): Promise<SearchResult[]> {
+  if (USE_FULL_RAG) {
+    return searchProtocolsWithRAG(query);
+  }
+  return searchProtocolsKeywordOnly(query);
 }
 
 // ============================================
