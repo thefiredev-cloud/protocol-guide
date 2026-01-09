@@ -72,12 +72,15 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   const truncatedText = text.length > maxChars ? text.substring(0, maxChars) : text;
 
   try {
-    if (isDevMode) {
-      // DEV MODE: Use direct Gemini API
+    if (useDirectAPI) {
+      // DEV MODE or NODE SCRIPT: Use direct Gemini API
       // @ts-expect-error - Vite provides import.meta.env at runtime
-      const apiKey = import.meta.env?.VITE_GEMINI_API_KEY as string;
+      const viteKey = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GEMINI_API_KEY : undefined;
+      const nodeKey = typeof process !== 'undefined' ? process.env?.VITE_GEMINI_API_KEY || process.env?.GEMINI_API_KEY : undefined;
+      const apiKey = viteKey || nodeKey;
+
       if (!apiKey) {
-        throw new Error('VITE_GEMINI_API_KEY not configured for dev mode');
+        throw new Error('GEMINI_API_KEY not configured');
       }
 
       const ai = new GoogleGenAI({ apiKey });
