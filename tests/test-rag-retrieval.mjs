@@ -69,6 +69,25 @@ async function testKeywordSearch(query) {
   };
 }
 
+async function testProtocolRefSearch(ref) {
+  const { data, error } = await supabase.rpc('search_protocols_by_ref', {
+    search_ref: ref,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {
+    count: data?.length || 0,
+    results: data?.slice(0, 3).map(r => ({
+      protocol: r.protocol_id,
+      title: r.protocol_title,
+      section: r.section_title,
+    })),
+  };
+}
+
 async function runTests() {
   console.log('='.repeat(70));
   console.log('RAG Retrieval Direct Test');
