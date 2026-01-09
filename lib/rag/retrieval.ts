@@ -228,6 +228,13 @@ function enhanceQueryWithFacts(
 
   const normalizedQuery = query.toLowerCase().trim();
 
+  // Don't enhance simple yes/no responses - they need conversation context, not RAG enhancement
+  const isSimpleResponse = /^(yes|no|yeah|nope|yep|nah|correct|incorrect|affirmative|negative|ok|okay)$/i.test(normalizedQuery);
+  if (isSimpleResponse) {
+    console.log('[RAG] Simple yes/no response - skipping enhancement, needs prior context');
+    return query; // Return unchanged, Chat.tsx should handle with prior context
+  }
+
   // Case 1: Bare number that could be a LAMS score (0-5) in stroke context
   if (/^[0-5]$/.test(normalizedQuery) && facts.complaintCategory === 'stroke') {
     console.log('[RAG] Enhancing bare number as LAMS score:', query);
