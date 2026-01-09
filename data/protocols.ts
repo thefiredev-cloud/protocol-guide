@@ -9,6 +9,7 @@ import { pharmacologyProtocolsList } from './library/pharmacology';
 import { policyProtocolsList } from './library/policies';
 import { procedureProtocolsList } from './library/procedures/index';
 import { traumaProtocols } from './library/trauma';
+import { curriculumProtocolsList } from './library/curriculum';
 import { bulkProtocols } from './library/bulk-protocols';
 
 // Detailed Series Imports
