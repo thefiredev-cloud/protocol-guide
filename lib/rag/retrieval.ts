@@ -862,7 +862,15 @@ export async function retrieveContext(
       console.log(`[RAG] Embedding SUCCESS on attempt ${attempt}`);
       break;
     } catch (error) {
-      console.error(`[RAG] Embedding attempt ${attempt}/${maxAttempts} FAILED:`, error);
+      // Log typed errors appropriately
+      if (error instanceof EmbeddingTimeoutError) {
+        console.warn(`[RAG] Embedding attempt ${attempt}/${maxAttempts} TIMEOUT`);
+      } else if (error instanceof EmbeddingError) {
+        console.error(`[RAG] Embedding attempt ${attempt}/${maxAttempts} FAILED:`, error.message);
+      } else {
+        console.error(`[RAG] Embedding attempt ${attempt}/${maxAttempts} UNEXPECTED ERROR:`, error);
+      }
+
       if (attempt < maxAttempts) {
         // Exponential backoff: 1s, 2s
         await new Promise(r => setTimeout(r, 1000 * attempt));
