@@ -52,16 +52,23 @@ export interface SourceViolation {
 
 /**
  * Validate that a source URL is from an authorized LA County DHS source
+ *
+ * @param sourceUrl - The source URL to validate
+ * @param allowUnverified - If true, allow chunks without source URLs (legacy data).
+ *                          Default false for patient safety.
  */
-export function validateSourceUrl(sourceUrl: string | null | undefined): SourceValidationResult {
-  // Missing source URL is a warning (for legacy data without source tracking)
+export function validateSourceUrl(
+  sourceUrl: string | null | undefined,
+  allowUnverified: boolean = false
+): SourceValidationResult {
+  // Missing source URL - reject by default for patient safety
   if (!sourceUrl || sourceUrl.trim() === '') {
     return {
-      isValid: true, // Allow but flag as warning
+      isValid: allowUnverified, // Only allow if explicitly permitted
       sourceUrl: null,
       authorizedSource: AUTHORIZED_SOURCES.primary,
       reason: 'No source URL provided - content origin cannot be verified',
-      severity: 'warning',
+      severity: allowUnverified ? 'warning' : 'error',
     };
   }
 
