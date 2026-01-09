@@ -84,8 +84,8 @@ async function loadAppProtocols(): Promise<Array<{
   // For now, return empty array - will be populated when integrated
   try {
     // Dynamic import of protocol data
-    const { allProtocols } = await import('../../data/protocols');
-    return allProtocols.map(p => ({
+    const { protocols } = await import('../../data/protocols');
+    return protocols.map(p => ({
       id: p.id,
       refNo: p.refNo,
       title: p.title,
