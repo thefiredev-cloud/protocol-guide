@@ -153,7 +153,24 @@ async function runSmokeTest() {
         // Navigate to chat page
         console.log(`  Navigating to ${BASE_URL}...`);
         await page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 10000 });
-        await delay(1500); // Let page settle
+        await delay(2000); // Let page settle and React render
+
+        // Debug: Check what's on the page
+        const pageContent = await page.evaluate(() => {
+          const inputs = Array.from(document.querySelectorAll('input'));
+          const textareas = Array.from(document.querySelectorAll('textarea'));
+          return {
+            url: window.location.href,
+            inputCount: inputs.length,
+            textareaCount: textareas.length,
+            inputs: inputs.map(i => ({
+              type: i.type,
+              placeholder: i.placeholder,
+              visible: i.offsetParent !== null
+            }))
+          };
+        });
+        console.log(`  Page debug:`, JSON.stringify(pageContent, null, 2));
 
         // Find chat input
         console.log('  Locating chat input...');
@@ -161,6 +178,7 @@ async function runSmokeTest() {
         const possibleSelectors = [
           'input[placeholder*="Query"]',
           'input[placeholder*="query"]',
+          'input[placeholder*="protocol"]',
           'input[type="text"]',
           'textarea[placeholder*="Query"]',
           'textarea[placeholder*="query"]'
@@ -169,7 +187,7 @@ async function runSmokeTest() {
         for (const selector of possibleSelectors) {
           const element = await page.$(selector);
           if (element) {
-            const isVisible = await element.isVisible();
+            const isVisible = await element.boundingBox();
             if (isVisible) {
               inputSelector = selector;
               console.log(`  Found input: ${selector}`);
@@ -179,6 +197,10 @@ async function runSmokeTest() {
         }
 
         if (!inputSelector) {
+          // Take debug screenshot
+          const debugScreenshot = join(SCREENSHOTS_DIR, `${test.id}-debug.png`);
+          await page.screenshot({ path: debugScreenshot, fullPage: true });
+          console.log(`  Debug screenshot: ${debugScreenshot}`);
           throw new Error('Could not find chat input field');
         }
 
