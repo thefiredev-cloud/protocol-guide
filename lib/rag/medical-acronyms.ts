@@ -377,7 +377,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'EPI': {
     expansion: 'Epinephrine',
     synonyms: ['adrenaline', 'epi 1:1000', 'epi 1:10000'],
-    relatedProtocols: ['1317.6', '518', '507'],
+    relatedProtocols: ['1317.6', '1210', '1306'],  // Epi med ref + Cardiac Arrest + Anaphylaxis
     category: 'medication',
     dosingInfo: 'Cardiac arrest: 1mg (1:10,000) IV/IO q3-5min; Anaphylaxis: 0.3mg (1:1,000) IM; Severe asthma: 0.3-0.5mg (1:1,000) IM'
   },
