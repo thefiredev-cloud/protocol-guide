@@ -7,7 +7,7 @@ export const tp1215: Protocol = {
   title: "Childbirth (Mother)",
   category: "OB/GYN",
   type: "Standing Order",
-  lastUpdated: "Jul 1, 2025",
+  lastUpdated: "Jan 2026",
   icon: "child_friendly",
   color: "pink",
   sections: [
@@ -33,6 +33,27 @@ export const tp1215: Protocol = {
     },
     {
       type: "accordion",
+      title: "Shoulder Dystocia",
+      items: [
+        {
+          title: "Recognition",
+          content: "Head delivers but retracts against perineum ('<b>turtle sign</b>'). Anterior shoulder trapped behind pubic symphysis. <b>Time is critical</b> - 4-5 min until hypoxic injury.",
+          icon: "warning"
+        },
+        {
+          title: "McRoberts Maneuver",
+          content: "<b>Positioning Steps:</b><br>1. Flatten the bed completely<br>2. Remove pillows from under mother<br>3. <b>Hyperflex mother's hips</b> - bring knees up toward chest/shoulders<br>4. Thighs should be pressed tightly against abdomen<br>5. Legs abducted (spread apart)<br><br><b>Suprapubic Pressure:</b><br>Apply firm <b>downward</b> pressure just above pubic bone to dislodge anterior shoulder. Use heel of hand. <b>DO NOT use fundal pressure.</b>",
+          icon: "pregnant_woman"
+        },
+        {
+          title: "Additional Maneuvers",
+          content: "If McRoberts fails:<br>• <b>Rubin maneuver</b> - rotate anterior shoulder posteriorly<br>• <b>Delivery of posterior arm</b><br>• <b>Gaskin (all-fours) position</b><br><br>Call for additional resources. CONTACT BASE for all shoulder dystocia.",
+          icon: "emergency"
+        }
+      ]
+    },
+    {
+      type: "accordion",
       title: "Post-Partum Care",
       items: [
         { title: "Fundal Massage", content: "Massage fundus (uterus) firmly if boggy to promote contraction." },
@@ -40,9 +61,14 @@ export const tp1215: Protocol = {
       ]
     },
     {
+      type: "facility-finder",
+      title: "Nearest Perinatal/Pediatric Center",
+      facilityTypes: ["pediatric"]
+    },
+    {
       type: "info",
       title: "APGAR Score",
-      content: "Assess at 1 min and 5 min.<br><b>A</b>ppearance (Color)<br><b>P</b>ulse (>100)<br><b>G</b>rimace (Reflex)<br><b>A</b>ctivity (Tone)<br><b>R</b>espiration (Cry)"
+      content: "Assess at 1 min and 5 min.<br><b>A</b>ppearance (Color): Blue/pale=0, Acrocyanosis=1, Pink=2<br><b>P</b>ulse: Absent=0, <100=1, >100=2<br><b>G</b>rimace (Reflex): None=0, Grimace=1, Cry=2<br><b>A</b>ctivity (Tone): Limp=0, Some flexion=1, Active=2<br><b>R</b>espiration: Absent=0, Weak/irregular=1, Strong cry=2"
     }
   ]
 };
