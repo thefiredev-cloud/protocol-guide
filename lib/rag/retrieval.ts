@@ -908,6 +908,12 @@ function extractProtocolNumber(query: string): string | null {
 
 /**
  * Retrieve relevant context for a query
+ *
+ * @param query - The user's search query
+ * @param patientContext - Optional patient demographics (age, weight, etc.)
+ * @param options.maxChunks - Maximum chunks to return (default: 10)
+ * @param options.boostExplicitRefs - Boost explicit protocol references (default: true)
+ * @param options.conversationFacts - Extracted facts from conversation history (LAMS, LKWT, etc.)
  */
 export async function retrieveContext(
   query: string,
@@ -915,12 +921,23 @@ export async function retrieveContext(
   options: {
     maxChunks?: number;
     boostExplicitRefs?: boolean;
+    conversationFacts?: ConversationFacts;
   } = {}
 ): Promise<RetrievalResult> {
-  const { maxChunks = 10, boostExplicitRefs = true } = options;
+  const { maxChunks = 10, boostExplicitRefs = true, conversationFacts } = options;
 
-  // Step 1: Analyze query
-  const analysis = analyzeQuery(query);
+  // Step 0: Enhance query with conversation facts (transforms "5" → "LAMS score 5 stroke...")
+  const enhancedQuery = enhanceQueryWithFacts(query, conversationFacts);
+  if (enhancedQuery !== query) {
+    console.log('[RAG] Query enhanced with conversation facts:', {
+      original: query,
+      enhanced: enhancedQuery,
+      facts: conversationFacts,
+    });
+  }
+
+  // Step 1: Analyze the enhanced query
+  const analysis = analyzeQuery(enhancedQuery);
 
   // Step 1b: Detect criteria queries (PMC, PTC, Stroke, etc.)
   const criteriaInfo = detectCriteriaQuery(query);
