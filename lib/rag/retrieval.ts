@@ -51,6 +51,10 @@ export interface RetrievalResult {
   queryAnalysis: QueryAnalysis;
   shouldDecline: boolean;
   declineReason?: string;
+  /** Search mode used - 'hybrid' is best, 'keyword-only' or 'exact-match' are fallbacks */
+  searchMode: 'hybrid' | 'keyword-only' | 'exact-match';
+  /** Reason for degraded search mode, if applicable */
+  degradedReason?: string;
 }
 
 export interface PatientContext {
