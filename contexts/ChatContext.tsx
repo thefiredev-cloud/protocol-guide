@@ -193,6 +193,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setConversationFacts(facts);
   }, []);
 
+  const setPendingClarification = useCallback((clarification: PendingClarification | null) => {
+    setPendingClarificationState(clarification);
+  }, []);
+
   const setTyping = useCallback((typing: boolean) => {
     setIsTyping(typing);
   }, []);
