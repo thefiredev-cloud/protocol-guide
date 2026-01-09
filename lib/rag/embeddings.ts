@@ -55,6 +55,32 @@ export interface EmbeddingStats {
 
 interface EmbedQueryResponse {
   embedding: number[];
+}
+
+// ============================================
+// Custom Errors
+// ============================================
+
+/**
+ * Error thrown when embedding generation times out
+ */
+export class EmbeddingTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EmbeddingTimeoutError';
+  }
+}
+
+/**
+ * Error thrown when embedding generation fails
+ */
+export class EmbeddingError extends Error {
+  cause?: Error;
+
+  constructor(message: string, cause?: Error) {
+    super(message);
+    this.name = 'EmbeddingError';
+    this.cause = cause;
   dimensions: number;
 }
 
