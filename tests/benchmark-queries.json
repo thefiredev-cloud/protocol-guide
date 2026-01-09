@@ -1538,6 +1538,77 @@
         "blood"
       ],
       "priority": "high"
+    },
+    {
+      "id": 101,
+      "query": "lams score 5",
+      "category": "stroke",
+      "expected_protocols": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "expected_terms": [
+        "LAMS",
+        "LVO",
+        "CSC",
+        "comprehensive stroke"
+      ],
+      "description": "Implicit stroke context - LAMS score only (multi-turn context test)",
+      "priority": "critical"
+    },
+    {
+      "id": 102,
+      "query": "5",
+      "category": "stroke",
+      "conversation_context": {
+        "complaintCategory": "stroke"
+      },
+      "expected_protocols": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "expected_terms": [
+        "LAMS",
+        "score"
+      ],
+      "description": "Bare number as LAMS score response with conversation context",
+      "priority": "critical"
+    },
+    {
+      "id": 103,
+      "query": "last known well 10 pm",
+      "category": "stroke",
+      "expected_protocols": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "expected_terms": [
+        "LKWT",
+        "time window",
+        "last known well"
+      ],
+      "description": "LKWT time in stroke context (multi-turn context test)",
+      "priority": "critical"
+    },
+    {
+      "id": 104,
+      "query": "LKWT 2 hours ago",
+      "category": "stroke",
+      "expected_protocols": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "expected_terms": [
+        "last known well",
+        "time",
+        "stroke"
+      ],
+      "description": "LKWT acronym with relative time",
+      "priority": "high"
     }
   ]
 }
