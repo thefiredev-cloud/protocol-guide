@@ -573,6 +573,14 @@ export function formatPriorContext(
 ): string {
   const lines: string[] = ['PRIOR CONTEXT (user is responding to this):'];
 
+  // Include protocol options that were being discussed (most important for follow-ups)
+  if (clarification?.retrievedProtocols && clarification.retrievedProtocols.length > 0) {
+    lines.push('Protocols being discussed:');
+    clarification.retrievedProtocols.slice(0, 5).forEach(p => {
+      lines.push(`  • ${p.ref}: ${p.title}`);
+    });
+  }
+
   if (clarification?.topic) {
     lines.push(`Topic under discussion: ${clarification.topic}`);
   }
