@@ -972,8 +972,11 @@ export async function retrieveContext(
     const relatedRefs = criteriaProtocolMap[criteriaInfo.criteriaType] || [];
     console.log(`[RAG] Searching criteria-related protocols:`, relatedRefs);
 
-    for (const ref of relatedRefs) {
-      const refResults = await searchByRef(ref);
+    // Run criteria searches in parallel
+    const criteriaSearchResults = await Promise.all(
+      relatedRefs.map(ref => searchByRef(ref))
+    );
+    for (const refResults of criteriaSearchResults) {
       // Boost criteria-related results
       const boostedResults = refResults.map(r => ({
         ...r,
