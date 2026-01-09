@@ -233,13 +233,38 @@ const Chat: React.FC = () => {
     setUseRAG(isSupabaseConfigured());
   }, []);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Check if user is near bottom of chat (within 150px)
+  const isNearBottom = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return true;
+    const threshold = 150;
+    return container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
   };
 
+  // Scroll to bottom - instant during streaming, smooth otherwise
+  const scrollToBottom = (instant = false) => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: instant ? 'instant' : 'smooth',
+      block: 'end'
+    });
+  };
+
+  // Auto-scroll only if user is near bottom (don't interrupt reading)
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
+    if (isNearBottom()) {
+      scrollToBottom(isStreaming);
+    }
+  }, [messages, isTyping, isStreaming]);
+
+  // When streaming starts, scroll to show the new message at TOP of viewport
+  useEffect(() => {
+    if (isStreaming && streamingMessageId) {
+      const msgElement = document.getElementById(`msg-${streamingMessageId}`);
+      if (msgElement) {
+        msgElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+    }
+  }, [streamingMessageId]);
 
   // Helper to strip HTML and clean text
   const stripHtml = (s?: string) => s ? s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : '';
