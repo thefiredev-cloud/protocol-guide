@@ -7,6 +7,9 @@ import { ProtocolSection } from '../types';
 import { renderIcon } from '../components/Icons';
 import { BurnCalculator } from '../components/BurnCalculator';
 import { ColorCodeReference } from '../components/ColorCodeReference';
+import { StepByStepSection } from '../components/StepByStepSection';
+import { FacilityFinder } from '../components/FacilityFinder';
+import { ProtocolImage } from '../components/ProtocolImage';
 
 // Sanitize HTML content to prevent XSS attacks
 const sanitizeHTML = (html: string | undefined): string => {
