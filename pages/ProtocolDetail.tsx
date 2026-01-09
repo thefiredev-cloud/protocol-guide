@@ -269,6 +269,26 @@ const ProtocolDetail: React.FC = () => {
           </div>
         );
 
+      case 'step-by-step':
+        return (
+          <StepByStepSection
+            key={index}
+            title={section.title}
+            steps={section.steps || []}
+            color={protocol.color}
+          />
+        );
+
+      case 'facility-finder':
+        return (
+          <FacilityFinder
+            key={index}
+            facilityTypes={section.facilityTypes || ['trauma']}
+            title={section.title}
+            showMapLink={true}
+          />
+        );
+
       default: return null;
     }
   };
