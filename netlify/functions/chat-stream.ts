@@ -44,7 +44,7 @@ function formatSSE(data: string, event?: string): string {
   return message;
 }
 
-const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
   // CORS headers - restrict to allowed origins
   const allowedOrigins = [
     'https://protocol-guide.com',
