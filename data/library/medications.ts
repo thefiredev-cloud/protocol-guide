@@ -44,7 +44,7 @@ export const medications: Protocol[] = [
   },
   {
     id: "MED-EPI10", refNo: "Epinephrine 1:10,000", title: "Epinephrine (0.1mg/mL)", category: "Pharmacology", type: "Formulary", lastUpdated: "Jan 1, 2024", icon: "medication", color: "red",
-    sections: [{ type: "header", items: [{ title: "Epinephrine 1:10,000", subtitle: "Cardiac Arrest / Push-dose" }] }, { type: "accordion", title: "Key Info", items: [{ title: "Arrest Dose", content: "1mg IV/IO q 3-5 min." }, { title: "Push Dose", content: "1mL (10mcg) q 1-3 min for Shock." }] }]
+    sections: [{ type: "header", items: [{ title: "Epinephrine 1:10,000", subtitle: "Cardiac Arrest / Push-dose" }] }, { type: "accordion", title: "Key Info", items: [{ title: "Arrest Dose", content: "1mg (10mL of 1:10,000 or 0.1mg/mL) IV/IO q 3-5 min." }, { title: "Push Dose", content: "1mL (10mcg) q 1-3 min for Shock." }] }]
   },
   {
     id: "MED-FENT", refNo: "Fentanyl", title: "Fentanyl", category: "Pharmacology", type: "Formulary", lastUpdated: "Jan 1, 2024", icon: "medication", color: "purple",
