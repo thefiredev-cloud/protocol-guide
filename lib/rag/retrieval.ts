@@ -15,6 +15,7 @@ import {
 } from './source-validation';
 import { rerankChunks } from './reranker';
 import { processQuery, type ProcessedQuery } from './query-processor';
+import type { ConversationFacts } from '../conversation';
 
 // ============================================
 // Types
