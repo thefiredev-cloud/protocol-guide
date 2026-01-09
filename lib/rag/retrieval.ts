@@ -358,12 +358,26 @@ function calculateConfidence(
   const uniqueProtocols = new Set(chunks.map(c => c.protocolId)).size;
   const coverageScore = Math.min(uniqueProtocols / 3, 1);
 
-  return (
+  // Factor 5: Medical acronym bonus
+  // Medical acronyms indicate specific clinical intent, not vague queries
+  const acronymBonus = analysis.hasAcronyms ? 0.15 : 0;
+
+  // Factor 6: Known stroke scale bonus (LAMS, mLAPSS, LKWT, GCS)
+  // These ARE destination triage tools - queries containing them have clear intent
+  const strokeScaleTerms = ['lams', 'mlapss', 'lapss', 'lkwt', 'last known well', 'gcs'];
+  const hasStrokeScale = strokeScaleTerms.some(term =>
+    analysis.originalQuery.toLowerCase().includes(term)
+  );
+  const strokeScaleBonus = hasStrokeScale ? 0.1 : 0;
+
+  const baseConfidence = (
     topScore * CONFIDENCE_WEIGHTS.topScore +
     avgMatchType * CONFIDENCE_WEIGHTS.matchTypeQuality +
     explicitScore * CONFIDENCE_WEIGHTS.explicitRefMatch +
     coverageScore * CONFIDENCE_WEIGHTS.protocolCoverage
   );
+
+  return Math.min(baseConfidence + acronymBonus + strokeScaleBonus, 1.0);
 }
 
 /**
