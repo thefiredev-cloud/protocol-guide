@@ -1,6 +1,7 @@
 
 import { procAirway } from './proc-airway';
 import { procIO } from './proc-io';
+import { procIOVascular } from './proc-io-vascular';
 import { procTCP } from './proc-tcp';
 import { procCPAP } from './proc-cpap';
 import { procIntubation } from './proc-intubation';
@@ -13,6 +14,7 @@ export const procedureProtocolsList = [
   procAirway,
   procIntubation,
   procIO,
+  procIOVascular,
   procTCP,
   procCPAP,
   procDefibrillation,
