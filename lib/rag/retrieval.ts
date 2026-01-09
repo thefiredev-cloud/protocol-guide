@@ -125,12 +125,13 @@ function analyzeQuery(query: string): QueryAnalysis {
   const acronymExpansion = expandQuery(query);
   const queryHasAcronyms = hasAcronyms(query);
 
-  // Detect explicit protocol references (TP-1201, Ref 1210, MCG 1302, etc.)
+  // Detect explicit protocol references (TP-1201, Ref 1210, MCG 1302, policy 830, etc.)
   const refPatterns = [
-    /(?:tp[-\s]?)(\d{3,4})/gi,
-    /(?:ref\.?\s*)(\d{3,4})/gi,
-    /(?:mcg[-\s]?)(\d{3,4})/gi,
-    /(?:protocol\s*)(\d{3,4})/gi,
+    /(?:tp[-\s]?)(\d{3,4}(?:\.\d+)?)/gi,
+    /(?:ref\.?\s*)(\d{3,4}(?:\.\d+)?)/gi,
+    /(?:mcg[-\s]?)(\d{3,4}(?:\.\d+)?)/gi,
+    /(?:protocol\s*)(\d{3,4}(?:\.\d+)?)/gi,
+    /(?:policy\s*)(\d{3,4}(?:\.\d+)?)/gi,
     /\b(\d{4})\b/g, // Standalone 4-digit numbers
   ];
 
