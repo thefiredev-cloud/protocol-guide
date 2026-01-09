@@ -357,7 +357,7 @@ async function keywordSearch(
   queryText: string,
   matchCount: number = 20
 ): Promise<Array<RetrievedChunk & { rank: number }>> {
-  const { data, error } = await supabase.rpc('keyword_search_protocols', {
+  const { data, error } = await supabase.rpc('fulltext_search_protocols', {
     query_text: queryText,
     match_count: matchCount,
   });
