@@ -53,6 +53,7 @@ const detailedProtocols: Protocol[] = [
   ...procedureProtocolsList,
   ...traumaProtocols,
   ...calculations,
+  ...curriculumProtocolsList,
 ];
 
 // Deduplication Logic: Prefer detailed protocols over bulk stubs
