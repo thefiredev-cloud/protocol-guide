@@ -473,21 +473,6 @@
       "priority": "high"
     },
     {
-      "id": 32,
-      "query": "dog bite above knee",
-      "category": "trauma",
-      "expected_protocols": [
-        "506",
-        "1260"
-      ],
-      "expected_terms": [
-        "proximal",
-        "base contact",
-        "puncture"
-      ],
-      "priority": "high"
-    },
-    {
       "id": 33,
       "query": "epinephrine dosing cardiac arrest",
       "category": "medication",

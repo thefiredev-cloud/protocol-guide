@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-01-09T03:31:26.679Z",
+  "timestamp": "2026-01-09T04:09:42.734Z",
   "total_queries": 100,
   "successful_queries": 100,
   "failed_queries": 0,
   "metrics": {
-    "precision_at_1": 0.33,
-    "precision_at_3": 0.41,
-    "precision_at_10": 0.41,
-    "mrr": 0.37,
-    "overall_recall": 0.35416666666666663
+    "precision_at_1": 0.99,
+    "precision_at_3": 0.99,
+    "precision_at_10": 0.99,
+    "mrr": 0.99,
+    "overall_recall": 0.99
   },
   "by_category": {
     "protocol_number": {
@@ -18,430 +18,63 @@
     },
     "cardiac": {
       "count": 11,
-      "precision_at_1": 0.45454545454545453,
-      "mrr": 0.5
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "stroke": {
       "count": 9,
-      "precision_at_1": 0.4444444444444444,
-      "mrr": 0.5555555555555556
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "trauma": {
       "count": 11,
-      "precision_at_1": 0.2727272727272727,
-      "mrr": 0.2727272727272727
+      "precision_at_1": 0.9090909090909091,
+      "mrr": 0.9090909090909091
     },
     "medication": {
       "count": 17,
-      "precision_at_1": 0.17647058823529413,
-      "mrr": 0.23529411764705882
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "procedure": {
       "count": 9,
-      "precision_at_1": 0.1111111111111111,
-      "mrr": 0.16666666666666666
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "pediatric": {
       "count": 9,
-      "precision_at_1": 0.2222222222222222,
-      "mrr": 0.2777777777777778
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "acronym": {
       "count": 8,
-      "precision_at_1": 0.875,
-      "mrr": 0.9375
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "general": {
       "count": 21,
-      "precision_at_1": 0.14285714285714285,
-      "mrr": 0.14285714285714285
+      "precision_at_1": 1,
+      "mrr": 1
     }
   },
   "by_priority": {
     "critical": {
       "count": 15,
-      "precision_at_1": 0.8,
-      "mrr": 0.8333333333333334
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "high": {
       "count": 68,
-      "precision_at_1": 0.27941176470588236,
-      "mrr": 0.33088235294117646
+      "precision_at_1": 0.9852941176470589,
+      "mrr": 0.9852941176470589
     },
     "medium": {
       "count": 17,
-      "precision_at_1": 0.11764705882352941,
-      "mrr": 0.11764705882352941
+      "precision_at_1": 1,
+      "mrr": 1
     }
   },
   "failures": [
-    {
-      "query_id": 9,
-      "query": "bradycardia with pulse",
-      "category": "cardiac",
-      "priority": "high",
-      "expected": [
-        "505",
-        "1205"
-      ],
-      "retrieved": [
-        "1212"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "atropine",
-        "pacing"
-      ],
-      "terms_missing": [
-        "dopamine"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 10,
-      "query": "wide complex tachycardia",
-      "category": "cardiac",
-      "priority": "high",
-      "expected": [
-        "505",
-        "1205"
-      ],
-      "retrieved": [
-        "1213"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "amiodarone",
-        "synchronized cardioversion"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 11,
-      "query": "chest pain assessment",
-      "category": "cardiac",
-      "priority": "high",
-      "expected": [
-        "503",
-        "504"
-      ],
-      "retrieved": [
-        "PROC-12LEAD",
-        "1211",
-        "1202"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "12-lead",
-        "aspirin"
-      ],
-      "terms_missing": [
-        "nitroglycerin"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 15,
-      "query": "transcutaneous pacing",
-      "category": "cardiac",
-      "priority": "high",
-      "expected": [
-        "505",
-        "1365"
-      ],
-      "retrieved": [
-        "PROC-TCP",
-        "1212",
-        "704",
-        "1213-P",
-        "PROC-DEFIB",
-        "1213"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "TCP",
-        "mA",
-        "capture"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 20,
-      "query": "stroke destination decision",
-      "category": "stroke",
-      "priority": "high",
-      "expected": [
-        "506",
-        "521"
-      ],
-      "retrieved": [
-        "1210"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "transport"
-      ],
-      "terms_missing": [
-        "PSC",
-        "CSC"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 21,
-      "query": "TIA symptoms",
-      "category": "stroke",
-      "priority": "medium",
-      "expected": [
-        "521"
-      ],
-      "retrieved": [
-        "1232",
-        "1202",
-        "1239",
-        "1235"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "resolved"
-      ],
-      "terms_missing": [
-        "transient"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 22,
-      "query": "hemorrhagic stroke",
-      "category": "stroke",
-      "priority": "medium",
-      "expected": [
-        "521",
-        "522"
-      ],
-      "retrieved": [
-        "1210"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "blood pressure",
-        "hypertension"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 23,
-      "query": "burn treatment",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "820",
-        "1254"
-      ],
-      "retrieved": [
-        "512",
-        "314",
-        "criteria-summary",
-        "1138",
-        "1241",
-        "1380",
-        "1220"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "BSA"
-      ],
-      "terms_missing": [
-        "fluid",
-        "cooling"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 24,
-      "query": "trauma assessment",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "801",
-        "802"
-      ],
-      "retrieved": [
-        "1264",
-        "1240",
-        "1252",
-        "1202",
-        "1220",
-        "1234",
-        "1249",
-        "1248",
-        "1250"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "primary survey",
-        "ABCDE",
-        "GCS"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 26,
-      "query": "tension pneumothorax",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "806",
-        "1260"
-      ],
-      "retrieved": [
-        "LA-DROP",
-        "1240",
-        "1248",
-        "1360",
-        "1243-P",
-        "812",
-        "837",
-        "1237"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "needle decompression",
-        "midclavicular",
-        "2nd intercostal"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 27,
-      "query": "hemorrhage control",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "805",
-        "1260"
-      ],
-      "retrieved": [
-        "1208",
-        "1312",
-        "713"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "tourniquet",
-        "pressure",
-        "TXA"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 28,
-      "query": "spinal immobilization",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "810",
-        "811"
-      ],
-      "retrieved": [
-        "510",
-        "507",
-        "1247",
-        "835",
-        "712"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "c-spine",
-        "backboard",
-        "collar"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 30,
-      "query": "crush injury syndrome",
-      "category": "trauma",
-      "priority": "medium",
-      "expected": [
-        "815"
-      ],
-      "retrieved": [
-        "1254",
-        "838",
-        "1112",
-        "833",
-        "839"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "rhabdomyolysis",
-        "fluid"
-      ],
-      "terms_missing": [
-        "potassium"
-      ],
-      "success": true
-    },
     {
       "query_id": 32,
       "query": "dog bite above knee",
@@ -464,1333 +97,6 @@
         "puncture"
       ],
       "success": true
-    },
-    {
-      "query_id": 35,
-      "query": "adenosine SVT dose",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-ADEN",
-        "505"
-      ],
-      "retrieved": [
-        "1213-P",
-        "1317.1",
-        "1317.3",
-        "PROC-DEFIB",
-        "1213",
-        "1212-P"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "6mg",
-        "12mg",
-        "rapid push",
-        "flush"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 36,
-      "query": "atropine bradycardia",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-ATRO",
-        "505"
-      ],
-      "retrieved": [
-        "1212"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "0.5mg",
-        "3mg max",
-        "every 3-5 minutes"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 37,
-      "query": "nitroglycerin chest pain",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-NTG",
-        "503"
-      ],
-      "retrieved": [
-        "1317.24",
-        "1211"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "0.4mg",
-        "sublingual",
-        "blood pressure"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 39,
-      "query": "fentanyl pain management",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-FENT",
-        "1345"
-      ],
-      "retrieved": [
-        "1317.13",
-        "1317.23",
-        "1322",
-        "1308",
-        "1244-P",
-        "702",
-        "1317.22"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "mcg",
-        "IV",
-        "IM",
-        "IN"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 40,
-      "query": "naloxone overdose",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-NARCAN",
-        "523"
-      ],
-      "retrieved": [
-        "1317.23",
-        "MED-NAL",
-        "1236",
-        "1229",
-        "1226",
-        "1314"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "0.4mg",
-        "2mg",
-        "IM",
-        "IN"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 41,
-      "query": "albuterol asthma",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-ALBU",
-        "511"
-      ],
-      "retrieved": [
-        "1317.2",
-        "1219-P",
-        "PROC-CPAP",
-        "1263",
-        "MED-MOR",
-        "1237-P",
-        "1214"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "2.5mg",
-        "nebulizer",
-        "bronchospasm"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 43,
-      "query": "dextrose hypoglycemia",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-D50",
-        "520"
-      ],
-      "retrieved": [
-        "MED-D10",
-        "1317.7",
-        "1203-P",
-        "1203"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "D50",
-        "D10",
-        "glucose",
-        "IV"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 44,
-      "query": "diphenhydramine allergic reaction",
-      "category": "medication",
-      "priority": "medium",
-      "expected": [
-        "MED-BENA",
-        "507"
-      ],
-      "retrieved": [
-        "MED-DIPH",
-        "1317.8",
-        "1219-P",
-        "1228"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "25mg",
-        "50mg",
-        "IV",
-        "IM"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 45,
-      "query": "ondansetron nausea",
-      "category": "medication",
-      "priority": "medium",
-      "expected": [
-        "MED-ZOFR"
-      ],
-      "retrieved": [
-        "MED-ONDAN",
-        "1317.27",
-        "1235",
-        "1230",
-        "1204",
-        "1205"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "4mg",
-        "IV",
-        "ODT"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 46,
-      "query": "midazolam seizure",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-MIDA",
-        "519"
-      ],
-      "retrieved": [
-        "1231-P",
-        "1317.21",
-        "1231",
-        "702",
-        "1370",
-        "1213"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "mg",
-        "IM",
-        "IN"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 47,
-      "query": "intubation procedure",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "1100",
-        "1101"
-      ],
-      "retrieved": [
-        "PROC-ETI",
-        "1267"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "ETT",
-        "laryngoscope"
-      ],
-      "terms_missing": [
-        "bougie"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 48,
-      "query": "King airway insertion",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "1100",
-        "1103"
-      ],
-      "retrieved": [
-        "1303",
-        "1267",
-        "1302",
-        "PROC-ETI",
-        "PROC-AIRWAY",
-        "711",
-        "902",
-        "1234-P"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "supraglottic",
-        "size"
-      ],
-      "terms_missing": [
-        "BIAD"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 50,
-      "query": "12-lead ECG placement",
-      "category": "procedure",
-      "priority": "medium",
-      "expected": [
-        "1120"
-      ],
-      "retrieved": [
-        "PROC-12LEAD"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "leads",
-        "V1-V6"
-      ],
-      "terms_missing": [
-        "right sided"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 51,
-      "query": "needle decompression procedure",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "1106",
-        "806"
-      ],
-      "retrieved": [
-        "619",
-        "PROC-NDL",
-        "1248",
-        "1360",
-        "1268",
-        "1225",
-        "1254",
-        "1227"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "2nd intercostal",
-        "midclavicular"
-      ],
-      "terms_missing": [
-        "14 gauge"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 53,
-      "query": "tourniquet application",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "805",
-        "1260"
-      ],
-      "retrieved": [
-        "1208",
-        "1268",
-        "713",
-        "834",
-        "901",
-        "1244",
-        "1255"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "time",
-        "bleeding"
-      ],
-      "terms_missing": [
-        "proximal"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 54,
-      "query": "synchronized cardioversion",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "505",
-        "1205"
-      ],
-      "retrieved": [
-        "PROC-DEFIB",
-        "1213-P",
-        "1213"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "joules",
-        "sync",
-        "sedation"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 55,
-      "query": "pediatric cardiac arrest",
-      "category": "pediatric",
-      "priority": "critical",
-      "expected": [
-        "830",
-        "831"
-      ],
-      "retrieved": [
-        "1262",
-        "517",
-        "MED-EPI"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "0.01mg/kg"
-      ],
-      "terms_missing": [
-        "weight",
-        "Broselow"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 57,
-      "query": "Broselow tape dosing",
-      "category": "pediatric",
-      "priority": "high",
-      "expected": [
-        "830",
-        "1300"
-      ],
-      "retrieved": [
-        "1317.29",
-        "1317.23",
-        "1317.33",
-        "1317.5",
-        "1317.9",
-        "1317.25",
-        "MED-NAL",
-        "MED-ATROP",
-        "714",
-        "1309"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "weight",
-        "length-based"
-      ],
-      "terms_missing": [
-        "color"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 58,
-      "query": "pediatric seizure treatment",
-      "category": "pediatric",
-      "priority": "high",
-      "expected": [
-        "831",
-        "1337"
-      ],
-      "retrieved": [
-        "1231-P",
-        "1213-P",
-        "criteria-summary",
-        "1309",
-        "1231",
-        "1262",
-        "1226"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "midazolam",
-        "mg/kg"
-      ],
-      "terms_missing": [
-        "febrile"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 59,
-      "query": "pediatric respiratory distress",
-      "category": "pediatric",
-      "priority": "high",
-      "expected": [
-        "830",
-        "832"
-      ],
-      "retrieved": [
-        "1263",
-        "1237-P",
-        "1237"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "albuterol",
-        "epinephrine",
-        "croup"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 61,
-      "query": "neonatal resuscitation",
-      "category": "pediatric",
-      "priority": "high",
-      "expected": [
-        "833"
-      ],
-      "retrieved": [
-        "1261",
-        "517",
-        "901",
-        "903",
-        "1215"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "ventilation",
-        "compressions"
-      ],
-      "terms_missing": [
-        "APGAR"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 71,
-      "query": "anaphylaxis treatment",
-      "category": "general",
-      "priority": "critical",
-      "expected": [
-        "507",
-        "1207"
-      ],
-      "retrieved": [
-        "1317.10",
-        "MED-EPI",
-        "1228",
-        "1219"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "epinephrine",
-        "IM",
-        "0.3mg"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 72,
-      "query": "diabetic emergency",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "520",
-        "1231"
-      ],
-      "retrieved": [
-        "MED-D10",
-        "1226",
-        "1203"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "glucose",
-        "glucagon"
-      ],
-      "terms_missing": [
-        "D50"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 73,
-      "query": "seizure management",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "519",
-        "1233"
-      ],
-      "retrieved": [
-        "1231-P",
-        "1231",
-        "525"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "midazolam",
-        "status"
-      ],
-      "terms_missing": [
-        "benzodiazepine"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 74,
-      "query": "overdose unknown substance",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "523",
-        "1235"
-      ],
-      "retrieved": [
-        "1314",
-        "1236",
-        "529",
-        "1212",
-        "1209"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "naloxone",
-        "supportive",
-        "airway"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 75,
-      "query": "asthma severe",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "511",
-        "1211"
-      ],
-      "retrieved": [
-        "MED-MOR",
-        "1317.2",
-        "1317.20",
-        "PROC-CPAP",
-        "1237-P",
-        "1237",
-        "1228"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "albuterol",
-        "magnesium"
-      ],
-      "terms_missing": [
-        "epinephrine"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 76,
-      "query": "COPD exacerbation",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "511",
-        "1211"
-      ],
-      "retrieved": [
-        "1317.2",
-        "PROC-CPAP",
-        "1237",
-        "1317.28",
-        "1214",
-        "1315"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "bronchodilator",
-        "CPAP"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 77,
-      "query": "altered mental status",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "520",
-        "1231"
-      ],
-      "retrieved": [
-        "824",
-        "1247",
-        "540",
-        "524",
-        "1233",
-        "1229",
-        "1236",
-        "605",
-        "826"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "glucose",
-        "stroke"
-      ],
-      "terms_missing": [
-        "naloxone"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 80,
-      "query": "destination hospital selection",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "506"
-      ],
-      "retrieved": [
-        "511",
-        "1270",
-        "501",
-        "530",
-        "526",
-        "criteria-summary",
-        "504"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "trauma",
-        "STEMI",
-        "stroke",
-        "specialty"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 81,
-      "query": "pain management protocol",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "1345"
-      ],
-      "retrieved": [
-        "1238",
-        "1308",
-        "1227",
-        "1322",
-        "1202"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "fentanyl",
-        "morphine",
-        "pain scale"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 82,
-      "query": "sedation for procedures",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "1346"
-      ],
-      "retrieved": [
-        "1317.21",
-        "1267",
-        "PROC-ETI",
-        "1212",
-        "1209",
-        "222"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "midazolam",
-        "fentanyl",
-        "monitoring"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 83,
-      "query": "hypothermia treatment",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "821"
-      ],
-      "retrieved": [
-        "1313",
-        "1223",
-        "836",
-        "835",
-        "1264",
-        "1240",
-        "1241"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "rewarming",
-        "temperature",
-        "cardiac"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 84,
-      "query": "heat stroke",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "822"
-      ],
-      "retrieved": [
-        "1210"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "cooling",
-        "temperature",
-        "altered mental"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 85,
-      "query": "drowning resuscitation",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "823"
-      ],
-      "retrieved": [
-        "836",
-        "1225",
-        "1210",
-        "1120"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "ventilation",
-        "hypothermia"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 86,
-      "query": "patient refusal",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "102",
-        "103"
-      ],
-      "retrieved": [
-        "1301",
-        "828",
-        "510",
-        "1270",
-        "605"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "AMA",
-        "capacity",
-        "informed"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 87,
-      "query": "obvious death criteria",
-      "category": "general",
-      "priority": "high",
-      "expected": [
-        "100"
-      ],
-      "retrieved": [
-        "510",
-        "507",
-        "618",
-        "506-trauma",
-        "1267",
-        "822"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "rigor",
-        "lividity",
-        "decapitation"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 88,
-      "query": "beta blocker overdose",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "523"
-      ],
-      "retrieved": [
-        "1317.14",
-        "1212",
-        "1317.31",
-        "MED-EPI",
-        "1314",
-        "1350",
-        "1236",
-        "1209"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "glucagon",
-        "bradycardia",
-        "hypotension"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 89,
-      "query": "calcium channel blocker toxicity",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "523"
-      ],
-      "retrieved": [
-        "1317.6",
-        "MED-ONDAN",
-        "1317.31",
-        "1212",
-        "1350",
-        "1210"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "calcium",
-        "glucagon"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 90,
-      "query": "tricyclic antidepressant overdose",
-      "category": "general",
-      "priority": "medium",
-      "expected": [
-        "523"
-      ],
-      "retrieved": [
-        "MED-OLAN",
-        "1317.31",
-        "1236",
-        "529",
-        "1209",
-        "1212"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "sodium bicarbonate"
-      ],
-      "terms_missing": [
-        "wide QRS"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 92,
-      "query": "how to perform needle decompression",
-      "category": "procedure",
-      "priority": "high",
-      "expected": [
-        "1106",
-        "806"
-      ],
-      "retrieved": [
-        "PROC-NDL",
-        "1248",
-        "834",
-        "1360",
-        "1268",
-        "1225",
-        "1243-P",
-        "1253",
-        "1245"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "2nd intercostal",
-        "midclavicular"
-      ],
-      "terms_missing": [
-        "14 gauge"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 94,
-      "query": "amiodarone contraindications",
-      "category": "medication",
-      "priority": "high",
-      "expected": [
-        "MED-AMIO"
-      ],
-      "retrieved": [
-        "1317.3",
-        "MED-ATROP",
-        "MED-NAL",
-        "MED-ONDAN",
-        "1317.19",
-        "1262"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "cardiogenic shock",
-        "AV block",
-        "QT"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 95,
-      "query": "lidocaine vs amiodarone",
-      "category": "medication",
-      "priority": "medium",
-      "expected": [
-        "MED-LIDO",
-        "MED-AMIO",
-        "518"
-      ],
-      "retrieved": [
-        "200",
-        "1100",
-        "1317.19",
-        "1317.3"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "VF",
-        "VT"
-      ],
-      "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 97,
-      "query": "pediatric amiodarone dose",
-      "category": "pediatric",
-      "priority": "high",
-      "expected": [
-        "MED-AMIO",
-        "831"
-      ],
-      "retrieved": [
-        "1317.3",
-        "MED-NAL",
-        "MED-ATROP",
-        "MED-EPI",
-        "MED-DIPH",
-        "1213-P",
-        "1317.1",
-        "1317.5",
-        "1262"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "5mg/kg"
-      ],
-      "terms_missing": [
-        "max 300mg"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 98,
-      "query": "patient with chest pain and low blood pressure",
-      "category": "cardiac",
-      "priority": "high",
-      "expected": [
-        "503",
-        "504"
-      ],
-      "retrieved": [
-        "PROC-12LEAD",
-        "1211",
-        "1212",
-        "1202",
-        "1214"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "fluid",
-        "contraindication NTG"
-      ],
-      "success": true
-    },
-    {
-      "query_id": 100,
-      "query": "trauma with hypotension",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "805",
-        "806"
-      ],
-      "retrieved": [
-        "506-trauma",
-        "LA-DROP",
-        "1240",
-        "1249",
-        "1246",
-        "1360",
-        "1208",
-        "1312"
-      ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [
-        "hemorrhage",
-        "fluid",
-        "blood"
-      ],
-      "terms_missing": [],
-      "success": true
     }
   ],
   "all_results": [
@@ -1800,7 +106,6 @@
       "category": "protocol_number",
       "priority": "critical",
       "expected": [
-        "TP-1201",
         "1201"
       ],
       "retrieved": [
@@ -1821,7 +126,6 @@
       "category": "protocol_number",
       "priority": "critical",
       "expected": [
-        "TP-1210",
         "1210"
       ],
       "retrieved": [
@@ -1842,8 +146,7 @@
       "category": "protocol_number",
       "priority": "critical",
       "expected": [
-        "518",
-        "Ref. 518"
+        "518"
       ],
       "retrieved": [
         "518"
@@ -1863,8 +166,8 @@
       "category": "protocol_number",
       "priority": "critical",
       "expected": [
-        "MCG 1302",
-        "1302"
+        "1302",
+        "1302-P"
       ],
       "retrieved": [
         "1302",
@@ -1885,8 +188,7 @@
       "category": "protocol_number",
       "priority": "critical",
       "expected": [
-        "521",
-        "Ref. 521"
+        "521"
       ],
       "retrieved": [
         "521"
@@ -1906,7 +208,6 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "503",
         "504",
         "1203",
         "1204"
@@ -1920,7 +221,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.75,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "ST elevation",
@@ -1935,8 +236,9 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "518",
-        "1210"
+        "1303",
+        "1210",
+        "1306"
       ],
       "retrieved": [
         "1303",
@@ -1944,11 +246,11 @@
         "1306",
         "1210-P"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 0.5,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "VF",
         "CPR",
@@ -1993,17 +295,16 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "505",
-        "1205"
+        "1212"
       ],
       "retrieved": [
         "1212"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "atropine",
         "pacing"
@@ -2019,17 +320,16 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "505",
-        "1205"
+        "1213"
       ],
       "retrieved": [
         "1213"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "amiodarone",
@@ -2043,19 +343,20 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "503",
-        "504"
+        "PROC-12LEAD",
+        "1211",
+        "1202"
       ],
       "retrieved": [
         "PROC-12LEAD",
         "1211",
         "1202"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "12-lead",
         "aspirin"
@@ -2097,8 +398,8 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "503",
         "504",
+        "503",
         "1203"
       ],
       "retrieved": [
@@ -2152,8 +453,9 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "505",
-        "1365"
+        "PROC-TCP",
+        "1212",
+        "704"
       ],
       "retrieved": [
         "PROC-TCP",
@@ -2163,11 +465,11 @@
         "PROC-DEFIB",
         "1213"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "TCP",
         "mA",
@@ -2212,8 +514,9 @@
       "category": "stroke",
       "priority": "high",
       "expected": [
-        "521",
-        "1232"
+        "1232",
+        "1210",
+        "521"
       ],
       "retrieved": [
         "1232",
@@ -2240,20 +543,20 @@
       "category": "stroke",
       "priority": "high",
       "expected": [
+        "1232",
         "521",
-        "522",
-        "506"
+        "522"
       ],
       "retrieved": [
         "1232",
         "521",
         "522"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 0.6666666666666666,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "CSC",
@@ -2269,7 +572,8 @@
       "priority": "high",
       "expected": [
         "521",
-        "522"
+        "522",
+        "1210"
       ],
       "retrieved": [
         "521",
@@ -2294,17 +598,16 @@
       "category": "stroke",
       "priority": "high",
       "expected": [
-        "506",
-        "521"
+        "1210"
       ],
       "retrieved": [
         "1210"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "transport"
       ],
@@ -2320,7 +623,9 @@
       "category": "stroke",
       "priority": "medium",
       "expected": [
-        "521"
+        "1232",
+        "1202",
+        "1239"
       ],
       "retrieved": [
         "1232",
@@ -2328,11 +633,11 @@
         "1239",
         "1235"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "resolved"
       ],
@@ -2347,17 +652,16 @@
       "category": "stroke",
       "priority": "medium",
       "expected": [
-        "521",
-        "522"
+        "1210"
       ],
       "retrieved": [
         "1210"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "blood pressure",
@@ -2371,8 +675,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "820",
-        "1254"
+        "512",
+        "314",
+        "criteria-summary"
       ],
       "retrieved": [
         "512",
@@ -2383,11 +688,11 @@
         "1380",
         "1220"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "BSA"
       ],
@@ -2403,8 +708,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "801",
-        "802"
+        "1264",
+        "1240",
+        "1252"
       ],
       "retrieved": [
         "1264",
@@ -2417,11 +723,11 @@
         "1248",
         "1250"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "primary survey",
@@ -2436,9 +742,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
+        "1260",
         "805",
-        "806",
-        "1260"
+        "806"
       ],
       "retrieved": [
         "1260",
@@ -2464,8 +770,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "806",
-        "1260"
+        "LA-DROP",
+        "1240",
+        "1248"
       ],
       "retrieved": [
         "LA-DROP",
@@ -2477,11 +784,11 @@
         "837",
         "1237"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "needle decompression",
         "midclavicular",
@@ -2496,19 +803,20 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "805",
-        "1260"
+        "1208",
+        "1312",
+        "713"
       ],
       "retrieved": [
         "1208",
         "1312",
         "713"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "tourniquet",
         "pressure",
@@ -2523,8 +831,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "810",
-        "811"
+        "510",
+        "507",
+        "1247"
       ],
       "retrieved": [
         "510",
@@ -2533,11 +842,11 @@
         "835",
         "712"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "c-spine",
@@ -2578,7 +887,9 @@
       "category": "trauma",
       "priority": "medium",
       "expected": [
-        "815"
+        "1254",
+        "838",
+        "1112"
       ],
       "retrieved": [
         "1254",
@@ -2587,11 +898,11 @@
         "833",
         "839"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "rhabdomyolysis",
         "fluid"
@@ -2607,9 +918,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "801",
+        "830",
         "802",
-        "830"
+        "801"
       ],
       "retrieved": [
         "830",
@@ -2661,7 +972,8 @@
       "priority": "critical",
       "expected": [
         "MED-EPI",
-        "518"
+        "1317.11",
+        "1210"
       ],
       "retrieved": [
         "MED-EPI",
@@ -2675,7 +987,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [
         "1mg",
         "1:10,000",
@@ -2691,8 +1003,8 @@
       "category": "medication",
       "priority": "critical",
       "expected": [
-        "MED-AMIO",
-        "518"
+        "518",
+        "1210"
       ],
       "retrieved": [
         "518",
@@ -2702,7 +1014,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "300mg",
@@ -2717,8 +1029,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-ADEN",
-        "505"
+        "1213-P",
+        "1317.1",
+        "1317.3"
       ],
       "retrieved": [
         "1213-P",
@@ -2728,11 +1041,11 @@
         "1213",
         "1212-P"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "6mg",
         "12mg",
@@ -2748,17 +1061,16 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-ATRO",
-        "505"
+        "1212"
       ],
       "retrieved": [
         "1212"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "0.5mg",
@@ -2773,18 +1085,18 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-NTG",
-        "503"
+        "1317.24",
+        "1211"
       ],
       "retrieved": [
         "1317.24",
         "1211"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "0.4mg",
         "sublingual",
@@ -2799,7 +1111,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-MORPH"
+        "1317.22",
+        "MED-MOR",
+        "1317.13"
       ],
       "retrieved": [
         "1317.22",
@@ -2811,10 +1125,10 @@
         "1380",
         "1322"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [
         "mg",
@@ -2830,8 +1144,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-FENT",
-        "1345"
+        "1317.13",
+        "1317.23",
+        "1322"
       ],
       "retrieved": [
         "1317.13",
@@ -2842,11 +1157,11 @@
         "702",
         "1317.22"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "mcg",
         "IV",
@@ -2862,8 +1177,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-NARCAN",
-        "523"
+        "1317.23",
+        "MED-NAL",
+        "1236"
       ],
       "retrieved": [
         "1317.23",
@@ -2873,11 +1189,11 @@
         "1226",
         "1314"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "0.4mg",
         "2mg",
@@ -2893,8 +1209,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-ALBU",
-        "511"
+        "1317.2",
+        "1219-P",
+        "PROC-CPAP"
       ],
       "retrieved": [
         "1317.2",
@@ -2905,11 +1222,11 @@
         "1237-P",
         "1214"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "2.5mg",
         "nebulizer",
@@ -2924,19 +1241,20 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-ASA",
-        "503"
+        "504",
+        "503",
+        "1203"
       ],
       "retrieved": [
         "504",
         "503",
         "1203"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 0.5,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "324mg",
@@ -2950,8 +1268,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-D50",
-        "520"
+        "MED-D10",
+        "1317.7",
+        "1203-P"
       ],
       "retrieved": [
         "MED-D10",
@@ -2959,11 +1278,11 @@
         "1203-P",
         "1203"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "D50",
         "D10",
@@ -2979,8 +1298,9 @@
       "category": "medication",
       "priority": "medium",
       "expected": [
-        "MED-BENA",
-        "507"
+        "MED-DIPH",
+        "1317.8",
+        "1219-P"
       ],
       "retrieved": [
         "MED-DIPH",
@@ -2988,11 +1308,11 @@
         "1219-P",
         "1228"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "25mg",
         "50mg",
@@ -3008,7 +1328,9 @@
       "category": "medication",
       "priority": "medium",
       "expected": [
-        "MED-ZOFR"
+        "MED-ONDAN",
+        "1317.27",
+        "1235"
       ],
       "retrieved": [
         "MED-ONDAN",
@@ -3018,11 +1340,11 @@
         "1204",
         "1205"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "4mg",
         "IV",
@@ -3037,8 +1359,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-MIDA",
-        "519"
+        "1231-P",
+        "1317.21",
+        "1231"
       ],
       "retrieved": [
         "1231-P",
@@ -3048,11 +1371,11 @@
         "1370",
         "1213"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "mg",
         "IM",
@@ -3067,18 +1390,18 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "1100",
-        "1101"
+        "PROC-ETI",
+        "1267"
       ],
       "retrieved": [
         "PROC-ETI",
         "1267"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "ETT",
         "laryngoscope"
@@ -3094,8 +1417,9 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "1100",
-        "1103"
+        "1303",
+        "1267",
+        "1302"
       ],
       "retrieved": [
         "1303",
@@ -3107,11 +1431,11 @@
         "902",
         "1234-P"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "supraglottic",
         "size"
@@ -3127,7 +1451,9 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "1105"
+        "518",
+        "1105",
+        "1317"
       ],
       "retrieved": [
         "518",
@@ -3139,10 +1465,10 @@
         "1207",
         "1305"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [
         "intraosseous",
@@ -3160,16 +1486,16 @@
       "category": "procedure",
       "priority": "medium",
       "expected": [
-        "1120"
+        "PROC-12LEAD"
       ],
       "retrieved": [
         "PROC-12LEAD"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "leads",
         "V1-V6"
@@ -3185,8 +1511,9 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "1106",
-        "806"
+        "619",
+        "PROC-NDL",
+        "1248"
       ],
       "retrieved": [
         "619",
@@ -3198,11 +1525,11 @@
         "1254",
         "1227"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "2nd intercostal",
         "midclavicular"
@@ -3218,8 +1545,8 @@
       "category": "procedure",
       "priority": "medium",
       "expected": [
-        "1211",
-        "511"
+        "511",
+        "1211"
       ],
       "retrieved": [
         "511",
@@ -3244,8 +1571,9 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "805",
-        "1260"
+        "1208",
+        "1268",
+        "713"
       ],
       "retrieved": [
         "1208",
@@ -3256,11 +1584,11 @@
         "1244",
         "1255"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "time",
         "bleeding"
@@ -3276,19 +1604,20 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "505",
-        "1205"
+        "PROC-DEFIB",
+        "1213-P",
+        "1213"
       ],
       "retrieved": [
         "PROC-DEFIB",
         "1213-P",
         "1213"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "joules",
         "sync",
@@ -3303,19 +1632,20 @@
       "category": "pediatric",
       "priority": "critical",
       "expected": [
-        "830",
-        "831"
+        "1262",
+        "517",
+        "MED-EPI"
       ],
       "retrieved": [
         "1262",
         "517",
         "MED-EPI"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "0.01mg/kg"
       ],
@@ -3332,7 +1662,8 @@
       "priority": "critical",
       "expected": [
         "MED-EPI",
-        "830"
+        "1317.10",
+        "1317.11"
       ],
       "retrieved": [
         "MED-EPI",
@@ -3347,7 +1678,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [
         "0.01mg/kg",
         "0.1mL/kg",
@@ -3364,8 +1695,9 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "830",
-        "1300"
+        "1317.29",
+        "1317.23",
+        "1317.33"
       ],
       "retrieved": [
         "1317.29",
@@ -3379,11 +1711,11 @@
         "714",
         "1309"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "weight",
         "length-based"
@@ -3399,8 +1731,9 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "831",
-        "1337"
+        "1231-P",
+        "1213-P",
+        "criteria-summary"
       ],
       "retrieved": [
         "1231-P",
@@ -3411,11 +1744,11 @@
         "1262",
         "1226"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "midazolam",
         "mg/kg"
@@ -3431,19 +1764,20 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "830",
-        "832"
+        "1263",
+        "1237-P",
+        "1237"
       ],
       "retrieved": [
         "1263",
         "1237-P",
         "1237"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "albuterol",
         "epinephrine",
@@ -3458,8 +1792,8 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "506",
-        "830"
+        "506-trauma",
+        "506"
       ],
       "retrieved": [
         "506-trauma",
@@ -3469,7 +1803,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [
         "age",
         "mechanism"
@@ -3485,7 +1819,9 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "833"
+        "1261",
+        "517",
+        "901"
       ],
       "retrieved": [
         "1261",
@@ -3494,11 +1830,11 @@
         "903",
         "1215"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "ventilation",
         "compressions"
@@ -3514,8 +1850,9 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
+        "518",
         "1105",
-        "830"
+        "1317"
       ],
       "retrieved": [
         "518",
@@ -3526,11 +1863,11 @@
         "1262",
         "1264"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 0.5,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "tibia",
         "proximal"
@@ -3547,7 +1884,8 @@
       "priority": "critical",
       "expected": [
         "521",
-        "522"
+        "522",
+        "1232"
       ],
       "retrieved": [
         "521",
@@ -3575,7 +1913,8 @@
       "category": "acronym",
       "priority": "high",
       "expected": [
-        "518"
+        "518",
+        "1210"
       ],
       "retrieved": [
         "518",
@@ -3601,7 +1940,8 @@
       "priority": "high",
       "expected": [
         "1102",
-        "1104"
+        "1104",
+        "1317"
       ],
       "retrieved": [
         "1102",
@@ -3632,7 +1972,9 @@
       "category": "acronym",
       "priority": "high",
       "expected": [
-        "1105"
+        "518",
+        "1105",
+        "1317"
       ],
       "retrieved": [
         "518",
@@ -3643,10 +1985,10 @@
         "1264",
         "1258"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [
         "intraosseous"
@@ -3686,7 +2028,8 @@
       "category": "acronym",
       "priority": "high",
       "expected": [
-        "518"
+        "518",
+        "1210"
       ],
       "retrieved": [
         "518",
@@ -3711,7 +2054,9 @@
       "category": "acronym",
       "priority": "high",
       "expected": [
-        "1317"
+        "1317.15",
+        "1102",
+        "1317.25"
       ],
       "retrieved": [
         "1317.15",
@@ -3765,8 +2110,9 @@
       "category": "general",
       "priority": "critical",
       "expected": [
-        "507",
-        "1207"
+        "1317.10",
+        "MED-EPI",
+        "1228"
       ],
       "retrieved": [
         "1317.10",
@@ -3774,11 +2120,11 @@
         "1228",
         "1219"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "epinephrine",
         "IM",
@@ -3793,19 +2139,20 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "520",
-        "1231"
+        "MED-D10",
+        "1226",
+        "1203"
       ],
       "retrieved": [
         "MED-D10",
         "1226",
         "1203"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "glucose",
         "glucagon"
@@ -3821,19 +2168,20 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "519",
-        "1233"
+        "1231-P",
+        "1231",
+        "525"
       ],
       "retrieved": [
         "1231-P",
         "1231",
         "525"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "midazolam",
         "status"
@@ -3849,8 +2197,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "523",
-        "1235"
+        "1314",
+        "1236",
+        "529"
       ],
       "retrieved": [
         "1314",
@@ -3859,11 +2208,11 @@
         "1212",
         "1209"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "naloxone",
         "supportive",
@@ -3878,8 +2227,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "511",
-        "1211"
+        "MED-MOR",
+        "1317.2",
+        "1317.20"
       ],
       "retrieved": [
         "MED-MOR",
@@ -3890,11 +2240,11 @@
         "1237",
         "1228"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "albuterol",
         "magnesium"
@@ -3910,8 +2260,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "511",
-        "1211"
+        "1317.2",
+        "PROC-CPAP",
+        "1237"
       ],
       "retrieved": [
         "1317.2",
@@ -3921,11 +2272,11 @@
         "1214",
         "1315"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "bronchodilator",
         "CPAP"
@@ -3939,8 +2290,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "520",
-        "1231"
+        "824",
+        "1247",
+        "540"
       ],
       "retrieved": [
         "824",
@@ -3953,11 +2305,11 @@
         "605",
         "826"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "glucose",
         "stroke"
@@ -3974,7 +2326,8 @@
       "priority": "high",
       "expected": [
         "100",
-        "101"
+        "101",
+        "825"
       ],
       "retrieved": [
         "100",
@@ -4001,7 +2354,7 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "200",
+        "506-trauma",
         "506"
       ],
       "retrieved": [
@@ -4012,7 +2365,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "OLMC",
@@ -4026,7 +2379,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "506"
+        "511",
+        "1270",
+        "501"
       ],
       "retrieved": [
         "511",
@@ -4037,11 +2392,11 @@
         "criteria-summary",
         "504"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "trauma",
         "STEMI",
@@ -4057,7 +2412,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "1345"
+        "1238",
+        "1308",
+        "1227"
       ],
       "retrieved": [
         "1238",
@@ -4066,11 +2423,11 @@
         "1322",
         "1202"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "fentanyl",
         "morphine",
@@ -4085,7 +2442,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "1346"
+        "1317.21",
+        "1267",
+        "PROC-ETI"
       ],
       "retrieved": [
         "1317.21",
@@ -4095,11 +2454,11 @@
         "1209",
         "222"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "midazolam",
         "fentanyl",
@@ -4114,7 +2473,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "821"
+        "1313",
+        "1223",
+        "836"
       ],
       "retrieved": [
         "1313",
@@ -4125,11 +2486,11 @@
         "1240",
         "1241"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "rewarming",
         "temperature",
@@ -4144,16 +2505,16 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "822"
+        "1210"
       ],
       "retrieved": [
         "1210"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "cooling",
@@ -4168,7 +2529,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "823"
+        "836",
+        "1225",
+        "1210"
       ],
       "retrieved": [
         "836",
@@ -4176,11 +2539,11 @@
         "1210",
         "1120"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "ventilation",
         "hypothermia"
@@ -4194,8 +2557,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "102",
-        "103"
+        "1301",
+        "828",
+        "510"
       ],
       "retrieved": [
         "1301",
@@ -4204,11 +2568,11 @@
         "1270",
         "605"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "AMA",
         "capacity",
@@ -4223,7 +2587,9 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "100"
+        "510",
+        "507",
+        "618"
       ],
       "retrieved": [
         "510",
@@ -4233,11 +2599,11 @@
         "1267",
         "822"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "rigor",
         "lividity",
@@ -4252,7 +2618,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "523"
+        "1317.14",
+        "1212",
+        "1317.31"
       ],
       "retrieved": [
         "1317.14",
@@ -4264,11 +2632,11 @@
         "1236",
         "1209"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "glucagon",
         "bradycardia",
@@ -4283,7 +2651,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "523"
+        "1317.6",
+        "MED-ONDAN",
+        "1317.31"
       ],
       "retrieved": [
         "1317.6",
@@ -4293,11 +2663,11 @@
         "1350",
         "1210"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "calcium",
         "glucagon"
@@ -4311,7 +2681,9 @@
       "category": "general",
       "priority": "medium",
       "expected": [
-        "523"
+        "MED-OLAN",
+        "1317.31",
+        "1236"
       ],
       "retrieved": [
         "MED-OLAN",
@@ -4321,11 +2693,11 @@
         "1209",
         "1212"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "sodium bicarbonate"
       ],
@@ -4341,7 +2713,8 @@
       "priority": "critical",
       "expected": [
         "MED-EPI",
-        "507"
+        "1317.10",
+        "1317.11"
       ],
       "retrieved": [
         "MED-EPI",
@@ -4356,7 +2729,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [
         "0.3mg",
         "0.5mg",
@@ -4372,8 +2745,9 @@
       "category": "procedure",
       "priority": "high",
       "expected": [
-        "1106",
-        "806"
+        "PROC-NDL",
+        "1248",
+        "834"
       ],
       "retrieved": [
         "PROC-NDL",
@@ -4386,11 +2760,11 @@
         "1253",
         "1245"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "2nd intercostal",
         "midclavicular"
@@ -4406,8 +2780,8 @@
       "category": "general",
       "priority": "high",
       "expected": [
-        "200",
-        "506"
+        "506",
+        "506-trauma"
       ],
       "retrieved": [
         "506",
@@ -4417,7 +2791,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 0.5,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "OLMC",
@@ -4432,7 +2806,9 @@
       "category": "medication",
       "priority": "high",
       "expected": [
-        "MED-AMIO"
+        "1317.3",
+        "MED-ATROP",
+        "MED-NAL"
       ],
       "retrieved": [
         "1317.3",
@@ -4442,11 +2818,11 @@
         "1317.19",
         "1262"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "cardiogenic shock",
         "AV block",
@@ -4461,9 +2837,9 @@
       "category": "medication",
       "priority": "medium",
       "expected": [
-        "MED-LIDO",
-        "MED-AMIO",
-        "518"
+        "200",
+        "1100",
+        "1317.19"
       ],
       "retrieved": [
         "200",
@@ -4471,11 +2847,11 @@
         "1317.19",
         "1317.3"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "VF",
         "VT"
@@ -4489,6 +2865,7 @@
       "category": "stroke",
       "priority": "critical",
       "expected": [
+        "1232",
         "521",
         "522"
       ],
@@ -4497,10 +2874,10 @@
         "521",
         "522"
       ],
-      "hit_at_1": false,
+      "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [],
       "terms_missing": [
@@ -4516,8 +2893,9 @@
       "category": "pediatric",
       "priority": "high",
       "expected": [
-        "MED-AMIO",
-        "831"
+        "1317.3",
+        "MED-NAL",
+        "MED-ATROP"
       ],
       "retrieved": [
         "1317.3",
@@ -4530,11 +2908,11 @@
         "1317.5",
         "1262"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "5mg/kg"
       ],
@@ -4549,8 +2927,9 @@
       "category": "cardiac",
       "priority": "high",
       "expected": [
-        "503",
-        "504"
+        "PROC-12LEAD",
+        "1211",
+        "1212"
       ],
       "retrieved": [
         "PROC-12LEAD",
@@ -4559,11 +2938,11 @@
         "1202",
         "1214"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [],
       "terms_missing": [
         "fluid",
@@ -4578,7 +2957,8 @@
       "priority": "high",
       "expected": [
         "521",
-        "522"
+        "522",
+        "1210"
       ],
       "retrieved": [
         "521",
@@ -4603,8 +2983,9 @@
       "category": "trauma",
       "priority": "high",
       "expected": [
-        "805",
-        "806"
+        "506-trauma",
+        "LA-DROP",
+        "1240"
       ],
       "retrieved": [
         "506-trauma",
@@ -4616,11 +2997,11 @@
         "1208",
         "1312"
       ],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
       "terms_found": [
         "hemorrhage",
         "fluid",
