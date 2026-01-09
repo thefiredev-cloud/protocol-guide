@@ -1,8 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Support both Vite (browser) and Node.js (scripts) environments
-// @ts-expect-error - Vite provides import.meta.env at runtime
-const viteEnv = typeof import.meta !== 'undefined' ? import.meta.env : undefined;
+const viteEnv = typeof import.meta !== 'undefined' ? (import.meta as any).env : undefined;
 const nodeEnv = typeof process !== 'undefined' ? process.env : undefined;
 
 const supabaseUrl = viteEnv?.VITE_SUPABASE_URL || nodeEnv?.VITE_SUPABASE_URL || nodeEnv?.SUPABASE_URL;
