@@ -380,3 +380,211 @@ export function formatFactsForPrompt(facts: ConversationFacts): string {
 
   return lines.join('\n');
 }
+
+// ============================================
+// Context-Dependent Message Detection
+// ============================================
+
+/**
+ * Patterns for detecting short/ambiguous responses that need prior context.
+ * These are responses that cannot stand alone and need the previous question.
+ */
+const CONTEXT_DEPENDENT_PATTERNS = [
+  // Affirmative responses
+  /^(?:yes|yeah|yep|yup|sure|ok|okay|correct|right|that'?s?\s*(?:it|right|correct)|affirmative|exactly|confirmed?|please|go\s*ahead)\.?$/i,
+
+  // Negative responses
+  /^(?:no|nope|nah|not?\s*(?:that|really)|negative|neither|none|wrong)\.?$/i,
+
+  // Selection responses
+  /^(?:the\s*)?(?:first|second|third|last|other|both|either)\s*(?:one)?\.?$/i,
+  /^(?:option\s*)?[abc123]\.?$/i,
+  /^that\s*one\.?$/i,
+
+  // Simple confirmations/questions
+  /^(?:what|which|where|when|why|how)\??$/i,
+  /^(?:and|but|also|or)\??$/i,
+];
+
+/**
+ * Check if a message is context-dependent (needs prior conversation context).
+ * Returns true for short responses like "yes", "no", "that one" that need
+ * the previous assistant question to be understood.
+ *
+ * @param message - The user's message
+ * @returns true if the message likely needs prior context to be understood
+ *
+ * @example
+ * isContextDependentMessage("yes") // true
+ * isContextDependentMessage("needle thoracostomy dosing") // false
+ * isContextDependentMessage("that one") // true
+ * isContextDependentMessage("the first option") // true
+ */
+export function isContextDependentMessage(message: string): boolean {
+  const trimmed = message.trim();
+
+  // Empty or very short messages need context
+  if (trimmed.length === 0) return true;
+  if (trimmed.length <= 3) return true;
+
+  // Check against context-dependent patterns
+  for (const pattern of CONTEXT_DEPENDENT_PATTERNS) {
+    if (pattern.test(trimmed)) {
+      return true;
+    }
+  }
+
+  // Also check: message has no medical terms and is under 25 chars
+  const hasMedicalTerms =
+    INJURY_TYPE_PATTERNS.some(p => p.pattern.test(message)) ||
+    COMPLAINT_CATEGORY_PATTERNS.some(p => p.pattern.test(message)) ||
+    LAMS_SCORE_PATTERN.test(message) ||
+    GCS_PATTERN.test(message) ||
+    LOCATION_PATTERNS.some(p => p.pattern.test(message));
+
+  if (!hasMedicalTerms && trimmed.length < 25) {
+    return true;
+  }
+
+  return false;
+}
+
+// ============================================
+// Pending Clarification Tracking
+// ============================================
+
+/**
+ * Represents the last question asked by the assistant that awaits user response.
+ */
+export interface PendingClarification {
+  /** The assistant's message asking for clarification */
+  question: string;
+  /** What the clarification is about */
+  clarificationType: 'protocol_confirmation' | 'location' | 'clinical_detail' | 'dosage' | 'general';
+  /** The topic being discussed (extracted from the question) */
+  topic?: string;
+  /** Protocol reference if mentioned in the question */
+  protocolRef?: string;
+  /** Timestamp of when the question was asked */
+  timestamp: number;
+}
+
+/**
+ * Detect if an assistant message is asking a clarifying question.
+ * Extracts the question and categorizes it.
+ *
+ * @param assistantMessage - The assistant's response
+ * @returns PendingClarification object if a question was asked, null otherwise
+ */
+export function detectClarifyingQuestion(assistantMessage: string): PendingClarification | null {
+  const content = assistantMessage.trim();
+
+  // Must contain a question mark
+  if (!content.includes('?')) return null;
+
+  // Extract all questions from the message
+  const questionMatches = content.match(/[^.!]*\?/g);
+  if (!questionMatches || questionMatches.length === 0) return null;
+
+  // Get the main question (usually the last one, or the first substantive one)
+  let question = questionMatches[questionMatches.length - 1].trim();
+
+  // If that's too short, try an earlier question
+  if (question.length < 15 && questionMatches.length > 1) {
+    for (let i = questionMatches.length - 2; i >= 0; i--) {
+      if (questionMatches[i].trim().length > 15) {
+        question = questionMatches[i].trim();
+        break;
+      }
+    }
+  }
+
+  // Determine clarification type
+  let clarificationType: PendingClarification['clarificationType'] = 'general';
+  let topic: string | undefined;
+  let protocolRef: string | undefined;
+
+  // Protocol confirmation pattern: "Are you asking about [X]?"
+  const protocolConfirmMatch = question.match(/(?:asking|inquiring|looking)\s+(?:about|for)\s+(.+?)\??$/i);
+  if (protocolConfirmMatch) {
+    clarificationType = 'protocol_confirmation';
+    topic = protocolConfirmMatch[1].replace(/\?$/, '').trim();
+  }
+
+  // Another pattern: "Do you mean [X]?" or "Did you mean [X]?"
+  const meanMatch = question.match(/(?:do|did)\s+you\s+mean\s+(.+?)\??$/i);
+  if (meanMatch) {
+    clarificationType = 'protocol_confirmation';
+    topic = meanMatch[1].replace(/\?$/, '').trim();
+  }
+
+  // Location question pattern: "Where is the [injury/wound]?"
+  if (/\bwhere\b.*\b(?:injury|wound|pain|location|it|bite|burn)/i.test(question)) {
+    clarificationType = 'location';
+    topic = 'injury location';
+  }
+
+  // Clinical detail pattern: "What is the [LAMS/GCS/etc.]?"
+  if (/\bwhat\s+is\s+(?:the\s+)?(?:lams|gcs|blood\s*pressure|heart\s*rate|spo2|bp)/i.test(question)) {
+    clarificationType = 'clinical_detail';
+  }
+
+  // Dosage pattern
+  if (/\b(?:dose|dosage|dosing|mg|mcg|how\s+much)\b/i.test(question)) {
+    clarificationType = 'dosage';
+  }
+
+  // Extract protocol reference if present anywhere in the message
+  const refMatch = content.match(/\b(TP[-\s]?\d{3,4}[-A-Z]*|Ref\.?\s*\d{3,4}|MCG[-\s]?\d{3,4}|\d{4}\.\d+)/i);
+  if (refMatch) {
+    protocolRef = refMatch[1];
+  }
+
+  // Also try to extract topic from "Are you asking about X?" anywhere
+  if (!topic) {
+    const topicMatch = content.match(/asking\s+about\s+([^?]+)\?/i);
+    if (topicMatch) {
+      topic = topicMatch[1].trim();
+    }
+  }
+
+  return {
+    question,
+    clarificationType,
+    topic,
+    protocolRef,
+    timestamp: Date.now(),
+  };
+}
+
+/**
+ * Format the prior context for injection into the current prompt.
+ * This gives the AI context about what was previously discussed.
+ *
+ * @param lastAssistantMessage - The previous assistant message
+ * @param clarification - Optional parsed clarification data
+ * @returns Formatted context string to prepend to the user's message
+ */
+export function formatPriorContext(
+  lastAssistantMessage: string,
+  clarification?: PendingClarification | null
+): string {
+  const lines: string[] = ['PRIOR CONTEXT (user is responding to this):'];
+
+  if (clarification?.topic) {
+    lines.push(`Topic under discussion: ${clarification.topic}`);
+  }
+
+  if (clarification?.protocolRef) {
+    lines.push(`Protocol reference: ${clarification.protocolRef}`);
+  }
+
+  // Include the actual question asked (truncate if too long)
+  const questionText = clarification?.question || lastAssistantMessage.slice(-300);
+  lines.push(`Assistant's question: "${questionText}"`);
+
+  lines.push('');
+  lines.push('The user\'s response below is answering the above question.');
+
+  return lines.join('\n');
+}
