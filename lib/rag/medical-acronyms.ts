@@ -77,7 +77,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
       'extracorporeal life support', 'ECMO criteria', 'ECMO eligibility',
       'ECMO candidate', 'ECMO destination', 'ECMO center'
     ],
-    relatedProtocols: ['MCG 1318', '1210'],  // MCG 1318 ECPR + Cardiac Arrest
+    relatedProtocols: ['Destination Criteria', 'MCG 1318', '1210'],  // ECPR criteria
     category: 'cardiac'
   },
   'ECPR': {
@@ -88,7 +88,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
       'ECPR candidate', 'ECPR patient selection', 'ECPR destination',
       'refractory cardiac arrest', 'ECPR center'
     ],
-    relatedProtocols: ['MCG 1318', '1210'],  // MCG 1318 ECPR + Cardiac Arrest
+    relatedProtocols: ['Destination Criteria', 'MCG 1318', '1210'],  // ECPR criteria
     category: 'cardiac'
   },
   'STEMI': {
