@@ -472,7 +472,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'IO': {
     expansion: 'Intraosseous',
     synonyms: ['intraosseous access', 'IO line', 'bone marrow access', 'IO needle'],
-    relatedProtocols: ['1105', '518', '1317'],
+    relatedProtocols: ['1102', '1317'],  // IV/IO Access + Drug Reference
     category: 'general'
   },
   'IM': {
