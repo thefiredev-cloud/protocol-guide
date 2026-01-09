@@ -577,12 +577,18 @@ function reciprocalRankFusion(
       chunkMap.set(chunk.chunkId, chunk);
     } else {
       // Chunk exists from keyword search
-      // Keep the one with better semantic similarity if available
-      if (chunk.similarity > ((existing as any).similarity || 0)) {
+      // Keep the one with better relevance score if available
+      if (chunk.relevanceScore > (existing.relevanceScore || 0)) {
         // Preserve keyword rank info but update with better semantic data
         chunkMap.set(chunk.chunkId, {
           ...existing,
           matchType: 'both', // Mark as appearing in both
+        });
+      } else {
+        // Just mark as appearing in both results
+        chunkMap.set(chunk.chunkId, {
+          ...existing,
+          matchType: 'both',
         });
       }
     }
