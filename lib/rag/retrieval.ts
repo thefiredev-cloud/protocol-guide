@@ -204,6 +204,82 @@ function analyzeQuery(query: string): QueryAnalysis {
 }
 
 // ============================================
+// Query Enhancement with Conversation Facts
+// ============================================
+
+/**
+ * Enhance a query with conversation facts for better retrieval.
+ * Transforms context-dependent messages like "5" into searchable queries.
+ *
+ * @example
+ * enhanceQueryWithFacts("5", { complaintCategory: 'stroke' })
+ * // Returns: "LAMS score 5 stroke destination criteria"
+ *
+ * enhanceQueryWithFacts("last known well 10 pm", { complaintCategory: 'stroke' })
+ * // Returns: "stroke LKWT last known well 10 pm destination criteria"
+ */
+function enhanceQueryWithFacts(
+  query: string,
+  facts: ConversationFacts | undefined
+): string {
+  if (!facts || Object.keys(facts).length === 0) {
+    return query;
+  }
+
+  const normalizedQuery = query.toLowerCase().trim();
+
+  // Case 1: Bare number that could be a LAMS score (0-5) in stroke context
+  if (/^[0-5]$/.test(normalizedQuery) && facts.complaintCategory === 'stroke') {
+    console.log('[RAG] Enhancing bare number as LAMS score:', query);
+    return `LAMS score ${query} stroke destination criteria LVO`;
+  }
+
+  // Case 2: Bare number that could be a GCS score (3-15) in trauma/stroke context
+  if (/^([3-9]|1[0-5])$/.test(normalizedQuery) &&
+      (facts.complaintCategory === 'stroke' || facts.complaintCategory === 'trauma')) {
+    console.log('[RAG] Enhancing bare number as GCS score:', query);
+    return `GCS score ${query} ${facts.complaintCategory} criteria`;
+  }
+
+  // Case 3: Time patterns for LKWT in stroke context
+  const timePattern = /\b(?:last\s*known\s*well|lkwt)?\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm|hours?|hrs?|minutes?|mins?)?)\b/i;
+  if (facts.complaintCategory === 'stroke' && timePattern.test(query)) {
+    console.log('[RAG] Enhancing time as LKWT:', query);
+    return `stroke LKWT last known well time ${query} destination criteria time window`;
+  }
+
+  // Case 4: Query mentions LAMS without full stroke context
+  if (/\blams\b/i.test(query) && !query.toLowerCase().includes('stroke')) {
+    console.log('[RAG] Enhancing LAMS query with stroke context');
+    return `${query} stroke destination criteria LVO large vessel occlusion`;
+  }
+
+  // Case 5: Query mentions LKWT without full stroke context
+  if (/\blkwt\b/i.test(query) && !query.toLowerCase().includes('stroke')) {
+    console.log('[RAG] Enhancing LKWT query with stroke context');
+    return `${query} stroke time window destination criteria`;
+  }
+
+  // Case 6: Build context from existing stroke facts (LAMS score, LKWT already extracted)
+  if (facts.complaintCategory === 'stroke') {
+    const enhancements: string[] = [query];
+    if (facts.lamsScore !== undefined) {
+      enhancements.push(`LAMS ${facts.lamsScore}`);
+    }
+    if (facts.lkwt) {
+      enhancements.push(`LKWT ${facts.lkwt}`);
+    }
+    if (enhancements.length > 1) {
+      enhancements.push('stroke criteria destination');
+      console.log('[RAG] Enhancing query with stroke facts:', enhancements);
+      return enhancements.join(' ');
+    }
+  }
+
+  return query;
+}
+
+// ============================================
 // Confidence Scoring
 // ============================================
 
