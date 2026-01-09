@@ -6,7 +6,7 @@
  */
 
 import { supabase } from '../supabase';
-import { embedQuery } from './embeddings';
+import { embedQuery, EmbeddingTimeoutError, EmbeddingError } from './embeddings';
 import { expandQuery, hasAcronyms, type ExpandedQueryResult } from './medical-acronyms';
 import {
   filterAuthorizedChunks,
