@@ -613,10 +613,36 @@ const Chat: React.FC = () => {
                   const parsed = JSON.parse(data);
                   if (parsed.text) {
                     responseText += parsed.text;
-                    setMessages(prev => prev.map(msg =>
-                      msg.id === botMsgId
-                        ? { ...msg, content: responseText }
-                        : msg
+                    // Batch updates: accumulate text and update every 80ms for smooth, fast rendering
+                    pendingTextRef.current = responseText;
+                    if (!updateTimeoutRef.current) {
+                      updateTimeoutRef.current = setTimeout(() => {
+                        setMessages(prev => prev.map(msg =>
+                          msg.id === botMsgId
+                            ? { ...msg, content: pendingTextRef.current }
+                            : msg
+                        ));
+                        updateTimeoutRef.current = null;
+                      }, 80);
+                    }
+                  }
+                  if (parsed.error) throw new Error(parsed.error);
+                } catch (parseError) {
+                  console.warn('Failed to parse SSE data:', parseError);
+                }
+              }
+            }
+          }
+
+          // Final update to ensure all text is rendered
+          if (updateTimeoutRef.current) {
+            clearTimeout(updateTimeoutRef.current);
+            updateTimeoutRef.current = null;
+          }
+          setMessages(prev => prev.map(msg =>
+            msg.id === botMsgId
+              ? { ...msg, content: responseText }
+              : msg
                     ));
                   }
                   if (parsed.error) throw new Error(parsed.error);
