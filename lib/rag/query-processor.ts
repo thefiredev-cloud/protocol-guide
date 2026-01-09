@@ -564,11 +564,11 @@ export function isSimpleProtocolLookup(query: string): boolean {
 }
 
 /**
- * Extract primary protocol number from simple lookup query
+ * Extract primary protocol number from simple lookup query (supports decimals)
  */
 export function extractPrimaryProtocol(query: string): string | null {
   if (!isSimpleProtocolLookup(query)) return null;
-  const match = query.match(/(\d{3,4})/);
+  const match = query.match(/(\d{3,4}(?:\.\d+)?)/);
   return match ? match[1] : null;
 }
 
