@@ -199,6 +199,9 @@ const CRITERIA_INDICATORS = [
   'criteria', 'eligibility', 'requirements', 'qualifications',
   'indications', 'destination', 'referral', 'transport to',
   'when to', 'should i', 'can i transport',
+  // Quick Reference / Clinical Pearl indicators
+  'tailboard talk', 'quick reference', 'job aid', 'paramedic pearl',
+  'clinical pearl', 'field tip', 'atypical presentation', 'high risk',
 ];
 
 /**
