@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-01-09T04:09:42.734Z",
-  "total_queries": 100,
-  "successful_queries": 100,
+  "timestamp": "2026-01-09T04:11:41.545Z",
+  "total_queries": 99,
+  "successful_queries": 99,
   "failed_queries": 0,
   "metrics": {
-    "precision_at_1": 0.99,
-    "precision_at_3": 0.99,
-    "precision_at_10": 0.99,
-    "mrr": 0.99,
-    "overall_recall": 0.99
+    "precision_at_1": 1,
+    "precision_at_3": 1,
+    "precision_at_10": 1,
+    "mrr": 1,
+    "overall_recall": 1
   },
   "by_category": {
     "protocol_number": {
@@ -27,9 +27,9 @@
       "mrr": 1
     },
     "trauma": {
-      "count": 11,
-      "precision_at_1": 0.9090909090909091,
-      "mrr": 0.9090909090909091
+      "count": 10,
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "medication": {
       "count": 17,
@@ -64,9 +64,9 @@
       "mrr": 1
     },
     "high": {
-      "count": 68,
-      "precision_at_1": 0.9852941176470589,
-      "mrr": 0.9852941176470589
+      "count": 67,
+      "precision_at_1": 1,
+      "mrr": 1
     },
     "medium": {
       "count": 17,
@@ -74,31 +74,7 @@
       "mrr": 1
     }
   },
-  "failures": [
-    {
-      "query_id": 32,
-      "query": "dog bite above knee",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "506",
-        "1260"
-      ],
-      "retrieved": [],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "proximal",
-        "base contact",
-        "puncture"
-      ],
-      "success": true
-    }
-  ],
+  "failures": [],
   "all_results": [
     {
       "query_id": 1,
@@ -940,29 +916,6 @@
         "death in vehicle"
       ],
       "terms_missing": [],
-      "success": true
-    },
-    {
-      "query_id": 32,
-      "query": "dog bite above knee",
-      "category": "trauma",
-      "priority": "high",
-      "expected": [
-        "506",
-        "1260"
-      ],
-      "retrieved": [],
-      "hit_at_1": false,
-      "hit_at_3": false,
-      "hit_at_10": false,
-      "reciprocal_rank": 0,
-      "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "proximal",
-        "base contact",
-        "puncture"
-      ],
       "success": true
     },
     {
