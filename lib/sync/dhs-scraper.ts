@@ -406,7 +406,7 @@ export class DHSScraper {
       }
     }
 
-    return [...new Set(procedures)];
+    return Array.from(new Set(procedures));
   }
 
   /**
