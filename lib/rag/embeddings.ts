@@ -9,9 +9,14 @@
 import { GoogleGenAI } from '@google/genai';
 import { supabase } from '../supabase';
 
-// Dev mode detection - use direct API on localhost
-const isDevMode = typeof window !== 'undefined' &&
+// Environment detection - use direct API in dev mode or Node.js scripts
+const isBrowser = typeof window !== 'undefined';
+const isNodeScript = !isBrowser && typeof process !== 'undefined';
+const isDevMode = isBrowser &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+// Use direct API in dev mode OR when running as Node.js script
+const useDirectAPI = isDevMode || isNodeScript;
 
 // ============================================
 // Configuration
