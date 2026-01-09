@@ -13,6 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { retrieveContext, type RetrievalResult } from '../lib/rag/retrieval';
 
 // ESM-compatible __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +27,9 @@ const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL |
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Flag to use full RAG pipeline (slower but accurate) vs keyword-only (fast)
+const USE_FULL_RAG = process.env.USE_FULL_RAG !== 'false';
 
 // ============================================
 // Types
