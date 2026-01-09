@@ -995,6 +995,8 @@ export async function retrieveContext(
     queryAnalysis: analysis,
     shouldDecline: declineCheck.decline,
     declineReason: declineCheck.reason,
+    searchMode,
+    degradedReason,
   };
 }
 
