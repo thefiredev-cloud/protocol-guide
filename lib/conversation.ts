@@ -195,11 +195,24 @@ export function extractFactsFromMessage(
   }
 
   // Extract complaint category
+  let newCategory: ConversationFacts['complaintCategory'] | undefined;
   for (const { pattern, category } of COMPLAINT_CATEGORY_PATTERNS) {
     if (pattern.test(message)) {
-      facts.complaintCategory = category;
+      newCategory = category;
       break;
     }
+  }
+
+  // Check for topic change and reset stale facts if needed
+  if (newCategory && hasTopicChanged(newCategory, existingFacts)) {
+    console.log('[Conversation] Topic changed from', existingFacts.complaintCategory, 'to', newCategory, '- resetting facts');
+    // Set the new category first, then reset
+    facts.complaintCategory = newCategory;
+    const resetFacts = resetCategorySpecificFacts(facts);
+    // Continue with reset facts instead of merged facts
+    Object.assign(facts, resetFacts);
+  } else if (newCategory) {
+    facts.complaintCategory = newCategory;
   }
 
   // Extract LAMS score
