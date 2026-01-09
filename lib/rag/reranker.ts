@@ -356,9 +356,15 @@ function calculatePenaltyScore(chunk: RetrievedChunk): number {
   // Penalize based on number of administrative terms found
   penalty += adminMatches.length * 0.05;
 
-  // Penalize very short chunks (likely metadata)
-  if (chunk.content.length < 100) {
-    penalty += 0.1;
+  // Penalize very short chunks ONLY if not clinical content
+  // Clinical summaries are often brief but highly relevant
+  const normalizedSection = (chunk.sectionTitle || '').toLowerCase();
+  const isClinicalSection = CLINICAL_SECTIONS.some(section =>
+    normalizedSection.includes(section)
+  );
+
+  if (chunk.content.length < 50 && !isClinicalSection) {
+    penalty += 0.05;  // Reduced penalty, only for very short non-clinical chunks
   }
 
   // Penalize chunks that are mostly numbers/tables without context
