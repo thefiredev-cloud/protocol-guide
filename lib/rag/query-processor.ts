@@ -137,6 +137,13 @@ const COMMON_SYMPTOMS = [
   'fever', 'hypothermia', 'hyperthermia',
   'burn', 'burns',
   'shock', 'hypotension', 'low blood pressure',
+
+  // Atypical STEMI Presentations (Clinical Pearl)
+  'epigastric pain', 'epigastric discomfort', 'upper abdominal pain',
+  'isolated dyspnea', 'unexplained diaphoresis', 'diaphoresis',
+  'jaw pain', 'jaw pain only', 'arm pain only',
+  'silent mi', 'atypical mi', 'atypical stemi', 'atypical presentation',
+  'interscapular pain', 'back pain between shoulder blades',
 ];
 
 /**
