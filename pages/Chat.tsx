@@ -116,9 +116,14 @@ const Chat: React.FC = () => {
   const [showQuickResults, setShowQuickResults] = useState(false);
   const [dbSessionId, setDbSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sessionCreatedRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Batched streaming updates - accumulate chunks before re-rendering
+  const pendingTextRef = useRef('');
+  const updateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auth context for user info
   const { user, isAuthenticated } = useAuth();
