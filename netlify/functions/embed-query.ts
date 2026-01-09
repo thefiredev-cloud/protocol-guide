@@ -135,28 +135,31 @@ async function generateEmbedding(query: string, apiKey: string): Promise<number[
         'x-goog-api-key': apiKey,
       },
       signal: controller.signal,
-    body: JSON.stringify({
-      model: `models/${GEMINI_EMBEDDING_MODEL}`,
-      content: {
-        parts: [{
-          text: query
-        }]
-      }
-    })
-  });
+      body: JSON.stringify({
+        model: `models/${GEMINI_EMBEDDING_MODEL}`,
+        content: {
+          parts: [{
+            text: query
+          }]
+        }
+      })
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini API error (${response.status}): ${errorText}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Gemini API error (${response.status}): ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.embedding || !data.embedding.values) {
+      throw new Error('Invalid response from Gemini API: missing embedding data');
+    }
+
+    return data.embedding.values;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  const data = await response.json();
-
-  if (!data.embedding || !data.embedding.values) {
-    throw new Error('Invalid response from Gemini API: missing embedding data');
-  }
-
-  return data.embedding.values;
 }
 
 /**
