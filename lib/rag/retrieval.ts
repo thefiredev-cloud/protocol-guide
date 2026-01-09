@@ -578,7 +578,7 @@ function reciprocalRankFusion(
     } else {
       // Chunk exists from keyword search
       // Keep the one with better semantic similarity if available
-      if (chunk.similarity > (existing as any).similarity || 0) {
+      if (chunk.similarity > ((existing as any).similarity || 0)) {
         // Preserve keyword rank info but update with better semantic data
         chunkMap.set(chunk.chunkId, {
           ...existing,
