@@ -450,7 +450,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'PALS': {
     expansion: 'Pediatric Advanced Life Support',
     synonyms: ['pediatric resuscitation', 'pediatric cardiac arrest', 'pediatric emergency'],
-    relatedProtocols: ['830', '831', '1300'],
+    relatedProtocols: ['1210', '1306', '510'],  // Cardiac Arrest + Anaphylaxis + PMC criteria
     category: 'pediatric'
   },
 
