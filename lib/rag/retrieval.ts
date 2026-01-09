@@ -870,9 +870,11 @@ export async function retrieveContext(
     }
   }
 
-  // Log final embedding status
+  // Log final embedding status and set degraded mode
   if (queryEmbedding.length === 0) {
     console.warn('[RAG] All embedding attempts failed - using keyword-only search');
+    searchMode = 'keyword-only';
+    degradedReason = 'Embedding service unavailable - using keyword search only';
   }
 
   // Step 3: Perform searches
