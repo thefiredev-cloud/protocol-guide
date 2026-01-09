@@ -47,6 +47,7 @@ const Browse: React.FC = () => {
             color: getCategoryColor(p.category),
             icon: getCategoryIcon(p.category),
             sections: p.sections || [],
+            lastUpdated: p.last_updated || new Date().toISOString(),
           }));
           setDbProtocols(transformed);
           setUseDatabase(true);
