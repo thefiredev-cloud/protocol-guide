@@ -153,7 +153,7 @@ async function runSmokeTest() {
         // Navigate to chat page
         console.log(`  Navigating to ${BASE_URL}...`);
         await page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 10000 });
-        await page.waitForTimeout(1500); // Let page settle
+        await delay(1500); // Let page settle
 
         // Find chat input
         console.log('  Locating chat input...');
