@@ -167,7 +167,7 @@ async function generateEmbedding(query: string, apiKey: string): Promise<number[
  */
 export const handler: Handler = async (
   event: HandlerEvent,
-  context: HandlerContext
+  _context: HandlerContext
 ) => {
   // CORS headers - restrict to allowed origins
   const allowedOrigins = [
