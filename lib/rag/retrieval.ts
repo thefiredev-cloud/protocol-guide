@@ -950,7 +950,7 @@ export async function retrieveContext(
   // 3c: Criteria-specific protocol search (PMC, PTC, Stroke, etc.)
   if (criteriaInfo.isCriteriaQuery && criteriaInfo.criteriaType) {
     const criteriaProtocolMap: Record<string, string[]> = {
-      'PMC': ['510', '506', '507', '508', '830'],  // Pediatric Medical Center criteria
+      'PMC': ['510', '507', '508'],  // Pediatric Medical Center criteria (NOT 506 - that's Trauma)
       'PTC': ['506', '510'],                 // Pediatric trauma refs
       'Stroke': ['1210', '503'],             // Stroke protocol refs
       'ECMO': ['1207', '503'],               // ECMO/cardiac refs
