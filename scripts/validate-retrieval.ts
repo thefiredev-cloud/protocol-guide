@@ -113,7 +113,7 @@ async function searchProtocolsWithRAG(query: string): Promise<SearchResult[]> {
   try {
     const result: RetrievalResult = await retrieveContext(query, null);
 
-    if (result.declined || result.chunks.length === 0) {
+    if (result.shouldDecline || result.chunks.length === 0) {
       return [];
     }
 
