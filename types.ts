@@ -69,6 +69,8 @@ export interface ProtocolSection {
   content?: string; // For text blocks
   data?: Record<string, string>; // For meta (Scope: County-wide)
   className?: string; // specific styling overrides
+  steps?: ProcedureStep[]; // For step-by-step sections
+  facilityTypes?: FacilityFinderType[]; // For facility-finder sections
 }
 
 export interface Protocol {
