@@ -629,8 +629,13 @@ async function hybridSearch(
   const keywordPromise = keywordSearch(queryText, matchCount * 2);
   const semanticPromise = semanticSearch(queryEmbedding, matchCount * 2);
 
+  // Timeout with cleanup
+  // Note: Supabase RPC calls don't support AbortController, so background
+  // promises continue after timeout. This is acceptable for client-side usage
+  // but should be monitored if converted to server-side with high concurrency.
+  let timeoutId: ReturnType<typeof setTimeout>;
   const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('Search timeout')), SEARCH_TIMEOUT);
+    timeoutId = setTimeout(() => reject(new Error('Search timeout')), SEARCH_TIMEOUT);
   });
 
   try {
@@ -638,6 +643,9 @@ async function hybridSearch(
       Promise.all([keywordPromise, semanticPromise]),
       timeoutPromise
     ]);
+
+    // Clear timeout on success
+    clearTimeout(timeoutId!);
 
     console.log('[Hybrid Search] Raw results:', {
       keyword: keywordResults.length,
