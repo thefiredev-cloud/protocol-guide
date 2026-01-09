@@ -101,8 +101,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   try {
     if (useDirectAPI) {
       // DEV MODE or NODE SCRIPT: Use direct Gemini API
-      // @ts-expect-error - Vite provides import.meta.env at runtime
-      const viteKey = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GEMINI_API_KEY : undefined;
+      const viteKey = typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_GEMINI_API_KEY : undefined;
       const nodeKey = typeof process !== 'undefined' ? process.env?.VITE_GEMINI_API_KEY || process.env?.GEMINI_API_KEY : undefined;
       const apiKey = viteKey || nodeKey;
 
