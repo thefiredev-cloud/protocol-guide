@@ -504,9 +504,40 @@ const Chat: React.FC = () => {
       // NOTE: Raw conversation history removed to prevent context bleeding.
       // Clinical facts are preserved via factsContext (extracted structured data).
       // This prevents unrelated queries (e.g., GSW then Narcan) from mixing.
+      // HOWEVER: For context-dependent responses (yes/no/confirmations), we inject prior context.
+
+      // Check if this is a context-dependent response needing prior context
+      const needsPriorContext = isContextDependentMessage(originalInput);
+      let priorContextString = '';
+
+      if (needsPriorContext && messages.length >= 2) {
+        // Find the last assistant message
+        const lastAssistantMsg = [...messages].reverse().find(m => m.role === 'assistant');
+
+        if (lastAssistantMsg) {
+          // Use pending clarification if available, otherwise detect from message
+          const clarification = pendingClarification ||
+                                detectClarifyingQuestion(lastAssistantMsg.content);
+
+          priorContextString = formatPriorContext(lastAssistantMsg.content, clarification);
+
+          console.log('[Chat] Context-dependent response detected:', {
+            userMessage: originalInput,
+            hasPendingClarification: !!pendingClarification,
+            topic: clarification?.topic,
+          });
+        }
+      }
 
       let augmentedPrompt = originalInput;
-      const contextParts: string[] = [confidenceInstruction];
+      const contextParts: string[] = [];
+
+      // Add prior context FIRST if this is a follow-up response
+      if (priorContextString) {
+        contextParts.push(priorContextString);
+      }
+
+      contextParts.push(confidenceInstruction);
 
       if (factsContext) contextParts.push(factsContext);
       if (followUpInstruction) contextParts.push(followUpInstruction);
