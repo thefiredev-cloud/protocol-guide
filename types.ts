@@ -33,7 +33,7 @@ export type ProtocolCategory =
   | 'Quick Reference'
   | 'Clinical Pearls';
 
-export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert' | 'step-by-step' | 'facility-finder';
+export type SectionType = 'header' | 'meta' | 'warning' | 'text' | 'list' | 'accordion' | 'link-list' | 'definitions' | 'info' | 'calculator' | 'pediatric-dosing' | 'section' | 'alert' | 'step-by-step' | 'facility-finder' | 'clinical-pearl' | 'pdf-reference' | 'checklist' | 'scoring-tool';
 
 // Facility finder types for hospital capability filtering
 export type FacilityFinderType = 'trauma' | 'pediatric' | 'stemi' | 'stroke' | 'burn' | 'ecmo';
