@@ -536,27 +536,11 @@ const Chat: React.FC = () => {
       // This prevents unrelated queries (e.g., GSW then Narcan) from mixing.
       // HOWEVER: For context-dependent responses (yes/no/confirmations), we inject prior context.
 
-      // Check if this is a context-dependent response needing prior context
-      const needsPriorContext = isContextDependentMessage(originalInput);
+      // Use already-computed values from pre-RAG check (isContextDependent, lastAssistantMsg, activeClarification)
       let priorContextString = '';
 
-      if (needsPriorContext && messages.length >= 2) {
-        // Find the last assistant message
-        const lastAssistantMsg = [...messages].reverse().find(m => m.role === 'assistant');
-
-        if (lastAssistantMsg) {
-          // Use pending clarification if available, otherwise detect from message
-          const clarification = pendingClarification ||
-                                detectClarifyingQuestion(lastAssistantMsg.content);
-
-          priorContextString = formatPriorContext(lastAssistantMsg.content, clarification);
-
-          console.log('[Chat] Context-dependent response detected:', {
-            userMessage: originalInput,
-            hasPendingClarification: !!pendingClarification,
-            topic: clarification?.topic,
-          });
-        }
+      if (isContextDependent && lastAssistantMsg) {
+        priorContextString = formatPriorContext(lastAssistantMsg.content, activeClarification);
       }
 
       let augmentedPrompt = originalInput;
