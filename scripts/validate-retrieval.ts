@@ -177,9 +177,10 @@ async function searchProtocols(query: string): Promise<SearchResult[]> {
 // ============================================
 
 function normalizeProtocolId(id: string): string {
-  // Remove prefixes and normalize
+  // Remove all known prefixes and suffixes, normalize for matching
   return id
-    .replace(/^(TP-|Ref\.?\s*|MCG\s*)/i, '')
+    .replace(/^(TP-|Ref\.?\s*|MCG\s*|MED-|PROC-)/i, '') // Remove prefixes
+    .replace(/-P$/i, '') // Remove pediatric suffix
     .replace(/\s+/g, '')
     .toUpperCase();
 }
