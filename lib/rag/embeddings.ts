@@ -238,7 +238,7 @@ export async function embedQuery(query: string): Promise<number[]> {
 
   try {
     const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error('Embedding timeout')), EMBEDDING_TIMEOUT);
+      setTimeout(() => reject(new EmbeddingTimeoutError('Embedding generation timeout')), EMBEDDING_TIMEOUT);
     });
 
     embedding = await Promise.race([
@@ -246,9 +246,17 @@ export async function embedQuery(query: string): Promise<number[]> {
       timeoutPromise
     ]);
   } catch (error) {
-    console.warn('[Embeddings] Timeout or error, returning empty embedding for keyword-only search');
-    // Return empty embedding to allow fallback to keyword search
-    return [];
+    // Throw a typed error so callers can handle appropriately
+    if (error instanceof EmbeddingTimeoutError) {
+      console.warn('[Embeddings] Timeout - caller should handle fallback to keyword search');
+      throw error;
+    }
+    // Wrap other errors
+    console.error('[Embeddings] Failed to generate embedding:', error);
+    throw new EmbeddingError(
+      `Failed to generate embedding: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      error instanceof Error ? error : undefined
+    );
   }
 
   // Store in cache
