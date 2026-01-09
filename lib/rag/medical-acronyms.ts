@@ -319,7 +319,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   'MAE': {
     expansion: 'Moves All Extremities',
     synonyms: ['motor function', 'extremity movement', 'motor assessment', 'four extremity movement', 'motor exam'],
-    relatedProtocols: ['810', '801', '1253'],
+    relatedProtocols: ['506', '1244'],  // Trauma Triage + Trauma TP
     category: 'assessment'
   },
   'VS': {
