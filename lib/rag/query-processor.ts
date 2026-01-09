@@ -556,11 +556,11 @@ export function processQuery(query: string): ProcessedQuery {
 }
 
 /**
- * Check if query is a simple protocol lookup (e.g., "1201", "TP-1201")
+ * Check if query is a simple protocol lookup (e.g., "1201", "TP-1201", "policy 830")
  */
 export function isSimpleProtocolLookup(query: string): boolean {
   const trimmed = query.trim();
-  return /^(?:tp[-\s]?|ref\.?\s*|mcg[-\s]?|protocol\s*)?(\d{3,4})$/i.test(trimmed);
+  return /^(?:tp[-\s]?|ref\.?\s*|mcg[-\s]?|protocol\s*|policy\s*)?(\d{3,4}(?:\.\d+)?)$/i.test(trimmed);
 }
 
 /**
