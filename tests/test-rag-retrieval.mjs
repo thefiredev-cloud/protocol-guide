@@ -51,8 +51,8 @@ function extractProtocolNumber(query) {
 
 async function testKeywordSearch(query) {
   const { data, error } = await supabase.rpc('fulltext_search_protocols', {
-    search_query: query,
-    max_results: 5,
+    query_text: query,
+    match_count: 5,
   });
 
   if (error) {
