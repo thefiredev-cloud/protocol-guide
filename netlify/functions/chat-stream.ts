@@ -150,6 +150,18 @@ VERBATIM REQUIREMENTS (CRITICAL FOR CLINICAL ACCURACY):
     // Build messages
     const messages: GeminiMessage[] = [];
 
+    // Add prior context first if this is a follow-up response (yes/no/confirmation)
+    if (priorContext) {
+      messages.push({
+        role: 'user',
+        parts: [{ text: priorContext }],
+      });
+      messages.push({
+        role: 'model',
+        parts: [{ text: 'I understand the context of our previous exchange. I will consider this when responding.' }],
+      });
+    }
+
     if (context) {
       messages.push({
         role: 'user',
