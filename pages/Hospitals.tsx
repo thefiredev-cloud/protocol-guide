@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { hospitals, Capability, Hospital } from '../data/hospitals';
 import { IconHospital, renderIcon } from '../components/Icons';
 
