@@ -1017,8 +1017,10 @@ export async function retrieveContext(
   // Log any source violations detected during retrieval
   if (violations.length > 0) {
     console.error(`[RAG] Filtered ${violations.length} chunks from unauthorized sources`);
-    // Log each violation asynchronously (don't block retrieval)
-    violations.forEach(v => logSourceViolation(v));
+    // Log violations asynchronously without blocking retrieval
+    Promise.all(violations.map(v => logSourceViolation(v))).catch(err => {
+      console.error('[RAG] Failed to log source violations:', err);
+    });
   }
 
   // Use validChunks for the rest of the function
