@@ -763,6 +763,20 @@ const Chat: React.FC = () => {
         persistMessage(persistData);
       }
 
+      // Detect if assistant asked a clarifying question for next turn
+      const newClarification = detectClarifyingQuestion(responseText);
+      if (newClarification) {
+        setPendingClarification(newClarification);
+        console.log('[Chat] New clarifying question detected:', {
+          question: newClarification.question,
+          topic: newClarification.topic,
+          type: newClarification.clarificationType,
+        });
+      } else {
+        // Clear pending clarification if no question was asked
+        setPendingClarification(null);
+      }
+
     } catch (error: any) {
       console.error('Chat error:', error);
       console.error('Error details:', {
