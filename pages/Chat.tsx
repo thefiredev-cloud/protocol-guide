@@ -448,6 +448,24 @@ const Chat: React.FC = () => {
       let patientInfo = '';
       let confidenceLevel: 'HIGH' | 'MEDIUM' | 'LOW' = 'HIGH';
 
+      // Check for context-dependent responses (yes/no) BEFORE RAG retrieval
+      // If user is responding to a clarifying question, don't let RAG decline
+      const isContextDependent = isContextDependentMessage(originalInput);
+      const lastAssistantMsg = messages.length >= 2
+        ? [...messages].reverse().find(m => m.role === 'assistant')
+        : null;
+      const activeClarification = pendingClarification ||
+        (lastAssistantMsg ? detectClarifyingQuestion(lastAssistantMsg.content) : null);
+
+      // Log context-dependent detection
+      if (isContextDependent) {
+        console.log('[Chat] Context-dependent message detected pre-RAG:', {
+          input: originalInput,
+          hasClarification: !!activeClarification,
+          clarificationTopic: activeClarification?.topic,
+        });
+      }
+
       // Use RAG pipeline if available, otherwise fallback to local search
       if (useRAG) {
         // RAG Pipeline: Retrieve context from Supabase with vector search
@@ -457,7 +475,9 @@ const Chat: React.FC = () => {
         });
 
         // Check if we should decline to answer
-        if (retrieval.shouldDecline) {
+        // IMPORTANT: Don't decline if this is a context-dependent response to a clarifying question
+        const shouldBypassDecline = isContextDependent && activeClarification !== null;
+        if (retrieval.shouldDecline && !shouldBypassDecline) {
           const declineMsg: Message = {
             id: (Date.now() + 1).toString(),
             role: 'assistant',
