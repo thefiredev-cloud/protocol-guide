@@ -34,6 +34,7 @@ interface StoredChatSession {
     isWarning?: boolean;
   }>;
   conversationFacts: ConversationFacts;
+  pendingClarification?: PendingClarification | null;
   expiresAt: number;
 }
 
