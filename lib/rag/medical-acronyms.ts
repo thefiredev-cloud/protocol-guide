@@ -178,7 +178,7 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
       'PMC referral criteria', 'critically ill pediatric', 'PMC destination',
       'pediatric medical center criteria', 'PMC referral'
     ],
-    relatedProtocols: ['510', '506', '507', '508', '830'],
+    relatedProtocols: ['510', '507', '508'],  // NOT 506 (Trauma) or 830 (Trial Studies)
     category: 'pediatric'
   },
   'SRC': {
