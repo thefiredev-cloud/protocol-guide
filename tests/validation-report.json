@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-01-09T04:11:41.545Z",
-  "total_queries": 99,
-  "successful_queries": 99,
+  "timestamp": "2026-01-10T23:58:22.403Z",
+  "total_queries": 103,
+  "successful_queries": 103,
   "failed_queries": 0,
   "metrics": {
-    "precision_at_1": 1,
-    "precision_at_3": 1,
-    "precision_at_10": 1,
-    "mrr": 1,
-    "overall_recall": 1
+    "precision_at_1": 0.7184466019417476,
+    "precision_at_3": 0.8155339805825242,
+    "precision_at_10": 0.8155339805825242,
+    "mrr": 0.7669902912621359,
+    "overall_recall": 0.7605177993527509
   },
   "by_category": {
     "protocol_number": {
@@ -18,18 +18,18 @@
     },
     "cardiac": {
       "count": 11,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.7272727272727273,
+      "mrr": 0.7727272727272727
     },
     "stroke": {
-      "count": 9,
-      "precision_at_1": 1,
-      "mrr": 1
+      "count": 13,
+      "precision_at_1": 0,
+      "mrr": 0.038461538461538464
     },
     "trauma": {
       "count": 10,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.6,
+      "mrr": 0.7
     },
     "medication": {
       "count": 17,
@@ -38,43 +38,547 @@
     },
     "procedure": {
       "count": 9,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.6666666666666666,
+      "mrr": 0.8333333333333334
     },
     "pediatric": {
       "count": 9,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.8888888888888888,
+      "mrr": 0.9444444444444444
     },
     "acronym": {
       "count": 8,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.625,
+      "mrr": 0.6875
     },
     "general": {
       "count": 21,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.9047619047619048,
+      "mrr": 0.9285714285714286
     }
   },
   "by_priority": {
     "critical": {
-      "count": 15,
-      "precision_at_1": 1,
-      "mrr": 1
+      "count": 18,
+      "precision_at_1": 0.6666666666666666,
+      "mrr": 0.6666666666666666
     },
     "high": {
-      "count": 67,
-      "precision_at_1": 1,
-      "mrr": 1
+      "count": 68,
+      "precision_at_1": 0.7058823529411765,
+      "mrr": 0.7720588235294118
     },
     "medium": {
       "count": 17,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.8235294117647058,
+      "mrr": 0.8529411764705882
     }
   },
-  "failures": [],
+  "failures": [
+    {
+      "query_id": 6,
+      "query": "STEMI protocol",
+      "category": "cardiac",
+      "priority": "high",
+      "expected": [
+        "504",
+        "1203",
+        "1204"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "ST elevation"
+      ],
+      "terms_missing": [
+        "cardiac cath",
+        "PCI"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 14,
+      "query": "ECMO criteria",
+      "category": "cardiac",
+      "priority": "medium",
+      "expected": [
+        "518",
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "ECPR",
+        "refractory",
+        "base contact"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 16,
+      "query": "LAMS score",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "facial droop",
+        "arm drift",
+        "grip strength",
+        "0-5"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 17,
+      "query": "stroke assessment mLAPSS",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "1232",
+        "1210",
+        "521"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "age",
+        "seizure"
+      ],
+      "terms_missing": [
+        "glucose",
+        "unilateral"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 18,
+      "query": "LVO stroke transport",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "1232",
+        "521",
+        "522"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "CSC",
+        "comprehensive stroke center",
+        "LAMS 4"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 19,
+      "query": "stroke LKWT greater than 24 hours",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "521",
+        "522",
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "last known well",
+        "time window"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 20,
+      "query": "stroke destination decision",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "transport"
+      ],
+      "terms_missing": [
+        "PSC",
+        "CSC"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 22,
+      "query": "hemorrhagic stroke",
+      "category": "stroke",
+      "priority": "medium",
+      "expected": [
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "blood pressure"
+      ],
+      "terms_missing": [
+        "hypertension"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 29,
+      "query": "head injury GCS less than 8",
+      "category": "trauma",
+      "priority": "high",
+      "expected": [
+        "810",
+        "1253"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "airway"
+      ],
+      "terms_missing": [
+        "intubation",
+        "hyperventilation"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 31,
+      "query": "MVC trauma criteria",
+      "category": "trauma",
+      "priority": "high",
+      "expected": [
+        "830",
+        "802",
+        "801"
+      ],
+      "retrieved": [
+        "506-trauma",
+        "506"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "mechanism"
+      ],
+      "terms_missing": [
+        "ejection",
+        "death in vehicle"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 63,
+      "query": "LAMS",
+      "category": "acronym",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "Los Angeles Motor Scale",
+        "facial",
+        "arm",
+        "grip"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 64,
+      "query": "ECMO",
+      "category": "acronym",
+      "priority": "high",
+      "expected": [
+        "518",
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "extracorporeal",
+        "membrane",
+        "oxygenation"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 84,
+      "query": "heat stroke",
+      "category": "general",
+      "priority": "high",
+      "expected": [
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "altered mental"
+      ],
+      "terms_missing": [
+        "cooling",
+        "temperature"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 96,
+      "query": "what does LAMS score of 4 mean",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "1232",
+        "521",
+        "522"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LVO",
+        "large vessel",
+        "CSC"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 99,
+      "query": "suspected stroke but LKWT unknown",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "521",
+        "522",
+        "1210"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "time window",
+        "CSC"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 101,
+      "query": "lams score 5",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LAMS",
+        "LVO",
+        "CSC",
+        "comprehensive stroke"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 102,
+      "query": "5",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "1317.16",
+        "1317.22",
+        "1317.21",
+        "1317.26",
+        "1317.6",
+        "PROC-DEFIB",
+        "CALC-PED-WEIGHT",
+        "PROC-CPAP",
+        "1317.10",
+        "MED-OLAN"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LAMS",
+        "score"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 103,
+      "query": "last known well 10 pm",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LKWT",
+        "time window",
+        "last known well"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 104,
+      "query": "LKWT 2 hours ago",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "time",
+        "stroke"
+      ],
+      "terms_missing": [
+        "last known well"
+      ],
+      "success": true
+    }
+  ],
   "all_results": [
     {
       "query_id": 1,
@@ -189,18 +693,17 @@
         "1204"
       ],
       "retrieved": [
-        "504",
-        "1203",
-        "1204"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "ST elevation"
+      ],
       "terms_missing": [
-        "ST elevation",
         "cardiac cath",
         "PCI"
       ],
@@ -248,19 +751,18 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [
+        "defibrillation",
         "shock"
       ],
       "terms_missing": [
-        "defibrillation",
         "joules"
       ],
       "success": true
@@ -352,14 +854,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [],
       "terms_missing": [
         "targeted temperature",
@@ -406,19 +907,17 @@
         "1210"
       ],
       "retrieved": [
-        "518",
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [
-        "ECPR",
-        "refractory"
-      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
       "terms_missing": [
+        "ECPR",
+        "refractory",
         "base contact"
       ],
       "success": true
@@ -465,22 +964,19 @@
         "1232"
       ],
       "retrieved": [
-        "521",
-        "522",
-        "1232"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
         "facial droop",
         "arm drift",
+        "grip strength",
         "0-5"
-      ],
-      "terms_missing": [
-        "grip strength"
       ],
       "success": true
     },
@@ -495,22 +991,21 @@
         "521"
       ],
       "retrieved": [
-        "1232",
-        "1210",
-        "521"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [
         "age",
-        "seizure",
+        "seizure"
+      ],
+      "terms_missing": [
         "glucose",
         "unilateral"
       ],
-      "terms_missing": [],
       "success": true
     },
     {
@@ -524,15 +1019,13 @@
         "522"
       ],
       "retrieved": [
-        "1232",
-        "521",
-        "522"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [],
       "terms_missing": [
         "CSC",
@@ -552,15 +1045,13 @@
         "1210"
       ],
       "retrieved": [
-        "521",
-        "522",
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [],
       "terms_missing": [
         "last known well",
@@ -577,13 +1068,13 @@
         "1210"
       ],
       "retrieved": [
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [
         "transport"
       ],
@@ -604,16 +1095,15 @@
         "1239"
       ],
       "retrieved": [
+        "PEARL-ATYPICAL-STEMI",
         "1232",
-        "1202",
-        "1239",
-        "1235"
+        "1202"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "resolved"
       ],
@@ -631,16 +1121,17 @@
         "1210"
       ],
       "retrieved": [
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "blood pressure"
+      ],
       "terms_missing": [
-        "blood pressure",
         "hypertension"
       ],
       "success": true
@@ -691,12 +1182,12 @@
       "retrieved": [
         "1264",
         "1240",
-        "1252",
+        "1248",
+        "1249",
         "1202",
+        "1252",
         "1220",
         "1234",
-        "1249",
-        "1248",
         "1250"
       ],
       "hit_at_1": true,
@@ -723,14 +1214,15 @@
         "806"
       ],
       "retrieved": [
+        "PROC-IO-VASCULAR",
         "1260",
         "805",
         "806"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [],
       "terms_missing": [
@@ -751,19 +1243,17 @@
         "1248"
       ],
       "retrieved": [
+        "CURR-PROC-002",
         "LA-DROP",
-        "1240",
         "1248",
+        "1240",
         "1360",
-        "1243-P",
-        "812",
-        "837",
-        "1237"
+        "1243-P"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "needle decompression",
@@ -841,18 +1331,18 @@
         "1253"
       ],
       "retrieved": [
-        "810",
-        "1253"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "airway"
+      ],
       "terms_missing": [
         "intubation",
-        "airway",
         "hyperventilation"
       ],
       "success": true
@@ -899,23 +1389,21 @@
         "801"
       ],
       "retrieved": [
-        "830",
-        "802",
-        "801",
-        "1317.33",
-        "506-trauma"
+        "506-trauma",
+        "506"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [
-        "mechanism",
+        "mechanism"
+      ],
+      "terms_missing": [
         "ejection",
         "death in vehicle"
       ],
-      "terms_missing": [],
       "success": true
     },
     {
@@ -960,14 +1448,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [],
       "terms_missing": [
         "300mg",
@@ -1287,11 +1774,12 @@
       ],
       "retrieved": [
         "MED-ONDAN",
+        "1230",
         "1317.27",
         "1235",
-        "1230",
         "1204",
-        "1205"
+        "1205",
+        "1206"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1409,26 +1897,24 @@
         "1317"
       ],
       "retrieved": [
-        "518",
-        "1105",
+        "1102",
         "1317",
+        "PROC-IO-VASCULAR",
         "PROC-IO",
         "1268",
-        "1220",
-        "1207",
-        "1305"
+        "CURR-PROC-001"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "intraosseous",
-        "tibia",
-        "humerus"
+        "tibia"
       ],
       "terms_missing": [
+        "humerus",
         "EZ-IO"
       ],
       "success": true
@@ -1469,19 +1955,16 @@
         "1248"
       ],
       "retrieved": [
+        "CURR-PROC-002",
         "619",
         "PROC-NDL",
         "1248",
-        "1360",
-        "1268",
-        "1225",
-        "1254",
-        "1227"
+        "1360"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "2nd intercostal",
@@ -1530,8 +2013,8 @@
       ],
       "retrieved": [
         "1208",
-        "1268",
         "713",
+        "1268",
         "834",
         "901",
         "1244",
@@ -1658,9 +2141,9 @@
         "1317.33",
         "1317.5",
         "1317.9",
-        "1317.25",
         "MED-NAL",
         "MED-ATROP",
+        "PROC-IO-VASCULAR",
         "714",
         "1309"
       ],
@@ -1808,19 +2291,19 @@
         "1317"
       ],
       "retrieved": [
-        "518",
-        "1105",
+        "1102",
         "1317",
         "PROC-IO",
+        "PROC-IO-VASCULAR",
         "708",
         "1262",
         "1264"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "tibia",
         "proximal"
@@ -1841,22 +2324,19 @@
         "1232"
       ],
       "retrieved": [
-        "521",
-        "522",
-        "1232"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "Los Angeles Motor Scale",
         "facial",
         "arm",
         "grip"
-      ],
-      "terms_missing": [
-        "Los Angeles Motor Scale"
       ],
       "success": true
     },
@@ -1870,14 +2350,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [],
       "terms_missing": [
         "extracorporeal",
@@ -1901,11 +2380,12 @@
         "1104",
         "1317",
         "PROC-IO",
+        "CURR-PROC-001",
+        "PROC-IO-VASCULAR",
         "PROC-DEFIB",
         "840",
         "708",
-        "1210",
-        "903"
+        "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1930,19 +2410,17 @@
         "1317"
       ],
       "retrieved": [
-        "518",
-        "1105",
+        "1102",
         "1317",
         "PROC-IO",
-        "1268",
-        "1264",
-        "1258"
+        "CURR-PROC-001",
+        "1268"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "intraosseous"
       ],
@@ -1959,14 +2437,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [
         "compressions",
         "rate",
@@ -1985,14 +2462,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [],
       "terms_missing": [
         "defibrillator",
@@ -2041,14 +2517,13 @@
         "1210"
       ],
       "retrieved": [
-        "518",
         "1210"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.5,
       "terms_found": [],
       "terms_missing": [
         "H's and T's",
@@ -2252,9 +2727,9 @@
         "1247",
         "540",
         "524",
+        "1236",
         "1233",
         "1229",
-        "1236",
         "605",
         "826"
       ],
@@ -2337,18 +2812,18 @@
         "501"
       ],
       "retrieved": [
+        "CURR-OB-001",
         "511",
         "1270",
         "501",
         "530",
         "526",
-        "criteria-summary",
-        "504"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "trauma",
@@ -2403,9 +2878,9 @@
         "1317.21",
         "1267",
         "PROC-ETI",
+        "PROC-IO-VASCULAR",
         "1212",
-        "1209",
-        "222"
+        "1209"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2461,18 +2936,19 @@
         "1210"
       ],
       "retrieved": [
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "altered mental"
+      ],
       "terms_missing": [
         "cooling",
-        "temperature",
-        "altered mental"
+        "temperature"
       ],
       "success": true
     },
@@ -2703,20 +3179,15 @@
         "834"
       ],
       "retrieved": [
+        "CURR-PROC-002",
         "PROC-NDL",
         "1248",
-        "834",
-        "1360",
-        "1268",
-        "1225",
-        "1243-P",
-        "1253",
-        "1245"
+        "834"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "2nd intercostal",
@@ -2823,15 +3294,13 @@
         "522"
       ],
       "retrieved": [
-        "1232",
-        "521",
-        "522"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [],
       "terms_missing": [
         "LVO",
@@ -2885,17 +3354,16 @@
         "1212"
       ],
       "retrieved": [
-        "PROC-12LEAD",
+        "PEARL-ATYPICAL-STEMI",
         "1211",
         "1212",
-        "1202",
-        "1214"
+        "1202"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.6666666666666666,
       "terms_found": [],
       "terms_missing": [
         "fluid",
@@ -2914,15 +3382,13 @@
         "1210"
       ],
       "retrieved": [
-        "521",
-        "522",
-        "1210"
+        "criteria-summary"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
       "terms_found": [],
       "terms_missing": [
         "time window",
@@ -2961,6 +3427,120 @@
         "blood"
       ],
       "terms_missing": [],
+      "success": true
+    },
+    {
+      "query_id": 101,
+      "query": "lams score 5",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LAMS",
+        "LVO",
+        "CSC",
+        "comprehensive stroke"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 102,
+      "query": "5",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "1317.16",
+        "1317.22",
+        "1317.21",
+        "1317.26",
+        "1317.6",
+        "PROC-DEFIB",
+        "CALC-PED-WEIGHT",
+        "PROC-CPAP",
+        "1317.10",
+        "MED-OLAN"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LAMS",
+        "score"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 103,
+      "query": "last known well 10 pm",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "LKWT",
+        "time window",
+        "last known well"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 104,
+      "query": "LKWT 2 hours ago",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "521",
+        "522",
+        "1232"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [
+        "time",
+        "stroke"
+      ],
+      "terms_missing": [
+        "last known well"
+      ],
       "success": true
     }
   ]
