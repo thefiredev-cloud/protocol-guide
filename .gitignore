@@ -28,3 +28,6 @@ ENV_AUDIT_REPORT.md
 .netlify
 supabase/.temp/
 .env
+
+# Test credentials
+tests/test-credentials.json
