@@ -1031,7 +1031,7 @@ const Chat: React.FC = () => {
       <div className="fixed bottom-[100px] left-0 w-full px-6 z-40">
         <div className="max-w-3xl mx-auto">
           <div className="relative flex items-center gap-3">
-            <div className="flex-1 bg-white dark:bg-slate-800 rounded-full shadow-2xl border border-slate-200 dark:border-slate-700 flex items-center p-2 pl-6 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+            <div className="flex-1 bg-white dark:bg-slate-800 rounded-full shadow-2xl border border-slate-200 dark:border-slate-700 flex items-center p-2 pl-6 transition-all focus-within:ring-2 focus-within:ring-primary/50">
               <input
                 ref={inputRef}
                 value={input}
