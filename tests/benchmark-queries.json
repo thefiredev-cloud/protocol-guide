@@ -1609,6 +1609,110 @@
       ],
       "description": "LKWT acronym with relative time",
       "priority": "high"
+    },
+    {
+      "id": 200,
+      "query": "mLAPSS criteria",
+      "category": "stroke",
+      "expected_protocols": [
+        "STROKE-MLAPSS",
+        "521"
+      ],
+      "expected_terms": [
+        "facial droop",
+        "arm drift",
+        "grip strength"
+      ],
+      "description": "mLAPSS stroke assessment tool",
+      "priority": "critical"
+    },
+    {
+      "id": 201,
+      "query": "tourniquet application",
+      "category": "procedure",
+      "expected_protocols": [
+        "EQUIP-SOF-TQ"
+      ],
+      "expected_terms": [
+        "tourniquet",
+        "hemorrhage",
+        "bleeding"
+      ],
+      "description": "SOF tourniquet application guide",
+      "priority": "high"
+    },
+    {
+      "id": 202,
+      "query": "posterior circulation stroke",
+      "category": "stroke",
+      "expected_protocols": [
+        "STROKE-POSTERIOR",
+        "522"
+      ],
+      "expected_terms": [
+        "ataxia",
+        "vertigo",
+        "diplopia"
+      ],
+      "description": "Posterior stroke recognition",
+      "priority": "high"
+    },
+    {
+      "id": 203,
+      "query": "celox gauze",
+      "category": "procedure",
+      "expected_protocols": [
+        "EQUIP-CELOX"
+      ],
+      "expected_terms": [
+        "hemostatic",
+        "wound packing"
+      ],
+      "description": "Celox hemostatic gauze guide",
+      "priority": "medium"
+    },
+    {
+      "id": 204,
+      "query": "igel insertion",
+      "category": "procedure",
+      "expected_protocols": [
+        "EQUIP-IGEL",
+        "1101"
+      ],
+      "expected_terms": [
+        "supraglottic",
+        "airway"
+      ],
+      "description": "iGel airway insertion",
+      "priority": "high"
+    },
+    {
+      "id": 205,
+      "query": "chest seal application",
+      "category": "procedure",
+      "expected_protocols": [
+        "EQUIP-CHEST-SEAL"
+      ],
+      "expected_terms": [
+        "pneumothorax",
+        "penetrating trauma"
+      ],
+      "description": "Russell chest seal application",
+      "priority": "high"
+    },
+    {
+      "id": 206,
+      "query": "CPAP with ETCO2",
+      "category": "procedure",
+      "expected_protocols": [
+        "EQUIP-CPAP-ETCO2"
+      ],
+      "expected_terms": [
+        "CPAP",
+        "capnography"
+      ],
+      "description": "CPAP with ETCO2 monitoring guide",
+      "priority": "medium"
     }
   ]
 }
