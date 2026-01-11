@@ -997,7 +997,7 @@ const Chat: React.FC = () => {
                </div>
 
                <div className={`flex items-center gap-3 mt-1 ${msg.role === 'user' ? 'mr-1 flex-row-reverse' : 'ml-1'}`}>
-                 <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                 <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
                    {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                    {msg.role === 'user' && <span className="material-symbols-outlined text-[14px] text-blue-400">done_all</span>}
                  </span>
