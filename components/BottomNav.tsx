@@ -117,7 +117,7 @@ const BottomNav: React.FC = () => {
         {/* Account - Gray stroke icon */}
         <button
           onClick={() => navigate('/account')}
-          className="relative flex flex-col items-center justify-center flex-1 h-full min-w-[76px] gap-1.5 transition-all active:scale-95 text-slate-500 dark:text-slate-400"
+          className="relative flex flex-col items-center justify-center flex-1 h-full min-w-[76px] gap-1.5 transition-all active:scale-95 text-slate-500 dark:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
         >
           <IconUser className="w-8 h-8" strokeWidth={1.8} />
           <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Account</span>
