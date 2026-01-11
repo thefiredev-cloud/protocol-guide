@@ -143,7 +143,7 @@ interface QuickActionsProps {
 export const QuickActions: React.FC<QuickActionsProps> = ({ onSelect, disabled }) => {
   return (
     <div className="mb-6">
-      <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">
+      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 text-center">
         Quick Access
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
