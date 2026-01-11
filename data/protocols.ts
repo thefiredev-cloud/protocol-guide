@@ -68,6 +68,8 @@ const detailedProtocols: Protocol[] = [
   ...quickReferenceList,
   ...clinicalPearlsList,
   ...lacofdProtocolsList,
+  ...strokeAssessmentProtocols,
+  ...equipmentProtocols,
 ];
 
 // Deduplication Logic: Prefer detailed protocols over bulk stubs
