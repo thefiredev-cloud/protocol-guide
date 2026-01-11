@@ -964,12 +964,7 @@ const Chat: React.FC = () => {
                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none text-slate-800 dark:text-slate-200 shadow-md'
                }`}>
                  <div className="text-[15px] leading-relaxed whitespace-pre-wrap font-medium">
-                   {/* Animate assistant messages after streaming completes */}
-                   {msg.role === 'assistant' && streamingMessageId !== msg.id ? (
-                     <AnimatedText text={msg.content} staggerDelay={25} />
-                   ) : (
-                     msg.content
-                   )}
+                   {msg.content}
                    {/* Streaming cursor */}
                    {isStreaming && streamingMessageId === msg.id && (
                      <span className="inline-block w-1.5 h-4 bg-primary/60 ml-1 animate-pulse rounded-sm align-middle" />
