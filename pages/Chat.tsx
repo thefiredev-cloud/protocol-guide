@@ -132,9 +132,9 @@ const Chat: React.FC = () => {
   const sessionCreatedRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Batched streaming updates - accumulate chunks before re-rendering
+  // Batched streaming updates - accumulate chunks before re-rendering (RAF for 60fps)
   const pendingTextRef = useRef('');
-  const updateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const updateRafRef = useRef<number | null>(null);
 
   // Auth context for user info
   const { user, isAuthenticated } = useAuth();
