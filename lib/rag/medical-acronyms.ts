@@ -24,8 +24,8 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   },
   'mLAPSS': {
     expansion: 'Modified Los Angeles Prehospital Stroke Screen',
-    synonyms: ['stroke screen', 'prehospital stroke', 'LAPSS', 'MLAPPS', 'stroke screening', 'stroke assessment'],
-    relatedProtocols: ['521', '1232'],
+    synonyms: ['stroke screen', 'prehospital stroke', 'LAPSS', 'MLAPPS', 'stroke screening', 'stroke assessment', 'HAM assessment'],
+    relatedProtocols: ['521', '1232', 'STROKE-MLAPSS', 'STROKE-POSTERIOR'],
     category: 'stroke'
   },
   'LAPSS': {
