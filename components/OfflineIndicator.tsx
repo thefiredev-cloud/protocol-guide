@@ -30,7 +30,7 @@ const OfflineIndicator: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-14 left-0 right-0 z-[100] px-4 py-3 text-center text-sm font-bold transition-all duration-300 ${
+      className={`fixed top-14 left-0 right-0 z-[51] px-4 py-3 text-center text-sm font-bold transition-all duration-300 ${
         isOnline
           ? 'bg-emerald-500 text-white'
           : 'bg-amber-500 text-white'
