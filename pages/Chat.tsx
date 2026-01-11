@@ -979,7 +979,7 @@ const Chat: React.FC = () => {
                  {/* Citations Section */}
                  {msg.citations && msg.citations.length > 0 && (
                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
-                     <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Sources</div>
+                     <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Sources</div>
                      <div className="flex flex-wrap gap-2">
                        {msg.citations.map((citation, idx) => (
                          <a
