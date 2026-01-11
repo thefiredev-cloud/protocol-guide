@@ -80,7 +80,7 @@ const BottomNav: React.FC = () => {
           <button
             onClick={handleMicClick}
             title={isListening ? 'Stop listening' : (isSupported ? 'Start voice input' : 'Voice input not supported')}
-            className={`relative w-[76px] h-[76px] rounded-full flex items-center justify-center shadow-lg z-10 transition-all ${
+            className={`relative w-[76px] h-[76px] rounded-full flex items-center justify-center shadow-lg z-10 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50 ${
               isListening
                 ? 'bg-primary animate-pulse ring-4 ring-primary/30'
                 : 'bg-gradient-to-b from-slate-200 to-slate-300 dark:from-slate-600 dark:to-slate-700 ring-4 ring-white dark:ring-slate-800'
