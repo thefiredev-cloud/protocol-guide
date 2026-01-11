@@ -7,6 +7,7 @@
  */
 
 import { GoogleGenAI } from '@google/genai';
+import { LRUCache } from 'lru-cache';
 import { supabase } from '../supabase';
 
 // Environment detection - use direct API in dev mode or Node.js scripts
