@@ -1119,12 +1119,13 @@ export async function retrieveContext(
   // Sort by relevance
   uniqueChunks.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
-  // Take top results for reranking (2x maxChunks for reranker input)
-  const candidateChunks = uniqueChunks.slice(0, maxChunks * 2);
+  // Take top results for reranking (4x for criteria queries, 2x otherwise)
+  const rerankerMultiplier = criteriaInfo.isCriteriaQuery ? 4 : 2;
+  const candidateChunks = uniqueChunks.slice(0, maxChunks * rerankerMultiplier);
 
   // Step 4a: Apply reranking for better precision
   const rerankedChunks = await rerankChunks(query, candidateChunks, {
-    maxChunksToRerank: maxChunks * 2,
+    maxChunksToRerank: maxChunks * rerankerMultiplier,
     minRelevanceAfterRerank: 0.01,
     boostFactors: {
       exactProtocolMatch: criteriaInfo.isCriteriaQuery ? 0.2 : 0.3,
