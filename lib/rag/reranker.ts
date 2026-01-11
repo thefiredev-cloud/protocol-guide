@@ -83,6 +83,18 @@ const CLINICAL_SECTIONS = [
   'quick reference',
   'job aid checklist',
   'tailboard talk',
+  // Equipment and Assessment sections
+  'application',
+  'application technique',
+  'assessment criteria',
+  'scoring',
+  'scoring tool',
+  'size selection',
+  'insertion',
+  'insertion technique',
+  'key findings',
+  'ham assessment',
+  'equipment guide',
 ];
 
 /**
