@@ -424,6 +424,7 @@ const Browse: React.FC = () => {
              </div>
            )}
          </div>
+         )}
       </div>
     </main>
   );
