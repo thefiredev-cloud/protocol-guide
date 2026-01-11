@@ -124,6 +124,7 @@ const Chat: React.FC = () => {
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [quickResults, setQuickResults] = useState<LocalSearchResult[]>([]);
   const [showQuickResults, setShowQuickResults] = useState(false);
+  const [quickResultsFading, setQuickResultsFading] = useState(false);
   const [dbSessionId, setDbSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
