@@ -1046,7 +1046,7 @@ const Chat: React.FC = () => {
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping || isStreaming}
-              className={`group relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ease-out active:scale-90 ${
+              className={`group relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ease-out active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                 !input.trim() || isTyping || isStreaming
                   ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-br from-[#B02040] to-[#9B1B30] text-white shadow-lg shadow-[#9B1B30]/25 hover:shadow-xl hover:shadow-[#9B1B30]/40 hover:scale-105 hover:from-[#C02848] hover:to-[#B02040]'
