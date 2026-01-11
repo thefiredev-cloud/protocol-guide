@@ -19,17 +19,21 @@ interface QuickResultsProps {
   results: LocalSearchResult[];
   onProtocolClick: (protocolRef: string) => void;
   isVisible: boolean;
+  isFading?: boolean;
 }
 
 export const QuickResults: React.FC<QuickResultsProps> = ({
   results,
   onProtocolClick,
-  isVisible
+  isVisible,
+  isFading = false
 }) => {
   if (!isVisible || results.length === 0) return null;
 
   return (
-    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mb-4 animate-fadeIn border border-blue-200 dark:border-blue-800/30">
+    <div className={`bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mb-4 border border-blue-200 dark:border-blue-800/30 transition-opacity duration-300 ${
+      isFading ? 'opacity-0' : 'opacity-100 animate-fadeIn'
+    }`}>
       <div className="flex items-center gap-2 mb-3">
         <span className="material-symbols-outlined text-blue-500 text-lg">bolt</span>
         <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
