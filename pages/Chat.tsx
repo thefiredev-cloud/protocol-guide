@@ -685,9 +685,9 @@ const Chat: React.FC = () => {
           }
 
           // Final update to ensure all text is rendered
-          if (updateTimeoutRef.current) {
-            clearTimeout(updateTimeoutRef.current);
-            updateTimeoutRef.current = null;
+          if (updateRafRef.current) {
+            cancelAnimationFrame(updateRafRef.current);
+            updateRafRef.current = null;
           }
           setMessages(prev => prev.map(msg =>
             msg.id === botMsgId
