@@ -912,6 +912,7 @@ const Chat: React.FC = () => {
         <QuickResults
           results={quickResults}
           isVisible={showQuickResults}
+          isFading={quickResultsFading}
           onProtocolClick={(ref) => {
             // Navigate to protocol detail
             window.location.href = `/browse?protocol=${ref}`;
