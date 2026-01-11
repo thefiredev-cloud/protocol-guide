@@ -274,6 +274,12 @@ export const MEDICAL_ACRONYMS: Record<string, AcronymEntry> = {
   },
 
   // Assessment
+  'HAM': {
+    expansion: 'History, Allergies, Medications',
+    synonyms: ['patient history', 'allergy check', 'medication list', 'HAM assessment', 'stroke history', 'medical history'],
+    relatedProtocols: ['521', '1232', 'STROKE-MLAPSS'],
+    category: 'assessment'
+  },
   'AMS': {
     expansion: 'Altered Mental Status',
     synonyms: ['altered consciousness', 'confusion', 'decreased LOC', 'mental status change'],
