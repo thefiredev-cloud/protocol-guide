@@ -7,6 +7,7 @@ import { procCPAP } from './proc-cpap';
 import { procIntubation } from './proc-intubation';
 import { procDefibrillation } from './proc-defibrillation';
 import { proc12Lead } from './proc-12lead';
+import { proc1335 } from './proc-1335';
 import { tp1100 } from './tp-1100';
 import { remainingProcedures } from './all-procedures';
 
@@ -19,6 +20,7 @@ export const procedureProtocolsList = [
   procCPAP,
   procDefibrillation,
   proc12Lead,
+  proc1335,
   tp1100,
   ...remainingProcedures
 ];
