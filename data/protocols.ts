@@ -16,6 +16,8 @@ import { bulkProtocols } from './library/bulk-protocols';
 import { quickReferenceList } from './library/quick-reference';
 import { clinicalPearlsList } from './library/clinical-pearls';
 import { lacofdProtocolsList } from './library/lacofd';
+import { strokeAssessmentProtocols } from './library/stroke-assessment';
+import { equipmentProtocols } from './library/equipment';
 
 // Detailed Series Imports
 import { series100 } from './library/series-100';
