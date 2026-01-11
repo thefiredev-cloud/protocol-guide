@@ -935,7 +935,7 @@ const Chat: React.FC = () => {
                 <img src="/logo.png" alt="Protocol Guide" className="w-8 h-8 flex-shrink-0 self-start mt-4 mix-blend-multiply dark:mix-blend-normal" />
              )}
 
-             <div className={`flex flex-col gap-1.5 max-w-[82%] ${msg.role === 'user' ? 'items-end' : ''}`}>
+             <div className={`flex flex-col gap-1.5 max-w-[85%] md:max-w-[80%] lg:max-w-[75%] ${msg.role === 'user' ? 'items-end' : ''}`}>
                {msg.role === 'assistant' && (
                  <div className="flex items-center gap-2 ml-1 mb-1">
                    <span className="text-[11px] font-bold text-slate-400">Protocol-Guide</span>
