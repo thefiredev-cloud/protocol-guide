@@ -571,8 +571,12 @@ const Chat: React.FC = () => {
       };
       setMessages(prev => [...prev, botMsg]);
 
-      // Hide quick results when AI starts responding
-      setShowQuickResults(false);
+      // Fade out quick results when AI starts responding
+      setQuickResultsFading(true);
+      setTimeout(() => {
+        setShowQuickResults(false);
+        setQuickResultsFading(false);
+      }, 300);
       setStreamingMessageId(botMsgId);
 
       // Stream response - use direct API in dev mode, Netlify function in production
