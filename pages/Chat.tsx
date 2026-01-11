@@ -753,7 +753,7 @@ const Chat: React.FC = () => {
         />
 
         {messages.map((msg) => (
-          <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+          <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse animate-slide-in-up' : 'animate-fade-in'}`}>
              {msg.role === 'assistant' && (
                 <img src="/logo.png" alt="Protocol Guide" className="w-8 h-8 flex-shrink-0 self-start mt-4 mix-blend-multiply dark:mix-blend-normal" />
              )}
