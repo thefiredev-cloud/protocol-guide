@@ -119,6 +119,10 @@ const COMMON_SYMPTOMS = [
   'facial droop', 'arm drift', 'slurred speech',
   'headache', 'severe headache',
   'syncope', 'fainting', 'loss of consciousness',
+  // Posterior circulation stroke symptoms
+  'posterior circulation stroke', 'posterior stroke', 'basilar artery',
+  'vertebral artery', 'ataxia', 'vertigo', 'diplopia', 'double vision',
+  'dysarthria', 'nystagmus', 'coordination problems', 'unsteady gait',
 
   // Trauma
   'trauma', 'injury', 'bleeding', 'hemorrhage',
