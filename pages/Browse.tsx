@@ -353,6 +353,22 @@ const Browse: React.FC = () => {
              </div>
          )}
 
+         {isLoading ? (
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+             {[...Array(6)].map((_, i) => (
+               <div key={i} className="flex items-center w-full min-h-[76px] p-4 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 shadow-sm animate-pulse">
+                 <div className="w-14 h-14 rounded-xl bg-slate-200 dark:bg-slate-700 shrink-0" />
+                 <div className="ml-4 flex-1">
+                   <div className="flex items-center gap-2 mb-2">
+                     <div className="w-10 h-5 rounded bg-slate-200 dark:bg-slate-700" />
+                     <div className="w-16 h-4 rounded bg-slate-200 dark:bg-slate-700" />
+                   </div>
+                   <div className="w-3/4 h-5 rounded bg-slate-200 dark:bg-slate-700" />
+                 </div>
+               </div>
+             ))}
+           </div>
+         ) : (
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
            {filteredProtocols.map(protocol => {
              // Extract plain ID number for display by removing 'Ref.', 'TP-', and spaces
