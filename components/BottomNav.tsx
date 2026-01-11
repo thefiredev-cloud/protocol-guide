@@ -49,7 +49,7 @@ const BottomNav: React.FC = () => {
         {/* Assistant - Red filled icon */}
         <button
           onClick={() => navigate('/chat')}
-          className="relative flex flex-col items-center justify-center flex-1 h-full min-w-[76px] gap-1.5 transition-all active:scale-95"
+          className="relative flex flex-col items-center justify-center flex-1 h-full min-w-[76px] gap-1.5 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
         >
           <IconAssistant className="w-8 h-8" />
           <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Assistant</span>
