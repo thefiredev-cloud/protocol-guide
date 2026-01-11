@@ -269,12 +269,12 @@ const Chat: React.FC = () => {
     }
   }, [messages, isTyping, isStreaming]);
 
-  // When streaming starts, scroll to show the new message at TOP of viewport
+  // When streaming starts, scroll to show the new message at BOTTOM of viewport (smooth, non-interrupting)
   useEffect(() => {
     if (isStreaming && streamingMessageId) {
       const msgElement = document.getElementById(`msg-${streamingMessageId}`);
       if (msgElement) {
-        msgElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+        msgElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     }
   }, [streamingMessageId]);
