@@ -250,13 +250,13 @@ export async function embedAllChunks(): Promise<EmbeddingStats> {
  * Generate embedding for a user query (with caching and timeout protection)
  */
 export async function embedQuery(query: string): Promise<number[]> {
-  // Check cache first
+  // Check cache first (LRU handles TTL automatically)
   const cacheKey = query.toLowerCase().trim();
   const cached = queryCache.get(cacheKey);
 
-  if (cached && Date.now() - cached.timestamp < QUERY_CACHE_TTL) {
+  if (cached) {
     console.log('[Embeddings] Cache hit for query');
-    return cached.embedding;
+    return cached;
   }
 
   // Add query prefix for better search alignment
