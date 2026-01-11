@@ -842,7 +842,17 @@ const Chat: React.FC = () => {
         />
 
         {messages.map((msg) => (
+<<<<<<< HEAD
           <div key={msg.id} className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse animate-slide-in-up' : 'animate-fade-in'}`}>
+=======
+          <div
+            key={msg.id}
+            id={`msg-${msg.id}`}
+            className={`flex gap-3 mb-8 ${msg.role === 'user' ? 'flex-row-reverse' : ''} ${
+              streamingMessageId === msg.id ? '' : 'animate-slide-in-up'
+            }`}
+          >
+>>>>>>> 48663ce (chore: Create Chat.tsx)
              {msg.role === 'assistant' && (
                 <img src="/logo.png" alt="Protocol Guide" className="w-8 h-8 flex-shrink-0 self-start mt-4 mix-blend-multiply dark:mix-blend-normal" />
              )}
