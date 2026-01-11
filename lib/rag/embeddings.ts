@@ -289,18 +289,8 @@ export async function embedQuery(query: string): Promise<number[]> {
     );
   }
 
-  // Store in cache
-  queryCache.set(cacheKey, { embedding, timestamp: Date.now() });
-
-  // Clean old entries periodically (keep cache from growing unbounded)
-  if (queryCache.size > 100) {
-    const now = Date.now();
-    Array.from(queryCache.entries()).forEach(([key, value]) => {
-      if (now - value.timestamp > QUERY_CACHE_TTL) {
-        queryCache.delete(key);
-      }
-    });
-  }
+  // Store in cache (LRU handles size limits and TTL automatically)
+  queryCache.set(cacheKey, embedding);
 
   return embedding;
 }
