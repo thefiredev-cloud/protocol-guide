@@ -28,9 +28,12 @@ const EMBEDDING_DIMENSIONS = 768;
 const MAX_TOKENS_PER_CHUNK = 2048;
 const BATCH_SIZE = 20;
 
-// Query embedding cache for performance
-const queryCache = new Map<string, { embedding: number[]; timestamp: number }>();
+// Query embedding cache for performance (LRU with TTL)
 const QUERY_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+const queryCache = new LRUCache<string, number[]>({
+  max: 100, // Max 100 cached embeddings
+  ttl: QUERY_CACHE_TTL, // Auto-expire after 30 minutes
+});
 
 // ============================================
 // Types
