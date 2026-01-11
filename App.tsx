@@ -80,7 +80,7 @@ const StatusBar = () => {
   const formattedTime = time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
   return (
-    <div className="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pointer-events-none border-b border-transparent dark:border-slate-800/50">
+    <div className="h-12 w-full flex items-center justify-between px-6 text-sm font-medium z-50 fixed top-0 left-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pointer-events-none border-b border-transparent dark:border-slate-800/50 pt-[env(safe-area-inset-top)]">
       <span className="dark:text-white">{formattedTime}</span>
       <div className="flex gap-1.5 items-center dark:text-white">
         <span className="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
