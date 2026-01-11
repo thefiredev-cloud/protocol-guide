@@ -1056,11 +1056,13 @@ const Chat: React.FC = () => {
               <span className={`absolute inset-0 rounded-full transition-opacity duration-300 ring-4 ring-[#9B1B30]/20 ${
                 !input.trim() || isTyping || isStreaming ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'
               }`} />
-              <span className={`material-symbols-outlined text-[24px] transition-transform duration-200 ${
-                !input.trim() || isTyping || isStreaming ? '' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
-              }`}>
-                {isStreaming ? 'stop_circle' : 'send'}
-              </span>
+              {isStreaming ? (
+                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <span className={`material-symbols-outlined text-[24px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5`}>
+                  send
+                </span>
+              )}
             </button>
           </div>
         </div>
