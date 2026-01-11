@@ -214,6 +214,23 @@ const CRITERIA_INDICATORS = [
 const PROCEDURE_INDICATORS = [
   'how to', 'procedure', 'steps', 'perform', 'technique',
   'method', 'do i', 'perform', 'administration',
+  // Equipment-related
+  'application', 'apply', 'use', 'setup', 'insertion', 'insert',
+];
+
+/**
+ * Common EMS equipment for extraction
+ */
+const COMMON_EQUIPMENT = [
+  'tourniquet', 'sof tourniquet', 'cat tourniquet',
+  'chest seal', 'russell chest seal', 'occlusive dressing',
+  'celox', 'hemostatic gauze', 'hemostatic agent', 'wound packing',
+  'traction splint', 'slishman', 'sager', 'hare splint',
+  'igel', 'supraglottic airway', 'king airway', 'lma',
+  'cpap', 'bvm', 'bag valve mask', 'non-rebreather',
+  'etco2', 'capnography', 'waveform capnography',
+  'defibrillator', 'aed', 'monitor',
+  'io', 'intraosseous', 'ez-io',
 ];
 
 // ============================================
