@@ -1034,7 +1034,7 @@ const Chat: React.FC = () => {
                 className="w-full bg-transparent border-none p-0 py-3 text-[15px] font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:ring-0 focus:outline-none"
                 placeholder={isListening ? "Listening..." : "Query protocols (e.g. 'Sepsis fluids')"}
                 type="text"
-                disabled={isTyping}
+                disabled={isTyping || isStreaming}
               />
             </div>
             <button
