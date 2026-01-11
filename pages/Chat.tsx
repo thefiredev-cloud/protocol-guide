@@ -938,7 +938,7 @@ const Chat: React.FC = () => {
              <div className={`flex flex-col gap-1.5 max-w-[85%] md:max-w-[80%] lg:max-w-[75%] ${msg.role === 'user' ? 'items-end' : ''}`}>
                {msg.role === 'assistant' && (
                  <div className="flex items-center gap-2 ml-1 mb-1">
-                   <span className="text-[11px] font-bold text-slate-400">Protocol-Guide</span>
+                   <span className="text-[11px] font-bold text-slate-500">Protocol-Guide</span>
                    {/* Confidence Badge */}
                    {msg.confidence && (
                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
