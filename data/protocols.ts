@@ -34,8 +34,21 @@ import { series1200 as series1200Complete } from './library/series-1200-complete
 import { calculations } from './library/calculations';
 
 // Existing Detailed Protocols
-// Order matters: Detailed series first to override potential stubs in other lists
+// Order matters: Category-specific protocols (expanded versions) come FIRST,
+// then series files, so expanded protocols take precedence over stubs
 const detailedProtocols: Protocol[] = [
+  // Category-specific expanded protocols FIRST (highest priority)
+  ...cardiacProtocols,
+  ...medicalProtocols,
+  ...pediatricProtocols,
+  ...traumaProtocols,
+  ...procedureProtocolsList,
+  ...pharmacologyProtocolsList,
+  ...policyProtocolsList,
+  ...adminProtocolsList,
+  ...curriculumProtocolsList,
+  ...calculations,
+  // Series files second (stubs will be deduplicated if already present)
   ...series100,
   ...series200,
   ...series300,
@@ -49,16 +62,6 @@ const detailedProtocols: Protocol[] = [
   ...series1100,
   ...series1200Complete,
   ...series1300,
-  ...adminProtocolsList,
-  ...cardiacProtocols,
-  ...medicalProtocols,
-  ...pediatricProtocols,
-  ...pharmacologyProtocolsList,
-  ...policyProtocolsList,
-  ...procedureProtocolsList,
-  ...traumaProtocols,
-  ...calculations,
-  ...curriculumProtocolsList,
   // New Content Categories
   ...quickReferenceList,
   ...clinicalPearlsList,
