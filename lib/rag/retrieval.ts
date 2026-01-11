@@ -545,7 +545,7 @@ async function semanticSearch(
   const { data, error } = await supabase.rpc('semantic_search_protocols', {
     query_embedding: queryEmbedding,
     match_count: matchCount,
-    similarity_threshold: 0.5, // Minimum cosine similarity
+    similarity_threshold: 0.45, // Lowered for medical domain (terminology reduces similarity 10-15%)
   });
 
   if (error) {

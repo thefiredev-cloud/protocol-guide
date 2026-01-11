@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-01-10T23:58:22.403Z",
-  "total_queries": 103,
-  "successful_queries": 103,
+  "timestamp": "2026-01-11T00:14:55.247Z",
+  "total_queries": 110,
+  "successful_queries": 110,
   "failed_queries": 0,
   "metrics": {
-    "precision_at_1": 0.7184466019417476,
-    "precision_at_3": 0.8155339805825242,
-    "precision_at_10": 0.8155339805825242,
-    "mrr": 0.7669902912621359,
-    "overall_recall": 0.7605177993527509
+    "precision_at_1": 0.5636363636363636,
+    "precision_at_3": 0.7363636363636363,
+    "precision_at_10": 0.7818181818181819,
+    "mrr": 0.6575757575757577,
+    "overall_recall": 0.6636363636363638
   },
   "by_category": {
     "protocol_number": {
@@ -18,33 +18,33 @@
     },
     "cardiac": {
       "count": 11,
-      "precision_at_1": 0.7272727272727273,
-      "mrr": 0.7727272727272727
+      "precision_at_1": 0.6363636363636364,
+      "mrr": 0.7045454545454546
     },
     "stroke": {
-      "count": 13,
+      "count": 15,
       "precision_at_1": 0,
-      "mrr": 0.038461538461538464
+      "mrr": 0.02222222222222222
     },
     "trauma": {
       "count": 10,
-      "precision_at_1": 0.6,
-      "mrr": 0.7
+      "precision_at_1": 0.5,
+      "mrr": 0.6
     },
     "medication": {
       "count": 17,
-      "precision_at_1": 1,
-      "mrr": 1
+      "precision_at_1": 0.7058823529411765,
+      "mrr": 0.8529411764705882
     },
     "procedure": {
-      "count": 9,
-      "precision_at_1": 0.6666666666666666,
-      "mrr": 0.8333333333333334
+      "count": 14,
+      "precision_at_1": 0.5714285714285714,
+      "mrr": 0.6547619047619049
     },
     "pediatric": {
       "count": 9,
-      "precision_at_1": 0.8888888888888888,
-      "mrr": 0.9444444444444444
+      "precision_at_1": 0.6666666666666666,
+      "mrr": 0.8333333333333334
     },
     "acronym": {
       "count": 8,
@@ -53,25 +53,25 @@
     },
     "general": {
       "count": 21,
-      "precision_at_1": 0.9047619047619048,
-      "mrr": 0.9285714285714286
+      "precision_at_1": 0.6666666666666666,
+      "mrr": 0.7896825396825398
     }
   },
   "by_priority": {
     "critical": {
-      "count": 18,
-      "precision_at_1": 0.6666666666666666,
-      "mrr": 0.6666666666666666
+      "count": 19,
+      "precision_at_1": 0.5789473684210527,
+      "mrr": 0.6052631578947368
     },
     "high": {
-      "count": 68,
-      "precision_at_1": 0.7058823529411765,
-      "mrr": 0.7720588235294118
+      "count": 72,
+      "precision_at_1": 0.5694444444444444,
+      "mrr": 0.6724537037037037
     },
     "medium": {
-      "count": 17,
-      "precision_at_1": 0.8235294117647058,
-      "mrr": 0.8529411764705882
+      "count": 19,
+      "precision_at_1": 0.5263157894736842,
+      "mrr": 0.6535087719298245
     }
   },
   "failures": [
@@ -226,10 +226,11 @@
       "hit_at_10": false,
       "reciprocal_rank": 0,
       "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "last known well",
+      "terms_found": [
         "time window"
+      ],
+      "terms_missing": [
+        "last known well"
       ],
       "success": true
     },
@@ -328,11 +329,39 @@
       "reciprocal_rank": 0,
       "recall": 0,
       "terms_found": [
-        "mechanism"
+        "mechanism",
+        "ejection"
       ],
       "terms_missing": [
-        "ejection",
         "death in vehicle"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 51,
+      "query": "needle decompression procedure",
+      "category": "procedure",
+      "priority": "high",
+      "expected": [
+        "619",
+        "PROC-NDL",
+        "1248"
+      ],
+      "retrieved": [
+        "1335",
+        "CURR-PROC-002",
+        "1243"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "2nd intercostal",
+        "midclavicular",
+        "14 gauge"
       ],
       "success": true
     },
@@ -414,6 +443,34 @@
       "success": true
     },
     {
+      "query_id": 92,
+      "query": "how to perform needle decompression",
+      "category": "procedure",
+      "priority": "high",
+      "expected": [
+        "PROC-NDL",
+        "1248",
+        "834"
+      ],
+      "retrieved": [
+        "1335",
+        "CURR-PROC-002",
+        "1243"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "2nd intercostal",
+        "midclavicular",
+        "14 gauge"
+      ],
+      "success": true
+    },
+    {
       "query_id": 96,
       "query": "what does LAMS score of 4 mean",
       "category": "stroke",
@@ -457,9 +514,10 @@
       "hit_at_10": false,
       "reciprocal_rank": 0,
       "recall": 0,
-      "terms_found": [],
+      "terms_found": [
+        "time window"
+      ],
       "terms_missing": [
-        "time window",
         "CSC"
       ],
       "success": true
@@ -502,15 +560,14 @@
         "1232"
       ],
       "retrieved": [
-        "1317.16",
         "1317.22",
+        "1240",
+        "1317.16",
         "1317.21",
+        "1211",
         "1317.26",
-        "1317.6",
-        "PROC-DEFIB",
-        "CALC-PED-WEIGHT",
         "PROC-CPAP",
-        "1317.10",
+        "MED-NTG",
         "MED-OLAN"
       ],
       "hit_at_1": false,
@@ -575,6 +632,80 @@
       ],
       "terms_missing": [
         "last known well"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 200,
+      "query": "mLAPSS criteria",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "STROKE-MLAPSS",
+        "521"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "facial droop",
+        "arm drift",
+        "grip strength"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 202,
+      "query": "posterior circulation stroke",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "STROKE-POSTERIOR",
+        "522"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "ataxia",
+        "vertigo",
+        "diplopia"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 206,
+      "query": "CPAP with ETCO2",
+      "category": "procedure",
+      "priority": "medium",
+      "expected": [
+        "EQUIP-CPAP-ETCO2"
+      ],
+      "retrieved": [
+        "1211",
+        "511"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "CPAP",
+        "capnography"
       ],
       "success": true
     }
@@ -651,7 +782,8 @@
       ],
       "retrieved": [
         "1302",
-        "1302-P"
+        "1302-P",
+        "PROC-AIRWAY"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -671,7 +803,8 @@
         "521"
       ],
       "retrieved": [
-        "521"
+        "521",
+        "STROKE-MLAPSS"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -720,8 +853,8 @@
         "1306"
       ],
       "retrieved": [
-        "1303",
         "1210",
+        "1212",
         "1306",
         "1210-P"
       ],
@@ -729,16 +862,15 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "VF",
+        "asystole",
+        "PEA",
         "CPR",
         "epinephrine"
       ],
-      "terms_missing": [
-        "asystole",
-        "PEA"
-      ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -760,11 +892,10 @@
       "recall": 0.5,
       "terms_found": [
         "defibrillation",
-        "shock"
-      ],
-      "terms_missing": [
+        "shock",
         "joules"
       ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -808,10 +939,11 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 1,
-      "terms_found": [],
-      "terms_missing": [
-        "amiodarone",
+      "terms_found": [
         "synchronized cardioversion"
+      ],
+      "terms_missing": [
+        "amiodarone"
       ],
       "success": true
     },
@@ -837,11 +969,10 @@
       "recall": 1,
       "terms_found": [
         "12-lead",
-        "aspirin"
-      ],
-      "terms_missing": [
+        "aspirin",
         "nitroglycerin"
       ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -861,11 +992,12 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 0.5,
-      "terms_found": [],
+      "terms_found": [
+        "glucose"
+      ],
       "terms_missing": [
         "targeted temperature",
-        "blood pressure",
-        "glucose"
+        "blood pressure"
       ],
       "success": true
     },
@@ -880,14 +1012,15 @@
         "1203"
       ],
       "retrieved": [
-        "504",
+        "1204",
         "503",
+        "504",
         "1203"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [],
       "terms_missing": [
@@ -1052,10 +1185,11 @@
       "hit_at_10": false,
       "reciprocal_rank": 0,
       "recall": 0,
-      "terms_found": [],
-      "terms_missing": [
-        "last known well",
+      "terms_found": [
         "time window"
+      ],
+      "terms_missing": [
+        "last known well"
       ],
       "success": true
     },
@@ -1096,13 +1230,14 @@
       ],
       "retrieved": [
         "PEARL-ATYPICAL-STEMI",
-        "1232",
-        "1202"
+        "STROKE-POSTERIOR",
+        "1239",
+        "1232"
       ],
       "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 0.3333333333333333,
       "recall": 0.6666666666666666,
       "terms_found": [
         "resolved"
@@ -1181,20 +1316,21 @@
       ],
       "retrieved": [
         "1264",
-        "1240",
-        "1248",
-        "1249",
-        "1202",
         "1252",
+        "1248",
         "1220",
+        "1202",
+        "1249",
+        "1250",
         "1234",
-        "1250"
+        "1221",
+        "504"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [],
       "terms_missing": [
         "primary survey",
@@ -1244,23 +1380,23 @@
       ],
       "retrieved": [
         "CURR-PROC-002",
+        "1335",
+        "1243",
         "LA-DROP",
-        "1248",
-        "1240",
-        "1360",
-        "1243-P"
+        "1248"
       ],
       "hit_at_1": false,
-      "hit_at_3": true,
+      "hit_at_3": false,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 1,
+      "reciprocal_rank": 0.25,
+      "recall": 0.6666666666666666,
       "terms_found": [
-        "needle decompression",
+        "needle decompression"
+      ],
+      "terms_missing": [
         "midclavicular",
         "2nd intercostal"
       ],
-      "terms_missing": [],
       "success": true
     },
     {
@@ -1305,8 +1441,7 @@
         "510",
         "507",
         "1247",
-        "835",
-        "712"
+        "835"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1358,17 +1493,16 @@
         "1112"
       ],
       "retrieved": [
-        "1254",
-        "838",
-        "1112",
-        "833",
-        "839"
+        "1242",
+        "1245",
+        "1243",
+        "1254"
       ],
-      "hit_at_1": true,
-      "hit_at_3": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.25,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "rhabdomyolysis",
         "fluid"
@@ -1398,10 +1532,10 @@
       "reciprocal_rank": 0,
       "recall": 0,
       "terms_found": [
-        "mechanism"
+        "mechanism",
+        "ejection"
       ],
       "terms_missing": [
-        "ejection",
         "death in vehicle"
       ],
       "success": true
@@ -1421,8 +1555,8 @@
         "1317.11",
         "1210",
         "1262",
-        "1212",
-        "1207"
+        "1309",
+        "1212"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1475,17 +1609,18 @@
       ],
       "retrieved": [
         "1213-P",
+        "MED-ADEN",
         "1317.1",
-        "1317.3",
-        "PROC-DEFIB",
+        "1309",
+        "MED-AMIO",
         "1213",
-        "1212-P"
+        "PROC-DEFIB"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "6mg",
         "12mg",
@@ -1529,13 +1664,14 @@
         "1211"
       ],
       "retrieved": [
+        "MED-NTG",
         "1317.24",
         "1211"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "0.4mg",
@@ -1559,8 +1695,9 @@
         "1317.22",
         "MED-MOR",
         "1317.13",
-        "1317.23",
+        "MED-FENT",
         "MED-NAL",
+        "1317.23",
         "1308",
         "1380",
         "1322"
@@ -1590,18 +1727,17 @@
       ],
       "retrieved": [
         "1317.13",
-        "1317.23",
+        "MED-FENT",
         "1322",
         "1308",
         "1244-P",
-        "702",
-        "1317.22"
+        "702"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "mcg",
         "IV",
@@ -1654,19 +1790,15 @@
         "PROC-CPAP"
       ],
       "retrieved": [
+        "MED-ALB",
         "1317.2",
-        "1219-P",
-        "PROC-CPAP",
-        "1263",
-        "MED-MOR",
-        "1237-P",
-        "1214"
+        "1263"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "2.5mg",
         "nebulizer",
@@ -1686,14 +1818,15 @@
         "1203"
       ],
       "retrieved": [
-        "504",
+        "1204",
         "503",
+        "504",
         "1203"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [],
       "terms_missing": [
@@ -1746,7 +1879,8 @@
         "MED-DIPH",
         "1317.8",
         "1219-P",
-        "1228"
+        "1228",
+        "MED-MID"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1778,8 +1912,8 @@
         "1317.27",
         "1235",
         "1204",
-        "1205",
-        "1206"
+        "1202",
+        "1205"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1805,17 +1939,16 @@
         "1231"
       ],
       "retrieved": [
+        "MED-MID",
         "1231-P",
         "1317.21",
         "1231",
-        "702",
-        "1370",
-        "1213"
+        "1309"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "mg",
@@ -1835,14 +1968,14 @@
         "1267"
       ],
       "retrieved": [
-        "PROC-ETI",
-        "1267"
+        "PROC-AIRWAY",
+        "PROC-ETI"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.5,
       "terms_found": [
         "ETT",
         "laryngoscope"
@@ -1865,12 +1998,12 @@
       "retrieved": [
         "1303",
         "1267",
+        "EQUIP-IGEL",
+        "PROC-AIRWAY",
         "1302",
         "PROC-ETI",
-        "PROC-AIRWAY",
         "711",
-        "902",
-        "1234-P"
+        "902"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1928,7 +2061,8 @@
         "PROC-12LEAD"
       ],
       "retrieved": [
-        "PROC-12LEAD"
+        "PROC-12LEAD",
+        "1211"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -1936,10 +2070,10 @@
       "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [
-        "leads",
-        "V1-V6"
+        "leads"
       ],
       "terms_missing": [
+        "V1-V6",
         "right sided"
       ],
       "success": true
@@ -1955,22 +2089,19 @@
         "1248"
       ],
       "retrieved": [
+        "1335",
         "CURR-PROC-002",
-        "619",
-        "PROC-NDL",
-        "1248",
-        "1360"
+        "1243"
       ],
       "hit_at_1": false,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 1,
-      "terms_found": [
-        "2nd intercostal",
-        "midclavicular"
-      ],
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
       "terms_missing": [
+        "2nd intercostal",
+        "midclavicular",
         "14 gauge"
       ],
       "success": true
@@ -1993,11 +2124,12 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 1,
-      "terms_found": [],
+      "terms_found": [
+        "pressure"
+      ],
       "terms_missing": [
         "cmH2O",
-        "mask",
-        "pressure"
+        "mask"
       ],
       "success": true
     },
@@ -2017,8 +2149,9 @@
         "1268",
         "834",
         "901",
+        "EQUIP-SOF-TQ",
         "1244",
-        "1255"
+        "1240"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2026,12 +2159,11 @@
       "reciprocal_rank": 1,
       "recall": 1,
       "terms_found": [
+        "proximal",
         "time",
         "bleeding"
       ],
-      "terms_missing": [
-        "proximal"
-      ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -2075,17 +2207,16 @@
       "retrieved": [
         "1262",
         "517",
-        "MED-EPI"
+        "MED-AMIO"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
-      "terms_found": [
-        "0.01mg/kg"
-      ],
+      "recall": 0.6666666666666666,
+      "terms_found": [],
       "terms_missing": [
+        "0.01mg/kg",
         "weight",
         "Broselow"
       ],
@@ -2105,9 +2236,10 @@
         "MED-EPI",
         "1317.10",
         "1317.11",
+        "1243",
+        "1210",
         "1219-P",
         "1350",
-        "1262",
         "1309"
       ],
       "hit_at_1": true,
@@ -2136,16 +2268,16 @@
         "1317.33"
       ],
       "retrieved": [
-        "1317.29",
         "1317.23",
+        "1317.29",
         "1317.33",
         "1317.5",
-        "1317.9",
         "MED-NAL",
-        "MED-ATROP",
-        "PROC-IO-VASCULAR",
         "714",
-        "1309"
+        "1380",
+        "1309",
+        "CALC-PED-WEIGHT",
+        "309"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2154,11 +2286,10 @@
       "recall": 1,
       "terms_found": [
         "weight",
+        "color",
         "length-based"
       ],
-      "terms_missing": [
-        "color"
-      ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -2174,11 +2305,11 @@
       "retrieved": [
         "1231-P",
         "1213-P",
+        "MED-MID",
         "criteria-summary",
-        "1309",
+        "MED-AMIO",
         "1231",
-        "1262",
-        "1226"
+        "1262"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2260,17 +2391,14 @@
         "901"
       ],
       "retrieved": [
-        "1261",
-        "517",
-        "901",
-        "903",
-        "1215"
+        "1216",
+        "1261"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "ventilation",
         "compressions"
@@ -2383,9 +2511,8 @@
         "CURR-PROC-001",
         "PROC-IO-VASCULAR",
         "PROC-DEFIB",
-        "840",
         "708",
-        "1210"
+        "903"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2444,12 +2571,12 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 0.5,
-      "terms_found": [
+      "terms_found": [],
+      "terms_missing": [
         "compressions",
         "rate",
         "depth"
       ],
-      "terms_missing": [],
       "success": true
     },
     {
@@ -2469,11 +2596,12 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 0.5,
-      "terms_found": [],
+      "terms_found": [
+        "shock"
+      ],
       "terms_missing": [
         "defibrillator",
-        "pads",
-        "shock"
+        "pads"
       ],
       "success": true
     },
@@ -2491,8 +2619,9 @@
         "1317.15",
         "1102",
         "1317.25",
-        "1305",
-        "707"
+        "1309",
+        "1244",
+        "1243"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2524,11 +2653,12 @@
       "hit_at_10": true,
       "reciprocal_rank": 1,
       "recall": 0.5,
-      "terms_found": [],
+      "terms_found": [
+        "hypoxia"
+      ],
       "terms_missing": [
         "H's and T's",
-        "hypovolemia",
-        "hypoxia"
+        "hypovolemia"
       ],
       "success": true
     },
@@ -2543,15 +2673,15 @@
         "1228"
       ],
       "retrieved": [
+        "1219",
         "1317.10",
         "MED-EPI",
-        "1228",
-        "1219"
+        "1228"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "epinephrine",
@@ -2601,15 +2731,15 @@
         "525"
       ],
       "retrieved": [
-        "1231-P",
         "1231",
-        "525"
+        "1231-P",
+        "MED-MID"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "midazolam",
         "status"
@@ -2661,12 +2791,14 @@
       ],
       "retrieved": [
         "MED-MOR",
+        "MED-ALB",
         "1317.2",
+        "MED-FENT",
+        "MED-ASA",
+        "EQUIP-CPAP-ETCO2",
         "1317.20",
-        "PROC-CPAP",
-        "1237-P",
-        "1237",
-        "1228"
+        "MED-ADEN",
+        "PROC-CPAP"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2693,17 +2825,18 @@
         "1237"
       ],
       "retrieved": [
+        "MED-ALB",
+        "EQUIP-CPAP-ETCO2",
         "1317.2",
         "PROC-CPAP",
         "1237",
         "1317.28",
-        "1214",
-        "1315"
+        "1214"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "bronchodilator",
@@ -2762,7 +2895,7 @@
         "101",
         "825",
         "618",
-        "536"
+        "815"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2813,17 +2946,18 @@
       ],
       "retrieved": [
         "CURR-OB-001",
+        "510",
+        "515",
         "511",
         "1270",
         "501",
         "530",
-        "526",
         "criteria-summary"
       ],
       "hit_at_1": false,
-      "hit_at_3": true,
+      "hit_at_3": false,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 0.25,
       "recall": 1,
       "terms_found": [
         "trauma",
@@ -2849,7 +2983,8 @@
         "1308",
         "1227",
         "1322",
-        "1202"
+        "1202",
+        "1220"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2875,17 +3010,17 @@
         "PROC-ETI"
       ],
       "retrieved": [
+        "MED-MID",
         "1317.21",
         "1267",
-        "PROC-ETI",
-        "PROC-IO-VASCULAR",
-        "1212",
-        "1209"
+        "MED-FENT",
+        "PROC-AIRWAY",
+        "PROC-ETI"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.5,
       "recall": 1,
       "terms_found": [
         "midazolam",
@@ -2911,8 +3046,8 @@
         "836",
         "835",
         "1264",
-        "1240",
-        "1241"
+        "1241",
+        "1208"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -2993,7 +3128,6 @@
       "retrieved": [
         "1301",
         "828",
-        "510",
         "1270",
         "605"
       ],
@@ -3001,7 +3135,7 @@
       "hit_at_3": true,
       "hit_at_10": true,
       "reciprocal_rank": 1,
-      "recall": 1,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "AMA",
         "capacity",
@@ -3024,8 +3158,7 @@
         "510",
         "507",
         "618",
-        "506-trauma",
-        "1267",
+        "1210",
         "822"
       ],
       "hit_at_1": true,
@@ -3053,13 +3186,13 @@
       ],
       "retrieved": [
         "1317.14",
+        "MED-GLUC",
         "1212",
+        "MED-BICARB",
         "1317.31",
-        "MED-EPI",
-        "1314",
-        "1350",
-        "1236",
-        "1209"
+        "MED-CACL",
+        "MED-ALB",
+        "MED-AMIO"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -3085,23 +3218,22 @@
         "1317.31"
       ],
       "retrieved": [
+        "MED-CACL",
         "1317.6",
-        "MED-ONDAN",
-        "1317.31",
-        "1212",
-        "1350",
-        "1210"
+        "MED-AMIO",
+        "1212"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
-        "calcium",
+        "calcium"
+      ],
+      "terms_missing": [
         "glucagon"
       ],
-      "terms_missing": [],
       "success": true
     },
     {
@@ -3115,24 +3247,24 @@
         "1236"
       ],
       "retrieved": [
+        "1210",
+        "MED-BICARB",
         "MED-OLAN",
         "1317.31",
         "1236",
-        "529",
         "1209",
-        "1212"
+        "529"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
+      "reciprocal_rank": 0.3333333333333333,
       "recall": 1,
       "terms_found": [
-        "sodium bicarbonate"
-      ],
-      "terms_missing": [
+        "sodium bicarbonate",
         "wide QRS"
       ],
+      "terms_missing": [],
       "success": true
     },
     {
@@ -3151,8 +3283,8 @@
         "1317.11",
         "1219-P",
         "1219",
-        "1228",
-        "1210"
+        "1309",
+        "1228"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -3179,21 +3311,19 @@
         "834"
       ],
       "retrieved": [
+        "1335",
         "CURR-PROC-002",
-        "PROC-NDL",
-        "1248",
-        "834"
+        "1243"
       ],
       "hit_at_1": false,
-      "hit_at_3": true,
-      "hit_at_10": true,
-      "reciprocal_rank": 0.5,
-      "recall": 1,
-      "terms_found": [
-        "2nd intercostal",
-        "midclavicular"
-      ],
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
       "terms_missing": [
+        "2nd intercostal",
+        "midclavicular",
         "14 gauge"
       ],
       "success": true
@@ -3235,18 +3365,16 @@
         "MED-NAL"
       ],
       "retrieved": [
+        "MED-AMIO",
         "1317.3",
-        "MED-ATROP",
-        "MED-NAL",
-        "MED-ONDAN",
-        "1317.19",
-        "1262"
+        "MED-ADEN",
+        "MED-LIDO"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.3333333333333333,
       "terms_found": [
         "cardiogenic shock",
         "AV block",
@@ -3266,10 +3394,11 @@
         "1317.19"
       ],
       "retrieved": [
-        "200",
         "1100",
-        "1317.19",
-        "1317.3"
+        "200",
+        "MED-LIDO",
+        "MED-AMIO",
+        "1317.19"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -3320,21 +3449,20 @@
         "MED-ATROP"
       ],
       "retrieved": [
+        "MED-AMIO",
         "1317.3",
-        "MED-NAL",
+        "1210",
+        "MED-ADEN",
         "MED-ATROP",
-        "MED-EPI",
-        "MED-DIPH",
         "1213-P",
-        "1317.1",
-        "1317.5",
-        "1262"
+        "1262",
+        "1309"
       ],
-      "hit_at_1": true,
+      "hit_at_1": false,
       "hit_at_3": true,
       "hit_at_10": true,
-      "reciprocal_rank": 1,
-      "recall": 1,
+      "reciprocal_rank": 0.5,
+      "recall": 0.6666666666666666,
       "terms_found": [
         "5mg/kg"
       ],
@@ -3355,14 +3483,15 @@
       ],
       "retrieved": [
         "PEARL-ATYPICAL-STEMI",
+        "MED-NTG",
+        "1239",
         "1211",
-        "1212",
-        "1202"
+        "1212"
       ],
       "hit_at_1": false,
-      "hit_at_3": true,
+      "hit_at_3": false,
       "hit_at_10": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 0.25,
       "recall": 0.6666666666666666,
       "terms_found": [],
       "terms_missing": [
@@ -3389,9 +3518,10 @@
       "hit_at_10": false,
       "reciprocal_rank": 0,
       "recall": 0,
-      "terms_found": [],
+      "terms_found": [
+        "time window"
+      ],
       "terms_missing": [
-        "time window",
         "CSC"
       ],
       "success": true
@@ -3408,13 +3538,13 @@
       ],
       "retrieved": [
         "506-trauma",
-        "LA-DROP",
         "1240",
+        "1243",
+        "LA-DROP",
         "1249",
         "1246",
         "1360",
-        "1208",
-        "1312"
+        "1208"
       ],
       "hit_at_1": true,
       "hit_at_3": true,
@@ -3467,15 +3597,14 @@
         "1232"
       ],
       "retrieved": [
-        "1317.16",
         "1317.22",
+        "1240",
+        "1317.16",
         "1317.21",
+        "1211",
         "1317.26",
-        "1317.6",
-        "PROC-DEFIB",
-        "CALC-PED-WEIGHT",
         "PROC-CPAP",
-        "1317.10",
+        "MED-NTG",
         "MED-OLAN"
       ],
       "hit_at_1": false,
@@ -3540,6 +3669,194 @@
       ],
       "terms_missing": [
         "last known well"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 200,
+      "query": "mLAPSS criteria",
+      "category": "stroke",
+      "priority": "critical",
+      "expected": [
+        "STROKE-MLAPSS",
+        "521"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "facial droop",
+        "arm drift",
+        "grip strength"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 201,
+      "query": "tourniquet application",
+      "category": "procedure",
+      "priority": "high",
+      "expected": [
+        "EQUIP-SOF-TQ"
+      ],
+      "retrieved": [
+        "1208",
+        "713",
+        "1268",
+        "834",
+        "901",
+        "EQUIP-SOF-TQ",
+        "1244",
+        "1240"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": true,
+      "reciprocal_rank": 0.16666666666666666,
+      "recall": 1,
+      "terms_found": [
+        "tourniquet",
+        "hemorrhage",
+        "bleeding"
+      ],
+      "terms_missing": [],
+      "success": true
+    },
+    {
+      "query_id": 202,
+      "query": "posterior circulation stroke",
+      "category": "stroke",
+      "priority": "high",
+      "expected": [
+        "STROKE-POSTERIOR",
+        "522"
+      ],
+      "retrieved": [
+        "criteria-summary"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "ataxia",
+        "vertigo",
+        "diplopia"
+      ],
+      "success": true
+    },
+    {
+      "query_id": 203,
+      "query": "celox gauze",
+      "category": "procedure",
+      "priority": "medium",
+      "expected": [
+        "EQUIP-CELOX"
+      ],
+      "retrieved": [
+        "EQUIP-CELOX",
+        "713",
+        "1208",
+        "EQUIP-CHEST-SEAL"
+      ],
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
+      "terms_found": [
+        "hemostatic",
+        "wound packing"
+      ],
+      "terms_missing": [],
+      "success": true
+    },
+    {
+      "query_id": 204,
+      "query": "igel insertion",
+      "category": "procedure",
+      "priority": "high",
+      "expected": [
+        "EQUIP-IGEL",
+        "1101"
+      ],
+      "retrieved": [
+        "EQUIP-IGEL",
+        "PROC-IO-VASCULAR",
+        "PROC-AIRWAY",
+        "708",
+        "PROC-IO",
+        "1302",
+        "PROC-ETI"
+      ],
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 0.5,
+      "terms_found": [
+        "supraglottic",
+        "airway"
+      ],
+      "terms_missing": [],
+      "success": true
+    },
+    {
+      "query_id": 205,
+      "query": "chest seal application",
+      "category": "procedure",
+      "priority": "high",
+      "expected": [
+        "EQUIP-CHEST-SEAL"
+      ],
+      "retrieved": [
+        "EQUIP-CHEST-SEAL",
+        "713",
+        "1248",
+        "1245",
+        "834"
+      ],
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_10": true,
+      "reciprocal_rank": 1,
+      "recall": 1,
+      "terms_found": [
+        "pneumothorax",
+        "penetrating trauma"
+      ],
+      "terms_missing": [],
+      "success": true
+    },
+    {
+      "query_id": 206,
+      "query": "CPAP with ETCO2",
+      "category": "procedure",
+      "priority": "medium",
+      "expected": [
+        "EQUIP-CPAP-ETCO2"
+      ],
+      "retrieved": [
+        "1211",
+        "511"
+      ],
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_10": false,
+      "reciprocal_rank": 0,
+      "recall": 0,
+      "terms_found": [],
+      "terms_missing": [
+        "CPAP",
+        "capnography"
       ],
       "success": true
     }
