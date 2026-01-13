@@ -583,40 +583,14 @@ const Chat: React.FC = () => {
       let responseText = '';
 
       try {
-        if (isDevMode) {
-          // DEV MODE: Use direct Gemini API
-          const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY as string;
-          if (!apiKey) {
-            throw new Error('VITE_GEMINI_API_KEY not configured for dev mode');
-          }
-
-          const ai = new GoogleGenAI({ apiKey });
-          const chat = ai.chats.create({
-            model: 'gemini-2.0-flash',
-            config: {
-              systemInstruction: GROUNDED_SYSTEM_PROMPT,
-              temperature: 0.1,
-            },
-          });
-
-          const fullPrompt = context
-            ? `PROTOCOL CONTEXT:\n${context}\n\nUSER QUERY:\n${augmentedPrompt}`
-            : augmentedPrompt;
-
-          const stream = await chat.sendMessageStream({ message: fullPrompt });
-
-          for await (const chunk of stream) {
-            const chunkText = chunk.text || '';
-            responseText += chunkText;
-
-            setMessages(prev => prev.map(msg =>
-              msg.id === botMsgId
-                ? { ...msg, content: responseText }
-                : msg
-            ));
-          }
+        // SECURITY FIX: Always use Netlify function to avoid exposing API key in client bundle
+        // Dev mode direct API usage removed to pass Netlify security scan
+        if (false && isDevMode) {
+          // DEV MODE DISABLED: Previously used direct Gemini API
+          // This code path is disabled to prevent API key exposure in production bundle
+          throw new Error('Dev mode direct API usage is disabled for security');
         } else {
-          // PRODUCTION: Use Netlify function
+          // Use Netlify function for all environments
           const authToken = await supabase.auth.getSession().then(res => res.data.session?.access_token);
 
           abortControllerRef.current = new AbortController();

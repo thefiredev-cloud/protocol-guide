@@ -10,14 +10,12 @@ import { GoogleGenAI } from '@google/genai';
 import { LRUCache } from 'lru-cache';
 import { supabase } from '../supabase';
 
-// Environment detection - use direct API in dev mode or Node.js scripts
+// Environment detection - use direct API only in Node.js scripts (not in browser)
 const isBrowser = typeof window !== 'undefined';
 const isNodeScript = !isBrowser && typeof process !== 'undefined';
-const isDevMode = isBrowser &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-// Use direct API in dev mode OR when running as Node.js script
-const useDirectAPI = isDevMode || isNodeScript;
+// SECURITY FIX: Removed browser dev mode to prevent API key in client bundle
+// Browser always uses Netlify function, Node scripts can use direct API
+const useDirectAPI = isNodeScript;
 
 // ============================================
 // Configuration
@@ -104,13 +102,12 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
   try {
     if (useDirectAPI) {
-      // DEV MODE or NODE SCRIPT: Use direct Gemini API
-      const viteKey = typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_GEMINI_API_KEY : undefined;
-      const nodeKey = typeof process !== 'undefined' ? process.env?.VITE_GEMINI_API_KEY || process.env?.GEMINI_API_KEY : undefined;
-      const apiKey = viteKey || nodeKey;
+      // NODE SCRIPT ONLY: Use direct Gemini API (not available in browser)
+      // SECURITY FIX: Only check process.env, never import.meta.env in production bundle
+      const apiKey = typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY || process.env?.VITE_GEMINI_API_KEY : undefined;
 
       if (!apiKey) {
-        throw new Error('GEMINI_API_KEY not configured');
+        throw new Error('GEMINI_API_KEY not configured for Node.js script');
       }
 
       const ai = new GoogleGenAI({ apiKey });
