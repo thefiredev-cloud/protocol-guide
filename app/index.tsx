@@ -74,9 +74,9 @@ export default function LandingPage() {
 
   return (
     <ScreenContainer edges={["top", "left", "right"]}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <ScrollView
-        style={{ flex: 1, backgroundColor: "#FFFFFF" }}
+        style={{ flex: 1, backgroundColor: "#0F172A" }}
         showsVerticalScrollIndicator={false}
       >
         {/* Hero Section */}
