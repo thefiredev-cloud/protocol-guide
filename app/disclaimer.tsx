@@ -63,7 +63,7 @@ export default function MedicalDisclaimerScreen() {
 
         <Section title="Professional Responsibility">
           As an EMS professional, you are responsible for:
-          <BulletPoint>Following your agency's approved protocols and standing orders</BulletPoint>
+          <BulletPoint>Following your agency{"'"}s approved protocols and standing orders</BulletPoint>
           <BulletPoint>Obtaining appropriate medical direction when required</BulletPoint>
           <BulletPoint>Exercising independent professional judgment in patient care</BulletPoint>
           <BulletPoint>Practicing within your scope of practice and certification level</BulletPoint>
