@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
     ...(Platform.OS === "web"
       ? {
-          backgroundImage: `radial-gradient(circle, ${COLORS.borderGray} 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, ${COLORS.border} 1px, transparent 1px)`,
           backgroundSize: "24px 24px",
         }
       : {}),
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 24,
     borderWidth: 1,
-    borderColor: COLORS.borderGray,
+    borderColor: COLORS.border,
     marginBottom: 24,
     position: "relative",
     overflow: "hidden",
@@ -733,7 +733,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderTopWidth: 1,
-    borderTopColor: COLORS.borderGray,
+    borderTopColor: COLORS.border,
     paddingTop: 8,
   },
   xAxisLabel: {
@@ -775,7 +775,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.borderGray,
+    borderColor: COLORS.border,
     minWidth: 110,
     alignItems: "center",
   },
@@ -830,7 +830,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     borderWidth: 1,
-    borderColor: COLORS.borderGray,
+    borderColor: COLORS.border,
     position: "relative",
     overflow: "hidden",
     ...(Platform.OS === "web"
