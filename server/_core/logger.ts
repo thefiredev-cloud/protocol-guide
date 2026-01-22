@@ -8,7 +8,7 @@
 import pino from "pino";
 import pinoHttp from "pino-http";
 import type { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 // Base logger configuration
 export const logger = pino({
