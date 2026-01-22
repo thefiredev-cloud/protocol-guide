@@ -91,7 +91,7 @@ export default function TermsOfServiceScreen() {
         </Section>
 
         <Section title="11. Changes to Terms">
-          We reserve the right to modify these Terms at any time. We will provide notice of material changes by posting the updated Terms and updating the "Last updated" date. Your continued use of the Service after changes constitutes acceptance of the new Terms.
+          We reserve the right to modify these Terms at any time. We will provide notice of material changes by posting the updated Terms and updating the {'"Last updated"'} date. Your continued use of the Service after changes constitutes acceptance of the new Terms.
         </Section>
 
         <Section title="12. Governing Law">
