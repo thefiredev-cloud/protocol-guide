@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     gap: SPACING.md,
   },
   brandName: {
-    color: COLORS.textDark,
+    color: COLORS.textWhite,
     fontSize: 17,
     fontWeight: "700",
     letterSpacing: -0.4,
