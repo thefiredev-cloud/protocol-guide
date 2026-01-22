@@ -5,7 +5,7 @@
  * Verifies MySQL county IDs properly map to Supabase agency_ids
  */
 
-import { describe, it, expect, beforeAll } from '@jest/globals';
+import { describe, it, expect, beforeAll } from 'vitest';
 import {
   mapCountyIdToAgencyId,
   mapAgencyIdToCountyId,
