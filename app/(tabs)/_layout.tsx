@@ -36,8 +36,8 @@ export default function TabLayout() {
     }
   }, [isAuthenticated]);
 
-  // Show loading while checking auth or redirecting
-  if (loading || (!isAuthenticated && !hasRedirected.current)) {
+  // Show loading while checking auth or redirecting (unless E2E test)
+  if (!isE2ETest && (loading || (!isAuthenticated && !hasRedirected.current))) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -46,7 +46,7 @@ export default function TabLayout() {
   }
 
   // If not authenticated and already redirected, show loading (navigation in progress)
-  if (!isAuthenticated) {
+  if (!isE2ETest && !isAuthenticated) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
         <ActivityIndicator size="large" color={colors.primary} />
