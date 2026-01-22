@@ -8,9 +8,13 @@
  * - Medical domain optimization for EMS protocols
  * - Batch embedding for efficient migration
  * - Supabase pgvector integration
+ * - LRU cache for embedding responses (24-hour TTL)
+ * - Custom error types for better error handling
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { createHash } from 'crypto';
+import { parseVoyageError, VoyageApiError, ProtocolGuideError } from './errors';
 
 // Voyage AI configuration
 const VOYAGE_API_URL = 'https://api.voyageai.com/v1/embeddings';
