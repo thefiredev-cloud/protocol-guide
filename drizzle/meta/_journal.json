@@ -57,6 +57,13 @@
       "when": 1769042335870,
       "tag": "0007_big_master_mold",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1769113810560,
+      "tag": "0008_harsh_swordsman",
+      "breakpoints": true
     }
   ]
 }

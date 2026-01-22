@@ -5,8 +5,8 @@
  * Includes request ID tracking, user context, and performance timing.
  */
 
-import pino from "pino";
-import pinoHttp from "pino-http";
+import * as pino from "pino";
+import * as pinoHttp from "pino-http";
 import type { Request, Response } from "express";
 import { randomUUID } from "crypto";
 
