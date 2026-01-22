@@ -9,29 +9,33 @@ export const ENV = {
   // App Configuration
   appId: process.env.VITE_APP_ID ?? "",
   isProduction: process.env.NODE_ENV === "production",
-  
+
   // Authentication
   cookieSecret: process.env.JWT_SECRET ?? "",
   nextAuthSecret: process.env.NEXT_AUTH_SECRET ?? "",
   nextAuthUrl: process.env.NEXT_AUTH_URL ?? "http://localhost:3000",
-  
+
   // Database (Supabase)
   databaseUrl: process.env.DATABASE_URL ?? "",
   supabaseUrl: process.env.SUPABASE_URL ?? "",
   supabaseAnonKey: process.env.SUPABASE_ANON_KEY ?? "",
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
-  
+
+  // Redis (for distributed rate limiting and caching)
+  redisUrl: process.env.REDIS_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "",
+  redisToken: process.env.REDIS_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? "",
+
   // AI Services
   anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
   voyageApiKey: process.env.VOYAGE_API_KEY ?? "",
-  
+
   // Stripe Payments
   stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
   stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY ?? "",
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
   stripeProMonthlyPriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID ?? "",
   stripeProAnnualPriceId: process.env.STRIPE_PRO_ANNUAL_PRICE_ID ?? "",
-  
+
   // Legacy Manus OAuth (for migration)
   oAuthServerUrl: process.env.OAUTH_SERVER_URL ?? "",
   ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
