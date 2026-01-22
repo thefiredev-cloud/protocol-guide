@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   button: {
-    backgroundColor: "COLORS.bgSurface",
+    backgroundColor: COLORS.bgSurface,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
