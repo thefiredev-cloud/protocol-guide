@@ -240,7 +240,7 @@ function NativeEmailInput({
           borderWidth: 2,
           borderColor: getBorderColor(),
           backgroundColor: validationState === "invalid" && !isFocused ? COLORS.errorBg : COLORS.bgSurface,
-          color: COLORS.textBlack,
+          color: COLORS.textWhite,
           opacity: isLoading ? 0.7 : 1,
         }}
       />
@@ -462,7 +462,7 @@ export function EmailCaptureSection() {
       <Animated.View
         style={[{ paddingHorizontal: isMobile ? 16 : 24, maxWidth: 600, alignSelf: "center", width: "100%" }, animatedSectionStyle]}
       >
-        <Text style={{ color: COLORS.textBlack, fontSize: 28, fontWeight: "700", textAlign: "center", marginBottom: 16 }}>
+        <Text style={{ color: COLORS.textWhite, fontSize: 28, fontWeight: "700", textAlign: "center", marginBottom: 16 }}>
           Ready to upgrade your response?
         </Text>
 
