@@ -20,19 +20,19 @@ import Animated, {
 import Svg, { Path, Circle, G, Defs, LinearGradient, Stop, RadialGradient } from "react-native-svg";
 
 const COLORS = {
-  bgWhite: "#FFFFFF",
-  bgLightGray: "#F8FAFC",
-  bgLightPink: "#FEF2F2",
-  bgLightBlue: "#EFF6FF",
-  textBlack: "#0F172A",
-  textGray: "#475569",
-  borderGray: "#E2E8F0",
-  borderLight: "#F1F5F9",
-  primaryRed: "#9B2335",
-  primaryRedLight: "#DC2626",
+  bgSurface: "#1E293B",
+  bgDark: "#0F172A",
+  bgAccentRed: "#451a1a",
+  bgAccentBlue: "#1e3a5f",
+  textWhite: "#F1F5F9",
+  textMuted: "#94A3B8",
+  border: "#334155",
+  borderLight: "#475569",
+  primaryRed: "#EF4444",
+  primaryRedLight: "#F87171",
   primaryBlue: "#3B82F6",
   primaryBlueLight: "#60A5FA",
-  shadowColor: "#0F172A",
+  shadowColor: "#000000",
   accentGlow: "#F87171",
 };
 
