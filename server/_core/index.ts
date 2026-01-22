@@ -10,6 +10,7 @@ import { handleStripeWebhook } from "../webhooks/stripe";
 import { summarizeHandler } from "../api/summarize";
 import { validateEnv, ENV } from "./env";
 import { createRateLimiter } from "./rateLimit";
+import { healthHandler, readyHandler, liveHandler } from "./health";
 
 // CORS whitelist - only allow these origins
 const CORS_WHITELIST = [
