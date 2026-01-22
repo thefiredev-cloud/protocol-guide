@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   completeBadgeText: {
-    color: "COLORS.bgSurface",
+    color: "#FFFFFF",
     fontSize: 11,
     fontWeight: "700",
   },
