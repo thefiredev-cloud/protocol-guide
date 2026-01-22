@@ -480,7 +480,7 @@ export function FeaturesSection() {
         >
           <View
             style={{
-              backgroundColor: COLORS.bgLightPink,
+              backgroundColor: COLORS.bgAccentRed,
               paddingHorizontal: 16,
               paddingVertical: 6,
               borderRadius: 20,
