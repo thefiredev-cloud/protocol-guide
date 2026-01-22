@@ -14,13 +14,13 @@
 import { ENV } from './env';
 
 // Placeholder types until Sentry is installed
-type SentryModule = {
+interface SentryModule {
   init: (options: Record<string, unknown>) => void;
   captureException: (error: Error) => void;
   captureMessage: (message: string) => void;
   setUser: (user: { id?: string; email?: string } | null) => void;
   Integrations: Record<string, new () => unknown>;
-};
+}
 
 let Sentry: SentryModule | null = null;
 
@@ -39,7 +39,9 @@ export async function initSentry(): Promise<void> {
 
   try {
     // Dynamic import to avoid bundling Sentry if not used
-    Sentry = await import('@sentry/node').catch(() => null) as SentryModule | null;
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const sentryModule = await import(/* webpackIgnore: true */ '@sentry/node').catch(() => null);
+    Sentry = sentryModule as SentryModule | null;
 
     if (!Sentry) {
       console.log('[Sentry] @sentry/node not installed, run: pnpm add @sentry/node');
