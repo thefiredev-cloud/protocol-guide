@@ -5,16 +5,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import type Stripe from "stripe";
 
-// Import functions to test AFTER mocks are set up
-import {
-  createCheckoutSession,
-  createCustomerPortalSession,
-  constructWebhookEvent,
-  getSubscription,
-  cancelSubscription,
-} from "../server/stripe";
-
-// Mock Stripe SDK before importing stripe.ts
+// Mock Stripe SDK - define mocks BEFORE any imports
 const mockCheckoutSessionsCreate = vi.fn();
 const mockBillingPortalSessionsCreate = vi.fn();
 const mockSubscriptionsRetrieve = vi.fn();
@@ -26,20 +17,20 @@ vi.mock("stripe", () => {
     default: vi.fn().mockImplementation(() => ({
       checkout: {
         sessions: {
-          create: mockCheckoutSessionsCreate,
+          create: (...args: any[]) => mockCheckoutSessionsCreate(...args),
         },
       },
       billingPortal: {
         sessions: {
-          create: mockBillingPortalSessionsCreate,
+          create: (...args: any[]) => mockBillingPortalSessionsCreate(...args),
         },
       },
       subscriptions: {
-        retrieve: mockSubscriptionsRetrieve,
-        update: mockSubscriptionsUpdate,
+        retrieve: (...args: any[]) => mockSubscriptionsRetrieve(...args),
+        update: (...args: any[]) => mockSubscriptionsUpdate(...args),
       },
       webhooks: {
-        constructEvent: mockWebhooksConstructEvent,
+        constructEvent: (...args: any[]) => mockWebhooksConstructEvent(...args),
       },
     })),
   };
@@ -52,6 +43,15 @@ vi.mock("../server/db", () => ({
     annual: 99.99,
   },
 }));
+
+// Import functions to test AFTER mocks are set up
+import {
+  createCheckoutSession,
+  createCustomerPortalSession,
+  constructWebhookEvent,
+  getSubscription,
+  cancelSubscription,
+} from "../server/stripe";
 
 describe("Stripe Checkout Sessions", () => {
   beforeEach(() => {

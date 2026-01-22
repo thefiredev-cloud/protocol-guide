@@ -8,6 +8,11 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import type { Request, Response } from "express";
 import type Stripe from "stripe";
 
+// Import mocked modules and handler
+import { constructWebhookEvent } from "../server/stripe";
+import * as db from "../server/db";
+import { handleStripeWebhook } from "../server/webhooks/stripe";
+
 // Mock constructWebhookEvent from stripe module
 vi.mock("../server/stripe", () => ({
   constructWebhookEvent: vi.fn(),
@@ -20,11 +25,6 @@ vi.mock("../server/db", () => ({
   updateUserStripeCustomerId: vi.fn(),
   updateUserTier: vi.fn(),
 }));
-
-// Import mocked modules and handler
-import { constructWebhookEvent } from "../server/stripe";
-import * as db from "../server/db";
-import { handleStripeWebhook } from "../server/webhooks/stripe";
 
 // Helper to create mock Request/Response
 function createMockRequest(body: unknown, signature?: string): Partial<Request> {
