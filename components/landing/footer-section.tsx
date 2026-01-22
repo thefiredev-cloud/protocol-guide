@@ -302,7 +302,7 @@ export function FooterSection() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.bgSubtle,
+    backgroundColor: COLORS.bgDark,
     position: "relative",
   },
   gradientBorderWrapper: {
