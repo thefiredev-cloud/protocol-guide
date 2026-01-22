@@ -88,19 +88,46 @@ export async function createCustomerPortalSession({
   returnUrl,
 }: CreateCustomerPortalParams): Promise<{ url: string } | { error: string }> {
   if (!stripe) {
+    console.error("[Stripe] Portal session failed: Stripe not configured");
     return { error: "Stripe is not configured." };
   }
 
+  if (!stripeCustomerId) {
+    console.error("[Stripe] Portal session failed: Missing customer ID");
+    return { error: "Customer ID is required to create portal session" };
+  }
+
   try {
+    console.log(`[Stripe] Creating portal session for customer: ${stripeCustomerId}`);
+
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
       return_url: returnUrl,
     });
 
+    if (!session.url) {
+      console.error("[Stripe] Portal session created but no URL returned", { sessionId: session.id });
+      return { error: "Failed to create portal session URL" };
+    }
+
+    console.log(`[Stripe] Portal session created successfully: ${session.id}`);
     return { url: session.url };
   } catch (error) {
-    console.error("[Stripe] Portal session error:", error);
-    return { error: (error as Error).message || "Failed to create portal session" };
+    const errorMessage = (error as Error).message || "Failed to create portal session";
+    const errorDetails = error instanceof Error ? {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+    } : error;
+
+    console.error("[Stripe] Portal session error:", errorDetails);
+
+    // Provide user-friendly error messages
+    if (errorMessage.includes("No such customer")) {
+      return { error: "Customer not found in Stripe. Please contact support." };
+    }
+
+    return { error: errorMessage };
   }
 }
 
