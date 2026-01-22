@@ -256,7 +256,7 @@ function FeatureCard({ feature, index, isVisible, isMobile }: FeatureCardProps) 
       borderColor: interpolateColor(
         borderGlow.value,
         [0, 1],
-        [COLORS.borderGray, feature.accentColor]
+        [COLORS.border, feature.accentColor]
       ),
       borderWidth: interpolate(borderGlow.value, [0, 1], [1, 2]),
     };
