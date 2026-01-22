@@ -17,13 +17,17 @@ export default function TabLayout() {
   const router = useRouter();
   const hasRedirected = useRef(false);
 
+  // Allow E2E tests to bypass authentication
+  const isE2ETest = Platform.OS === "web" && typeof window !== "undefined" &&
+    (window.location.search.includes("e2e=true") || process.env.NODE_ENV === "test");
+
   // Redirect to landing if not authenticated (imperative to avoid render loops)
   useEffect(() => {
-    if (!loading && !isAuthenticated && !hasRedirected.current) {
+    if (!isE2ETest && !loading && !isAuthenticated && !hasRedirected.current) {
       hasRedirected.current = true;
       router.replace("/");
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, router, isE2ETest]);
 
   // Reset redirect flag when authenticated
   useEffect(() => {
