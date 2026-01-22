@@ -78,8 +78,8 @@ test.describe("Authentication UI", () => {
 
 test.describe("Protected Routes", () => {
   test("shows sign in prompt for protected profile page", async ({ page }) => {
-    // Try to access profile without being logged in
-    await page.goto("/(tabs)/profile");
+    // Try to access profile without being logged in (with E2E bypass to see the page)
+    await page.goto("/(tabs)/profile?e2e=true");
 
     // Wait for either sign-in content or profile content to load
     // React Native Web can be slow, so give it more time
@@ -98,7 +98,7 @@ test.describe("Protected Routes", () => {
   });
 
   test("shows sign in prompt for protected history page", async ({ page }) => {
-    await page.goto("/(tabs)/history");
+    await page.goto("/(tabs)/history?e2e=true");
 
     // Wait for content to load (React Native Web needs more time)
     await page.waitForTimeout(2000);
