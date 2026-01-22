@@ -176,7 +176,7 @@ export function LoadingCard() {
   return (
     <Animated.View 
       entering={FadeIn.duration(200)}
-      style={[styles.loadingCard, { backgroundColor: '#FFFFFF', borderColor: colors.border }]}
+      style={[styles.loadingCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
     >
       <View style={styles.loadingContent}>
         <View style={styles.loadingDots}>
