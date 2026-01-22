@@ -18,7 +18,7 @@ export const logger = pino.default ? pino.default({
       return { level: label };
     },
   },
-  timestamp: pino.stdTimeFunctions.isoTime,
+  timestamp: (pino.default || pino).stdTimeFunctions.isoTime,
   ...(process.env.NODE_ENV === "development" && {
     transport: {
       target: "pino-pretty",
