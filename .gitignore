@@ -72,34 +72,22 @@ Thumbs.db
 .netlify/
 
 # Internal planning docs - keep out of production repo
-ACCESSIBILITY-IMPROVEMENTS.md
-ACCESSIBILITY-SUMMARY.md
-CLEANUP-REQUIRED.md
-FIXES.md
-FRONTEND-FIXES-SUMMARY.md
-LANDING-PAGE-FIX-PLAN.md
-LA_COUNTY_PROTOCOL_IMPROVEMENT_PLAN.md
-MIGRATION-PLAN.md
-MIGRATION-TODO.md
-MOBILE_RESPONSIVENESS_AUDIT.md
-PROJECT-ORGANIZATION.md
-STATUS_REPORT.md
-WHITEBOARD-DIAGRAM.md
-CLAUDE_CODE_HANDOFF.md
-audit-notes.md
-design.md
-todo.md
-unknown-agencies-findings.md
+docs/accessibility/
+docs/migration/
+docs/fixes/
+docs/audits/
+docs/ai/
+docs/protocols/
+docs/design/
+docs/project/
+docs/unknown-agencies-findings.md
 
 # Sensitive business docs
-ImageTrend_Partnership_Analysis.xlsx
-ImageTrend_Partnership_Dashboard.jsx
-ImageTrend_Partnership_Financial_Model.py
+research/partnerships/
 
 # Development artifacts
 diagrams/
-research/
-file.svg
+assets/file.svg
 
 # Scripts artifacts - PDFs, extracted text, protocol folders
 scripts/*.pdf

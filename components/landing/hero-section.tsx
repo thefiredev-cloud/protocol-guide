@@ -241,7 +241,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
               accessibilityRole="link"
               accessibilityLabel="Speed Test section"
             >
-              <Text style={{ color: COLORS.textGray, fontSize: 14, fontWeight: "600", letterSpacing: 0.3 }}>
+              <Text style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: "600", letterSpacing: 0.3 }}>
                 Speed Test
               </Text>
             </AnimatedNavLink>
@@ -252,7 +252,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
               accessibilityRole="link"
               accessibilityLabel="Impact section"
             >
-              <Text style={{ color: COLORS.textGray, fontSize: 14, fontWeight: "600", letterSpacing: 0.3 }}>
+              <Text style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: "600", letterSpacing: 0.3 }}>
                 Impact
               </Text>
             </AnimatedNavLink>
@@ -312,7 +312,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
               onPress={() => scrollToSection("simulation-section")}
               style={{ minHeight: 44, justifyContent: "center" }}
             >
-              <Text style={{ color: COLORS.textGray, fontSize: 16, fontWeight: "500" }}>
+              <Text style={{ color: COLORS.textMuted, fontSize: 16, fontWeight: "500" }}>
                 Speed Test
               </Text>
             </AnimatedNavLink>
@@ -320,7 +320,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
               onPress={() => scrollToSection("impact-section")}
               style={{ minHeight: 44, justifyContent: "center" }}
             >
-              <Text style={{ color: COLORS.textGray, fontSize: 16, fontWeight: "500" }}>
+              <Text style={{ color: COLORS.textMuted, fontSize: 16, fontWeight: "500" }}>
                 Impact
               </Text>
             </AnimatedNavLink>
@@ -389,7 +389,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
         >
           <Text
             style={{
-              color: COLORS.textGray,
+              color: COLORS.textMuted,
               fontSize: isMobile ? 22 : 30,
               fontWeight: "700",
               textAlign: "center",
@@ -403,7 +403,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
           </Text>
           <Text
             style={{
-              color: COLORS.textGray,
+              color: COLORS.textMuted,
               fontSize: isMobile ? 18 : 20,
               fontWeight: "400",
               textAlign: "center",
