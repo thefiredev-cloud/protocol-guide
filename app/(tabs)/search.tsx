@@ -456,10 +456,15 @@ export default function SearchScreen() {
           autoCorrect={false}
         />
         {query.length > 0 && (
-          <TouchableOpacity onPress={handleClear} className="p-2 -mr-2">
+          <TouchableOpacity onPress={handleClear} className="p-2">
             <IconSymbol name="xmark" size={18} color={colors.muted} />
           </TouchableOpacity>
         )}
+        <VoiceInput
+          onTranscription={handleVoiceTranscription}
+          onError={handleVoiceError}
+          disabled={isSearching}
+        />
       </View>
 
       {/* State Filter */}
