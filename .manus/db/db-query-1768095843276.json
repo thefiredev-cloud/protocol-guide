@@ -1,0 +1,46 @@
+{
+  "query": "SELECT COUNT(*) as total FROM counties; SELECT state, COUNT(*) as count FROM counties GROUP BY state ORDER BY state LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute SELECT COUNT(*) as total FROM counties; SELECT state, COUNT(*) as count FROM counties GROUP BY state ORDER BY state LIMIT 10;",
+  "rows": [
+    {
+      "total": "1967"
+    },
+    {
+      "total": "state\tcount"
+    },
+    {
+      "total": "Alabama\t67"
+    },
+    {
+      "total": "Alaska\t29"
+    },
+    {
+      "total": "Arizona\t15"
+    },
+    {
+      "total": "Arkansas\t75"
+    },
+    {
+      "total": "CA\t1"
+    },
+    {
+      "total": "California\t58"
+    },
+    {
+      "total": "Colorado\t64"
+    },
+    {
+      "total": "Connecticut\t8"
+    },
+    {
+      "total": "Delaware\t3"
+    },
+    {
+      "total": "Florida\t67"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\n1967\nstate\tcount\nAlabama\t67\nAlaska\t29\nArizona\t15\nArkansas\t75\nCA\t1\nCalifornia\t58\nColorado\t64\nConnecticut\t8\nDelaware\t3\nFlorida\t67\n",
+  "stderr": "",
+  "execution_time_ms": 443
+}

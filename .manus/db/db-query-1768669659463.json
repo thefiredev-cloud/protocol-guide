@@ -1,0 +1,610 @@
+{
+  "query": "\nSELECT c.name, COUNT(p.id) as protocols\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nGROUP BY c.id, c.name\nORDER BY c.name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \nSELECT c.name, COUNT(p.id) as protocols\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nGROUP BY c.id, c.name\nORDER BY c.name;\n",
+  "rows": [
+    {
+      "name": "Alameda",
+      "protocols": "16"
+    },
+    {
+      "name": "Alameda County",
+      "protocols": "218"
+    },
+    {
+      "name": "Alameda County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Alameda County EMS Agency",
+      "protocols": "3"
+    },
+    {
+      "name": "Alpine",
+      "protocols": "16"
+    },
+    {
+      "name": "Alpine County",
+      "protocols": "0"
+    },
+    {
+      "name": "Amador",
+      "protocols": "16"
+    },
+    {
+      "name": "Amador County",
+      "protocols": "0"
+    },
+    {
+      "name": "Anaheim Fire Department EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Bakersfield Fire Department EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Butte",
+      "protocols": "16"
+    },
+    {
+      "name": "Butte County",
+      "protocols": "175"
+    },
+    {
+      "name": "Calaveras",
+      "protocols": "16"
+    },
+    {
+      "name": "Calaveras County",
+      "protocols": "0"
+    },
+    {
+      "name": "Central California EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Coastal Valleys EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Colusa",
+      "protocols": "16"
+    },
+    {
+      "name": "Colusa County",
+      "protocols": "175"
+    },
+    {
+      "name": "Contra Costa",
+      "protocols": "52"
+    },
+    {
+      "name": "Contra Costa County",
+      "protocols": "0"
+    },
+    {
+      "name": "Contra Costa County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Del Norte",
+      "protocols": "16"
+    },
+    {
+      "name": "Del Norte County",
+      "protocols": "9"
+    },
+    {
+      "name": "El Dorado",
+      "protocols": "16"
+    },
+    {
+      "name": "El Dorado County",
+      "protocols": "30"
+    },
+    {
+      "name": "El Dorado County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Fresno",
+      "protocols": "16"
+    },
+    {
+      "name": "Fresno County",
+      "protocols": "246"
+    },
+    {
+      "name": "Glenn",
+      "protocols": "16"
+    },
+    {
+      "name": "Glenn County",
+      "protocols": "175"
+    },
+    {
+      "name": "Humboldt",
+      "protocols": "16"
+    },
+    {
+      "name": "Humboldt County",
+      "protocols": "9"
+    },
+    {
+      "name": "Imperial",
+      "protocols": "16"
+    },
+    {
+      "name": "Imperial County",
+      "protocols": "75"
+    },
+    {
+      "name": "Inland Counties EMS Agency",
+      "protocols": "10"
+    },
+    {
+      "name": "Inyo",
+      "protocols": "16"
+    },
+    {
+      "name": "Inyo County",
+      "protocols": "358"
+    },
+    {
+      "name": "Kern",
+      "protocols": "16"
+    },
+    {
+      "name": "Kern County",
+      "protocols": "49"
+    },
+    {
+      "name": "Kern County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Kings",
+      "protocols": "16"
+    },
+    {
+      "name": "Kings County",
+      "protocols": "246"
+    },
+    {
+      "name": "Lake",
+      "protocols": "16"
+    },
+    {
+      "name": "Lassen",
+      "protocols": "16"
+    },
+    {
+      "name": "Lassen County",
+      "protocols": "175"
+    },
+    {
+      "name": "Long Beach Fire Department EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Los Angeles",
+      "protocols": "16"
+    },
+    {
+      "name": "Los Angeles",
+      "protocols": "16"
+    },
+    {
+      "name": "Los Angeles County",
+      "protocols": "409"
+    },
+    {
+      "name": "Madera",
+      "protocols": "16"
+    },
+    {
+      "name": "Madera County",
+      "protocols": "246"
+    },
+    {
+      "name": "Marin",
+      "protocols": "16"
+    },
+    {
+      "name": "Marin County",
+      "protocols": "9"
+    },
+    {
+      "name": "Mariposa",
+      "protocols": "16"
+    },
+    {
+      "name": "Mariposa County",
+      "protocols": "0"
+    },
+    {
+      "name": "Mendocino",
+      "protocols": "16"
+    },
+    {
+      "name": "Mendocino County",
+      "protocols": "45"
+    },
+    {
+      "name": "Merced",
+      "protocols": "16"
+    },
+    {
+      "name": "Merced County",
+      "protocols": "0"
+    },
+    {
+      "name": "Merced County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Modoc",
+      "protocols": "16"
+    },
+    {
+      "name": "Modoc County",
+      "protocols": "175"
+    },
+    {
+      "name": "Mono",
+      "protocols": "16"
+    },
+    {
+      "name": "Mono County",
+      "protocols": "358"
+    },
+    {
+      "name": "Monterey",
+      "protocols": "16"
+    },
+    {
+      "name": "Monterey County",
+      "protocols": "7"
+    },
+    {
+      "name": "Mountain-Valley EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Napa",
+      "protocols": "16"
+    },
+    {
+      "name": "Napa County",
+      "protocols": "12"
+    },
+    {
+      "name": "Nevada",
+      "protocols": "16"
+    },
+    {
+      "name": "Nevada County",
+      "protocols": "122"
+    },
+    {
+      "name": "Northern California EMS Inc",
+      "protocols": "0"
+    },
+    {
+      "name": "Oakland Fire Department EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Orange",
+      "protocols": "16"
+    },
+    {
+      "name": "Orange",
+      "protocols": "16"
+    },
+    {
+      "name": "Orange County",
+      "protocols": "78"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "protocols": "2"
+    },
+    {
+      "name": "Placer",
+      "protocols": "16"
+    },
+    {
+      "name": "Placer County",
+      "protocols": "122"
+    },
+    {
+      "name": "Plumas",
+      "protocols": "16"
+    },
+    {
+      "name": "Plumas County",
+      "protocols": "175"
+    },
+    {
+      "name": "Riverside",
+      "protocols": "58"
+    },
+    {
+      "name": "Riverside County",
+      "protocols": "406"
+    },
+    {
+      "name": "Riverside County EMS Agency (REMSA)",
+      "protocols": "0"
+    },
+    {
+      "name": "Sacramento",
+      "protocols": "16"
+    },
+    {
+      "name": "Sacramento",
+      "protocols": "16"
+    },
+    {
+      "name": "Sacramento County",
+      "protocols": "62"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Sacramento Fire Department/Metro Fire EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "San Benito",
+      "protocols": "16"
+    },
+    {
+      "name": "San Benito County",
+      "protocols": "0"
+    },
+    {
+      "name": "San Bernardino",
+      "protocols": "16"
+    },
+    {
+      "name": "San Bernardino County",
+      "protocols": "358"
+    },
+    {
+      "name": "San Diego",
+      "protocols": "46"
+    },
+    {
+      "name": "San Diego",
+      "protocols": "16"
+    },
+    {
+      "name": "San Diego County",
+      "protocols": "115"
+    },
+    {
+      "name": "San Diego County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "San Diego County EMS",
+      "protocols": "2"
+    },
+    {
+      "name": "San Francisco",
+      "protocols": "16"
+    },
+    {
+      "name": "San Francisco",
+      "protocols": "16"
+    },
+    {
+      "name": "San Francisco County",
+      "protocols": "37"
+    },
+    {
+      "name": "San Francisco EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Joaquin",
+      "protocols": "68"
+    },
+    {
+      "name": "San Joaquin County",
+      "protocols": "211"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Luis Obispo",
+      "protocols": "16"
+    },
+    {
+      "name": "San Luis Obispo County",
+      "protocols": "0"
+    },
+    {
+      "name": "San Mateo",
+      "protocols": "16"
+    },
+    {
+      "name": "San Mateo County",
+      "protocols": "4"
+    },
+    {
+      "name": "San Mateo County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Santa Barbara",
+      "protocols": "16"
+    },
+    {
+      "name": "Santa Barbara County",
+      "protocols": "1"
+    },
+    {
+      "name": "Santa Clara",
+      "protocols": "16"
+    },
+    {
+      "name": "Santa Clara County",
+      "protocols": "6"
+    },
+    {
+      "name": "Santa Cruz",
+      "protocols": "16"
+    },
+    {
+      "name": "Santa Cruz County",
+      "protocols": "53"
+    },
+    {
+      "name": "Santa Cruz County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Shasta",
+      "protocols": "16"
+    },
+    {
+      "name": "Shasta County",
+      "protocols": "175"
+    },
+    {
+      "name": "Sierra",
+      "protocols": "16"
+    },
+    {
+      "name": "Sierra County",
+      "protocols": "122"
+    },
+    {
+      "name": "Sierra-Sacramento Valley EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Siskiyou",
+      "protocols": "16"
+    },
+    {
+      "name": "Siskiyou County",
+      "protocols": "175"
+    },
+    {
+      "name": "Solano",
+      "protocols": "16"
+    },
+    {
+      "name": "Solano County",
+      "protocols": "0"
+    },
+    {
+      "name": "Sonoma",
+      "protocols": "16"
+    },
+    {
+      "name": "Sonoma County",
+      "protocols": "45"
+    },
+    {
+      "name": "Stanislaus",
+      "protocols": "16"
+    },
+    {
+      "name": "Stanislaus County",
+      "protocols": "1"
+    },
+    {
+      "name": "Sutter",
+      "protocols": "16"
+    },
+    {
+      "name": "Sutter County",
+      "protocols": "122"
+    },
+    {
+      "name": "Tehama",
+      "protocols": "16"
+    },
+    {
+      "name": "Tehama County",
+      "protocols": "175"
+    },
+    {
+      "name": "Trinity",
+      "protocols": "16"
+    },
+    {
+      "name": "Trinity County",
+      "protocols": "175"
+    },
+    {
+      "name": "Tulare",
+      "protocols": "16"
+    },
+    {
+      "name": "Tulare County",
+      "protocols": "246"
+    },
+    {
+      "name": "Tuolumne",
+      "protocols": "16"
+    },
+    {
+      "name": "Tuolumne County",
+      "protocols": "0"
+    },
+    {
+      "name": "Ventura",
+      "protocols": "16"
+    },
+    {
+      "name": "Ventura County",
+      "protocols": "21"
+    },
+    {
+      "name": "Ventura County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Yolo",
+      "protocols": "16"
+    },
+    {
+      "name": "Yolo County",
+      "protocols": "0"
+    },
+    {
+      "name": "Yuba",
+      "protocols": "16"
+    },
+    {
+      "name": "Yuba County",
+      "protocols": "122"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tprotocols\nAlameda\t16\nAlameda County\t218\nAlameda County EMS Agency\t0\nAlameda County EMS Agency\t3\nAlpine\t16\nAlpine County\t0\nAmador\t16\nAmador County\t0\nAnaheim Fire Department EMS\t0\nBakersfield Fire Department EMS\t0\nButte\t16\nButte County\t175\nCalaveras\t16\nCalaveras County\t0\nCentral California EMS Agency\t0\nCoastal Valleys EMS Agency\t0\nColusa\t16\nColusa County\t175\nContra Costa\t52\nContra Costa County\t0\nContra Costa County EMS\t0\nDel Norte\t16\nDel Norte County\t9\nEl Dorado\t16\nEl Dorado County\t30\nEl Dorado County EMS Agency\t0\nFresno\t16\nFresno County\t246\nGlenn\t16\nGlenn County\t175\nHumboldt\t16\nHumboldt County\t9\nImperial\t16\nImperial County\t75\nInland Counties EMS Agency\t10\nInyo\t16\nInyo County\t358\nKern\t16\nKern County\t49\nKern County EMS\t0\nKings\t16\nKings County\t246\nLake\t16\nLassen\t16\nLassen County\t175\nLong Beach Fire Department EMS\t0\nLos Angeles\t16\nLos Angeles\t16\nLos Angeles County\t409\nMadera\t16\nMadera County\t246\nMarin\t16\nMarin County\t9\nMariposa\t16\nMariposa County\t0\nMendocino\t16\nMendocino County\t45\nMerced\t16\nMerced County\t0\nMerced County EMS Agency\t0\nModoc\t16\nModoc County\t175\nMono\t16\nMono County\t358\nMonterey\t16\nMonterey County\t7\nMountain-Valley EMS Agency\t0\nNapa\t16\nNapa County\t12\nNevada\t16\nNevada County\t122\nNorthern California EMS Inc\t0\nOakland Fire Department EMS\t0\nOrange\t16\nOrange\t16\nOrange County\t78\nOrange County EMS Agency\t0\nOrange County EMS Agency\t2\nPlacer\t16\nPlacer County\t122\nPlumas\t16\nPlumas County\t175\nRiverside\t58\nRiverside County\t406\nRiverside County EMS Agency (REMSA)\t0\nSacramento\t16\nSacramento\t16\nSacramento County\t62\nSacramento County EMS Agency\t0\nSacramento County EMS Agency\t0\nSacramento Fire Department/Metro Fire EMS\t0\nSan Benito\t16\nSan Benito County\t0\nSan Bernardino\t16\nSan Bernardino County\t358\nSan Diego\t46\nSan Diego\t16\nSan Diego County\t115\nSan Diego County EMS\t0\nSan Diego County EMS\t2\nSan Francisco\t16\nSan Francisco\t16\nSan Francisco County\t37\nSan Francisco EMS Agency\t0\nSan Joaquin\t68\nSan Joaquin County\t211\nSan Joaquin County EMS Agency\t0\nSan Joaquin County EMS Agency\t0\nSan Luis Obispo\t16\nSan Luis Obispo County\t0\nSan Mateo\t16\nSan Mateo County\t4\nSan Mateo County EMS Agency\t0\nSanta Barbara\t16\nSanta Barbara County\t1\nSanta Clara\t16\nSanta Clara County\t6\nSanta Cruz\t16\nSanta Cruz County\t53\nSanta Cruz County EMS\t0\nShasta\t16\nShasta County\t175\nSierra\t16\nSierra County\t122\nSierra-Sacramento Valley EMS Agency\t0\nSiskiyou\t16\nSiskiyou County\t175\nSolano\t16\nSolano County\t0\nSonoma\t16\nSonoma County\t45\nStanislaus\t16\nStanislaus County\t1\nSutter\t16\nSutter County\t122\nTehama\t16\nTehama County\t175\nTrinity\t16\nTrinity County\t175\nTulare\t16\nTulare County\t246\nTuolumne\t16\nTuolumne County\t0\nVentura\t16\nVentura County\t21\nVentura County EMS Agency\t0\nYolo\t16\nYolo County\t0\nYuba\t16\nYuba County\t122\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

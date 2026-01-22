@@ -1,0 +1,61 @@
+{
+  "query": "SELECT COUNT(*) as total_entities FROM counties; SELECT state, COUNT(*) as count FROM counties GROUP BY state ORDER BY count DESC LIMIT 15;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute SELECT COUNT(*) as total_entities FROM counties; SELECT state, COUNT(*) as count FROM counties GROUP BY state ORDER BY count DESC LIMIT 15;",
+  "rows": [
+    {
+      "total_entities": "2582"
+    },
+    {
+      "total_entities": "state\tcount"
+    },
+    {
+      "total_entities": "Georgia\t166"
+    },
+    {
+      "total_entities": "Kentucky\t130"
+    },
+    {
+      "total_entities": "Kansas\t127"
+    },
+    {
+      "total_entities": "Missouri\t123"
+    },
+    {
+      "total_entities": "Mississippi\t120"
+    },
+    {
+      "total_entities": "Iowa\t114"
+    },
+    {
+      "total_entities": "Colorado\t110"
+    },
+    {
+      "total_entities": "Illinois\t108"
+    },
+    {
+      "total_entities": "Nebraska\t103"
+    },
+    {
+      "total_entities": "Indiana\t97"
+    },
+    {
+      "total_entities": "Minnesota\t93"
+    },
+    {
+      "total_entities": "Arkansas\t91"
+    },
+    {
+      "total_entities": "Alabama\t90"
+    },
+    {
+      "total_entities": "Michigan\t89"
+    },
+    {
+      "total_entities": "North Carolina\t87"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_entities\n2582\nstate\tcount\nGeorgia\t166\nKentucky\t130\nKansas\t127\nMissouri\t123\nMississippi\t120\nIowa\t114\nColorado\t110\nIllinois\t108\nNebraska\t103\nIndiana\t97\nMinnesota\t93\nArkansas\t91\nAlabama\t90\nMichigan\t89\nNorth Carolina\t87\n",
+  "stderr": "",
+  "execution_time_ms": 516
+}

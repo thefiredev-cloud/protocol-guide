@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Protocol Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    @page { size: 17in 11in; margin: 0; }
+
+    body {
+      margin: 0;
+      padding: 0.5in;
+      font-family: 'Caveat', cursive;
+      background: #f8f6f0;
+      width: 16in;
+      height: 10in;
+      position: relative;
+    }
+
+    /* Whiteboard texture */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);
+      pointer-events: none;
+    }
+
+    .title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 42px;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 0.2in;
+      text-decoration: underline;
+      text-decoration-style: wavy;
+      text-decoration-color: #e74c3c;
+    }
+
+    .container {
+      display: flex;
+      gap: 0.3in;
+      height: 8.5in;
+    }
+
+    .col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15in;
+    }
+
+    .box {
+      border: 3px solid #333;
+      border-radius: 4px;
+      padding: 12px;
+      position: relative;
+      background: white;
+      transform: rotate(-0.3deg);
+    }
+
+    .box:nth-child(even) { transform: rotate(0.4deg); }
+
+    .box-label {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 20px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 2px solid currentColor;
+    }
+
+    .blue { color: #2980b9; border-color: #2980b9; }
+    .red { color: #c0392b; border-color: #c0392b; }
+    .green { color: #27ae60; border-color: #27ae60; }
+    .purple { color: #8e44ad; border-color: #8e44ad; }
+    .orange { color: #d35400; border-color: #d35400; }
+
+    .content {
+      font-size: 22px;
+      line-height: 1.4;
+      color: #2c3e50;
+    }
+
+    .content strong {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 18px;
+    }
+
+    .arrow-text {
+      font-size: 24px;
+      text-align: center;
+      padding: 8px;
+      color: #7f8c8d;
+    }
+
+    /* Flow diagram */
+    .flow-box {
+      background: #fffde7;
+      border: 3px solid #f39c12;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 0.15in;
+    }
+
+    .flow-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 24px;
+      color: #f39c12;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .flow-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 20px;
+    }
+
+    .step {
+      background: white;
+      border: 2px solid #333;
+      padding: 8px 12px;
+      border-radius: 4px;
+      text-align: center;
+      transform: rotate(-1deg);
+    }
+
+    .step:nth-child(odd) { transform: rotate(1deg); }
+
+    .arrow {
+      font-size: 28px;
+      color: #e74c3c;
+    }
+
+    /* Stats row */
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 0.15in;
+    }
+
+    .stat {
+      flex: 1;
+      background: #2c3e50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      border-radius: 4px;
+      transform: rotate(-0.5deg);
+    }
+
+    .stat:nth-child(even) { transform: rotate(0.7deg); }
+
+    .stat-num {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 28px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    /* LA County highlight */
+    .la-box {
+      background: #ffebee;
+      border: 4px solid #c0392b;
+      padding: 12px;
+      border-radius: 4px;
+    }
+
+    .la-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 22px;
+      color: #c0392b;
+      margin-bottom: 8px;
+    }
+
+    .protocols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 18px;
+    }
+
+    .proto {
+      background: white;
+      padding: 4px 8px;
+      border-left: 3px solid #c0392b;
+    }
+
+    .proto-num {
+      font-family: 'Permanent Marker', cursive;
+      color: #c0392b;
+    }
+
+    /* Hand-drawn underlines */
+    .underline {
+      text-decoration: underline;
+      text-decoration-style: wavy;
+    }
+
+    /* Circled items */
+    .circled {
+      display: inline-block;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      line-height: 24px;
+      text-align: center;
+      font-family: 'Permanent Marker', cursive;
+      margin-right: 6px;
+    }
+
+    .note {
+      font-size: 18px;
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">PROTOCOL GUIDE 📋</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">49K</div>
+      <div class="stat-label">chunks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2.7K</div>
+      <div class="stat-label">agencies</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">51</div>
+      <div class="stat-label">states</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1536</div>
+      <div class="stat-label">dims</div>
+    </div>
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-title">THE FLOW ➜</div>
+    <div class="flow-steps">
+      <div class="step">📱 Query</div>
+      <div class="arrow">→</div>
+      <div class="step">🧠 Voyage<br><small>embed</small></div>
+      <div class="arrow">→</div>
+      <div class="step">🔍 pgvector<br><small>search</small></div>
+      <div class="arrow">→</div>
+      <div class="step">🤖 Claude<br><small>RAG</small></div>
+      <div class="arrow">→</div>
+      <div class="step">✅ Answer</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col">
+      <div class="box blue">
+        <div class="box-label blue">FRONTEND 📱</div>
+        <div class="content">
+          <strong>React Native + Expo</strong><br>
+          → iOS / Android / Web<br>
+          → Voice input<br>
+          → Offline cache (50)<br>
+          → County picker
+        </div>
+      </div>
+
+      <div class="box purple">
+        <div class="box-label purple">BACKEND ⚙️</div>
+        <div class="content">
+          <strong>Node + tRPC</strong><br>
+          → search.semantic<br>
+          → query.submit<br>
+          → voice.transcribe<br>
+          <br>
+          <span class="underline">Tiered LLM:</span><br>
+          Free = Haiku<br>
+          Pro = Sonnet
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box green">
+        <div class="box-label green">DATABASES 🗄️</div>
+        <div class="content">
+          <strong>TiDB (MySQL)</strong><br>
+          → protocolChunks<br>
+          → counties (2713)<br>
+          → users, queries<br>
+          <br>
+          <strong>Supabase (Postgres)</strong><br>
+          → manus_protocol_chunks<br>
+          → pgvector search<br>
+          → search_manus_protocols()
+        </div>
+      </div>
+
+      <div class="la-box">
+        <div class="la-title">🚒 LA COUNTY #240009</div>
+        <div class="protocols">
+          <div class="proto"><span class="proto-num">814</span> Death</div>
+          <div class="proto"><span class="proto-num">817</span> HERT</div>
+          <div class="proto"><span class="proto-num">1210</span> Cardiac</div>
+          <div class="proto"><span class="proto-num">1242</span> Crush</div>
+          <div class="proto"><span class="proto-num">1335</span> Needle</div>
+          <div class="proto"><span class="proto-num">1200.3</span> Impressions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box orange">
+        <div class="box-label orange">AI 🧠</div>
+        <div class="content">
+          <strong>Voyage AI</strong><br>
+          → voyage-large-2<br>
+          → 1536 dimensions<br>
+          → medical optimized<br>
+          <br>
+          <strong>Claude</strong><br>
+          → Haiku (free)<br>
+          → Sonnet (pro)<br>
+          → retrieval-only!
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-label">KEY FILES 📁</div>
+        <div class="content">
+          → routers.ts<br>
+          → embeddings.ts<br>
+          → schema.ts<br>
+          → db.ts<br>
+          <br>
+          <strong>Scripts:</strong><br>
+          → fix-la-county-protocols<br>
+          → generate-embeddings<br>
+          → verify-protocols
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    hybrid search: keyword match → embedding → cosine similarity → top K → Claude RAG → citations
+  </div>
+</body>
+</html>

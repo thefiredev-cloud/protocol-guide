@@ -1,0 +1,90 @@
+{
+  "query": "SELECT sourcePdfUrl, COUNT(*) as count FROM protocolChunks WHERE countyId = 1 GROUP BY sourcePdfUrl ORDER BY count DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute SELECT sourcePdfUrl, COUNT(*) as count FROM protocolChunks WHERE countyId = 1 GROUP BY sourcePdfUrl ORDER BY count DESC LIMIT 20;",
+  "rows": [
+    {
+      "sourcePdfUrl": "https://www.emmco.org/content/protocols/",
+      "count": "493"
+    },
+    {
+      "sourcePdfUrl": "https://pehsc.org/resources/clinical/",
+      "count": "493"
+    },
+    {
+      "sourcePdfUrl": "https://gmvemsc.org/protocols.html",
+      "count": "490"
+    },
+    {
+      "sourcePdfUrl": "https://www.academyofmedicine.org/aws/AOMC/asset_manager/get_file/937559?ver=2",
+      "count": "336"
+    },
+    {
+      "sourcePdfUrl": "https://www.academyofmedicine.org/aws/AOMC/pt/sp/ems-phcoc",
+      "count": "336"
+    },
+    {
+      "sourcePdfUrl": "https://dam.assets.ohio.gov/image/upload/ems.ohio.gov/links/ems_Guidelines-Procedures-Manual.pdf",
+      "count": "219"
+    },
+    {
+      "sourcePdfUrl": "https://jcems.net/docs/Standing%20Orders%202024%20-%20Final.pdf",
+      "count": "211"
+    },
+    {
+      "sourcePdfUrl": "https://www.pa.gov/content/dam/copapwp-pagov/en/health/documents/topics/documents/ems/2023v1-2%20PA%20ALS%20Protocols.pdf",
+      "count": "194"
+    },
+    {
+      "sourcePdfUrl": "https://www.gshvin.org/documents/PROTOCOLS-FOR-GSH-WEBPAGE.pdf",
+      "count": "165"
+    },
+    {
+      "sourcePdfUrl": "http://www.ohiohealthems.com/wp-content/uploads/2019/09/OhioHealth-EMS-Protocols-2019-09-13.pdf",
+      "count": "90"
+    },
+    {
+      "sourcePdfUrl": "https://www.mcleancountyems.org/protocols-policies",
+      "count": "78"
+    },
+    {
+      "sourcePdfUrl": "http://hartcountyga.gov/documents/GAprehospitalprotocols.pdf",
+      "count": "59"
+    },
+    {
+      "sourcePdfUrl": "https://dam.assets.ohio.gov/image/upload/ems.ohio.gov/links/ems_Guidelines-Emergency-Medical-Responders.pdf",
+      "count": "58"
+    },
+    {
+      "sourcePdfUrl": "https://dph.georgia.gov/EMS/protocols-and-scope-practice",
+      "count": "34"
+    },
+    {
+      "sourcePdfUrl": "https://www.loyolamedicine.org/ems/",
+      "count": "23"
+    },
+    {
+      "sourcePdfUrl": "NULL",
+      "count": "16"
+    },
+    {
+      "sourcePdfUrl": "https://www.hallcounty.org/DocumentCenter/View/198/Medical-Protocols-and-Standing-Orders-PDF",
+      "count": "12"
+    },
+    {
+      "sourcePdfUrl": "https://dph.georgia.gov/document/document/2025-ems-scope-practicepdf/download",
+      "count": "11"
+    },
+    {
+      "sourcePdfUrl": "https://www.pharmacy.ohio.gov/EMSpractice",
+      "count": "10"
+    },
+    {
+      "sourcePdfUrl": "https://www.gradyhealth.org/wp-content/uploads/2019/06/PARAMEDIC-Clinical-Education-Manual.pdf",
+      "count": "10"
+    }
+  ],
+  "messages": [],
+  "stdout": "sourcePdfUrl\tcount\nhttps://www.emmco.org/content/protocols/\t493\nhttps://pehsc.org/resources/clinical/\t493\nhttps://gmvemsc.org/protocols.html\t490\nhttps://www.academyofmedicine.org/aws/AOMC/asset_manager/get_file/937559?ver=2\t336\nhttps://www.academyofmedicine.org/aws/AOMC/pt/sp/ems-phcoc\t336\nhttps://dam.assets.ohio.gov/image/upload/ems.ohio.gov/links/ems_Guidelines-Procedures-Manual.pdf\t219\nhttps://jcems.net/docs/Standing%20Orders%202024%20-%20Final.pdf\t211\nhttps://www.pa.gov/content/dam/copapwp-pagov/en/health/documents/topics/documents/ems/2023v1-2%20PA%20ALS%20Protocols.pdf\t194\nhttps://www.gshvin.org/documents/PROTOCOLS-FOR-GSH-WEBPAGE.pdf\t165\nhttp://www.ohiohealthems.com/wp-content/uploads/2019/09/OhioHealth-EMS-Protocols-2019-09-13.pdf\t90\nhttps://www.mcleancountyems.org/protocols-policies\t78\nhttp://hartcountyga.gov/documents/GAprehospitalprotocols.pdf\t59\nhttps://dam.assets.ohio.gov/image/upload/ems.ohio.gov/links/ems_Guidelines-Emergency-Medical-Responders.pdf\t58\nhttps://dph.georgia.gov/EMS/protocols-and-scope-practice\t34\nhttps://www.loyolamedicine.org/ems/\t23\nNULL\t16\nhttps://www.hallcounty.org/DocumentCenter/View/198/Medical-Protocols-and-Standing-Orders-PDF\t12\nhttps://dph.georgia.gov/document/document/2025-ems-scope-practicepdf/download\t11\nhttps://www.pharmacy.ohio.gov/EMSpractice\t10\nhttps://www.gradyhealth.org/wp-content/uploads/2019/06/PARAMEDIC-Clinical-Education-Manual.pdf\t10\n",
+  "stderr": "",
+  "execution_time_ms": 281
+}

@@ -1,0 +1,106 @@
+# Netlify Configuration for Protocol Guide
+# PWA deployment with Express API server
+
+[build]
+  # Install dependencies and build both web app and server
+  # Copy public folder (PWA assets) to dist after Expo export
+  # Note: pnpm check removed - RN Web has known type mismatches with accessibility props
+  command = "pnpm install && pnpm build && npx expo export --platform web && cp -r public/* dist/"
+  # Expo web export outputs to dist/ by default
+  publish = "dist"
+
+[build.environment]
+  # Node version for build
+  NODE_VERSION = "20"
+  # Ensure production mode
+  NODE_ENV = "production"
+  # Suppress Expo CLI interactive prompts
+  CI = "true"
+
+# SPA routing - all paths serve index.html for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  # Only redirect if no file exists at path
+  force = false
+
+# API routes proxy to Netlify Functions (if using serverless)
+# For full Express server, deploy separately or use Netlify Functions adapter
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/api/:splat"
+#   status = 200
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking
+    X-Frame-Options = "DENY"
+    # Prevent MIME type sniffing
+    X-Content-Type-Options = "nosniff"
+    # XSS protection
+    X-XSS-Protection = "1; mode=block"
+    # Referrer policy
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Content Security Policy
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https:;
+      font-src 'self' data:;
+      connect-src 'self' https://*.supabase.co https://api.anthropic.com wss://*.supabase.co;
+      frame-ancestors 'none';
+    """
+
+# Cache static assets aggressively
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Service worker should not be cached long
+[[headers]]
+  for = "/service-worker.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# HTML pages should revalidate
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Development settings
+[dev]
+  command = "pnpm dev:metro"
+  port = 8081
+  targetPort = 8081
+  autoLaunch = false
+
+# Context-specific settings
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.deploy-preview]
+  environment = { NODE_ENV = "preview" }
+
+[context.branch-deploy]
+  environment = { NODE_ENV = "development" }

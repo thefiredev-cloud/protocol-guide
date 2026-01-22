@@ -1,0 +1,150 @@
+4101
+
+Introduction to
+Treatment Protocols
+
+Treatment Protocol
+Last Reviewed: November 30, 2022
+
+Last Revised: December 2, 2022
+
+PURPOSE
+To introduce the County of Riverside Emergency Medical Services (EMS) Agency (REMSA) treatment protocols, and the
+REMSA Approved Policies and Procedures Manual. These policies must be observed within the full context of the REMSA
+Policy Manual, which establishes the REMSA approved Public Safety Personnel, Emergency Medical Technician,
+Advanced Emergency Medical Technician, and paramedic scope of practice as specified in Title 22 of the California Code
+of Regulations.
+AUTHORITY
+California Health and Safety Code - Division 2.5: Emergency Medical Services [1797. - 1799.207.]
+California Code of Regulations, Title 22. Social Security, Division 9. Prehospital Emergency Medical Services
+APPLICATION
+The REMSA treatment protocols must be adhered to by each part of the EMS System including the following personnel:
+• Public Safety Personnel (PSP)
+• Emergency Medical Technician (EMT)
+• Advanced Emergency Medical Technician (AEMT)
+• Paramedic (EMT-P)
+• Mobile Intensive Care Nurse (MICN)
+• Base Hospital Physician (BHP)
+PSPs are non-EMT firefighters, peace officers and/or lifeguards functioning in the Riverside County EMS System. PSPs
+who have completed either Cal Fire’s PSP First Aid and CPR Training Course, or a REMSA Approved PSP First Aid and CPR
+course, must follow the REMSA treatment protocols as they were trained at the PSP level and may not operate beyond
+the REMSA approved PSP scope of practice.
+All REMSA treatment protocols were developed to be consistent with pre-hospital provider primary impressions, as
+approved by the California EMS Authority. The foundations for these treatment protocols are the EMT and EMT-P scope
+of practice, medical research, and community standards in medical practice.
+Patients with the same disease may have differing symptoms and presentations, and conversely, patients with similar
+signs and symptoms may have very different diagnoses. As such, the treatment protocols contained in this series of the
+REMSA policy manual were created to provide treatment guidance of “classic” presentations based on the most
+common patient complaints, based on evidence-based practice.
+These protocols were not developed with the intent that all therapies will be performed on scene, or that at any therapy
+contained in a specific treatment protocol will be performed simply because of a provided complaint. EMTs, EMT-Ps,
+MICNs and BHPs must utilize their medical knowledge, expertise, and critical thinking to determine appropriate
+treatment(s), if any, for each patient. Additionally, transport of patients with treatment(s) en route is left to the
+discretion of the provider and the base hospital.
+REMSA treatment protocols, as approved, allow EMTs and EMT-Ps the latitude to provide treatments and perform
+procedures based on a thorough assessment of the patient’s complaint as well as their clinical presentation.
+It is incumbent upon the individual provider to know and understand their scope of practice based on their level of
+certification.
+4101 — Introduction to Treatment Protocols
+
+1 of 3
+
+PRINTING, RETENTION AND DISPLAY
+All REMSA Treatment protocols are intended for color printing and hard copy retention in a binder using top loading
+sheet protectors. These protocols are also intended for electronic display in Adobe Portable Document Format (PDF) or
+through the REMSA authorized web application (found here: https://remsaapp.rivcoready.org/). Distribution is provided
+by means of the EMS Agency’s official website(s).
+
+Introduction to the Treatment Protocols
+
+Each REMSA treatment protocol included in this series constitutes medical control by the REMSA Medical Director, as
+specified in Section 1798 of the California Health and Safety Code, so long as it bears the following:
+• A “Last Reviewed” date, indicating the most recent date that the protocol was reviewed in its entirety AND
+• A “Last Revised” date, indicating the most recent date that a change was made to the protocol. These changes may
+include but not be limited to grammar, syntax, spelling formatting and/or content.
+These protocols must be observed within the full context of the REMSA Policy Manual, which establishes the REMSA
+approved PSP, EMT, AEMT, or EMT-P scope of practice as specified in Title 22 of the California Code of Regulations.
+
+Format of the Treatment Protocols
+
+All REMSA treatment protocols follow a consistent format, where BLS patient management medications and procedures
+are contained in the first column (left) and ALS patient management medications and procedures are contained in the
+second column (right).
+In general, most patients will be transported to the closest, most appropriate receiving center without issue. For all
+other patients, and if the section is present at the end of the individual treatment protocol, refer to “Patient Disposition”
+for specific instructions or suggestions regarding treatment and transport considerations.
+
+Understanding the Treatment Protocols
+
+• Medical Direction
+Medical direction is provided through standing orders written into the REMSA treatment protocols, and through base
+hospital orders given during online / verbal base hospital contact. At no time may any REMSA authorized personnel
+operate beyond, or direct another to operate beyond, their REMSA approved scope of practice as established by the
+REMSA Policy Manual.
+• Standing orders
+REMSA treatment protocols include standing orders for medications, procedures, and dosages and/or dosing formulas,
+which apply to both adult and pediatric patients. Medications, concentrations, dosages, volumes, energy settings and
+advanced airway sizes for pediatric patients can be found in the REMSA Pediatric Medication Dosing Resource, located
+here: http://remsa.us/policy/PMDRCOMPLETE.pdf. Adult medication dosing and energy settings are embedded in each
+associated treatment protocol.
+Standing orders are to be utilized as clinically indicated. Not every standing order in a treatment protocol must be
+carried out on every patient treated under that treatment protocol. A thorough assessment of the patient’s complaint,
+their clinical presentation, and sound judgment are required.
+• Base hospital orders and contact
+Base hospital contact is required when any clinically indicated medication or procedure is not included in the applicable
+standing orders, when directed by protocol, or when the EMT, AEMT, or EMT-P encounters any atypical presentation,
+circumstance, or is uncertain of any of the following:
+1. The differential diagnosis and field impression
+2. What therapeutic interventions are indicated
+3. What patient disposition is indicated
+4101 — Introduction to Treatment Protocols
+
+2 of 3
+
+Base hospital contact will be performed by the highest level of REMSA authorized provider at scene: EMT, AEMT, or
+paramedic. Orders issued by the base hospital may not exceed the scope of practice of the person making contact. BHOs
+are not provided to PSPs.
+BHOs are given during base hospital contact: radio or phone voice communications with the MICN or BHP of a REMSA
+authorized base hospital. The MICN or BHP may also assume the base hospital role at any time while receiving
+notification.
+
+Using the Treatment protocols
+
+Pre-hospital Providers: After completing a thorough assessment of the patient’s complaint, condition and clinical
+presentation, the primary care provider at the scene will determine his / her primary impression. REMSA treatment
+protocols are categorized according to body systems, mechanisms of injury and natures of illness, with each impression
+corresponding to a specific treatment protocol in that category:
+4100 – Key Policies
+4200 – General Medical
+4300 – Trauma
+4400 – Cardiovascular / Pulmonary
+4500 – Neurological
+4600 – Toxicological
+4700 – Environmental
+4800 – Pregnancy and Childbirth
+The primary care provider will determine the treatment protocol that most closely aligns with the patient’s complaint,
+condition and clinical presentation and begin providing care as outlined in the BLS Patient Management column. After all
+BLS treatments have been rendered, and if the patient’s condition warrants, continuation of treatment(s) as outlined in
+the ALS Patient Management column should be rendered. If a patient presents with multiple complaints and appropriate
+medications and/or procedures are contained in multiple treatment protocols, treatment of the most life-threatening
+conditions must occur first, before providing any other treatments.
+EX:
+A patient complains of chest discomfort with associated nausea and vomiting. This patient should be treated utilizing BLS
+and ALS Patient Management strategies as outlined in REMSA Policy #4401 (Suspected Acute Coronary Syndrome) before
+administering Ondansetron / Zofran, as outlined in Policy #4203 (Nausea and/or Vomiting).
+Not all treatments, as outlined in each column, need to be provided to each patient. Additionally, treatments, as
+outlined in each column, do not need to be provided or performed in the order in which they are presented. A thorough
+assessment of the patient’s complaint, their clinical presentation, and the providers sound judgment are required to
+determine clinical necessity and appropriateness as well as the order in which they are rendered.
+Should the patient require immediate intervention(s) due to life threatening conditions, ALS Patient Management
+should be provided before BLS Patient Management is provided.
+MICNs / BHPs: The MICN or BHP may provide orders for further assessment, clarification, monitoring, procedures,
+medications, patient disposition and destination. MICNs and/or BHPs may not order medications, routes or procedures
+that are outside the EMT, AEMT, or EMT-P scope of practice. FURTHERMORE, PREHOSPITAL PERSONNEL ARE NOT
+PERMITTED TO FOLLOW ORDERS THAT ARE GIVEN OUTSIDE OF THEIR SCOPE OF PRACTICE.
+
+4101 — Introduction to Treatment Protocols
+
+3 of 3
+
+

@@ -1,0 +1,208 @@
+{
+  "lemsas": [
+    {
+      "name": "Alameda County EMS Agency",
+      "counties": ["Alameda"],
+      "website": "https://ems.acgov.org/",
+      "protocolUrl": "https://ems.acgov.org/ClinicalProcedures/FieldTreatmtProtocols.page"
+    },
+    {
+      "name": "Central California EMS Agency",
+      "counties": ["Fresno", "Kings", "Madera", "Tulare"],
+      "website": "https://www.ccemsa.org/",
+      "protocolUrl": "https://www.ccemsa.org/protocols/"
+    },
+    {
+      "name": "Coastal Valleys EMS Agency",
+      "counties": ["Mendocino", "Sonoma"],
+      "website": "https://www.coastalvalleysems.org/",
+      "protocolUrl": "https://www.coastalvalleysems.org/protocols"
+    },
+    {
+      "name": "Contra Costa County EMS Agency",
+      "counties": ["Contra Costa"],
+      "website": "https://cchealth.org/ems/",
+      "protocolUrl": "https://cchealth.org/ems/protocols.php"
+    },
+    {
+      "name": "El Dorado County EMS Agency",
+      "counties": ["El Dorado"],
+      "website": "https://www.edcgov.us/Government/EMS",
+      "protocolUrl": "https://www.edcgov.us/Government/EMS/Pages/Protocols.aspx"
+    },
+    {
+      "name": "Imperial County EMS Agency",
+      "counties": ["Imperial"],
+      "website": "https://www.icphd.org/environmental-health/emergency-medical-services/",
+      "protocolUrl": "https://www.icphd.org/environmental-health/emergency-medical-services/"
+    },
+    {
+      "name": "Inland Counties Emergency Medical Agency (ICEMA)",
+      "counties": ["Inyo", "Mono", "San Bernardino"],
+      "website": "https://www.sbcounty.gov/icema/",
+      "protocolUrl": "https://www.sbcounty.gov/icema/content/protocols.html"
+    },
+    {
+      "name": "Kern County EMS Agency",
+      "counties": ["Kern"],
+      "website": "https://www.kernpublichealth.com/emergency-medical-services",
+      "protocolUrl": "https://www.kernpublichealth.com/emergency-medical-services"
+    },
+    {
+      "name": "Los Angeles County EMS Agency",
+      "counties": ["Los Angeles"],
+      "website": "https://dhs.lacounty.gov/emergency-medical-services-agency/",
+      "protocolUrl": "https://dhs.lacounty.gov/emergency-medical-services-agency/home/resources-ems/prehospital-care-manual/"
+    },
+    {
+      "name": "Marin County EMS Agency",
+      "counties": ["Marin"],
+      "website": "https://www.marinhhs.org/ems",
+      "protocolUrl": "https://www.marinhhs.org/ems-policies-and-procedures"
+    },
+    {
+      "name": "Merced County EMS Agency",
+      "counties": ["Merced"],
+      "website": "https://www.co.merced.ca.us/2267/Emergency-Medical-Services",
+      "protocolUrl": "https://www.co.merced.ca.us/2267/Emergency-Medical-Services"
+    },
+    {
+      "name": "Monterey County EMS Agency",
+      "counties": ["Monterey"],
+      "website": "https://www.co.monterey.ca.us/government/departments-a-h/health/emergency-medical-services",
+      "protocolUrl": "https://www.co.monterey.ca.us/government/departments-a-h/health/emergency-medical-services/ems-policies-and-procedures"
+    },
+    {
+      "name": "Mountain Counties EMS Agency",
+      "counties": ["Alpine", "Amador", "Calaveras", "Mariposa", "Tuolumne"],
+      "website": "https://www.mtcounties-ems.org/",
+      "protocolUrl": "https://www.mtcounties-ems.org/protocols"
+    },
+    {
+      "name": "Napa County EMS Agency",
+      "counties": ["Napa"],
+      "website": "https://www.countyofnapa.org/1426/Emergency-Medical-Services",
+      "protocolUrl": "https://www.countyofnapa.org/1426/Emergency-Medical-Services"
+    },
+    {
+      "name": "North Coast EMS Agency",
+      "counties": ["Del Norte", "Humboldt"],
+      "website": "https://humboldtgov.org/1697/Emergency-Medical-Services",
+      "protocolUrl": "https://humboldtgov.org/1697/Emergency-Medical-Services"
+    },
+    {
+      "name": "Northern California EMS Agency (Nor-Cal EMS)",
+      "counties": ["Butte", "Colusa", "Glenn", "Lassen", "Modoc", "Plumas", "Shasta", "Siskiyou", "Tehama", "Trinity"],
+      "website": "https://www.norcalems.org/",
+      "protocolUrl": "https://www.norcalems.org/protocols/"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "counties": ["Orange"],
+      "website": "https://www.ochealthinfo.com/about-hca/public-health-services/emergency-medical-services-ems",
+      "protocolUrl": "https://www.ochealthinfo.com/about-hca/public-health-services/emergency-medical-services-ems/ems-policies-and-procedures"
+    },
+    {
+      "name": "Riverside County EMS Agency",
+      "counties": ["Riverside"],
+      "website": "https://www.rivcoems.org/",
+      "protocolUrl": "https://www.rivcoems.org/Portals/0/Documents/Policies/Policy%20Manual%202024.pdf"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "counties": ["Sacramento"],
+      "website": "https://dhs.saccounty.gov/PRI/EMS/Pages/EMS-Home.aspx",
+      "protocolUrl": "https://dhs.saccounty.gov/PRI/EMS/Pages/EMS-Protocols.aspx"
+    },
+    {
+      "name": "San Benito County EMS Agency",
+      "counties": ["San Benito"],
+      "website": "https://hhsa.cosb.us/emergency-medical-services/",
+      "protocolUrl": "https://hhsa.cosb.us/emergency-medical-services/"
+    },
+    {
+      "name": "San Diego County EMS Agency",
+      "counties": ["San Diego"],
+      "website": "https://www.sandiegocounty.gov/ems/",
+      "protocolUrl": "https://www.sandiegocounty.gov/content/sdc/ems/Policies_Protocols.html"
+    },
+    {
+      "name": "San Francisco County EMS Agency",
+      "counties": ["San Francisco"],
+      "website": "https://sf.gov/departments/department-public-health/emergency-medical-services-agency",
+      "protocolUrl": "https://sf.gov/departments/department-public-health/emergency-medical-services-agency"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "counties": ["San Joaquin"],
+      "website": "https://www.sjgov.org/ems/",
+      "protocolUrl": "https://www.sjgov.org/ems/protocols"
+    },
+    {
+      "name": "San Luis Obispo County EMS Agency",
+      "counties": ["San Luis Obispo"],
+      "website": "https://www.slocounty.ca.gov/Departments/Health-Agency/Public-Health/All-Public-Health-Services/Emergency-Medical-Services.aspx",
+      "protocolUrl": "https://www.slocounty.ca.gov/Departments/Health-Agency/Public-Health/All-Public-Health-Services/Emergency-Medical-Services.aspx"
+    },
+    {
+      "name": "San Mateo County EMS Agency",
+      "counties": ["San Mateo"],
+      "website": "https://www.smchealth.org/ems",
+      "protocolUrl": "https://www.smchealth.org/ems/policies-and-procedures"
+    },
+    {
+      "name": "Santa Barbara County EMS Agency",
+      "counties": ["Santa Barbara"],
+      "website": "https://www.sbcphd.org/ems",
+      "protocolUrl": "https://www.sbcphd.org/ems/policies-procedures"
+    },
+    {
+      "name": "Santa Clara County EMS Agency",
+      "counties": ["Santa Clara"],
+      "website": "https://emsagency.sccgov.org/",
+      "protocolUrl": "https://emsagency.sccgov.org/ems-system-resources/ems-policies-and-procedures"
+    },
+    {
+      "name": "Santa Cruz County EMS Agency",
+      "counties": ["Santa Cruz"],
+      "website": "https://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/EmergencyMedicalServices.aspx",
+      "protocolUrl": "https://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/EmergencyMedicalServices.aspx"
+    },
+    {
+      "name": "Sierra-Sacramento Valley EMS Agency",
+      "counties": ["Nevada", "Placer", "Sierra", "Sutter", "Yuba"],
+      "website": "https://www.ssvems.com/",
+      "protocolUrl": "https://www.ssvems.com/policies-and-procedures/"
+    },
+    {
+      "name": "Solano County EMS Agency",
+      "counties": ["Solano"],
+      "website": "https://www.solanocounty.com/depts/ph/ems/",
+      "protocolUrl": "https://www.solanocounty.com/depts/ph/ems/protocols.asp"
+    },
+    {
+      "name": "Stanislaus County EMS Agency",
+      "counties": ["Stanislaus"],
+      "website": "https://www.schsa.org/PublicHealth/ems/",
+      "protocolUrl": "https://www.schsa.org/PublicHealth/ems/protocols/"
+    },
+    {
+      "name": "Tuolumne County EMS Agency",
+      "counties": ["Tuolumne"],
+      "website": "https://www.tuolumnecounty.ca.gov/1013/Emergency-Medical-Services",
+      "protocolUrl": "https://www.tuolumnecounty.ca.gov/1013/Emergency-Medical-Services"
+    },
+    {
+      "name": "Ventura County EMS Agency",
+      "counties": ["Ventura"],
+      "website": "https://vcemsa.org/",
+      "protocolUrl": "https://vcemsa.org/policies-procedures/"
+    },
+    {
+      "name": "Yolo County EMS Agency",
+      "counties": ["Yolo"],
+      "website": "https://www.yolocounty.org/health-human-services/adults/emergency-medical-services",
+      "protocolUrl": "https://www.yolocounty.org/health-human-services/adults/emergency-medical-services"
+    }
+  ]
+}

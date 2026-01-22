@@ -1,0 +1,18 @@
+{
+  "query": "\n-- Add indexes for better query performance on large dataset\n-- Check if indexes exist first, then create if not\nCREATE INDEX IF NOT EXISTS idx_protocols_county ON protocolChunks(countyId);\nCREATE INDEX IF NOT EXISTS idx_protocols_section ON protocolChunks(section);\nCREATE INDEX IF NOT EXISTS idx_protocols_number ON protocolChunks(protocolNumber);\nCREATE INDEX IF NOT EXISTS idx_protocols_year ON protocolChunks(protocolYear);\nCREATE INDEX IF NOT EXISTS idx_counties_state ON counties(state);\n\n-- Show current table sizes\nSELECT \n    'protocolChunks' as table_name,\n    COUNT(*) as row_count\nFROM protocolChunks\nUNION ALL\nSELECT \n    'counties' as table_name,\n    COUNT(*) as row_count\nFROM counties;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \n-- Add indexes for better query performance on large dataset\n-- Check if indexes exist first, then create if not\nCREATE INDEX IF NOT EXISTS idx_protocols_county ON protocolChunks(countyId);\nCREATE INDEX IF NOT EXISTS idx_protocols_section ON protocolChunks(section);\nCREATE INDEX IF NOT EXISTS idx_protocols_number ON protocolChunks(protocolNumber);\nCREATE INDEX IF NOT EXISTS idx_protocols_year ON protocolChunks(protocolYear);\nCREATE INDEX IF NOT EXISTS idx_counties_state ON counties(state);\n\n-- Show current table sizes\nSELECT \n    'protocolChunks' as table_name,\n    COUNT(*) as row_count\nFROM protocolChunks\nUNION ALL\nSELECT \n    'counties' as table_name,\n    COUNT(*) as row_count\nFROM counties;\n",
+  "rows": [
+    {
+      "table_name": "counties",
+      "row_count": "2647"
+    },
+    {
+      "table_name": "protocolChunks",
+      "row_count": "54934"
+    }
+  ],
+  "messages": [],
+  "stdout": "table_name\trow_count\ncounties\t2647\nprotocolChunks\t54934\n",
+  "stderr": "",
+  "execution_time_ms": 101871
+}

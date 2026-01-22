@@ -1,0 +1,14 @@
+{
+  "query": "\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Vermont - Burlington Chittenden', 'Vermont', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Virginia - Northern Virginia Fairfax Arlington Alexandria', 'Virginia', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Washington - Seattle King Pierce Snohomish', 'Washington', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Washington - Spokane', 'Washington', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('West Virginia - Charleston Kanawha', 'West Virginia', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Wisconsin - Madison Dane', 'Wisconsin', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Wyoming - Cheyenne Laramie', 'Wyoming', '2025', NOW());\n\n-- Check total agencies and states now\nSELECT \n  (SELECT COUNT(*) FROM counties) as total_agencies,\n  (SELECT COUNT(DISTINCT state) FROM counties) as total_states;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Vermont - Burlington Chittenden', 'Vermont', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Virginia - Northern Virginia Fairfax Arlington Alexandria', 'Virginia', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Washington - Seattle King Pierce Snohomish', 'Washington', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Washington - Spokane', 'Washington', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('West Virginia - Charleston Kanawha', 'West Virginia', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Wisconsin - Madison Dane', 'Wisconsin', '2025', NOW());\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) VALUES ('Wyoming - Cheyenne Laramie', 'Wyoming', '2025', NOW());\n\n-- Check total agencies and states now\nSELECT \n  (SELECT COUNT(*) FROM counties) as total_agencies,\n  (SELECT COUNT(DISTINCT state) FROM counties) as total_states;\n",
+  "rows": [
+    {
+      "total_agencies": "2735",
+      "total_states": "53"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_agencies\ttotal_states\n2735\t53\n",
+  "stderr": "",
+  "execution_time_ms": 136
+}

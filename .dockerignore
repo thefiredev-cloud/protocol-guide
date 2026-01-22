@@ -1,0 +1,55 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+.expo
+.next
+.turbo
+
+# Environment files (loaded separately)
+.env
+.env.local
+.env.*.local
+
+# Development files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+coverage
+.nyc_output
+
+# Git
+.git
+.gitignore
+
+# Docker files (don't copy into image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+README.md
+docs
+*.md
+
+# Rust server (separate build)
+rust-server
+
+# iOS/Android (not needed for web)
+ios
+android
+*.ipa
+*.apk

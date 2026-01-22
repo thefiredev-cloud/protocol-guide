@@ -1,0 +1,26 @@
+{
+  "query": "\n-- Get total California protocol count\nSELECT \n    c.state,\n    COUNT(DISTINCT c.id) as agency_count,\n    COUNT(p.id) as protocol_count\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nGROUP BY c.state;\n\n-- Get counts for the three newly added counties\nSELECT \n    c.name,\n    COUNT(p.id) as protocol_count\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.name LIKE '%San Joaquin%' \n   OR c.name LIKE '%Riverside%'\n   OR c.name LIKE '%Contra Costa%'\nGROUP BY c.name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \n-- Get total California protocol count\nSELECT \n    c.state,\n    COUNT(DISTINCT c.id) as agency_count,\n    COUNT(p.id) as protocol_count\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nGROUP BY c.state;\n\n-- Get counts for the three newly added counties\nSELECT \n    c.name,\n    COUNT(p.id) as protocol_count\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.name LIKE '%San Joaquin%' \n   OR c.name LIKE '%Riverside%'\n   OR c.name LIKE '%Contra Costa%'\nGROUP BY c.name;\n",
+  "rows": [
+    {
+      "state": "California",
+      "agency_count": "128",
+      "protocol_count": "7389"
+    }
+  ],
+  "messages": [
+    "name\tprotocol_count",
+    "San Joaquin\t68",
+    "Contra Costa County\t0",
+    "Riverside\t58",
+    "San Joaquin County EMS Agency\t0",
+    "Riverside County EMS Agency (REMSA)\t0",
+    "Contra Costa\t52",
+    "San Joaquin County\t211",
+    "Contra Costa County EMS\t0",
+    "Riverside County\t406"
+  ],
+  "stdout": "state\tagency_count\tprotocol_count\nCalifornia\t128\t7389\nname\tprotocol_count\nSan Joaquin\t68\nContra Costa County\t0\nRiverside\t58\nSan Joaquin County EMS Agency\t0\nRiverside County EMS Agency (REMSA)\t0\nContra Costa\t52\nSan Joaquin County\t211\nContra Costa County EMS\t0\nRiverside County\t406\n",
+  "stderr": "",
+  "execution_time_ms": 1288
+}

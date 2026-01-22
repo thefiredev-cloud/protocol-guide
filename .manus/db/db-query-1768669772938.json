@@ -1,0 +1,238 @@
+{
+  "query": "\nSELECT c.name, COUNT(p.id) as protocols\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nAND c.name IN (\n  'Alameda County EMS Agency',\n  'Central California EMS Agency',\n  'Coastal Valleys EMS Agency',\n  'Contra Costa County EMS',\n  'El Dorado County EMS Agency',\n  'Imperial County EMS Agency',\n  'Inland Counties EMS Agency',\n  'Kern County EMS',\n  'Los Angeles County EMS Agency',\n  'Marin County EMS',\n  'Merced County EMS Agency',\n  'Monterey County EMS Agency',\n  'Mountain-Valley EMS Agency',\n  'Napa County EMS',\n  'North Coast EMS',\n  'Northern California EMS Inc',\n  'Orange County EMS Agency',\n  'Riverside County EMS Agency',\n  'Sacramento County EMS Agency',\n  'San Benito County EMS',\n  'San Diego County EMS',\n  'San Francisco EMS Agency',\n  'San Joaquin County EMS Agency',\n  'San Luis Obispo County EMS Agency',\n  'San Mateo County EMS Agency',\n  'Santa Barbara County EMS Agency',\n  'Santa Clara County EMS Agency',\n  'Santa Cruz County EMS',\n  'Sierra-Sacramento Valley EMS Agency',\n  'Solano County EMS',\n  'Stanislaus County EMS Agency',\n  'Ventura County EMS Agency',\n  'Yolo County EMS Agency'\n)\nGROUP BY c.id, c.name\nORDER BY protocols ASC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \nSELECT c.name, COUNT(p.id) as protocols\nFROM counties c\nLEFT JOIN protocolChunks p ON c.id = p.countyId\nWHERE c.state = 'California'\nAND c.name IN (\n  'Alameda County EMS Agency',\n  'Central California EMS Agency',\n  'Coastal Valleys EMS Agency',\n  'Contra Costa County EMS',\n  'El Dorado County EMS Agency',\n  'Imperial County EMS Agency',\n  'Inland Counties EMS Agency',\n  'Kern County EMS',\n  'Los Angeles County EMS Agency',\n  'Marin County EMS',\n  'Merced County EMS Agency',\n  'Monterey County EMS Agency',\n  'Mountain-Valley EMS Agency',\n  'Napa County EMS',\n  'North Coast EMS',\n  'Northern California EMS Inc',\n  'Orange County EMS Agency',\n  'Riverside County EMS Agency',\n  'Sacramento County EMS Agency',\n  'San Benito County EMS',\n  'San Diego County EMS',\n  'San Francisco EMS Agency',\n  'San Joaquin County EMS Agency',\n  'San Luis Obispo County EMS Agency',\n  'San Mateo County EMS Agency',\n  'Santa Barbara County EMS Agency',\n  'Santa Clara County EMS Agency',\n  'Santa Cruz County EMS',\n  'Sierra-Sacramento Valley EMS Agency',\n  'Solano County EMS',\n  'Stanislaus County EMS Agency',\n  'Ventura County EMS Agency',\n  'Yolo County EMS Agency'\n)\nGROUP BY c.id, c.name\nORDER BY protocols ASC;\n",
+  "rows": [
+    {
+      "name": "Santa Cruz County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "El Dorado County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Kern County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Francisco EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Sierra-Sacramento Valley EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Merced County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Alameda County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Inland Counties EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Mateo County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Coastal Valleys EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Northern California EMS Inc",
+      "protocols": "0"
+    },
+    {
+      "name": "Alameda County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Central California EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Diego County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "San Diego County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Ventura County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Mountain-Valley EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "Contra Costa County EMS",
+      "protocols": "0"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "protocols": "0"
+    },
+    {
+      "name": "San Luis Obispo County EMS Agency",
+      "protocols": "16"
+    },
+    {
+      "name": "Merced County EMS Agency",
+      "protocols": "16"
+    },
+    {
+      "name": "Yolo County EMS Agency",
+      "protocols": "16"
+    },
+    {
+      "name": "Solano County EMS",
+      "protocols": "16"
+    },
+    {
+      "name": "San Benito County EMS",
+      "protocols": "16"
+    },
+    {
+      "name": "Santa Barbara County EMS Agency",
+      "protocols": "17"
+    },
+    {
+      "name": "Stanislaus County EMS Agency",
+      "protocols": "17"
+    },
+    {
+      "name": "San Mateo County EMS Agency",
+      "protocols": "20"
+    },
+    {
+      "name": "Santa Clara County EMS Agency",
+      "protocols": "22"
+    },
+    {
+      "name": "Monterey County EMS Agency",
+      "protocols": "23"
+    },
+    {
+      "name": "Marin County EMS",
+      "protocols": "25"
+    },
+    {
+      "name": "Napa County EMS",
+      "protocols": "28"
+    },
+    {
+      "name": "Ventura County EMS Agency",
+      "protocols": "37"
+    },
+    {
+      "name": "El Dorado County EMS Agency",
+      "protocols": "46"
+    },
+    {
+      "name": "North Coast EMS",
+      "protocols": "50"
+    },
+    {
+      "name": "Contra Costa County EMS",
+      "protocols": "52"
+    },
+    {
+      "name": "Kern County EMS",
+      "protocols": "65"
+    },
+    {
+      "name": "Santa Cruz County EMS",
+      "protocols": "69"
+    },
+    {
+      "name": "San Francisco EMS Agency",
+      "protocols": "69"
+    },
+    {
+      "name": "Mountain-Valley EMS Agency",
+      "protocols": "80"
+    },
+    {
+      "name": "Imperial County EMS Agency",
+      "protocols": "91"
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "protocols": "94"
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "protocols": "112"
+    },
+    {
+      "name": "Coastal Valleys EMS Agency",
+      "protocols": "122"
+    },
+    {
+      "name": "San Diego County EMS",
+      "protocols": "179"
+    },
+    {
+      "name": "Alameda County EMS Agency",
+      "protocols": "237"
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "protocols": "279"
+    },
+    {
+      "name": "Los Angeles County EMS Agency",
+      "protocols": "441"
+    },
+    {
+      "name": "Riverside County EMS Agency",
+      "protocols": "464"
+    },
+    {
+      "name": "Sierra-Sacramento Valley EMS Agency",
+      "protocols": "690"
+    },
+    {
+      "name": "Central California EMS Agency",
+      "protocols": "1048"
+    },
+    {
+      "name": "Inland Counties EMS Agency",
+      "protocols": "1132"
+    },
+    {
+      "name": "Northern California EMS Inc",
+      "protocols": "1910"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tprotocols\nSanta Cruz County EMS\t0\nEl Dorado County EMS Agency\t0\nKern County EMS\t0\nSan Joaquin County EMS Agency\t0\nSacramento County EMS Agency\t0\nSan Francisco EMS Agency\t0\nSierra-Sacramento Valley EMS Agency\t0\nOrange County EMS Agency\t0\nSan Joaquin County EMS Agency\t0\nMerced County EMS Agency\t0\nAlameda County EMS Agency\t0\nInland Counties EMS Agency\t0\nSan Mateo County EMS Agency\t0\nCoastal Valleys EMS Agency\t0\nNorthern California EMS Inc\t0\nAlameda County EMS Agency\t0\nCentral California EMS Agency\t0\nSan Diego County EMS\t0\nSan Diego County EMS\t0\nVentura County EMS Agency\t0\nSacramento County EMS Agency\t0\nMountain-Valley EMS Agency\t0\nContra Costa County EMS\t0\nOrange County EMS Agency\t0\nSan Luis Obispo County EMS Agency\t16\nMerced County EMS Agency\t16\nYolo County EMS Agency\t16\nSolano County EMS\t16\nSan Benito County EMS\t16\nSanta Barbara County EMS Agency\t17\nStanislaus County EMS Agency\t17\nSan Mateo County EMS Agency\t20\nSanta Clara County EMS Agency\t22\nMonterey County EMS Agency\t23\nMarin County EMS\t25\nNapa County EMS\t28\nVentura County EMS Agency\t37\nEl Dorado County EMS Agency\t46\nNorth Coast EMS\t50\nContra Costa County EMS\t52\nKern County EMS\t65\nSanta Cruz County EMS\t69\nSan Francisco EMS Agency\t69\nMountain-Valley EMS Agency\t80\nImperial County EMS Agency\t91\nSacramento County EMS Agency\t94\nOrange County EMS Agency\t112\nCoastal Valleys EMS Agency\t122\nSan Diego County EMS\t179\nAlameda County EMS Agency\t237\nSan Joaquin County EMS Agency\t279\nLos Angeles County EMS Agency\t441\nRiverside County EMS Agency\t464\nSierra-Sacramento Valley EMS Agency\t690\nCentral California EMS Agency\t1048\nInland Counties EMS Agency\t1132\nNorthern California EMS Inc\t1910\n",
+  "stderr": "",
+  "execution_time_ms": 70
+}

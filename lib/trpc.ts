@@ -1,0 +1,59 @@
+import { createTRPCReact } from "@trpc/react-query";
+import { httpBatchLink } from "@trpc/client";
+import superjson from "superjson";
+import type { AppRouter } from "@/server/routers";
+import { getApiBaseUrl } from "@/constants/oauth";
+import { supabase } from "@/lib/supabase";
+
+/**
+ * tRPC React client for type-safe API calls.
+ *
+ * IMPORTANT (tRPC v11): The `transformer` must be inside `httpBatchLink`,
+ * NOT at the root createClient level. This ensures client and server
+ * use the same serialization format (superjson).
+ */
+export const trpc = createTRPCReact<AppRouter>();
+
+/**
+ * Creates the tRPC client with proper configuration.
+ * Call this once in your app's root layout.
+ */
+export function createTRPCClient() {
+  const apiBaseUrl = getApiBaseUrl();
+  const trpcUrl = `${apiBaseUrl}/api/trpc`;
+
+  console.log("[tRPC] Creating client with URL:", trpcUrl);
+
+  return trpc.createClient({
+    links: [
+      httpBatchLink({
+        url: trpcUrl,
+        // tRPC v11: transformer MUST be inside httpBatchLink, not at root
+        transformer: superjson,
+        async headers() {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.access_token) {
+            return { Authorization: `Bearer ${session.access_token}` };
+          }
+          return {};
+        },
+        // Custom fetch to include credentials for cookie-based auth
+        fetch(url, options) {
+          console.log("[tRPC] Fetching:", url);
+          return fetch(url, {
+            ...options,
+            credentials: "include",
+          }).then(response => {
+            if (!response.ok) {
+              console.error("[tRPC] Request failed:", response.status, response.statusText);
+            }
+            return response;
+          }).catch(error => {
+            console.error("[tRPC] Network error:", error);
+            throw error;
+          });
+        },
+      }),
+    ],
+  });
+}

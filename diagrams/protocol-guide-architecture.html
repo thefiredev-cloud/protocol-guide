@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protocol Guide - System Architecture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f5f0e8;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .whiteboard {
+      background: #fffef9;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      border: 3px solid #ddd;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+      font-family: 'Arial Black', sans-serif;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .section {
+      background: white;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .frontend .section-title { background: #4361ee; }
+    .backend .section-title { background: #7209b7; }
+    .database .section-title { background: #f72585; }
+    .ai .section-title { background: #4cc9f0; color: #1a1a2e; }
+    .external .section-title { background: #06d6a0; color: #1a1a2e; }
+
+    .box {
+      background: #f8f9fa;
+      border: 1px dashed #aaa;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+
+    .box-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .box-content {
+      color: #555;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .highlight {
+      background: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .flow-section {
+      background: white;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .flow-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #ddd;
+    }
+
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 140px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .flow-step.query { background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); }
+    .flow-step.embed { background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%); }
+    .flow-step.search { background: linear-gradient(135deg, #f72585 0%, #7209b7 100%); }
+    .flow-step.rag { background: linear-gradient(135deg, #06d6a0 0%, #118ab2 100%); }
+    .flow-step.response { background: linear-gradient(135deg, #ffd166 0%, #ef476f 100%); }
+
+    .flow-arrow {
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+
+    .la-county-section {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      border: 3px solid #e17055;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .la-county-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #d63031;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .protocol-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .protocol-item {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 12px;
+      border-left: 4px solid #e17055;
+    }
+
+    .protocol-num {
+      font-weight: 700;
+      color: #d63031;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tech-badge {
+      background: #e9ecef;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .connection-note {
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    @media print {
+      body { background: white; padding: 20px; }
+      .whiteboard { box-shadow: none; border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="whiteboard">
+    <h1 class="title">📋 PROTOCOL GUIDE</h1>
+    <p class="subtitle">EMS Protocol Search & RAG System Architecture</p>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">49,201</div>
+        <div class="stat-label">Protocol Chunks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2,713</div>
+        <div class="stat-label">EMS Agencies</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">51</div>
+        <div class="stat-label">States Covered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1,536</div>
+        <div class="stat-label">Embedding Dims</div>
+      </div>
+    </div>
+
+    <!-- Query Flow -->
+    <div class="flow-section">
+      <div class="flow-title">🔄 QUERY FLOW</div>
+      <div class="flow-diagram">
+        <div class="flow-step query">
+          📱 User Query<br>
+          <small>"814 policy"</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step embed">
+          🧠 Voyage AI<br>
+          <small>Generate Embedding</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step search">
+          🔍 pgvector<br>
+          <small>Semantic Search</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step rag">
+          🤖 Claude<br>
+          <small>RAG Response</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step response">
+          ✅ Answer<br>
+          <small>With Protocol Refs</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Architecture -->
+    <div class="container">
+      <!-- Frontend -->
+      <div class="section frontend">
+        <span class="section-title">📱 Frontend</span>
+
+        <div class="box">
+          <div class="box-title">React Native / Expo</div>
+          <div class="box-content">
+            Cross-platform mobile app<br>
+            iOS + Android + Web
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Features</div>
+          <div class="box-content">
+            • Voice input (transcription)<br>
+            • Offline cache (50 protocols)<br>
+            • County selection<br>
+            • Query history
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Auth</div>
+          <div class="box-content">
+            Google OAuth + Apple Sign-In<br>
+            via Supabase Auth
+          </div>
+        </div>
+
+        <div class="tech-stack">
+          <span class="tech-badge">React Query</span>
+          <span class="tech-badge">AsyncStorage</span>
+          <span class="tech-badge">Expo Router</span>
+        </div>
+      </div>
+
+      <!-- Backend -->
+      <div class="section backend">
+        <span class="section-title">⚙️ Backend</span>
+
+        <div class="box">
+          <div class="box-title">Node.js + tRPC</div>
+          <div class="box-content">
+            Type-safe API layer<br>
+            <span class="highlight">server/routers.ts</span>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Endpoints</div>
+          <div class="box-content">
+            • <span class="highlight">search.semantic</span><br>
+            • <span class="highlight">query.submit</span><br>
+            • <span class="highlight">user.selectCounty</span><br>
+            • <span class="highlight">voice.transcribe</span>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Tiered LLM Routing</div>
+          <div class="box-content">
+            Free → Claude Haiku<br>
+            Pro → Claude Sonnet
+          </div>
+        </div>
+
+        <div class="tech-stack">
+          <span class="tech-badge">Express</span>
+          <span class="tech-badge">Drizzle ORM</span>
+          <span class="tech-badge">Stripe</span>
+        </div>
+      </div>
+
+      <!-- Databases -->
+      <div class="section database">
+        <span class="section-title">🗄️ Databases</span>
+
+        <div class="box">
+          <div class="box-title">TiDB Cloud (MySQL)</div>
+          <div class="box-content">
+            Primary data store<br>
+            • protocolChunks<br>
+            • counties<br>
+            • users, queries, feedback
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Supabase (PostgreSQL)</div>
+          <div class="box-content">
+            Vector search + Auth<br>
+            • manus_protocol_chunks<br>
+            • pgvector extension<br>
+            • <span class="highlight">search_manus_protocols()</span>
+          </div>
+        </div>
+
+        <div class="tech-stack">
+          <span class="tech-badge">pgvector</span>
+          <span class="tech-badge">1536-dim vectors</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Services -->
+    <div class="container" style="grid-template-columns: 1fr 1fr;">
+      <div class="section ai">
+        <span class="section-title">🧠 AI Services</span>
+
+        <div class="box">
+          <div class="box-title">Voyage AI</div>
+          <div class="box-content">
+            Medical-optimized embeddings<br>
+            Model: <span class="highlight">voyage-large-2</span><br>
+            1536 dimensions
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Claude (Anthropic)</div>
+          <div class="box-content">
+            RAG response generation<br>
+            • Haiku (fast, free tier)<br>
+            • Sonnet (quality, pro tier)<br>
+            Strict retrieval-only prompting
+          </div>
+        </div>
+      </div>
+
+      <div class="section external">
+        <span class="section-title">🌐 External</span>
+
+        <div class="box">
+          <div class="box-title">Data Sources</div>
+          <div class="box-content">
+            • LA County DHS PDFs<br>
+            • State LEMSA protocols<br>
+            • NAEMSP guidelines<br>
+            • County-specific manuals
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Payments</div>
+          <div class="box-content">
+            Stripe integration<br>
+            • Pro Monthly<br>
+            • Pro Annual<br>
+            Webhook subscription sync
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LA County Focus -->
+    <div class="la-county-section">
+      <div class="la-county-title">
+        🚒 LA COUNTY PROTOCOLS (ID: 240009)
+      </div>
+      <div class="protocol-list">
+        <div class="protocol-item">
+          <span class="protocol-num">Ref 814</span> — Determination of Death
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">Ref 817</span> — HERT Team
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">TP 1210</span> — Cardiac Arrest
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">TP 1242</span> — Crush Injury
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">TP 1335</span> — Needle Decompression
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">TP 1200.3</span> — Provider Impressions
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #4361ee;"></div>
+        <span>Frontend</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #7209b7;"></div>
+        <span>Backend</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #f72585;"></div>
+        <span>Database</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #4cc9f0;"></div>
+        <span>AI Services</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #06d6a0;"></div>
+        <span>External</span>
+      </div>
+    </div>
+
+    <p class="connection-note">
+      ⚡ Hybrid Search: Keyword matching (protocol #) + Semantic search (pgvector) → Merged results → Claude RAG
+    </p>
+  </div>
+</body>
+</html>

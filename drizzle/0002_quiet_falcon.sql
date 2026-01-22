@@ -1,0 +1,1 @@
+ALTER TABLE `counties` MODIFY COLUMN `state` varchar(64) NOT NULL;

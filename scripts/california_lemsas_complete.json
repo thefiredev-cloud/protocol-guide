@@ -1,0 +1,238 @@
+{
+  "lemsas": [
+    {
+      "name": "Alameda County EMS Agency",
+      "counties": ["Alameda"],
+      "protocol_url": "https://ems.acgov.org/providers/policies-and-procedures.page",
+      "protocol_type": "web",
+      "population": 1682353
+    },
+    {
+      "name": "Central California EMS Agency",
+      "counties": ["Fresno", "Kings", "Madera", "Tulare"],
+      "protocol_url": "https://www.centralcalems.com/protocols",
+      "protocol_type": "pdf",
+      "population": 1891000
+    },
+    {
+      "name": "Coastal Valleys EMS Agency",
+      "counties": ["Mendocino", "Sonoma"],
+      "protocol_url": "https://www.coastalvalleysems.org/protocols",
+      "protocol_type": "pdf",
+      "population": 580000
+    },
+    {
+      "name": "Contra Costa County EMS",
+      "counties": ["Contra Costa"],
+      "protocol_url": "https://portal.acidremap.com/sites/ContraCostaCountyEMS/",
+      "protocol_type": "acidremap",
+      "population": 1165927
+    },
+    {
+      "name": "El Dorado County EMS Agency",
+      "counties": ["El Dorado"],
+      "protocol_url": "https://www.edcgov.us/Government/EMS/Pages/protocols.aspx",
+      "protocol_type": "pdf",
+      "population": 193000
+    },
+    {
+      "name": "Imperial County EMS Agency",
+      "counties": ["Imperial"],
+      "protocol_url": "https://www.icphd.org/environmental-health/emergency-medical-services/",
+      "protocol_type": "pdf",
+      "population": 180000
+    },
+    {
+      "name": "Inland Counties EMS Agency",
+      "counties": ["Inyo", "Mono", "San Bernardino"],
+      "protocol_url": "https://www.icema.net/policies-procedures/treatment-protocols",
+      "protocol_type": "pdf",
+      "population": 2200000
+    },
+    {
+      "name": "Kern County EMS",
+      "counties": ["Kern"],
+      "protocol_url": "https://kernpublichealth.com/ems-protocols/",
+      "protocol_type": "pdf",
+      "population": 909235
+    },
+    {
+      "name": "Los Angeles County EMS Agency",
+      "counties": ["Los Angeles"],
+      "protocol_url": "https://dhs.lacounty.gov/emergency-medical-services/ems-protocols/",
+      "protocol_type": "pdf",
+      "population": 10014009
+    },
+    {
+      "name": "Marin County EMS",
+      "counties": ["Marin"],
+      "protocol_url": "https://www.marinems.org/protocols",
+      "protocol_type": "pdf",
+      "population": 262321
+    },
+    {
+      "name": "Merced County EMS Agency",
+      "counties": ["Merced"],
+      "protocol_url": "https://www.co.merced.ca.us/2686/EMS-Protocols",
+      "protocol_type": "pdf",
+      "population": 286461
+    },
+    {
+      "name": "Monterey County EMS Agency",
+      "counties": ["Monterey"],
+      "protocol_url": "https://www.co.monterey.ca.us/government/departments-a-h/health/emergency-medical-services/ems-policies-and-procedures",
+      "protocol_type": "pdf",
+      "population": 439035
+    },
+    {
+      "name": "Mountain-Valley EMS Agency",
+      "counties": ["Alpine", "Amador", "Calaveras", "Mariposa", "Tuolumne"],
+      "protocol_url": "https://www.mvemsa.com/protocols",
+      "protocol_type": "pdf",
+      "population": 150000
+    },
+    {
+      "name": "Napa County EMS",
+      "counties": ["Napa"],
+      "protocol_url": "https://www.countyofnapa.org/1689/EMS-Protocols",
+      "protocol_type": "pdf",
+      "population": 138019
+    },
+    {
+      "name": "North Coast EMS",
+      "counties": ["Del Norte", "Humboldt"],
+      "protocol_url": "https://www.ncems.org/protocols.html",
+      "protocol_type": "pdf",
+      "population": 165000
+    },
+    {
+      "name": "Northern California EMS Inc",
+      "counties": ["Butte", "Colusa", "Glenn", "Lassen", "Modoc", "Plumas", "Shasta", "Siskiyou", "Tehama", "Trinity"],
+      "protocol_url": "https://www.norcalems.org/protocols",
+      "protocol_type": "pdf",
+      "population": 500000
+    },
+    {
+      "name": "Orange County EMS Agency",
+      "counties": ["Orange"],
+      "protocol_url": "https://ochealthinfo.com/providers-partners/emergency-medical-services/ems-policies-procedures-standing-orders/ems-standing",
+      "protocol_type": "web",
+      "population": 3186989
+    },
+    {
+      "name": "Riverside County EMS Agency",
+      "counties": ["Riverside"],
+      "protocol_url": "https://rivcoready.org/remsa/policy-manual",
+      "protocol_type": "pdf",
+      "population": 2470546
+    },
+    {
+      "name": "Sacramento County EMS Agency",
+      "counties": ["Sacramento"],
+      "protocol_url": "https://dhs.saccounty.gov/PUB/EMS/Pages/Policy%20Pages/GI-8000-ADULT-TREATMENT-POLICIES.aspx",
+      "protocol_type": "web",
+      "population": 1585055
+    },
+    {
+      "name": "San Benito County EMS",
+      "counties": ["San Benito"],
+      "protocol_url": "https://hhsa.cosb.us/ems/",
+      "protocol_type": "pdf",
+      "population": 64209
+    },
+    {
+      "name": "San Diego County EMS",
+      "counties": ["San Diego"],
+      "protocol_url": "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/emergency_medical_services/ems_policy_manual.html",
+      "protocol_type": "pdf",
+      "population": 3298634
+    },
+    {
+      "name": "San Francisco EMS Agency",
+      "counties": ["San Francisco"],
+      "protocol_url": "https://www.sf.gov/departments/department-public-health/san-francisco-emergency-medical-services-agency",
+      "protocol_type": "pdf",
+      "population": 873965
+    },
+    {
+      "name": "San Joaquin County EMS Agency",
+      "counties": ["San Joaquin"],
+      "protocol_url": "https://www.sjgov.org/department/ems/policies",
+      "protocol_type": "pdf",
+      "population": 779233
+    },
+    {
+      "name": "San Luis Obispo County EMS Agency",
+      "counties": ["San Luis Obispo"],
+      "protocol_url": "https://www.slocounty.ca.gov/Departments/Health-Agency/Public-Health/All-Public-Health-Services/Emergency-Medical-Services-(EMS)/EMS-Policies-and-Procedures.aspx",
+      "protocol_type": "pdf",
+      "population": 282424
+    },
+    {
+      "name": "San Mateo County EMS Agency",
+      "counties": ["San Mateo"],
+      "protocol_url": "https://www.smchealth.org/ems/policies",
+      "protocol_type": "pdf",
+      "population": 764442
+    },
+    {
+      "name": "Santa Barbara County EMS Agency",
+      "counties": ["Santa Barbara"],
+      "protocol_url": "https://www.countyofsb.org/2049/EMS-Policies-Procedures",
+      "protocol_type": "pdf",
+      "population": 448229
+    },
+    {
+      "name": "Santa Clara County EMS Agency",
+      "counties": ["Santa Clara"],
+      "protocol_url": "https://www.sccgov.org/sites/ems/Pages/protocols.aspx",
+      "protocol_type": "pdf",
+      "population": 1936259
+    },
+    {
+      "name": "Santa Cruz County EMS",
+      "counties": ["Santa Cruz"],
+      "protocol_url": "https://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/EMSAgency/EMSPoliciesProcedures.aspx",
+      "protocol_type": "pdf",
+      "population": 270861
+    },
+    {
+      "name": "Sierra-Sacramento Valley EMS Agency",
+      "counties": ["Nevada", "Placer", "Sierra", "Sutter", "Yuba"],
+      "protocol_url": "https://www.ssvems.com/policies-and-procedures/",
+      "protocol_type": "pdf",
+      "population": 700000
+    },
+    {
+      "name": "Solano County EMS",
+      "counties": ["Solano"],
+      "protocol_url": "https://www.solanocounty.com/depts/ph/ems/policies_and_procedures.asp",
+      "protocol_type": "pdf",
+      "population": 453491
+    },
+    {
+      "name": "Stanislaus County EMS Agency",
+      "counties": ["Stanislaus"],
+      "protocol_url": "https://www.schsa.org/PublicHealth/ems/policies",
+      "protocol_type": "pdf",
+      "population": 552878
+    },
+    {
+      "name": "Ventura County EMS Agency",
+      "counties": ["Ventura"],
+      "protocol_url": "https://www.vcems.com/policies-procedures/",
+      "protocol_type": "pdf",
+      "population": 843843
+    },
+    {
+      "name": "Yolo County EMS Agency",
+      "counties": ["Yolo"],
+      "protocol_url": "https://www.yolocounty.org/government/general-government-departments/health-human-services/public-health/emergency-medical-services/ems-policies-and-procedures",
+      "protocol_type": "pdf",
+      "population": 222581
+    }
+  ],
+  "total_lemsas": 33,
+  "total_counties_covered": 58,
+  "total_population": 39538223
+}

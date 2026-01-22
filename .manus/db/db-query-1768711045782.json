@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, protocolTitle, sourcePdfUrl, section FROM protocolChunks WHERE countyId = 1 LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute SELECT id, protocolTitle, sourcePdfUrl, section FROM protocolChunks WHERE countyId = 1 LIMIT 5;",
+  "rows": [
+    {
+      "id": "30001",
+      "protocolTitle": "Adult Cardiac Arrest - VF/pVT (Shockable Rhythm)",
+      "sourcePdfUrl": "NULL",
+      "section": "Cardiac"
+    },
+    {
+      "id": "32157",
+      "protocolTitle": "Adult Cardiac Arrest - Asystole/PEA (Non-Shockable)",
+      "sourcePdfUrl": "NULL",
+      "section": "Cardiac"
+    },
+    {
+      "id": "34313",
+      "protocolTitle": "STEMI Protocol",
+      "sourcePdfUrl": "NULL",
+      "section": "Cardiac"
+    },
+    {
+      "id": "36469",
+      "protocolTitle": "Stroke/CVA Protocol",
+      "sourcePdfUrl": "NULL",
+      "section": "Neurological"
+    },
+    {
+      "id": "38625",
+      "protocolTitle": "Asthma/COPD/Bronchospasm Protocol",
+      "sourcePdfUrl": "NULL",
+      "section": "Respiratory"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tprotocolTitle\tsourcePdfUrl\tsection\n30001\tAdult Cardiac Arrest - VF/pVT (Shockable Rhythm)\tNULL\tCardiac\n32157\tAdult Cardiac Arrest - Asystole/PEA (Non-Shockable)\tNULL\tCardiac\n34313\tSTEMI Protocol\tNULL\tCardiac\n36469\tStroke/CVA Protocol\tNULL\tNeurological\n38625\tAsthma/COPD/Bronchospasm Protocol\tNULL\tRespiratory\n",
+  "stderr": "",
+  "execution_time_ms": 71
+}
