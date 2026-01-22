@@ -11,32 +11,16 @@ import type { Request, Response } from "express";
 import { randomUUID } from "crypto";
 
 // Base logger configuration
-export const logger = pino.default ? pino.default({
+const pinoLogger = typeof pino === 'function' ? pino : (pino as any).default;
+
+export const logger = pinoLogger({
   level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "production" ? "info" : "debug"),
   formatters: {
-    level: (label) => {
+    level: (label: string) => {
       return { level: label };
     },
   },
-  timestamp: (pino.default || pino).stdTimeFunctions.isoTime,
-  ...(process.env.NODE_ENV === "development" && {
-    transport: {
-      target: "pino-pretty",
-      options: {
-        colorize: true,
-        translateTime: "HH:MM:ss",
-        ignore: "pid,hostname",
-      },
-    },
-  }),
-}) : pino({
-  level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "production" ? "info" : "debug"),
-  formatters: {
-    level: (label) => {
-      return { level: label };
-    },
-  },
-  timestamp: pino.stdTimeFunctions.isoTime,
+  timestamp: pinoLogger.stdTimeFunctions.isoTime,
   ...(process.env.NODE_ENV === "development" && {
     transport: {
       target: "pino-pretty",
@@ -50,20 +34,22 @@ export const logger = pino.default ? pino.default({
 });
 
 // HTTP request logger middleware
-export const httpLogger = (pinoHttp.default || pinoHttp)({
+const pinoHttpMiddleware = typeof pinoHttp === 'function' ? pinoHttp : (pinoHttp as any).default;
+
+export const httpLogger = pinoHttpMiddleware({
   logger,
   // Generate unique request ID for tracing
-  genReqId: (req) => {
+  genReqId: (req: Request) => {
     const existingId = req.headers["x-request-id"];
     return (existingId as string) || randomUUID();
   },
   // Custom request ID header
   requestIdHeader: "x-request-id",
   // Include request ID in response
-  customSuccessMessage: (req, res) => {
+  customSuccessMessage: (req: Request, res: Response) => {
     return `${req.method} ${req.url} completed`;
   },
-  customErrorMessage: (req, res, err) => {
+  customErrorMessage: (req: Request, res: Response, err: Error) => {
     return `${req.method} ${req.url} failed: ${err.message}`;
   },
   // Customize logged properties
@@ -74,13 +60,13 @@ export const httpLogger = (pinoHttp.default || pinoHttp)({
   }),
   // Automatically log request/response
   autoLogging: {
-    ignore: (req) => {
+    ignore: (req: Request) => {
       // Don't log health checks to reduce noise
       return req.url === "/api/health";
     },
   },
   // Custom log level based on status code
-  customLogLevel: (req, res, err) => {
+  customLogLevel: (req: Request, res: Response, err?: Error) => {
     if (res.statusCode >= 500 || err) {
       return "error";
     }
