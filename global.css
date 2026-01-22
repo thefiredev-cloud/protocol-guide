@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dark mode typography enhancement for legibility */
+.dark body,
+[data-theme="dark"] body {
+  font-weight: 500;
+}
