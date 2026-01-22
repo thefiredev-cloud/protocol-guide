@@ -597,7 +597,7 @@ function ComparisonCard({ label, value, description, variant }: ComparisonCardPr
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.bgLightGray,
+    backgroundColor: COLORS.bgDark,
     paddingVertical: 48,
     position: "relative",
     overflow: "hidden",
@@ -710,7 +710,7 @@ const styles = StyleSheet.create({
   },
   barTrack: {
     height: 24,
-    backgroundColor: COLORS.bgLightGray,
+    backgroundColor: COLORS.bgDark,
     borderRadius: 4,
     overflow: "hidden",
   },
