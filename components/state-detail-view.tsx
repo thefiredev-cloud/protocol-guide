@@ -195,7 +195,7 @@ export function StateDetailView({
             onPress={() => navigateToSearch()}
             activeOpacity={0.8}
             style={{
-              backgroundColor: "#6366F1",
+              backgroundColor: colors.primary,
               borderRadius: 12,
               paddingVertical: 14,
               flexDirection: "row",
