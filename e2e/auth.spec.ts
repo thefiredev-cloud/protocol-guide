@@ -76,39 +76,34 @@ test.describe("Authentication UI", () => {
 });
 
 test.describe("Protected Routes", () => {
-  test("redirects to login for protected profile page", async ({ page }) => {
+  test("shows sign in prompt for protected profile page", async ({ page }) => {
     // Try to access profile without being logged in
     await page.goto("/profile");
     await page.waitForLoadState("networkidle");
 
-    // Should either show login prompt or redirect
-    const currentUrl = page.url();
+    // React Native app shows inline sign-in prompts, not redirects
     const pageContent = await page.textContent("body");
 
-    const isProtected =
-      currentUrl.includes("login") ||
-      currentUrl.includes("sign") ||
+    // Should show sign in button or prompt
+    const hasSignInPrompt =
       pageContent?.toLowerCase().includes("sign in") ||
-      pageContent?.toLowerCase().includes("login");
+      pageContent?.toLowerCase().includes("continue with google") ||
+      pageContent?.toLowerCase().includes("continue with apple");
 
-    // Either redirected to login or shows auth prompt
-    expect(isProtected || currentUrl.includes("profile")).toBeTruthy();
+    expect(hasSignInPrompt).toBeTruthy();
   });
 
-  test("redirects to login for protected history page", async ({ page }) => {
+  test("shows sign in prompt for protected history page", async ({ page }) => {
     await page.goto("/history");
     await page.waitForLoadState("networkidle");
 
-    const currentUrl = page.url();
+    // React Native app shows inline message, not redirect
     const pageContent = await page.textContent("body");
 
-    const isProtected =
-      currentUrl.includes("login") ||
-      currentUrl.includes("sign") ||
-      pageContent?.toLowerCase().includes("sign in") ||
-      pageContent?.toLowerCase().includes("login");
+    // Should show "Please sign in to view your history"
+    const hasSignInPrompt = pageContent?.toLowerCase().includes("please sign in");
 
-    expect(isProtected || currentUrl.includes("history")).toBeTruthy();
+    expect(hasSignInPrompt).toBeTruthy();
   });
 });
 
