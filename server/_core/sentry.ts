@@ -39,7 +39,7 @@ export async function initSentry(): Promise<void> {
 
   try {
     // Dynamic import to avoid bundling Sentry if not used
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+     
     const sentryModule = await import(/* webpackIgnore: true */ '@sentry/node').catch(() => null);
     Sentry = sentryModule as SentryModule | null;
 
