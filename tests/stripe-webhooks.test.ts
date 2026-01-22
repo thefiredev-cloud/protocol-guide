@@ -537,6 +537,14 @@ describe("Stripe Webhook Handler - customer.subscription.updated", () => {
     };
 
     const mockDb = {
+      query: {
+        stripeWebhookEvents: {
+          findFirst: vi.fn().mockResolvedValue(null),
+        },
+      },
+      insert: vi.fn().mockReturnValue({
+        values: vi.fn().mockResolvedValue(undefined),
+      }),
       update: vi.fn().mockReturnValue({
         set: vi.fn().mockReturnValue({
           where: vi.fn().mockResolvedValue(undefined),
