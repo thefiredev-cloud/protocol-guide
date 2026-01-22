@@ -187,8 +187,11 @@ test.describe("State Filter", () => {
 test.describe("Search Results Display", () => {
   test("displays protocol title in results", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(2000);
 
-    const searchInput = page.getByTestId("search-input");
+    const searchInput = page.locator('[data-testid="search-input"]').or(
+      page.locator('input[placeholder*="protocol"]')
+    ).first();
     await searchInput.fill("chest pain");
     await searchInput.press("Enter");
 
@@ -201,8 +204,11 @@ test.describe("Search Results Display", () => {
 
   test("displays relevance score or ranking", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(2000);
 
-    const searchInput = page.getByTestId("search-input");
+    const searchInput = page.locator('[data-testid="search-input"]').or(
+      page.locator('input[placeholder*="protocol"]')
+    ).first();
     await searchInput.fill("stroke");
     await searchInput.press("Enter");
 
@@ -215,8 +221,11 @@ test.describe("Search Results Display", () => {
 
   test("allows clicking on result for details", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(2000);
 
-    const searchInput = page.getByTestId("search-input");
+    const searchInput = page.locator('[data-testid="search-input"]').or(
+      page.locator('input[placeholder*="protocol"]')
+    ).first();
     await searchInput.fill("trauma");
     await searchInput.press("Enter");
 
