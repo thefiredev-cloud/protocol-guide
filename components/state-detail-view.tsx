@@ -151,7 +151,7 @@ export function StateDetailView({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         {/* Header */}
         <View
           style={{
@@ -162,15 +162,15 @@ export function StateDetailView({
             paddingTop: 16,
             paddingBottom: 12,
             borderBottomWidth: 1,
-            borderBottomColor: "#E5E7EB",
-            backgroundColor: "#FFFFFF",
+            borderBottomColor: colors.border,
+            backgroundColor: colors.background,
           }}
         >
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 22, fontWeight: "700", color: "#1F2937" }}>
+            <Text style={{ fontSize: 22, fontWeight: "700", color: colors.foreground }}>
               {stateName}
             </Text>
-            <Text style={{ fontSize: 14, color: "#6B7280", marginTop: 2 }}>
+            <Text style={{ fontSize: 14, color: colors.muted, marginTop: 2 }}>
               {stateCode} • {totalAgencies} agencies • {totalProtocols.toLocaleString()} protocols
             </Text>
           </View>
@@ -180,12 +180,12 @@ export function StateDetailView({
               width: 36,
               height: 36,
               borderRadius: 18,
-              backgroundColor: "#F3F4F6",
+              backgroundColor: colors.surface,
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <IconSymbol name="chevron.right" size={18} color="#6B7280" />
+            <IconSymbol name="chevron.right" size={18} color={colors.muted} />
           </TouchableOpacity>
         </View>
 
