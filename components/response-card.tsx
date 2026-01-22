@@ -38,7 +38,7 @@ export function ResponseCard({ text, protocolRefs, timestamp }: ResponseCardProp
   return (
     <Animated.View 
       entering={FadeInDown.duration(300)}
-      style={[styles.card, { backgroundColor: '#FFFFFF', borderColor: colors.border }]}
+      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
     >
       {/* Protocol Header */}
       {sections.protocol && (
