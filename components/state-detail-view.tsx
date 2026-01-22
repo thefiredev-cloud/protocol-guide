@@ -216,7 +216,7 @@ export function StateDetailView({
             style={{
               fontSize: 16,
               fontWeight: "600",
-              color: "#1F2937",
+              color: colors.foreground,
               marginBottom: 12,
               marginTop: 4,
             }}
@@ -226,13 +226,13 @@ export function StateDetailView({
 
           {isLoading ? (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <ActivityIndicator size="large" color="#6366F1" />
-              <Text style={{ color: "#6B7280", marginTop: 12 }}>Loading agencies...</Text>
+              <ActivityIndicator size="large" color={colors.primary} />
+              <Text style={{ color: colors.muted, marginTop: 12 }}>Loading agencies...</Text>
             </View>
           ) : error ? (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <IconSymbol name="exclamationmark.triangle.fill" size={40} color="#EF4444" />
-              <Text style={{ color: "#EF4444", marginTop: 12, textAlign: "center" }}>
+              <IconSymbol name="exclamationmark.triangle.fill" size={40} color={colors.error} />
+              <Text style={{ color: colors.error, marginTop: 12, textAlign: "center" }}>
                 {error}
               </Text>
               <TouchableOpacity
@@ -241,7 +241,7 @@ export function StateDetailView({
                   marginTop: 16,
                   paddingHorizontal: 20,
                   paddingVertical: 10,
-                  backgroundColor: "#6366F1",
+                  backgroundColor: colors.primary,
                   borderRadius: 8,
                 }}
               >
@@ -250,8 +250,8 @@ export function StateDetailView({
             </View>
           ) : agencies.length === 0 ? (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <IconSymbol name="house.fill" size={40} color="#9CA3AF" />
-              <Text style={{ color: "#6B7280", marginTop: 12, textAlign: "center" }}>
+              <IconSymbol name="house.fill" size={40} color={colors.muted} />
+              <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>
                 No agencies with protocols found for {stateName}
               </Text>
             </View>
@@ -263,7 +263,7 @@ export function StateDetailView({
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 24 }}
               ListHeaderComponent={
-                <Text style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 12 }}>
+                <Text style={{ fontSize: 13, color: colors.muted, marginBottom: 12 }}>
                   Tap an agency to search its protocols
                 </Text>
               }
