@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     paddingVertical: SPACING.xxxl,
     paddingHorizontal: SPACING.xl,
-    backgroundColor: COLORS.bgWhite,
+    backgroundColor: COLORS.bgSurface,
   },
   innerContainerMobile: {
     paddingVertical: SPACING.xxl,
