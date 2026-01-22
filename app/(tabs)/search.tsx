@@ -102,6 +102,22 @@ export default function SearchScreen() {
     inputRef.current?.focus();
   }, []);
 
+  // Handle voice transcription result
+  const handleVoiceTranscription = useCallback((text: string) => {
+    setQuery(text);
+    // Auto-search after voice input
+    setTimeout(() => {
+      if (text.trim()) {
+        handleSearch();
+      }
+    }, 100);
+  }, [handleSearch]);
+
+  // Handle voice input error
+  const handleVoiceError = useCallback((error: string) => {
+    setSearchError(error);
+  }, []);
+
   const handleStateSelect = useCallback((state: string | null) => {
     setSelectedState(state);
     setShowStateFilter(false);
