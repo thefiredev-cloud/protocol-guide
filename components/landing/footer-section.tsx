@@ -19,16 +19,16 @@ import { router } from "expo-router";
 import { ProtocolGuideLogo } from "@/components/icons/protocol-guide-logo";
 
 const COLORS = {
-  bgWhite: "#FFFFFF",
-  bgSubtle: "#FAFBFC",
-  primaryRed: "#9B2335",
-  primaryRedLight: "#C41E3A",
-  redGradientEnd: "rgba(155, 35, 53, 0.1)",
-  textGray: "#475569",
-  textMuted: "#64748B",
-  textDark: "#0F172A",
-  borderGray: "#E2E8F0",
-  shadow: "rgba(155, 35, 53, 0.08)",
+  bgSurface: "#1E293B",
+  bgDark: "#0F172A",
+  primaryRed: "#EF4444",
+  primaryRedLight: "#F87171",
+  redGradientEnd: "rgba(239, 68, 68, 0.2)",
+  textMuted: "#94A3B8",
+  textMutedLight: "#CBD5E1",
+  textWhite: "#F1F5F9",
+  border: "#334155",
+  shadow: "rgba(239, 68, 68, 0.15)",
 };
 
 // Consistent spacing scale (8px grid)
