@@ -86,7 +86,7 @@ test.describe("Protocol Search", () => {
 
 test.describe("State Filter", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/(tabs)/");
+    await page.goto("/(tabs)/?e2e=true");
     await page.waitForTimeout(2000);
   });
 
