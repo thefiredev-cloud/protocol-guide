@@ -883,7 +883,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cardBadgeText: {
-    color: "COLORS.bgSurface",
+    color: "#FFFFFF",
     fontSize: 9,
     fontWeight: "700",
     textTransform: "uppercase",
