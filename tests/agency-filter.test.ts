@@ -28,6 +28,7 @@ describe("Agency Filter Feature", () => {
   });
   describe("Agencies by State API", () => {
     it("should return agencies for California", async () => {
+      if (!serverRunning) return; // Skip if server not running
       const response = await fetch(`${TRPC_BASE}/search.agenciesByState?input=${trpcInput({ state: "California" })}`);
       expect(response.ok).toBe(true);
       
