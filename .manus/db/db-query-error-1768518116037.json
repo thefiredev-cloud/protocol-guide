@@ -1,8 +1,0 @@
-{
-  "query": "\n-- First get or create Alameda County EMS Agency\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) \nVALUES ('Alameda County EMS Agency', 'California', '2025', NOW());\n\n-- Get the agency ID\nSELECT id INTO @alameda_id FROM counties WHERE name = 'Alameda County EMS Agency' AND state = 'California' LIMIT 1;\n\n-- Show current count\nSELECT @alameda_id as agency_id, \n       (SELECT COUNT(*) FROM protocolChunks WHERE countyId = @alameda_id) as current_protocols;\n",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute \n-- First get or create Alameda County EMS Agency\nINSERT IGNORE INTO counties (name, state, protocolVersion, createdAt) \nVALUES ('Alameda County EMS Agency', 'California', '2025', NOW());\n\n-- Get the agency ID\nSELECT id INTO @alameda_id FROM counties WHERE name = 'Alameda County EMS Agency' AND state = 'California' LIMIT 1;\n\n-- Show current count\nSELECT @alameda_id as agency_id, \n       (SELECT COUNT(*) FROM protocolChunks WHERE countyId = @alameda_id) as current_protocols;\n",
-  "returncode": 1,
-  "logs": [
-    "ERROR 1064 (42000) at line 7: You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 1 column 26 near \"@alameda_id FROM counties WHERE name = 'Alameda County EMS Agency' AND state = 'California' LIMIT 1\""
-  ]
-}

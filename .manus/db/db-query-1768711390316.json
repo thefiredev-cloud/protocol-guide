@@ -1,9 +1,0 @@
-{
-  "query": "UPDATE protocolChunks SET countyId = 210091 WHERE countyId = 240005;\nUPDATE protocolChunks SET countyId = 210094 WHERE countyId = 240011;\nUPDATE protocolChunks SET countyId = 210102 WHERE countyId = 240025;\nUPDATE protocolChunks SET countyId = 210103 WHERE countyId = 240028;\nDELETE FROM counties WHERE id IN (240005, 240011, 240025, 240028);",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XDdWnjTq9wYRT5.root --database VxWDA7dN6oFTU34ptu3qAr --execute UPDATE protocolChunks SET countyId = 210091 WHERE countyId = 240005;\nUPDATE protocolChunks SET countyId = 210094 WHERE countyId = 240011;\nUPDATE protocolChunks SET countyId = 210102 WHERE countyId = 240025;\nUPDATE protocolChunks SET countyId = 210103 WHERE countyId = 240028;\nDELETE FROM counties WHERE id IN (240005, 240011, 240025, 240028);",
-  "rows": [],
-  "messages": [],
-  "stdout": "",
-  "stderr": "",
-  "execution_time_ms": 105
-}
