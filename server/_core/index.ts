@@ -51,18 +51,32 @@ async function startServer() {
   // Validate required environment variables
   const envCheck = validateEnv();
   if (!envCheck.valid) {
-    console.error("❌ Missing required environment variables:", envCheck.missing.join(", "));
+    logger.error({ missing: envCheck.missing }, "Missing required environment variables");
     process.exit(1);
   }
-  console.log("✅ Environment validation passed");
+  logger.info("Environment validation passed");
+
+  // Initialize Redis for distributed rate limiting
+  initRedis();
+  if (isRedisAvailable()) {
+    logger.info("Redis initialized - using distributed rate limiting");
+  } else {
+    logger.warn("Redis not available - using in-memory rate limiting (not recommended for production)");
+  }
 
   const app = express();
   const server = createServer(app);
 
-  // Rate limiters
-  const publicLimiter = createRateLimiter({ windowMs: 60000, max: 100 }); // 100 req/min
-  const searchLimiter = createRateLimiter({ windowMs: 60000, max: 30 });  // 30 req/min
-  const aiLimiter = createRateLimiter({ windowMs: 60000, max: 10 });      // 10 req/min
+  // Request timeout middleware (30s default)
+  app.use(createTimeoutMiddleware({ timeout: 30000 }));
+
+  // Structured logging middleware
+  app.use(httpLogger);
+
+  // Redis-based rate limiters with tier support
+  const publicLimiter = createPublicLimiter();   // IP-based, tier-aware
+  const searchLimiter = createSearchLimiter();   // User-based, tier-aware (free: 30/min, pro: 100/min, premium: 500/min)
+  const aiLimiter = createAiLimiter();           // User-based, tier-aware (free: 10/min, pro: 50/min, premium: 200/min)
 
   // CORS middleware - whitelist-based for security
   app.use((req, res, next) => {
