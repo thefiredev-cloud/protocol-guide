@@ -62,12 +62,12 @@ const MAIN_PATH =
 const SECONDARY_PATH =
   "M3940 6181 c-107 -10 -177 -50 -307 -178 -62 -61 -113 -109 -113 -108 0 2 -19 -16 -43 -39 -23 -22 -41 -44 -40 -47 1 -3 -24 -31 -57 -63 -33 -31 -62 -67 -66 -81 -3 -14 -10 -22 -15 -19 -5 3 -9 -12 -9 -33 0 -29 8 -47 30 -72 17 -18 28 -36 25 -41 -7 -11 51 -55 98 -75 20 -8 38 -15 39 -14 7 3 164 -14 172 -19 18 -10 136 -7 132 3 -2 7 14 11 40 11 24 1 41 -3 38 -8 -3 -4 0 -8 5 -8 6 0 11 4 11 8 0 5 44 14 98 21 53 7 128 19 167 27 38 8 83 17 100 19 16 2 57 11 90 20 33 10 83 22 110 28 28 5 52 14 55 18 3 4 48 20 100 35 118 33 246 94 284 133 25 26 28 35 23 73 -4 32 -14 50 -38 70 -18 15 -35 25 -37 23 -3 -3 -11 0 -19 6 -7 6 -13 8 -13 4 0 -5 -8 -1 -17 8 -23 20 -326 167 -345 167 -8 0 -18 4 -24 8 -5 5 -38 19 -74 32 -36 12 -87 32 -115 45 -88 39 -185 55 -285 46z";
 
-/** Default brand color */
-const DEFAULT_COLOR = "#9B2335";
-/** Default placeholder color (gray-200) */
-const DEFAULT_PLACEHOLDER_COLOR = "#E5E7EB";
-/** Inverted background color (light red tint) */
-const INVERTED_BG_COLOR = "#FEF2F2";
+/** Default brand color - Signal Red for dark theme */
+const DEFAULT_COLOR = "#EF4444";
+/** Default placeholder color (slate-700) */
+const DEFAULT_PLACEHOLDER_COLOR = "#334155";
+/** Inverted background color (dark surface) */
+const INVERTED_BG_COLOR = "#1E293B";
 
 /**
  * Hook for pulse animation (scale up/down)
