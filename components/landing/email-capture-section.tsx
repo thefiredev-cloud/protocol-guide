@@ -28,22 +28,22 @@ import Animated, {
 } from "react-native-reanimated";
 
 const COLORS = {
-  bgLightGray: "#F8FAFC",
-  textBlack: "#0F172A",
-  textGray: "#475569",
-  primaryRed: "#9B2335",
-  primaryRedHover: "#7F1D2B",
-  primaryRedActive: "#6B1824",
-  borderGray: "#E2E8F0",
-  borderFocus: "#9B2335",
-  bgWhite: "#FFFFFF",
-  errorRed: "#DC2626",
-  errorBg: "#FEF2F2",
-  successGreen: "#065F46",
-  successBg: "#ECFDF5",
-  successBorder: "#A7F3D0",
-  focusGlow: "rgba(155, 35, 53, 0.25)",
-  errorGlow: "rgba(220, 38, 38, 0.2)",
+  bgDark: "#0F172A",
+  textWhite: "#F1F5F9",
+  textMuted: "#94A3B8",
+  primaryRed: "#EF4444",
+  primaryRedHover: "#DC2626",
+  primaryRedActive: "#B91C1C",
+  border: "#334155",
+  borderFocus: "#EF4444",
+  bgSurface: "#1E293B",
+  errorRed: "#EF4444",
+  errorBg: "#451a1a",
+  successGreen: "#10B981",
+  successBg: "#064e3b",
+  successBorder: "#10B981",
+  focusGlow: "rgba(239, 68, 68, 0.35)",
+  errorGlow: "rgba(239, 68, 68, 0.3)",
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
