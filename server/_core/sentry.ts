@@ -11,7 +11,7 @@
 import { ENV } from './env';
 
 // Sentry module reference (loaded dynamically)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 let SentryInstance: any = null;
 
 /**
@@ -48,7 +48,7 @@ export async function initSentry(): Promise<void> {
       tracesSampleRate: ENV.isProduction ? 0.1 : 1.0,
 
       // Filter out expected/noisy errors
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       beforeSend(event: any) {
         const message = event?.message || '';
 
@@ -135,7 +135,7 @@ export function sentryErrorHandler(
 /**
  * Get the Sentry instance (if initialized)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export function getSentry(): any {
   return SentryInstance;
 }
