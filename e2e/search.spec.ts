@@ -13,8 +13,8 @@ test.describe("Protocol Search", () => {
   });
 
   test("displays search input on homepage", async ({ page }) => {
-    // Verify search UI is visible
-    const searchInput = page.getByPlaceholder(/search/i);
+    // Verify search UI is visible - React Native Web uses testID
+    const searchInput = page.getByTestId("search-input");
     await expect(searchInput).toBeVisible();
   });
 
