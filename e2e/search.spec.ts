@@ -49,7 +49,9 @@ test.describe("Protocol Search", () => {
   });
 
   test("handles empty search query gracefully", async ({ page }) => {
-    const searchInput = page.getByTestId("search-input");
+    const searchInput = page.locator('[data-testid="search-input"]').or(
+      page.locator('input[placeholder*="protocol"]')
+    ).first();
 
     // Submit empty search
     await searchInput.fill("");
