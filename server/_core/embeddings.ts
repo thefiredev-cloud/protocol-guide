@@ -233,16 +233,37 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
 /**
  * Generate embeddings for multiple texts in batch
+ * Uses cache for texts that have been previously embedded
  */
 export async function generateEmbeddingsBatch(texts: string[]): Promise<number[][]> {
   const apiKey = process.env.VOYAGE_API_KEY;
   if (!apiKey) {
-    throw new Error('VOYAGE_API_KEY is required for embedding generation');
+    throw new VoyageApiError('VOYAGE_API_KEY is required for embedding generation', 500);
   }
 
   // Truncate each text
   const truncatedTexts = texts.map(t => t.slice(0, 8000));
 
+  // Check cache for each text
+  const results: (number[] | null)[] = truncatedTexts.map(text => embeddingCache.get(text));
+  const uncachedIndices: number[] = [];
+  const uncachedTexts: string[] = [];
+
+  for (let i = 0; i < results.length; i++) {
+    if (results[i] === null) {
+      uncachedIndices.push(i);
+      uncachedTexts.push(truncatedTexts[i]);
+    }
+  }
+
+  console.log(`[Embeddings] Batch: ${results.length - uncachedTexts.length} cache hits, ${uncachedTexts.length} misses`);
+
+  // If all cached, return immediately
+  if (uncachedTexts.length === 0) {
+    return results as number[][];
+  }
+
+  // Fetch uncached embeddings from API
   const response = await fetch(VOYAGE_API_URL, {
     method: 'POST',
     headers: {
@@ -251,21 +272,34 @@ export async function generateEmbeddingsBatch(texts: string[]): Promise<number[]
     },
     body: JSON.stringify({
       model: VOYAGE_MODEL,
-      input: truncatedTexts,
+      input: uncachedTexts,
     }),
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Voyage AI error: ${response.status} - ${error}`);
+    const errorText = await response.text();
+    console.error(`[Embeddings] Voyage API batch error: ${response.status} - ${errorText}`);
+    throw parseVoyageError(response.status, errorText);
   }
 
   const data = (await response.json()) as VoyageEmbeddingResponse;
 
   // Sort by index to maintain order
-  return data.data
+  const sortedEmbeddings = data.data
     .sort((a, b) => a.index - b.index)
     .map(d => d.embedding);
+
+  // Merge results and cache new embeddings
+  for (let i = 0; i < uncachedIndices.length; i++) {
+    const originalIndex = uncachedIndices[i];
+    const embedding = sortedEmbeddings[i];
+    results[originalIndex] = embedding;
+
+    // Cache the new embedding
+    embeddingCache.set(truncatedTexts[originalIndex], embedding);
+  }
+
+  return results as number[][];
 }
 
 
