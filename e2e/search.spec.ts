@@ -167,7 +167,7 @@ test.describe("State Filter", () => {
   });
 
   test("filters by Florida (FL)", async ({ page }) => {
-    await page.goto("/coverage");
+    await page.goto("/(tabs)/coverage");
     await page.waitForLoadState("networkidle");
 
     const floridaOption = page.getByText(/Florida/i).or(
