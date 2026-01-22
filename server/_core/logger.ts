@@ -29,10 +29,28 @@ export const logger = pino.default ? pino.default({
       },
     },
   }),
+}) : pino({
+  level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "production" ? "info" : "debug"),
+  formatters: {
+    level: (label) => {
+      return { level: label };
+    },
+  },
+  timestamp: pino.stdTimeFunctions.isoTime,
+  ...(process.env.NODE_ENV === "development" && {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        colorize: true,
+        translateTime: "HH:MM:ss",
+        ignore: "pid,hostname",
+      },
+    },
+  }),
 });
 
 // HTTP request logger middleware
-export const httpLogger = pinoHttp({
+export const httpLogger = (pinoHttp.default || pinoHttp)({
   logger,
   // Generate unique request ID for tracing
   genReqId: (req) => {
