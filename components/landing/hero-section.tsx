@@ -388,8 +388,6 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
               marginBottom: isMobile ? 18 : 24,
               letterSpacing: -0.5,
             }}
-            accessibilityRole="header"
-            accessibilityLevel={2}
           >
             Why waste 90 of them searching?
           </Text>
