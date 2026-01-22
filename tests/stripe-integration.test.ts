@@ -665,4 +665,88 @@ describe("Stripe Error Handling - Comprehensive", () => {
 
     consoleSpy.mockRestore();
   });
+
+  it("handles non-Error objects thrown from portal session creation", async () => {
+    // Test the `error instanceof Error` branch by throwing a non-Error object
+    const nonErrorObject = { code: "some_error", detail: "error details" };
+    mockBillingPortalSessionsCreate.mockRejectedValue(nonErrorObject);
+
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const result = await createCustomerPortalSession({
+      stripeCustomerId: "cus_test_123",
+      returnUrl: "https://app.example.com/settings",
+    });
+
+    expect(result).toEqual({
+      error: "Failed to create portal session",
+    });
+
+    // Verify the error logging uses the non-Error object directly
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[Stripe] Portal session error:",
+      nonErrorObject
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it("handles errors without message property in createCheckoutSession", async () => {
+    // Create an error-like object without a message property
+    const errorWithoutMessage = Object.create(null);
+    mockCheckoutSessionsCreate.mockRejectedValue(errorWithoutMessage);
+
+    const result = await createCheckoutSession({
+      userId: 1,
+      userEmail: "test@example.com",
+      plan: "monthly",
+      successUrl: "https://app.example.com/success",
+      cancelUrl: "https://app.example.com/cancel",
+    });
+
+    expect(result).toEqual({
+      error: "Failed to create checkout session",
+    });
+  });
+
+  it("handles errors without message property in constructWebhookEvent", () => {
+    // Create an error-like object without a message property
+    const errorWithoutMessage = Object.create(null);
+    mockWebhooksConstructEvent.mockImplementation(() => {
+      throw errorWithoutMessage;
+    });
+
+    const result = constructWebhookEvent("payload", "signature");
+
+    expect(result).toEqual({
+      error: "Webhook verification failed",
+    });
+  });
+
+  it("handles errors without message property in cancelSubscription", async () => {
+    // Create an error-like object without a message property
+    const errorWithoutMessage = Object.create(null);
+    mockSubscriptionsUpdate.mockRejectedValue(errorWithoutMessage);
+
+    const result = await cancelSubscription("sub_test_123");
+
+    expect(result).toEqual({
+      error: "Failed to cancel subscription",
+    });
+  });
+
+  it("handles customer portal errors without 'No such customer' message", async () => {
+    // Test the branch where errorMessage does NOT include "No such customer"
+    const genericError = new Error("Some other error");
+    mockBillingPortalSessionsCreate.mockRejectedValue(genericError);
+
+    const result = await createCustomerPortalSession({
+      stripeCustomerId: "cus_test_123",
+      returnUrl: "https://app.example.com/settings",
+    });
+
+    expect(result).toEqual({
+      error: "Some other error",
+    });
+  });
 });
