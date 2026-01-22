@@ -34,9 +34,35 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     return res.status(400).json({ error: event.error });
   }
 
-  console.log(`[Stripe Webhook] Received event: ${event.type}`);
+  console.log(`[Stripe Webhook] Received event: ${event.type} (ID: ${(event as any).id})`);
 
   try {
+    // Idempotency check: prevent processing duplicate events
+    const eventId = (event as any).id;
+    if (eventId) {
+      const dbInstance = await db.getDb();
+      if (dbInstance) {
+        // Check if event already processed
+        const existingEvent = await dbInstance.query.stripeWebhookEvents.findFirst({
+          where: eq(stripeWebhookEvents.eventId, eventId),
+        });
+
+        if (existingEvent) {
+          console.log(`[Stripe Webhook] Event ${eventId} already processed at ${existingEvent.processedAt}, skipping`);
+          return res.status(200).json({ received: true, skipped: true, reason: "Already processed" });
+        }
+
+        // Mark event as processed BEFORE handling to prevent race conditions
+        await dbInstance.insert(stripeWebhookEvents).values({
+          eventId,
+          eventType: event.type,
+          eventData: event.data.object,
+        });
+        console.log(`[Stripe Webhook] Marked event ${eventId} as processed`);
+      }
+    }
+
+    // Process the event
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
@@ -76,6 +102,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     return res.status(200).json({ received: true });
   } catch (error) {
     console.error("[Stripe Webhook] Handler error:", error);
+    // Return 500 so Stripe retries the webhook
     return res.status(500).json({ error: "Webhook handler failed" });
   }
 }
