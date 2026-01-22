@@ -35,6 +35,69 @@ const MODELS = {
   SONNET: 'claude-sonnet-4-5-20250929',
 } as const;
 
+// Retry configuration
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  initialDelayMs: 1000,
+  maxDelayMs: 10000,
+  backoffMultiplier: 2,
+} as const;
+
+/**
+ * Sleep for a specified duration
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Calculate delay for exponential backoff
+ */
+function calculateBackoffDelay(attempt: number): number {
+  const delay = RETRY_CONFIG.initialDelayMs * Math.pow(RETRY_CONFIG.backoffMultiplier, attempt);
+  // Add jitter (10-20% random variation) to prevent thundering herd
+  const jitter = delay * (0.1 + Math.random() * 0.1);
+  return Math.min(delay + jitter, RETRY_CONFIG.maxDelayMs);
+}
+
+/**
+ * Execute a function with exponential backoff retry logic
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  operationName: string
+): Promise<T> {
+  let lastError: Error | undefined;
+
+  for (let attempt = 0; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+      const parsedError = parseClaudeError(error);
+
+      // Log the error
+      console.error(
+        `[Claude] ${operationName} failed (attempt ${attempt + 1}/${RETRY_CONFIG.maxRetries + 1}):`,
+        parsedError.message
+      );
+
+      // Don't retry if error is not retryable or we've exhausted retries
+      if (!isRetryableError(error) || attempt === RETRY_CONFIG.maxRetries) {
+        throw parsedError;
+      }
+
+      // Calculate delay and wait before retrying
+      const delayMs = calculateBackoffDelay(attempt);
+      console.log(`[Claude] Retrying ${operationName} in ${Math.round(delayMs)}ms...`);
+      await sleep(delayMs);
+    }
+  }
+
+  // Should never reach here, but TypeScript needs this
+  throw parseClaudeError(lastError || new Error('Unknown error'));
+}
+
 // User tier type
 export type UserTier = 'free' | 'pro' | 'enterprise';
 
