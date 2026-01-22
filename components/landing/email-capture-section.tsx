@@ -127,7 +127,7 @@ function WebEmailInput({
   const getBorderColor = () => {
     if (validationState === "invalid" && !isFocused) return COLORS.errorRed;
     if (isFocused) return COLORS.borderFocus;
-    return COLORS.borderGray;
+    return COLORS.border;
   };
 
   const getBoxShadow = () => {
@@ -200,7 +200,7 @@ function NativeEmailInput({
   const getBorderColor = () => {
     if (validationState === "invalid" && !isFocused) return COLORS.errorRed;
     if (isFocused) return COLORS.borderFocus;
-    return COLORS.borderGray;
+    return COLORS.border;
   };
 
   return (
