@@ -144,8 +144,6 @@ export function AnimatedPressable({
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      // @ts-expect-error - web className for focus indicator
-      className={Platform.OS === "web" ? "focusable-pressable" : undefined}
       {...props}
     >
       <Animated.View
