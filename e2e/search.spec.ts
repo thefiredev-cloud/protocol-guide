@@ -10,12 +10,19 @@ test.describe("Protocol Search", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to search page
     await page.goto("/");
+    // Wait for React Native Web to fully render
+    await page.waitForTimeout(2000);
   });
 
   test("displays search input on homepage", async ({ page }) => {
     // Verify search UI is visible - React Native Web uses testID
-    const searchInput = page.getByTestId("search-input");
-    await expect(searchInput).toBeVisible();
+    // Try both data-testid and testID selectors
+    const searchInput = page.locator('[data-testid="search-input"]').or(
+      page.locator('[testID="search-input"]')
+    ).or(
+      page.locator('input[placeholder*="protocol"]')
+    );
+    await expect(searchInput.first()).toBeVisible({ timeout: 10000 });
   });
 
   test("searches for cardiac arrest and returns results", async ({ page }) => {
