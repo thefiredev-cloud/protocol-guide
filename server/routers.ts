@@ -179,17 +179,25 @@ export const appRouter = router({
     searchByAgency: publicProcedure
       .input(z.object({
         query: z.string().min(1).max(500),
-        agencyId: z.number(),
+        agencyId: z.number(), // MySQL county ID (will be mapped)
         limit: z.number().min(1).max(50).default(10),
       }))
       .query(async ({ input }) => {
-        // Look up agency name from MySQL county table
-        const county = await db.getCountyById(input.agencyId);
-        const agencyName = county?.name || null;
+        // Map MySQL county ID -> Supabase agency_id
+        const supabaseAgencyId = await mapCountyIdToAgencyId(input.agencyId);
+
+        // Get agency details
+        const agency = await getAgencyByCountyId(input.agencyId);
+        const agencyName = agency?.name || null;
+        const stateCode = agency?.state_code || null;
+
+        console.log(`[Search] Agency search - MySQL ${input.agencyId} -> Supabase ${supabaseAgencyId}`);
 
         const results = await semanticSearchProtocols({
           query: input.query,
+          agencyId: supabaseAgencyId,
           agencyName,
+          stateCode,
           limit: input.limit,
           threshold: 0.3,
         });
