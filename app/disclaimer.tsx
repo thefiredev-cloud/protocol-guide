@@ -96,7 +96,7 @@ export default function MedicalDisclaimerScreen() {
         </Section>
 
         <Section title="No Warranty">
-          Protocol Guide is provided "as is" without any warranties, express or implied. We do not warrant that:
+          Protocol Guide is provided {'"as is"'} without any warranties, express or implied. We do not warrant that:
           <BulletPoint>The information will be error-free or uninterrupted</BulletPoint>
           <BulletPoint>The content will meet your specific requirements</BulletPoint>
           <BulletPoint>The results obtained will be accurate or reliable</BulletPoint>
