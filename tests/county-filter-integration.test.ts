@@ -244,8 +244,8 @@ describe('Error Handling', () => {
     // Should return null instead of throwing
 
     const agencyId = await mapCountyIdToAgencyId(1);
-    // Should not throw, may return null
-    expect([null, 'number']).toContain(typeof agencyId);
+    // Should not throw, result can be null or a number
+    expect(agencyId === null || typeof agencyId === 'number').toBe(true);
   });
 
   it('should handle counties with special characters', async () => {
