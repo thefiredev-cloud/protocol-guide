@@ -33,7 +33,7 @@ export default function PrivacyPolicyScreen() {
         <Text className="text-sm text-muted mb-6">Last updated: January 10, 2026</Text>
 
         <Section title="1. Introduction">
-          Protocol Guide ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services (collectively, the "Service").
+          Protocol Guide ({'"we," "our," or "us"'}) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services (collectively, the {'"Service"'}).
         </Section>
 
         <Section title="2. Information We Collect">
