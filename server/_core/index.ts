@@ -137,12 +137,37 @@ async function startServer() {
   const port = await findAvailablePort(preferredPort);
 
   if (port !== preferredPort) {
-    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
+    logger.info({ preferredPort, actualPort: port }, `Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
   server.listen(port, () => {
-    console.log(`[api] server listening on port ${port}`);
+    logger.info({
+      port,
+      environment: ENV.isProduction ? "production" : "development",
+      redis: isRedisAvailable() ? "enabled" : "disabled",
+    }, `Server listening on port ${port}`);
   });
+
+  // Graceful shutdown
+  const shutdown = async () => {
+    logger.info("Shutting down gracefully...");
+    server.close(() => {
+      logger.info("Server closed");
+      process.exit(0);
+    });
+
+    // Force close after 10s
+    setTimeout(() => {
+      logger.error("Forced shutdown after timeout");
+      process.exit(1);
+    }, 10000);
+  };
+
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
 }
 
-startServer().catch(console.error);
+startServer().catch((error) => {
+  logger.error({ error }, "Failed to start server");
+  process.exit(1);
+});
