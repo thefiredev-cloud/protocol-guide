@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   chartCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "COLORS.bgSurface",
     borderRadius: 12,
     padding: 24,
     borderWidth: 1,
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   completeBadgeText: {
-    color: "#FFFFFF",
+    color: "COLORS.bgSurface",
     fontSize: 11,
     fontWeight: "700",
   },
@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   button: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "COLORS.bgSurface",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
@@ -792,7 +792,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   buttonTextPrimary: {
-    color: "#FFFFFF",
+    color: "COLORS.bgSurface",
   },
   buttonTextDisabled: {
     color: COLORS.textMuted,
@@ -826,7 +826,7 @@ const styles = StyleSheet.create({
   // ComparisonCard styles
   card: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "COLORS.bgSurface",
     borderRadius: 12,
     padding: 20,
     borderWidth: 1,
@@ -883,7 +883,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cardBadgeText: {
-    color: "#FFFFFF",
+    color: "COLORS.bgSurface",
     fontSize: 9,
     fontWeight: "700",
     textTransform: "uppercase",
