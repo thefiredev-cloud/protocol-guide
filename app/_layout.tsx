@@ -72,17 +72,23 @@ export default function RootLayout() {
 
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ErrorBoundary>
+      <ErrorBoundary
+          section="general"
+          errorTitle="Application Error"
+          errorMessage="Something went wrong. Please restart the app."
+        >
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
             {/* Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)", "products/[id]"). */}
             {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
             <AppProvider>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="oauth/callback" />
-              </Stack>
+              <NavigationErrorBoundary>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen name="(tabs)" />
+                  <Stack.Screen name="oauth/callback" />
+                </Stack>
+              </NavigationErrorBoundary>
               <InstallPrompt />
             </AppProvider>
             <StatusBar style="auto" />

@@ -233,9 +233,6 @@ const envSchema = z.object({
   // ===========================================
   EXPO_PORT: z
     .string()
-    .regex(/^\d+$/, 'EXPO_PORT must be a valid number')
-    .transform(Number)
-    .pipe(z.number().int().positive().max(65535))
     .optional()
     .describe('Expo development server port'),
 });
