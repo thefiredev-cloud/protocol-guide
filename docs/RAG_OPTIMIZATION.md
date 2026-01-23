@@ -366,13 +366,26 @@ Note: Multi-query mode adds ~200-400ms latency but significantly improves recall
 
 ---
 
-## Files Created
+## Files Modified/Created
 
 | File | Purpose |
 |------|---------|
-| `server/_core/ems-query-normalizer.ts` | Query preprocessing and abbreviation expansion |
-| `server/_core/rag-optimizer.ts` | Adaptive thresholds, caching, re-ranking |
+| `server/_core/ems-query-normalizer.ts` | Query preprocessing, abbreviation expansion, query variations |
+| `server/_core/rag-optimizer.ts` | Adaptive thresholds, caching, re-ranking, multi-query fusion, RRF |
 | `server/_core/protocol-chunker.ts` | Semantic-aware document chunking |
+| `server/routers/search.ts` | Integrated RAG optimizer with search options |
+| `server/routers/query.ts` | Integrated RAG optimizer with tier-based optimizations |
+
+### Key Functions Added to `rag-optimizer.ts`
+
+| Function | Description |
+|----------|-------------|
+| `optimizedSearch()` | Main entry point with configurable optimization options |
+| `highAccuracySearch()` | Convenience wrapper with all optimizations enabled |
+| `multiQueryFusion()` | Searches with query variations, merges with RRF |
+| `reciprocalRankFusion()` | Merges multiple result lists mathematically |
+| `advancedRerank()` | Enhanced re-ranking with semantic signals |
+| `applyContextBoost()` | Boosts results matching user's agency/state |
 
 ---
 

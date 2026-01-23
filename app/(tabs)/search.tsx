@@ -464,9 +464,8 @@ export default function SearchScreen() {
             <IconSymbol name="xmark" size={18} color={colors.muted} />
           </TouchableOpacity>
         )}
-        <VoiceInput
-          onTranscription={handleVoiceTranscription}
-          onError={handleVoiceError}
+        <VoiceSearchButtonInline
+          onPress={() => setShowVoiceModal(true)}
           disabled={isSearching}
         />
       </View>
