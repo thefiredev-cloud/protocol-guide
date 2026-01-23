@@ -25,11 +25,15 @@ export default function HistoryScreen() {
   const colors = useColors();
   const router = useRouter();
   const { cachedProtocols, removeFromCache } = useOfflineCache();
+  const { hasOfflineAccess, tier } = useOfflineAccess();
   const { addMessage } = useAppContext();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [dateFilter, setDateFilter] = useState<FilterOption>("all");
   const [countyFilter, setCountyFilter] = useState<number | null>(null);
+
+  // Check if user is on free tier (no offline access)
+  const isFreeTier = tier === "free";
 
   // Get unique counties from cached protocols
   const uniqueCounties = useMemo(() => {
