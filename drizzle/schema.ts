@@ -60,7 +60,9 @@ export const protocolChunks = mysqlTable("protocolChunks", {
   lastVerifiedAt: timestamp("lastVerifiedAt"), // When we last verified this protocol was current
   protocolYear: int("protocolYear"), // Year of protocol for quick filtering
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  countyIdx: index("idx_protocol_chunks_county").on(table.countyId),
+}));
 
 export type ProtocolChunk = typeof protocolChunks.$inferSelect;
 export type InsertProtocolChunk = typeof protocolChunks.$inferInsert;
