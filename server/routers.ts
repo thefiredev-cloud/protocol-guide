@@ -8,6 +8,7 @@ import { semanticSearchProtocols } from "./_core/embeddings";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
 import * as db from "./db";
+import * as dbUserCounties from "./db-user-counties";
 import * as stripe from "./stripe";
 import { mapCountyIdToAgencyId, getAgencyByCountyId } from "./db-agency-mapping";
 import { TRPCError } from "@trpc/server";
