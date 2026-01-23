@@ -3,9 +3,9 @@
 
 [build]
   # Install dependencies and build both web app and server
-  # Copy public folder (PWA assets) to dist after Expo export
+  # Build server, export web app, inject PWA meta tags, copy PWA assets
   # Note: pnpm check removed - RN Web has known type mismatches with accessibility props
-  command = "pnpm install && pnpm build && npx expo export --platform web && cp -r public/* dist/"
+  command = "pnpm install && pnpm build && pnpm build:web"
   # Expo web export outputs to dist/ by default
   publish = "dist"
 
