@@ -1,3 +1,5 @@
+/// <reference lib="deno.ns" />
+
 /**
  * CORS headers for edge functions
  *

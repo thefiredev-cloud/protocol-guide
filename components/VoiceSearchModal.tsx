@@ -120,6 +120,24 @@ export function VoiceSearchModal({
   const maxDurationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Use ref to track current state synchronously (prevents race conditions)
+  const stateRef = useRef<RecordingState>("idle");
+
+  // State machine transition function - validates transitions and prevents invalid state changes
+  const transitionTo = useCallback((newState: RecordingState): boolean => {
+    const currentState = stateRef.current;
+    const validNextStates = VALID_TRANSITIONS[currentState];
+
+    if (!validNextStates.includes(newState)) {
+      console.warn(`Invalid state transition: ${currentState} -> ${newState}`);
+      return false;
+    }
+
+    stateRef.current = newState;
+    setRecordingState(newState);
+    return true;
+  }, []);
+
   // tRPC mutations
   const uploadMutation = trpc.voice.uploadAudio.useMutation();
   const transcribeMutation = trpc.voice.transcribe.useMutation();
