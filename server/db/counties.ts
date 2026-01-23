@@ -32,7 +32,6 @@ export async function createCounty(data: InsertCounty) {
  */
 export async function getAllStates(): Promise<string[]> {
   const db = await getDb();
-  if (!db) return [];
 
   const results = await db.selectDistinct({ state: counties.state }).from(counties).orderBy(counties.state);
   return results.map(r => r.state);
