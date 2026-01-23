@@ -503,13 +503,17 @@ describe("Subscription Router Security", () => {
           "not-a-url",
           "javascript:alert(1)",
           "data:text/html,<script>alert(1)</script>",
-          "",
         ];
 
         invalidUrls.forEach(returnUrl => {
           const result = createPortalInputSchema.safeParse({ returnUrl });
           expect(result.success).toBe(false);
         });
+      });
+
+      it("should reject empty return URL", () => {
+        const result = createPortalInputSchema.safeParse({ returnUrl: "" });
+        expect(result.success).toBe(false);
       });
     });
   });
