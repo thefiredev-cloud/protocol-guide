@@ -112,7 +112,7 @@ export default function PrivacyPolicyScreen() {
           The Service is not intended for users under 18 years of age. We do not knowingly collect personal information from children under 18.
         </Section>
 
-        <Section title="9. Changes to This Policy">
+        <Section title="10. Changes to This Policy">
           We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the {'"Last updated"'} date.
         </Section>
 

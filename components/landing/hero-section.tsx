@@ -184,12 +184,25 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
   useEffect(() => {
     injectGradientStyles();
     injectSmoothScrollCSS();
-    const animations = Animated.stagger(150, [
+    const animations = Animated.stagger(120, [
       Animated.timing(navOpacity, {
         toValue: 1,
         duration: 400,
         useNativeDriver: true,
       }),
+      Animated.parallel([
+        Animated.timing(socialProofOpacity, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.spring(socialProofTranslateY, {
+          toValue: 0,
+          friction: 8,
+          tension: 50,
+          useNativeDriver: true,
+        }),
+      ]),
       Animated.parallel([
         Animated.timing(headlineOpacity, {
           toValue: 1,
@@ -230,6 +243,19 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
         }),
       ]),
       Animated.parallel([
+        Animated.timing(testimonialOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.spring(testimonialTranslateY, {
+          toValue: 0,
+          friction: 8,
+          tension: 40,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
         Animated.timing(badgesOpacity, {
           toValue: 1,
           duration: 500,
@@ -244,7 +270,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
       ]),
     ]);
     animations.start();
-  }, [navOpacity, headlineOpacity, headlineTranslateY, subheadOpacity, subheadTranslateY, ctaOpacity, ctaScale, badgesOpacity, badgesTranslateY]);
+  }, [navOpacity, socialProofOpacity, socialProofTranslateY, headlineOpacity, headlineTranslateY, subheadOpacity, subheadTranslateY, ctaOpacity, ctaScale, testimonialOpacity, testimonialTranslateY, badgesOpacity, badgesTranslateY]);
 
   // Mobile menu slide animation
   useEffect(() => {

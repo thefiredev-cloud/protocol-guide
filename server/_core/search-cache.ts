@@ -74,11 +74,13 @@ const stats: CacheStats = {
  */
 export function getSearchCacheKey(params: SearchCacheParams): string {
   // Normalize parameters for consistent hashing
+  // Support both stateCode and stateFilter (alias)
+  const stateValue = params.stateCode ?? params.stateFilter ?? '';
   const normalized = {
     q: params.query.toLowerCase().trim(),
     a: params.agencyId ?? 0,
     n: params.agencyName?.toLowerCase().trim() ?? '',
-    s: params.stateCode?.toUpperCase().trim() ?? '',
+    s: stateValue?.toUpperCase().trim() ?? '',
     l: params.limit ?? 10,
   };
 
