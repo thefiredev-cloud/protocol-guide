@@ -62,7 +62,7 @@ export default function UploadProtocolScreen() {
       }
 
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to pick file");
     }
   };
