@@ -223,7 +223,7 @@ export async function findOrCreateUserBySupabaseId(
     const created = await db
       .select()
       .from(users)
-      .where(eq(users.id, newUser.id))
+      .where(eq(users.id, (newUser as { id: number }).id))
       .limit(1);
 
     return created.length > 0 ? created[0] : null;

@@ -132,6 +132,7 @@ export async function signInWithAppleMobile(): Promise<{
 }> {
   try {
     const redirectUri = getRedirectUri();
+    const state = await generateOAuthState("apple");
 
     console.log("[AppleAuth] Starting OAuth flow with redirect:", redirectUri);
 
@@ -141,6 +142,9 @@ export async function signInWithAppleMobile(): Promise<{
       options: {
         redirectTo: redirectUri,
         skipBrowserRedirect: Platform.OS !== "web",
+        queryParams: {
+          state: state,
+        },
       },
     });
 
