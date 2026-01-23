@@ -226,8 +226,76 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   }
 
   console.log(`[Stripe Webhook] Payment failed for user ${user.id}`);
-  
+
   // Note: We don't immediately downgrade on payment failure
   // Stripe will retry and eventually cancel the subscription if payments continue to fail
   // The subscription.deleted event will handle the downgrade
+}
+
+async function handleDisputeCreated(dispute: Stripe.Dispute) {
+  const chargeId = dispute.charge as string;
+  const customerId = dispute.payment_intent ?
+    (dispute.payment_intent as any).customer :
+    null;
+
+  console.log(`[Stripe Webhook] Dispute created: ${dispute.id} for charge ${chargeId}`);
+  console.log(`[Stripe Webhook] Dispute reason: ${dispute.reason}, status: ${dispute.status}`);
+
+  if (customerId) {
+    const user = await db.getUserByStripeCustomerId(customerId as string);
+    if (user) {
+      console.log(`[Stripe Webhook] Dispute affects user ${user.id}`);
+
+      // Optionally downgrade user immediately on dispute
+      // This is configurable - some businesses may want to wait for dispute resolution
+      const DOWNGRADE_ON_DISPUTE = process.env.STRIPE_DOWNGRADE_ON_DISPUTE === "true";
+
+      if (DOWNGRADE_ON_DISPUTE) {
+        console.log(`[Stripe Webhook] Downgrading user ${user.id} due to dispute`);
+        const { downgradeToFree } = await import("../stripe.js");
+        await downgradeToFree(user.id);
+      }
+    }
+  }
+}
+
+async function handleDisputeClosed(dispute: Stripe.Dispute) {
+  console.log(`[Stripe Webhook] Dispute closed: ${dispute.id}, status: ${dispute.status}`);
+
+  if (dispute.status === "lost") {
+    console.log(`[Stripe Webhook] Dispute lost - funds returned to customer`);
+  } else if (dispute.status === "won") {
+    console.log(`[Stripe Webhook] Dispute won - funds retained`);
+  } else if (dispute.status === "warning_closed") {
+    console.log(`[Stripe Webhook] Dispute warning closed`);
+  }
+
+  // Log outcome for record-keeping
+  // Could also notify admins or update user records here
+}
+
+async function handleCustomerDeleted(customer: Stripe.Customer) {
+  const customerId = customer.id;
+  const user = await db.getUserByStripeCustomerId(customerId);
+
+  if (!user) {
+    console.log(`[Stripe Webhook] Customer deleted but no user found: ${customerId}`);
+    return;
+  }
+
+  console.log(`[Stripe Webhook] Customer deleted for user ${user.id}, cleaning up`);
+
+  // Clean up user's Stripe data
+  const dbInstance = await db.getDb();
+  if (dbInstance) {
+    await dbInstance.update(users).set({
+      stripeCustomerId: null,
+      subscriptionId: null,
+      subscriptionStatus: null,
+      subscriptionEndDate: null,
+      tier: "free",
+    }).where(eq(users.id, user.id));
+  }
+
+  console.log(`[Stripe Webhook] Cleaned up Stripe data for user ${user.id}`);
 }
