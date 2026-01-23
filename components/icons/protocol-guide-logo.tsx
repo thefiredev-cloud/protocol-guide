@@ -207,7 +207,7 @@ function getSvgDataUri(
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
-/** Native version using react-native-svg */
+/** Native version using react-native-svg - Star of Life */
 function NativeLogo({
   size,
   color,
@@ -217,31 +217,20 @@ function NativeLogo({
   color: string;
   variant?: LogoVariant;
 }) {
+  const bgColor = "#0F172A"; // Dark background for rod contrast
   return (
-    <Svg
-      width={size}
-      height={size}
-      viewBox="0 0 600 685"
-      preserveAspectRatio="xMidYMid meet"
-    >
+    <Svg width={size} height={size} viewBox="0 0 24 24">
       {variant === "inverted" && (
-        <Rect
-          x="1.5"
-          y="3"
-          width="597"
-          height="679"
-          rx="8"
-          fill={INVERTED_BG_COLOR}
-        />
+        <Rect width="24" height="24" rx="4" fill={INVERTED_BG_COLOR} />
       )}
-      <G
-        transform="translate(0,685) scale(0.1,-0.1)"
-        fill={color}
-        stroke="none"
-      >
-        <Path d={MAIN_PATH} />
-        <Path d={SECONDARY_PATH} />
-      </G>
+      <Path d={STAR_OF_LIFE_PATH} fill={color} />
+      <Path
+        d={ROD_PATH}
+        fill="none"
+        stroke={variant === "inverted" ? INVERTED_BG_COLOR : bgColor}
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
     </Svg>
   );
 }
