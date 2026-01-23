@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Keyboard,
+  AccessibilityInfo,
 } from "react-native";
 import { SkeletonProtocolCard } from "@/components/ui/Skeleton";
 import { ScreenContainer } from "@/components/screen-container";
@@ -18,6 +19,13 @@ import { VoiceSearchButtonInline } from "@/components/VoiceSearchButton-inline";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useLocalSearchParams } from "expo-router";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import {
+  createSearchA11y,
+  createButtonA11y,
+  createStatusA11y,
+  announceForAccessibility,
+  MEDICAL_A11Y_LABELS,
+} from "@/lib/accessibility";
 
 type SearchResult = {
   id: number;
