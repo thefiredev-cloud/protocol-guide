@@ -8,6 +8,15 @@ import {
   logProcedureError,
   createTraceLogger,
 } from "./tracing";
+import {
+  type RateLimitInfo,
+  RATE_LIMIT_HEADERS,
+  setRateLimitHeaders,
+  getNextMidnightUTC,
+} from "./types/rateLimit";
+
+// Re-export rate limit types and utilities for convenience
+export { RATE_LIMIT_HEADERS, setRateLimitHeaders, type RateLimitInfo } from "./types/rateLimit";
 
 const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,

@@ -320,17 +320,17 @@ export function VoiceSearchModal({
     try {
       const { granted } = await Audio.requestPermissionsAsync();
       if (!granted) {
-        setRecordingState("error");
+        transitionTo("error");
         setErrorType("permission_denied");
         return false;
       }
       return true;
     } catch {
-      setRecordingState("error");
+      transitionTo("error");
       setErrorType("permission_unavailable");
       return false;
     }
-  }, []);
+  }, [transitionTo]);
 
   // Reset silence timeout
   const resetSilenceTimeout = useCallback(() => {
@@ -544,15 +544,18 @@ export function VoiceSearchModal({
     }
   }, [checkPermissions, transitionTo, startPulseAnimation, resetSilenceTimeout, stopRecording]);
 
-  // Handle tap on microphone
+  // Handle tap on microphone - uses stateRef for synchronous state checking
   const handleMicPress = useCallback(() => {
-    if (recordingState === "idle" || recordingState === "error") {
+    const currentState = stateRef.current;
+
+    if (currentState === "idle" || currentState === "error") {
       setErrorType(null);
       startRecording();
-    } else if (recordingState === "recording") {
+    } else if (currentState === "recording") {
       stopRecording();
     }
-  }, [recordingState, startRecording, stopRecording]);
+    // Ignore presses during processing or complete states
+  }, [startRecording, stopRecording]);
 
   // Format duration for display
   const formatDuration = (seconds: number): string => {

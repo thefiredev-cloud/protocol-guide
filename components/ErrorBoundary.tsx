@@ -1,6 +1,11 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 import { View, Text, Pressable, ScrollView, Platform } from "react-native";
 import { spacing, radii, touchTargets } from "@/lib/design-tokens";
+import { captureError, addBreadcrumb } from "@/lib/sentry-client";
+import type { ErrorContext } from "@/lib/sentry-client";
+
+// Section types for categorizing errors
+export type ErrorSection = 'search' | 'voice' | 'protocol_viewer' | 'navigation' | 'general';
 
 interface ErrorBoundaryProps {
   /** Child components to wrap */
@@ -11,6 +16,18 @@ interface ErrorBoundaryProps {
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   /** Whether to show error details (dev only) */
   showDetails?: boolean;
+  /** Section identifier for Sentry context */
+  section?: ErrorSection;
+  /** Custom title for error UI */
+  errorTitle?: string;
+  /** Custom message for error UI */
+  errorMessage?: string;
+  /** Whether to show retry button */
+  showRetry?: boolean;
+  /** Custom retry handler */
+  onRetry?: () => void;
+  /** Compact mode for inline errors */
+  compact?: boolean;
 }
 
 interface ErrorBoundaryState {
@@ -26,6 +43,7 @@ const errorColors = {
   foreground: '#F1F5F9',
   muted: '#94A3B8',
   error: '#EF4444',
+  warning: '#F59E0B',
   primary: '#EF4444',
   border: '#334155',
 };
@@ -36,13 +54,14 @@ const errorColors = {
  * Features:
  * - Catches render errors anywhere in child component tree
  * - Displays friendly error UI with retry option
- * - Logs errors to console (and optionally to external service)
+ * - Reports errors to Sentry with context
  * - Shows error details in development mode
+ * - Supports compact mode for inline error displays
  *
  * Usage:
  * ```tsx
- * <ErrorBoundary onError={(error) => logToSentry(error)}>
- *   <MyComponent />
+ * <ErrorBoundary section="search" errorTitle="Search Failed">
+ *   <SearchResults />
  * </ErrorBoundary>
  * ```
  */
@@ -68,13 +87,32 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     // Update state with error info
     this.setState({ errorInfo });
 
-    // Call optional error handler (for Sentry, etc.)
+    // Report to Sentry with context
+    const context: ErrorContext = {
+      componentStack: errorInfo.componentStack || undefined,
+      section: this.props.section || 'general',
+    };
+    captureError(error, context);
+
+    // Add breadcrumb for debugging
+    addBreadcrumb(`Error in ${this.props.section || 'component'}`, 'error', {
+      errorMessage: error.message,
+      errorName: error.name,
+    });
+
+    // Call optional error handler
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
   }
 
   handleRetry = (): void => {
+    // Call custom retry handler if provided
+    if (this.props.onRetry) {
+      this.props.onRetry();
+    }
+
+    // Reset error state
     this.setState({
       hasError: false,
       error: null,
@@ -91,7 +129,69 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       const { error, errorInfo } = this.state;
       const showDetails = this.props.showDetails ?? __DEV__;
+      const showRetry = this.props.showRetry ?? true;
+      const compact = this.props.compact ?? false;
 
+      // Compact mode for inline error displays
+      if (compact) {
+        return (
+          <View
+            style={{
+              backgroundColor: `${errorColors.error}15`,
+              borderRadius: radii.lg,
+              padding: spacing.md,
+              borderWidth: 1,
+              borderColor: `${errorColors.error}30`,
+            }}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, marginRight: spacing.sm }}>!</Text>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: '600',
+                    color: errorColors.error,
+                  }}
+                >
+                  {this.props.errorTitle || 'Something went wrong'}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: errorColors.muted,
+                    marginTop: 2,
+                  }}
+                >
+                  {this.props.errorMessage || 'Please try again'}
+                </Text>
+              </View>
+              {showRetry && (
+                <Pressable
+                  onPress={this.handleRetry}
+                  style={({ pressed }) => ({
+                    paddingVertical: spacing.xs,
+                    paddingHorizontal: spacing.md,
+                    borderRadius: radii.md,
+                    backgroundColor: errorColors.error,
+                    opacity: pressed ? 0.7 : 1,
+                  })}
+                  accessibilityRole="button"
+                  accessibilityLabel="Retry"
+                >
+                  <Text style={{ fontSize: 12, fontWeight: '600', color: '#FFFFFF' }}>
+                    Retry
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          </View>
+        );
+      }
+
+      // Full error display
       return (
         <View
           style={{
@@ -126,7 +226,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 marginBottom: spacing.lg,
               }}
             >
-              <Text style={{ fontSize: 32 }}>!</Text>
+              <Text style={{ fontSize: 32, color: errorColors.error }}>!</Text>
             </View>
 
             {/* Title */}
@@ -140,7 +240,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               }}
               accessibilityRole="header"
             >
-              Something went wrong
+              {this.props.errorTitle || 'Something went wrong'}
             </Text>
 
             {/* Description */}
@@ -153,7 +253,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 marginBottom: spacing.xl,
               }}
             >
-              We encountered an unexpected error. Please try again or restart the app if the problem persists.
+              {this.props.errorMessage ||
+                'We encountered an unexpected error. Please try again or restart the app if the problem persists.'}
             </Text>
 
             {/* Error Details (dev only) */}
@@ -194,32 +295,34 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             )}
 
             {/* Retry Button */}
-            <Pressable
-              onPress={this.handleRetry}
-              style={({ pressed }) => ({
-                minHeight: touchTargets.minimum,
-                paddingVertical: spacing.md,
-                paddingHorizontal: spacing['2xl'],
-                borderRadius: radii.lg,
-                backgroundColor: errorColors.primary,
-                opacity: pressed ? 0.7 : 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              })}
-              accessibilityRole="button"
-              accessibilityLabel="Try again"
-              accessibilityHint="Attempts to render the component again"
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  color: '#FFFFFF',
-                }}
+            {showRetry && (
+              <Pressable
+                onPress={this.handleRetry}
+                style={({ pressed }) => ({
+                  minHeight: touchTargets.minimum,
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing['2xl'],
+                  borderRadius: radii.lg,
+                  backgroundColor: errorColors.primary,
+                  opacity: pressed ? 0.7 : 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                })}
+                accessibilityRole="button"
+                accessibilityLabel="Try again"
+                accessibilityHint="Attempts to render the component again"
               >
-                Try Again
-              </Text>
-            </Pressable>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  Try Again
+                </Text>
+              </Pressable>
+            )}
           </View>
         </View>
       );
@@ -235,7 +338,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
  * Usage:
  * ```tsx
  * export default withErrorBoundary(MyComponent, {
- *   onError: (error) => logToSentry(error),
+ *   section: 'search',
+ *   errorTitle: 'Search Error',
  * });
  * ```
  */
@@ -254,6 +358,90 @@ export function withErrorBoundary<P extends object>(
   ComponentWithErrorBoundary.displayName = `withErrorBoundary(${displayName})`;
 
   return ComponentWithErrorBoundary;
+}
+
+// ============================================================================
+// Specialized Error Boundaries for Different App Sections
+// ============================================================================
+
+/**
+ * Error boundary for search-related components
+ */
+export function SearchErrorBoundary({ children }: { children: ReactNode }) {
+  return (
+    <ErrorBoundary
+      section="search"
+      errorTitle="Search Error"
+      errorMessage="We couldn't complete your search. Please try again with different keywords."
+      compact={false}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+
+/**
+ * Error boundary for voice recording components
+ */
+export function VoiceErrorBoundary({ children }: { children: ReactNode }) {
+  return (
+    <ErrorBoundary
+      section="voice"
+      errorTitle="Voice Search Error"
+      errorMessage="Voice recording encountered an issue. Please try typing your search instead."
+      compact={true}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+
+/**
+ * Error boundary for protocol viewer/display components
+ */
+export function ProtocolViewerErrorBoundary({ children }: { children: ReactNode }) {
+  return (
+    <ErrorBoundary
+      section="protocol_viewer"
+      errorTitle="Display Error"
+      errorMessage="Could not display this protocol. The content may be temporarily unavailable."
+      compact={false}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+
+/**
+ * Error boundary for search results list
+ */
+export function SearchResultsErrorBoundary({ children }: { children: ReactNode }) {
+  return (
+    <ErrorBoundary
+      section="search"
+      errorTitle="Results Error"
+      errorMessage="Could not display search results. Please try your search again."
+      compact={true}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+
+/**
+ * Error boundary for navigation/routing
+ */
+export function NavigationErrorBoundary({ children }: { children: ReactNode }) {
+  return (
+    <ErrorBoundary
+      section="navigation"
+      errorTitle="Navigation Error"
+      errorMessage="Could not navigate to this screen. Please go back and try again."
+      showRetry={true}
+    >
+      {children}
+    </ErrorBoundary>
+  );
 }
 
 export default ErrorBoundary;

@@ -460,9 +460,11 @@ export default function SearchScreen() {
       </View>
 
       {/* Search Input */}
-      <View 
+      <View
         className="flex-row items-center rounded-xl px-4 mb-4"
         style={{ backgroundColor: colors.surface, height: 52 }}
+        accessible={false}
+        importantForAccessibility="no-hide-descendants"
       >
         <IconSymbol name="magnifyingglass" size={20} color={colors.muted} />
         <TextInput
@@ -476,9 +478,18 @@ export default function SearchScreen() {
           onSubmitEditing={handleSearch}
           autoCapitalize="none"
           autoCorrect={false}
+          {...createSearchA11y(
+            "Search protocols",
+            "Type medical condition or protocol name, then press search button or enter key"
+          )}
+          accessibilityValue={{ text: query }}
         />
         {query.length > 0 && (
-          <TouchableOpacity onPress={handleClear} className="p-2">
+          <TouchableOpacity
+            onPress={handleClear}
+            className="p-2"
+            {...createButtonA11y(MEDICAL_A11Y_LABELS.search.clear, "Clears the search input field")}
+          >
             <IconSymbol name="xmark" size={18} color={colors.muted} />
           </TouchableOpacity>
         )}
