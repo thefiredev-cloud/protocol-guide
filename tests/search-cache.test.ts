@@ -90,6 +90,10 @@ const mockSearchResults: CachedSearchResult = {
   cachedAt: Date.now(),
 };
 
+// Note: These tests verify the cache logic, but the actual Redis cache
+// will not be available in test environment. The functions return null/false
+// when Redis is unavailable, which is expected behavior.
+
 describe("Search Cache", () => {
   beforeEach(() => {
     mockRedisStore.clear();
