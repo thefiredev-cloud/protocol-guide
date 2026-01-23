@@ -17,7 +17,6 @@ export async function createQuery(data: InsertQuery) {
 
 export async function getUserQueries(userId: number, limit = 50) {
   const db = await getDb();
-  if (!db) return [];
 
   return await db.select().from(queries)
     .where(eq(queries.userId, userId))
