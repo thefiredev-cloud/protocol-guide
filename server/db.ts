@@ -18,4 +18,4 @@
  * - db/protocol-versions.ts - Protocol versioning and uploads
  */
 
-export * from "./db";
+export * from "./db/index";
