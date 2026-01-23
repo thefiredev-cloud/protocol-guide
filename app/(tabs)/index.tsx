@@ -22,6 +22,8 @@ import { trpc } from "@/lib/trpc";
 import * as Haptics from "@/lib/haptics";
 import { useCountyRestriction } from "@/hooks/use-county-restriction";
 import { CountyLimitModal } from "@/components/county-limit-modal";
+import { DisclaimerConsentModal } from "@/components/DisclaimerConsentModal";
+import { useAuth } from "@/hooks/use-auth";
 
 type Agency = {
   id: number;
