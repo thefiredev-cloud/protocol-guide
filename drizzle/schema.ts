@@ -236,6 +236,47 @@ export const protocolUploads = mysqlTable("protocol_uploads", {
 	index("idx_protocol_uploads_uploader").on(table.uploadedBy),
 ]);
 
+export const userCounties = mysqlTable("user_counties", {
+	id: int().autoincrement().notNull(),
+	userId: int().notNull(),
+	countyId: int().notNull(),
+	isPrimary: tinyint().default(0),
+	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+},
+(table) => [
+	index("idx_user_counties_user").on(table.userId),
+	index("idx_user_counties_county").on(table.countyId),
+]);
+
+export const searchHistory = mysqlTable("search_history", {
+	id: int().autoincrement().notNull(),
+	userId: int().notNull(),
+	countyId: int(),
+	searchQuery: text().notNull(),
+	resultsCount: int(),
+	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+},
+(table) => [
+	index("idx_search_history_user").on(table.userId),
+	index("idx_search_history_created").on(table.createdAt),
+]);
+
+export const stripeWebhookEvents = mysqlTable("stripe_webhook_events", {
+	id: int().autoincrement().notNull(),
+	eventId: varchar({ length: 255 }).notNull(),
+	eventType: varchar({ length: 100 }).notNull(),
+	payload: json(),
+	processed: tinyint().default(0),
+	processedAt: timestamp({ mode: 'string' }),
+	error: text(),
+	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+},
+(table) => [
+	index("idx_stripe_events_id").on(table.eventId),
+	index("idx_stripe_events_type").on(table.eventType),
+	index("idx_stripe_events_processed").on(table.processed),
+]);
+
 // ========================================
 // Type exports
 // ========================================
