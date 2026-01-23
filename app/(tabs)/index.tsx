@@ -280,7 +280,7 @@ export default function HomeScreen() {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedState, selectedAgency, trpcUtils]);
+  }, [selectedState, selectedAgency, trpcUtils, isAuthenticated, disclaimerAcknowledged]);
 
   // Extract key steps from protocol content (fallback)
   const extractKeySteps = (content: string, query: string): string => {
