@@ -212,19 +212,19 @@ export function SimulationSection() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isTablet && { paddingVertical: 56 }]}>
       {/* Background pattern overlay */}
       <View style={styles.backgroundPattern} />
 
-      <View style={styles.content}>
+      <View style={[styles.content, isMobile && { paddingHorizontal: 16 }, isTablet && { paddingHorizontal: 32 }]}>
         {/* Section Label */}
         <Text style={styles.sectionLabel}>Live Simulation</Text>
 
         {/* Title */}
-        <Text style={styles.title}>The Cognitive Load Gap</Text>
+        <Text style={[styles.title, isMobile && { fontSize: 24 }, isTablet && { fontSize: 30 }]}>The Cognitive Load Gap</Text>
 
         {/* Subtitle */}
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, isMobile && { fontSize: 15 }, isTablet && { fontSize: 16, marginBottom: 28 }]}>
           {`Click "Simulate Call" to visualize the time difference\nin a cardiac arrest scenario.`}
         </Text>
 

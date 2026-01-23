@@ -82,6 +82,15 @@ export default function TabLayout() {
         }}
       />
       
+      {/* Calculator - medication dosing tool */}
+      <Tabs.Screen
+        name="calculator"
+        options={{
+          title: "Dosing",
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="scalemass.fill" color={color} />,
+        }}
+      />
+
       {/* Profile - settings, favorites, account */}
       <Tabs.Screen
         name="profile"
@@ -90,7 +99,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={24} name="person.fill" color={color} />,
         }}
       />
-      
+
       {/* Hide non-essential tabs */}
       <Tabs.Screen
         name="coverage"

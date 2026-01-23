@@ -48,14 +48,25 @@ export const feedback = mysqlTable("feedback", {
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 });
 
+/**
+ * Integration access logs for partner analytics
+ *
+ * HIPAA COMPLIANCE (2026-01-23):
+ * This table intentionally does NOT store PHI (Protected Health Information).
+ * The following fields were REMOVED for HIPAA compliance:
+ * - userAge: Patient age constitutes PHI when combined with timestamps
+ * - impression: Clinical impression codes are medical PHI
+ *
+ * DO NOT re-add any patient-identifying fields to this table.
+ * See migration: 0012_remove_phi_from_integration_logs.sql
+ */
 export const integrationLogs = mysqlTable("integration_logs", {
 	id: int().autoincrement().notNull(),
 	partner: mysqlEnum(['imagetrend','esos','zoll','emscloud','none']).notNull(),
 	agencyId: varchar({ length: 100 }),
 	agencyName: varchar({ length: 255 }),
 	searchTerm: varchar({ length: 500 }),
-	userAge: int(),
-	impression: varchar({ length: 255 }),
+	// HIPAA: PHI columns removed - DO NOT ADD userAge or impression
 	responseTimeMs: int(),
 	resultCount: int(),
 	ipAddress: varchar({ length: 45 }),
