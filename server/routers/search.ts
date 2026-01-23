@@ -176,7 +176,7 @@ export const searchRouter = router({
         searchOptions
       );
 
-      // Step 5: Build response
+      // Step 6: Build response
       const latencyMs = Date.now() - searchStartTime;
       latencyMonitor.record('totalRetrieval', latencyMs);
 
