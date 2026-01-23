@@ -64,6 +64,13 @@
       "when": 1769113810560,
       "tag": "0008_harsh_swordsman",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1769144517996,
+      "tag": "0009_common_rockslide",
+      "breakpoints": true
     }
   ]
 }

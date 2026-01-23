@@ -8,7 +8,8 @@
  * sharing with partners and department colleagues.
  */
 
-import React, { useState, useCallback } from "react";
+import * as React from "react";
+const { useState, useCallback } = React;
 import {
   View,
   Text,

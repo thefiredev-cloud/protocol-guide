@@ -13,21 +13,15 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { appRouter } from "../server/routers";
-import type { TrpcContext } from "../server/_core/context";
-
-// Mock the embeddings module
-const mockSemanticSearch = vi.fn();
+// Mock the embeddings module - use inline mock to avoid hoisting issues
 vi.mock("../server/_core/embeddings", () => ({
-  semanticSearchProtocols: mockSemanticSearch,
+  semanticSearchProtocols: vi.fn(),
 }));
 
 // Mock the database module
-const mockMapCountyIdToAgencyId = vi.fn();
-const mockGetAgencyByCountyId = vi.fn();
 vi.mock("../server/db-agency-mapping", () => ({
-  mapCountyIdToAgencyId: mockMapCountyIdToAgencyId,
-  getAgencyByCountyId: mockGetAgencyByCountyId,
+  mapCountyIdToAgencyId: vi.fn(),
+  getAgencyByCountyId: vi.fn(),
 }));
 
 // Mock the database
