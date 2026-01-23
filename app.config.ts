@@ -43,7 +43,7 @@ const config: ExpoConfig = {
   // Update configuration for OTA updates
   updates: {
     enabled: true,
-    url: "https://u.expo.dev/REPLACE_WITH_EAS_PROJECT_ID",
+    url: "",  // Will be set after eas project:init
     fallbackToCacheTimeout: 30000,
     checkAutomatically: "ON_LOAD",
   },
