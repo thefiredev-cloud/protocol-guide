@@ -99,16 +99,16 @@ export default function TeamScreen() {
               <View
                 style={[
                   styles.roleBadge,
-                  { backgroundColor: (ROLE_COLORS[member.role] || colors.muted) + "20" },
+                  { backgroundColor: (ROLE_COLORS[member.role ?? "member"] || colors.muted) + "20" },
                 ]}
               >
                 <Text
                   style={[
                     styles.roleText,
-                    { color: ROLE_COLORS[member.role] || colors.muted },
+                    { color: ROLE_COLORS[member.role ?? "member"] || colors.muted },
                   ]}
                 >
-                  {ROLE_LABELS[member.role] || member.role}
+                  {ROLE_LABELS[member.role ?? "member"] || member.role}
                 </Text>
               </View>
 
