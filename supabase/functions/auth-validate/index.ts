@@ -27,7 +27,7 @@ serve(async (req) => {
     // Extract Bearer token
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return errorResponse("Missing or invalid authorization header", 401);
+      return errorResponse("Missing or invalid authorization header", 401, req);
     }
 
     const token = authHeader.replace("Bearer ", "");
@@ -36,7 +36,7 @@ serve(async (req) => {
     const { user, error } = await verifyAndGetUser(token);
 
     if (error || !user) {
-      return jsonResponse({ valid: false, error: error || "Invalid token" }, 401);
+      return jsonResponse({ valid: false, error: error || "Invalid token" }, 401, req);
     }
 
     // Get user metadata from our database for tier/subscriptions
@@ -55,7 +55,7 @@ serve(async (req) => {
         userId: user.id,
         email: user.email,
         tier: "free",
-      } satisfies ValidateResponse);
+      } satisfies ValidateResponse, 200, req);
     }
 
     // Get user's subscribed states
@@ -81,9 +81,9 @@ serve(async (req) => {
       subscribedAgencies: agencyData?.map((a) => a.agency_id) || [],
     };
 
-    return jsonResponse(response);
+    return jsonResponse(response, 200, req);
   } catch (error) {
     console.error("[AuthValidate] Error:", error);
-    return errorResponse("Internal server error", 500);
+    return errorResponse("Internal server error", 500, req);
   }
 });

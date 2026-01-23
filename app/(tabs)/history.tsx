@@ -336,6 +336,7 @@ export default function HistoryScreen() {
           showsVerticalScrollIndicator={false}
         />
       </ProFeatureLock>
+      )}
     </ScreenContainer>
   );
 }
