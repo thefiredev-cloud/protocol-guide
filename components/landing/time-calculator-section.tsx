@@ -12,6 +12,7 @@
 import * as React from "react";
 import { useState, useRef, useEffect } from "react";
 import { View, Text, Platform, Animated, StyleSheet, useWindowDimensions, Easing } from "react-native";
+import Slider from "@react-native-community/slider";
 
 const COLORS = {
   darkNavy: "#0A0F1C", // Deeper navy for better contrast

@@ -179,9 +179,22 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
           useNativeDriver: true,
         }),
       ]),
+      Animated.parallel([
+        Animated.timing(badgesOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.spring(badgesTranslateY, {
+          toValue: 0,
+          friction: 8,
+          tension: 40,
+          useNativeDriver: true,
+        }),
+      ]),
     ]);
     animations.start();
-  }, [navOpacity, headlineOpacity, headlineTranslateY, subheadOpacity, subheadTranslateY, ctaOpacity, ctaScale]);
+  }, [navOpacity, headlineOpacity, headlineTranslateY, subheadOpacity, subheadTranslateY, ctaOpacity, ctaScale, badgesOpacity, badgesTranslateY]);
 
   // Mobile menu slide animation
   useEffect(() => {
