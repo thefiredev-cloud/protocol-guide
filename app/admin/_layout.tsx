@@ -69,7 +69,7 @@ export default function AdminLayout() {
           <IconSymbol name="building.2" size={64} color={colors.muted} />
           <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No Agency Access</Text>
           <Text style={[styles.emptyText, { color: colors.muted }]}>
-            You don't have admin access to any agencies. Contact your agency administrator.
+            You do not have admin access to any agencies. Contact your agency administrator.
           </Text>
           <TouchableOpacity
             style={[styles.backButton, { backgroundColor: colors.primary }]}
