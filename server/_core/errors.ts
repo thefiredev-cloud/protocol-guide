@@ -400,3 +400,88 @@ export function isRetryableError(error: unknown): boolean {
   const retryableCodes = ['ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED', 'EPIPE', 'ENOTFOUND'];
   return retryableCodes.includes(err.code || '');
 }
+
+// ============================================================================
+// TRACE CONTEXT HELPERS
+// ============================================================================
+
+/**
+ * Attach trace context to any error
+ * If error is ProtocolGuideError, uses withTrace method
+ * Otherwise, attaches traceContext as a property
+ */
+export function attachTraceToError<T extends Error>(
+  error: T,
+  traceContext: TraceContext
+): T & { requestId: string; traceContext: TraceContext } {
+  if (error instanceof ProtocolGuideError) {
+    error.withTrace(traceContext);
+    return error as T & { requestId: string; traceContext: TraceContext };
+  }
+
+  // For non-ProtocolGuideError errors, attach trace as properties
+  const tracedError = error as T & { requestId: string; traceContext: TraceContext };
+  tracedError.requestId = traceContext.requestId;
+  tracedError.traceContext = traceContext;
+  return tracedError;
+}
+
+/**
+ * Extract request ID from an error if present
+ */
+export function getRequestIdFromError(error: unknown): string | undefined {
+  if (error instanceof ProtocolGuideError) {
+    return error.requestId;
+  }
+
+  if (error && typeof error === 'object' && 'requestId' in error) {
+    return (error as { requestId: string }).requestId;
+  }
+
+  return undefined;
+}
+
+/**
+ * Create a standardized error response object for API responses
+ */
+export function createErrorResponse(
+  error: unknown,
+  requestId?: string
+): {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    requestId?: string;
+    timestamp: string;
+    retryable: boolean;
+  };
+} {
+  const timestamp = new Date().toISOString();
+
+  if (error instanceof ProtocolGuideError) {
+    return {
+      success: false,
+      error: {
+        code: error.code,
+        message: error.userMessage,
+        requestId: error.requestId || requestId,
+        timestamp: error.timestamp,
+        retryable: error.retryable,
+      },
+    };
+  }
+
+  const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+
+  return {
+    success: false,
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: errorMessage,
+      requestId,
+      timestamp,
+      retryable: false,
+    },
+  };
+}
