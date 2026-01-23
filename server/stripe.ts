@@ -66,6 +66,7 @@ export async function createCheckoutSession({
           userId: userId.toString(),
           plan,
         },
+        trial_period_days: TRIAL_PERIOD_DAYS,
       },
       allow_promotion_codes: true,
     });
