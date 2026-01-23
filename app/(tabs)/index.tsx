@@ -488,25 +488,22 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* Input with Voice Search */}
-      <View className="flex-row items-end px-4 pb-2 gap-2">
-        {/* Voice Search Button */}
+      {/* Voice Search Button - positioned above input */}
+      <View className="flex-row items-center justify-center pb-2">
         <VoiceSearchButton
           onTranscription={handleVoiceTranscription}
           onError={handleVoiceError}
           disabled={isLoading}
           size="medium"
         />
-
-        {/* Text Input */}
-        <View className="flex-1">
-          <ChatInput
-            onSend={handleSendMessage}
-            disabled={isLoading}
-            placeholder="cardiac arrest adult..."
-          />
-        </View>
       </View>
+
+      {/* Text Input */}
+      <ChatInput
+        onSend={handleSendMessage}
+        disabled={isLoading}
+        placeholder="cardiac arrest adult..."
+      />
 
       {/* State Modal */}
       <Modal
