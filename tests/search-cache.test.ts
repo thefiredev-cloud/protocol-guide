@@ -644,4 +644,58 @@ describe("Search Cache", () => {
       expect(result2?.results[0].countyId).toBe(2);
     });
   });
+
+  describe("Cache Headers", () => {
+    it("should export correct TTL constants", () => {
+      expect(CACHE_TTL).toBe(3600); // 1 hour
+      expect(CACHE_HEADER_MAX_AGE).toBe(3600); // 1 hour
+      expect(CACHE_HEADER_STALE_WHILE_REVALIDATE).toBe(300); // 5 minutes
+    });
+
+    it("should generate correct headers for cache hit", () => {
+      const headers = getSearchCacheHeaders(true);
+
+      expect(headers['Cache-Control']).toBe(
+        `public, max-age=${CACHE_HEADER_MAX_AGE}, stale-while-revalidate=${CACHE_HEADER_STALE_WHILE_REVALIDATE}`
+      );
+      expect(headers['X-Cache']).toBe('HIT');
+      expect(headers['X-Cache-TTL']).toBe(String(CACHE_TTL));
+    });
+
+    it("should generate correct headers for cache miss", () => {
+      const headers = getSearchCacheHeaders(false);
+
+      expect(headers['Cache-Control']).toBe(
+        `public, max-age=${CACHE_HEADER_MAX_AGE}, stale-while-revalidate=${CACHE_HEADER_STALE_WHILE_REVALIDATE}`
+      );
+      expect(headers['X-Cache']).toBe('MISS');
+      expect(headers['X-Cache-TTL']).toBe(String(CACHE_TTL));
+    });
+
+    it("should set headers on response object", () => {
+      const mockRes = {
+        setHeader: vi.fn(),
+      };
+
+      setSearchCacheHeaders(mockRes, true);
+
+      expect(mockRes.setHeader).toHaveBeenCalledTimes(3);
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'Cache-Control',
+        `public, max-age=${CACHE_HEADER_MAX_AGE}, stale-while-revalidate=${CACHE_HEADER_STALE_WHILE_REVALIDATE}`
+      );
+      expect(mockRes.setHeader).toHaveBeenCalledWith('X-Cache', 'HIT');
+      expect(mockRes.setHeader).toHaveBeenCalledWith('X-Cache-TTL', String(CACHE_TTL));
+    });
+
+    it("should set MISS header on cache miss", () => {
+      const mockRes = {
+        setHeader: vi.fn(),
+      };
+
+      setSearchCacheHeaders(mockRes, false);
+
+      expect(mockRes.setHeader).toHaveBeenCalledWith('X-Cache', 'MISS');
+    });
+  });
 });
