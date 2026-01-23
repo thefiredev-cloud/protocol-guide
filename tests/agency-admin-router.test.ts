@@ -585,7 +585,7 @@ describe("Agency Admin Router", () => {
     });
 
     it("should track version history", async () => {
-      await createProtocolVersion({
+      const v1Id = await createProtocolVersion({
         agencyId: testAgency.id,
         protocolNumber: "C-101",
         title: "Cardiac Arrest",
@@ -595,7 +595,10 @@ describe("Agency Admin Router", () => {
         createdBy: adminUser.id,
       });
 
-      await createProtocolVersion({
+      // Small delay to ensure different timestamps
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const v2Id = await createProtocolVersion({
         agencyId: testAgency.id,
         protocolNumber: "C-101",
         title: "Cardiac Arrest",
@@ -607,11 +610,13 @@ describe("Agency Admin Router", () => {
 
       const versions = Array.from(mockProtocolVersions.values())
         .filter((v) => v.protocolNumber === "C-101")
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        .sort((a, b) => b.id - a.id); // Sort by ID instead of timestamp for deterministic results
 
       expect(versions).toHaveLength(2);
-      expect(versions[0].version).toBe("2.0"); // Most recent
+      expect(versions[0].version).toBe("2.0"); // Most recent (higher ID)
       expect(versions[1].version).toBe("1.0");
+      expect(versions[0].id).toBe(v2Id);
+      expect(versions[1].id).toBe(v1Id);
     });
 
     it("should allow metadata for change tracking", async () => {
