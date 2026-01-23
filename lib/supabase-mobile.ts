@@ -197,12 +197,15 @@ export async function signInWithAppleMobile(): Promise<{
       }
 
       if (result.type === "cancel") {
+        await clearOAuthState();
         return { success: false, error: "Sign in was cancelled" };
       }
     }
 
+    await clearOAuthState();
     return { success: false, error: "Failed to start authentication" };
   } catch (error) {
+    await clearOAuthState();
     console.error("[AppleAuth] Error:", error);
     return {
       success: false,
