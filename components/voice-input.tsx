@@ -111,7 +111,15 @@ type VoiceInputProps = {
   disabled?: boolean;
 };
 
-type RecordingState = "idle" | "recording" | "processing";
+type RecordingState = "idle" | "recording" | "processing" | "complete";
+
+// Valid state transitions - prevents invalid state changes
+const VALID_TRANSITIONS: Record<RecordingState, RecordingState[]> = {
+  idle: ["recording"],
+  recording: ["processing", "idle"], // idle for cancel/error
+  processing: ["complete", "idle"], // idle for error
+  complete: ["idle"],
+};
 
 export function VoiceInput({ onTranscription, onError, disabled = false }: VoiceInputProps) {
   const colors = useColors();
@@ -119,6 +127,24 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
   const [recordingDuration, setRecordingDuration] = useState(0);
   const recordingRef = useRef<Recording | null>(null);
   const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Use ref to track current state synchronously (prevents race conditions)
+  const stateRef = useRef<RecordingState>("idle");
+
+  // State machine transition function - validates transitions
+  const transitionTo = useCallback((newState: RecordingState): boolean => {
+    const currentState = stateRef.current;
+    const validNextStates = VALID_TRANSITIONS[currentState];
+
+    if (!validNextStates.includes(newState)) {
+      console.warn(`VoiceInput: Invalid state transition: ${currentState} -> ${newState}`);
+      return false;
+    }
+
+    stateRef.current = newState;
+    setRecordingState(newState);
+    return true;
+  }, []);
 
   // Animation for recording indicator
   const pulseScale = useSharedValue(1);
