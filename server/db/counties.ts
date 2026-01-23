@@ -15,7 +15,6 @@ export async function getAllCounties() {
 
 export async function getCountyById(id: number) {
   const db = await getDb();
-  if (!db) return undefined;
 
   const result = await db.select().from(counties).where(eq(counties.id, id)).limit(1);
   return result.length > 0 ? result[0] : undefined;
