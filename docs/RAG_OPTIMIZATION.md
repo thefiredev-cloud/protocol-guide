@@ -295,15 +295,32 @@ app.get('/api/health/rag', (req, res) => {
 
 ### Latency Breakdown (Target)
 
+**Simple Query Mode:**
 ```
 Query normalization:     10ms
 Embedding (cached):       0ms  |  Embedding (new): 250ms
 Vector search:          150ms
-Re-ranking:              30ms
+Advanced re-ranking:     40ms
 LLM inference:        1200ms   (Haiku) / 1800ms (Sonnet)
                       ------
-Total:                1390ms   (Haiku) / 2040ms (Sonnet w/ cache)
+Total:                1400ms   (Haiku) / 2050ms (Sonnet w/ cache)
 ```
+
+**Multi-Query Fusion Mode (medication/complex queries):**
+```
+Query normalization:     10ms
+Query variation gen:      5ms
+Parallel embedding:     300ms  (3 queries, parallel)
+Parallel vector search: 200ms  (3 queries, parallel)
+RRF merge:               10ms
+Advanced re-ranking:     50ms
+Context boosting:        10ms
+LLM inference:        1200ms   (Haiku) / 1800ms (Sonnet)
+                      ------
+Total:                1785ms   (Haiku) / 2385ms (Sonnet)
+```
+
+Note: Multi-query mode adds ~200-400ms latency but significantly improves recall for safety-critical queries.
 
 ---
 
