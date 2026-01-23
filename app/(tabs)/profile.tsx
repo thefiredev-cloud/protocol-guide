@@ -303,6 +303,50 @@ export default function ProfileScreen() {
     );
   }
 
+  // Show error state if queries failed
+  if (hasProfileError) {
+    return (
+      <ScreenContainer>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+          {/* Header still shows */}
+          <View style={styles.header}>
+            <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
+              <Text style={styles.avatarText}>
+                {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
+              </Text>
+            </View>
+            <Text style={[styles.userName, { color: colors.foreground }]}>
+              {user.name || "User"}
+            </Text>
+            <Text style={[styles.userEmail, { color: colors.muted }]}>{user.email || "No email"}</Text>
+          </View>
+
+          {/* Error Card */}
+          <View style={[styles.card, { backgroundColor: colors.error + "10", borderColor: colors.error }]}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.iconCircle, { backgroundColor: colors.error + "20" }]}>
+                <IconSymbol name="exclamationmark.triangle.fill" size={18} color={colors.error} />
+              </View>
+              <Text style={[styles.cardTitle, { color: colors.error }]}>Unable to Load Profile</Text>
+            </View>
+            <Text style={[styles.cacheDescription, { color: colors.muted, marginTop: 8 }]}>
+              Could not connect to the server. Check your internet connection and try again.
+            </Text>
+          </View>
+
+          {/* Sign Out still available */}
+          <TouchableOpacity
+            onPress={handleLogout}
+            style={[styles.signOutButton, { borderColor: colors.error }]}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.signOutText, { color: colors.error }]}>Sign Out</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </ScreenContainer>
+    );
+  }
+
   return (
     <ScreenContainer>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
