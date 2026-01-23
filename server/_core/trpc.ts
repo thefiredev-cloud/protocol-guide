@@ -116,9 +116,15 @@ const requireUser = t.middleware(async (opts) => {
   });
 });
 
-export const protectedProcedure = t.procedure.use(requireUser);
+/**
+ * Protected procedure with tracing - requires authenticated user
+ */
+export const protectedProcedure = publicProcedure.use(requireUser);
 
-export const adminProcedure = t.procedure.use(
+/**
+ * Admin procedure with tracing - requires admin role
+ */
+export const adminProcedure = publicProcedure.use(
   t.middleware(async (opts) => {
     const { ctx, next } = opts;
 
@@ -158,7 +164,10 @@ const requirePaidTier = t.middleware(async (opts) => {
   });
 });
 
-export const paidProcedure = t.procedure.use(requirePaidTier);
+/**
+ * Paid procedure with tracing - requires Pro or Enterprise tier
+ */
+export const paidProcedure = publicProcedure.use(requirePaidTier);
 
 // ============================================================================
 // RATE LIMIT MIDDLEWARE
