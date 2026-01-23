@@ -9,7 +9,33 @@
  */
 
 import { Platform } from 'react-native';
-import { getApiBaseUrl } from '@/constants/oauth';
+
+/**
+ * Get the API base URL for error reporting
+ */
+function getApiBaseUrl(): string {
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? '';
+
+  if (API_BASE_URL) {
+    return API_BASE_URL.replace(/\/$/, '');
+  }
+
+  // On web, derive from current hostname
+  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location) {
+    const { protocol, hostname, port } = window.location;
+
+    if (hostname === 'localhost' && port === '8081') {
+      return `${protocol}//localhost:3000`;
+    }
+
+    const apiHostname = hostname.replace(/^8081-/, '3000-');
+    if (apiHostname !== hostname) {
+      return `${protocol}//${apiHostname}`;
+    }
+  }
+
+  return '';
+}
 
 // Error context types
 export type ErrorContext = {

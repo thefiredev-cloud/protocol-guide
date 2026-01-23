@@ -66,7 +66,7 @@ serve(async (req) => {
           suggestions: cached.slice(0, limit),
           source: "cache",
           detected_state: null,
-        });
+        }, 200, req);
       }
 
       // Get top agencies by protocol count
@@ -78,7 +78,7 @@ serve(async (req) => {
 
       if (error) {
         console.error("[AgencySuggest] Query error:", error);
-        return errorResponse("Failed to fetch agencies", 500);
+        return errorResponse("Failed to fetch agencies", 500, req);
       }
 
       // Cache for 1 hour
@@ -89,7 +89,7 @@ serve(async (req) => {
         source: "database",
         detected_state: null,
         detected_country: cfCountry,
-      });
+      }, 200, req);
     }
 
     // Check cache for state
@@ -101,7 +101,7 @@ serve(async (req) => {
         source: "cache",
         detected_state: stateCode,
         state_name: STATE_CODES[stateCode],
-      });
+      }, 200, req);
     }
 
     // Query agencies for this state
@@ -114,7 +114,7 @@ serve(async (req) => {
 
     if (error) {
       console.error("[AgencySuggest] Query error:", error);
-      return errorResponse("Failed to fetch agencies", 500);
+      return errorResponse("Failed to fetch agencies", 500, req);
     }
 
     // If no agencies in state, get nearby states or national
@@ -132,7 +132,7 @@ serve(async (req) => {
         detected_state: stateCode,
         state_name: STATE_CODES[stateCode],
         message: `No local agencies found in ${STATE_CODES[stateCode]}. Showing state-level protocols.`,
-      });
+      }, 200, req);
     }
 
     // Cache for 1 hour
@@ -144,9 +144,9 @@ serve(async (req) => {
       detected_state: stateCode,
       state_name: STATE_CODES[stateCode],
       detected_city: cfCity,
-    });
+    }, 200, req);
   } catch (error) {
     console.error("[AgencySuggest] Error:", error);
-    return errorResponse("Internal server error", 500);
+    return errorResponse("Internal server error", 500, req);
   }
 });

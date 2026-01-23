@@ -288,6 +288,20 @@ export default function ProfileScreen() {
 
   const isPro = usage?.tier === "pro" || usage?.tier === "enterprise";
 
+  // Show loading skeletons while data is being fetched
+  if (isProfileLoading) {
+    return (
+      <ScreenContainer>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+          <SkeletonProfileHeader />
+          <SkeletonSubscriptionCard style={{ marginBottom: 16 }} />
+          <SkeletonUsageCard style={{ marginBottom: 16 }} />
+          <SkeletonRecentQueries count={3} style={{ marginBottom: 16 }} />
+        </ScrollView>
+      </ScreenContainer>
+    );
+  }
+
   return (
     <ScreenContainer>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
