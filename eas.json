@@ -89,8 +89,8 @@
     "production": {
       "ios": {
         "appleId": "team@protocolguide.app",
-        "ascAppId": "REPLACE_WITH_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "REPLACE_WITH_APPLE_TEAM_ID",
+        "ascAppId": "6740513729",
+        "appleTeamId": "69UBHLK3VY",
         "sku": "com.protocolguide.app",
         "language": "en-US",
         "companyName": "Protocol Guide Inc",
