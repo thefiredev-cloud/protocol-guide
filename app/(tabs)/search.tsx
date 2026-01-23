@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Keyboard,
-  Pressable,
 } from "react-native";
 import { SkeletonProtocolCard } from "@/components/ui/Skeleton";
 import { ScreenContainer } from "@/components/screen-container";

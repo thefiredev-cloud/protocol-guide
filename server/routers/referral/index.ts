@@ -13,7 +13,7 @@ import { userProcedures } from "./user-procedures";
 import { codeProcedures } from "./code-procedures";
 import { analyticsProcedures } from "./analytics-procedures";
 
-export const referralRouter = createTRPCRouter({
+export const referralRouter = router({
   // User referral operations
   getMyReferralCode: userProcedures.getMyReferralCode,
   getMyStats: userProcedures.getMyStats,
