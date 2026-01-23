@@ -124,6 +124,10 @@ async function startServer() {
   // AI endpoint - stricter rate limiting (10 req/min)
   app.post("/api/summarize", aiLimiter, summarizeHandler);
 
+  // ImageTrend integration endpoints
+  app.get("/api/imagetrend/launch", publicLimiter, imageTrendLaunchHandler);
+  app.get("/api/imagetrend/health", publicLimiter, imageTrendHealthHandler);
+
   // tRPC routes - search/AI procedures use stricter limits internally
   app.use(
     "/api/trpc",
