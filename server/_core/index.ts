@@ -22,6 +22,7 @@ import { initResilientRedis, initResilientDb, ServiceRegistry } from "./resilien
 const CORS_WHITELIST = [
   "https://protocol-guide.com",
   "https://www.protocol-guide.com",
+  "https://protocol-guide.netlify.app",
   // Development only
   ...(ENV.isProduction ? [] : [
     "http://localhost:8081",
