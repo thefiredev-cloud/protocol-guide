@@ -94,7 +94,7 @@ export default function PrivacyPolicyScreen() {
           We implement industry-standard security measures to protect your data, including encryption in transit and at rest. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.
         </Section>
 
-        <Section title="6. Data Retention">
+        <Section title="7. Data Retention">
           We retain your data for as long as your account is active or as needed to provide the Service. You may request deletion of your account and associated data at any time by contacting us.
         </Section>
 
