@@ -138,7 +138,7 @@ export default function PrivacyPolicyScreen() {
           {"\n\n"}
           <Text className="font-semibold">Clinical Guidance Disclaimer:</Text>
           <BulletPoint>Protocol information provided through this Service is for reference purposes only.</BulletPoint>
-          <BulletPoint>Always follow your agency's specific protocols and medical director guidance.</BulletPoint>
+          <BulletPoint>Always follow your agency&apos;s specific protocols and medical director guidance.</BulletPoint>
           <BulletPoint>Protocol Guide does not provide medical advice, diagnosis, or treatment recommendations for specific patients.</BulletPoint>
           <BulletPoint>Users are responsible for exercising appropriate clinical judgment in all patient care situations.</BulletPoint>
         </Section>
