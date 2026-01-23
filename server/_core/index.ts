@@ -69,7 +69,7 @@ async function startServer() {
 
   // Initialize resilience infrastructure (circuit breakers, fallback caches)
   const resilientRedis = initResilientRedis();
-  const resilientDb = initResilientDb({
+  initResilientDb({
     slowQuery: {
       warningThresholdMs: 500,
       errorThresholdMs: 2000,
