@@ -20,17 +20,12 @@ import {
   EmailCaptureSection,
   FooterSection,
 } from "@/components/landing";
-import { signInWithGoogle } from "@/lib/supabase";
 
 export default function LandingPage() {
   const { isAuthenticated, loading } = useAuth();
 
-  const handleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("[Landing] Sign-in error:", error);
-    }
+  const handleSignIn = () => {
+    router.push("/login");
   };
 
   // Redirect to main app if already authenticated
