@@ -10,12 +10,13 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import { useAuth } from "@/hooks/use-auth";
 import { useColors } from "@/hooks/use-colors";
-import { useOfflineCache } from "@/hooks/use-offline-cache";
+import { useOfflineCache, useOfflineAccess } from "@/hooks/use-offline-cache";
 import { CachedProtocol, formatCacheTime } from "@/lib/offline-cache";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useAppContext } from "@/lib/app-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "@/lib/haptics";
+import { ProFeatureLock, ProBadge } from "@/components/pro-feature-lock";
 
 type FilterOption = "all" | "today" | "week" | "month";
 
