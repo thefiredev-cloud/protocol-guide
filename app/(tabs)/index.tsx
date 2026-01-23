@@ -528,12 +528,14 @@ export default function HomeScreen() {
 
       {/* Voice Search Button - positioned above input */}
       <View className="flex-row items-center justify-center pb-2">
-        <VoiceSearchButton
-          onTranscription={handleVoiceTranscription}
-          onError={handleVoiceError}
-          disabled={isLoading}
-          size="medium"
-        />
+        <VoiceErrorBoundary>
+          <VoiceSearchButton
+            onTranscription={handleVoiceTranscription}
+            onError={handleVoiceError}
+            disabled={isLoading}
+            size="medium"
+          />
+        </VoiceErrorBoundary>
       </View>
 
       {/* Text Input */}
