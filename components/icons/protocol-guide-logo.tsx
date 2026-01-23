@@ -192,19 +192,20 @@ function getCrispSize(size: number): number {
   return Math.round(size * pixelRatio) / pixelRatio;
 }
 
-// Generate SVG data URI for web - Star of Life icon
+// Generate SVG data URI for web - Caduceus logo without background square
 function getSvgDataUri(
   size: number,
   color: string,
   variant: LogoVariant = "default"
 ): string {
+  // ViewBox adjusted for caduceus paths (roughly 600x685 but paths are in ~1000-6000 range)
+  // Using transform to fit properly
   if (variant === "inverted") {
-    // Inverted: dark rounded rect background with colored star
-    const svg = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="${INVERTED_BG_COLOR}"/><path d="${STAR_OF_LIFE_PATH}" fill="${color}"/><path d="${ROD_PATH}" fill="none" stroke="${INVERTED_BG_COLOR}" stroke-width="1" stroke-linecap="round"/></svg>`;
+    const svg = `<svg width="${size}" height="${size}" viewBox="0 0 600 685" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="685" rx="20" fill="${INVERTED_BG_COLOR}"/><g transform="translate(0,685) scale(0.1,-0.1)" fill="${color}" stroke="none"><path d="${CADUCEUS_PATH}"/><path d="${SECONDARY_PATH}"/></g></svg>`;
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   }
-  // Default: Star of Life in solid color
-  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${STAR_OF_LIFE_PATH}" fill="${color}"/><path d="${ROD_PATH}" fill="none" stroke="#0F172A" stroke-width="1" stroke-linecap="round"/></svg>`;
+  // Default: Caduceus in solid color (no background)
+  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 600 685" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,685) scale(0.1,-0.1)" fill="${color}" stroke="none"><path d="${CADUCEUS_PATH}"/><path d="${SECONDARY_PATH}"/></g></svg>`;
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
