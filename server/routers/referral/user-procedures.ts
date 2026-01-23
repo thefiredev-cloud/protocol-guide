@@ -10,7 +10,7 @@ import { getDb } from "../../db";
 import { sql } from "drizzle-orm";
 import { generateReferralCode, calculateTier, REFERRAL_TIERS } from "./constants";
 
-export const userProcedures = createTRPCRouter({
+export const userProcedures = router({
   /**
    * Get or create the user's referral code
    */
