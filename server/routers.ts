@@ -198,11 +198,12 @@ export const appRouter = router({
           }
         }
 
-        // Step 2: Check Redis cache first
-        const cacheKey = generateSearchCacheKey({
+        // Step 2: Check Redis cache first (target <10ms for cache hits)
+        const cacheKey = getSearchCacheKey({
           query: normalized.normalized,
           agencyId: input.countyId,
-          stateFilter: input.stateFilter,
+          stateCode: input.stateFilter,
+          limit: input.limit,
         });
 
         type CachedResult = {
