@@ -12,8 +12,10 @@ import { semanticSearchProtocols } from "../_core/embeddings";
 import { normalizeEmsQuery } from "../_core/ems-query-normalizer";
 import {
   optimizedSearch,
+  highAccuracySearch,
   selectModel,
   latencyMonitor,
+  type OptimizedSearchOptions,
 } from "../_core/rag-optimizer";
 import * as db from "../db";
 import * as dbUserCounties from "../db-user-counties";
