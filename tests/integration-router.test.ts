@@ -584,9 +584,17 @@ describe("Integration Router", () => {
     it("should respect time period filter", async () => {
       const { dailyUsage } = await getDailyUsage({ days: 1 });
 
-      // Should only include today's data
+      // Should only include recent data (within 1 day)
+      // Note: Due to timing, may include yesterday if we're close to midnight
       const dates = new Set(dailyUsage.map((u) => u.date));
-      expect(dates.size).toBeLessThanOrEqual(1);
+      expect(dates.size).toBeLessThanOrEqual(2); // Today + possibly yesterday
+
+      // Verify we're not getting data from 2 days ago
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+      const twoDaysAgoStr = twoDaysAgo.toISOString().split("T")[0];
+
+      expect(Array.from(dates)).not.toContain(twoDaysAgoStr);
     });
   });
 
