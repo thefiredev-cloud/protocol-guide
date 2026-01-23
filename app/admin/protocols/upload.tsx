@@ -94,7 +94,7 @@ export default function UploadProtocolScreen() {
       } else {
         // For native, use FileSystem
         base64 = await FileSystem.readAsStringAsync(file.uri, {
-          encoding: FileSystem.EncodingType.Base64,
+          encoding: "base64",
         });
       }
 
