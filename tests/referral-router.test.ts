@@ -191,6 +191,16 @@ async function redeemReferralCode(
     return { success: false, benefit: "", error: "Invalid or expired referral code" };
   }
 
+  // Check if code is still active
+  if (!referralCode.isActive) {
+    return { success: false, benefit: "", error: "This code is no longer active" };
+  }
+
+  // Check max uses
+  if (referralCode.maxUses && referralCode.usesCount >= referralCode.maxUses) {
+    return { success: false, benefit: "", error: "This code has reached its usage limit" };
+  }
+
   // Prevent self-referral
   if (referralCode.userId === newUserId) {
     return { success: false, benefit: "", error: "You cannot use your own referral code" };
