@@ -51,6 +51,10 @@ export function SimulationSection() {
   const [manualElapsedTime, setManualElapsedTime] = useState(0);
   const [protocolElapsedTime, setProtocolElapsedTime] = useState(0);
   const [protocolComplete, setProtocolComplete] = useState(false);
+
+  // Live simulation timer with pause/resume support
+  const simulationTimer = useSimulationTimer(100);
+
   const manualWidth = useRef(new Animated.Value(0)).current;
   const protocolWidth = useRef(new Animated.Value(0)).current;
   const protocolBounce = useRef(new Animated.Value(1)).current;
@@ -80,6 +84,9 @@ export function SimulationSection() {
       protocolTimerRef.current = null;
     }
 
+    // Reset the live timer
+    simulationTimer.reset();
+
     manualWidth.setValue(0);
     protocolWidth.setValue(0);
     protocolBounce.setValue(1);
@@ -91,7 +98,7 @@ export function SimulationSection() {
     setProtocolElapsedTime(0);
     setProtocolComplete(false);
     setState("idle");
-  }, [manualWidth, protocolWidth, protocolBounce, completeBadgeScale, protocolFoundScale, checkmarkRotate]);
+  }, [manualWidth, protocolWidth, protocolBounce, completeBadgeScale, protocolFoundScale, checkmarkRotate, simulationTimer]);
 
   const runSimulation = useCallback(() => {
     if (state === "complete") {
@@ -101,6 +108,9 @@ export function SimulationSection() {
 
     setState("running");
     startTimeRef.current = Date.now();
+
+    // Start the live timer
+    simulationTimer.start();
 
     // Start main elapsed time timer (updates every 100ms)
     timerRef.current = setInterval(() => {
@@ -180,6 +190,9 @@ export function SimulationSection() {
       }
       setManualElapsedTime(MANUAL_SEARCH_TIME);
 
+      // Pause the live timer when simulation completes
+      simulationTimer.pause();
+
       setState("complete");
       setShowCelebration(true);
 
@@ -194,7 +207,7 @@ export function SimulationSection() {
       // Hide celebration after delay
       setTimeout(() => setShowCelebration(false), 2500);
     });
-  }, [state, resetAnimation, protocolWidth, protocolBounce, manualWidth, completeBadgeScale, protocolFoundScale, checkmarkRotate]);
+  }, [state, resetAnimation, protocolWidth, protocolBounce, manualWidth, completeBadgeScale, protocolFoundScale, checkmarkRotate, simulationTimer]);
 
   const getStatusText = () => {
     switch (state) {
@@ -227,6 +240,19 @@ export function SimulationSection() {
         <Text style={[styles.subtitle, isMobile && { fontSize: 15 }, isTablet && { fontSize: 16, marginBottom: 28 }]}>
           {`Click "Simulate Call" to visualize the time difference\nin a cardiac arrest scenario.`}
         </Text>
+
+        {/* Live Timer Display */}
+        <View style={[styles.timerContainer, isMobile && { marginBottom: 16 }]}>
+          <SimulationTimer
+            formattedTime={simulationTimer.formattedTimeWithDeciseconds}
+            isRunning={simulationTimer.isRunning}
+            isPaused={simulationTimer.isPaused}
+            onTogglePause={simulationTimer.togglePause}
+            label="Real-Time Elapsed"
+            compact={isMobile}
+            showPauseButton={state === "running"}
+          />
+        </View>
 
         {/* Chart Card */}
         <View style={[styles.chartCard, isMobile && { padding: 16 }, isTablet && { padding: 20 }]}>
@@ -771,6 +797,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 32,
     lineHeight: 24,
+  },
+  timerContainer: {
+    alignItems: "center",
+    marginBottom: 24,
   },
   chartCard: {
     backgroundColor: COLORS.bgSurface,
