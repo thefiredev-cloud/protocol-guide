@@ -40,6 +40,7 @@ vi.mock("stripe", () => {
       subscriptions: {
         retrieve: (...args: any[]) => mockSubscriptionsRetrieve(...args),
         update: (...args: any[]) => mockSubscriptionsUpdate(...args),
+        cancel: (...args: any[]) => mockSubscriptionsCancel(...args),
       },
       webhooks: {
         constructEvent: (...args: any[]) => mockWebhooksConstructEvent(...args),
