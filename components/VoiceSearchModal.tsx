@@ -573,6 +573,8 @@ export function VoiceSearchModal({
         return "Listening... Tap to stop";
       case "processing":
         return "Processing...";
+      case "complete":
+        return "Success!";
       case "error":
         return errorType ? ERROR_MESSAGES[errorType].title : "An error occurred";
       default:
