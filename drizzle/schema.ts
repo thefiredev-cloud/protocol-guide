@@ -193,3 +193,201 @@ export const searchHistory = mysqlTable("search_history", {
 
 export type SearchHistory = typeof searchHistory.$inferSelect;
 export type InsertSearchHistory = typeof searchHistory.$inferInsert;
+
+// ============ Phase 1: OAuth Provider Tables ============
+
+/**
+ * User OAuth providers - tracks linked authentication providers
+ * Enables Google/Apple OAuth and account linking
+ */
+export const userAuthProviders = mysqlTable("user_auth_providers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 64 }).notNull(), // 'google', 'apple'
+  providerUserId: varchar("providerUserId", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  linkedAt: timestamp("linkedAt").defaultNow().notNull(),
+});
+
+export type UserAuthProvider = typeof userAuthProviders.$inferSelect;
+export type InsertUserAuthProvider = typeof userAuthProviders.$inferInsert;
+
+// ============ Phase 2: State/Agency Subscription Tables ============
+
+/**
+ * User state subscriptions - tracks which states a user has access to
+ * Pro users can subscribe to states for access to all state protocols
+ */
+export const userStates = mysqlTable("user_states", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  stateCode: varchar("stateCode", { length: 2 }).notNull(),
+  accessLevel: mysqlEnum("accessLevel", ["view", "contribute", "admin"]).default("view"),
+  subscribedAt: timestamp("subscribedAt").defaultNow(),
+  expiresAt: timestamp("expiresAt"),
+});
+
+export type UserState = typeof userStates.$inferSelect;
+export type InsertUserState = typeof userStates.$inferInsert;
+
+/**
+ * User agency subscriptions - tracks which agencies a user has access to
+ * Replaces userCounties with richer access control
+ */
+export const userAgencies = mysqlTable("user_agencies", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  agencyId: int("agencyId").notNull(),
+  accessLevel: mysqlEnum("accessLevel", ["view", "contribute", "admin"]).default("view"),
+  isPrimary: boolean("isPrimary").default(false),
+  role: varchar("role", { length: 100 }), // e.g., "Paramedic", "Medical Director"
+  verifiedAt: timestamp("verifiedAt"),
+  subscribedAt: timestamp("subscribedAt").defaultNow(),
+  expiresAt: timestamp("expiresAt"),
+});
+
+export type UserAgency = typeof userAgencies.$inferSelect;
+export type InsertUserAgency = typeof userAgencies.$inferInsert;
+
+// ============ Phase 4: Agency Admin Portal Tables ============
+
+/**
+ * Agency settings type definition
+ */
+export interface AgencySettings {
+  brandColor?: string;
+  logoUrl?: string;
+  allowSelfRegistration?: boolean;
+  requireEmailVerification?: boolean;
+  defaultAccessLevel?: "view" | "contribute";
+  protocolApprovalRequired?: boolean;
+  auditLogRetentionDays?: number;
+}
+
+/**
+ * Protocol metadata type definition
+ */
+export interface ProtocolMetadata {
+  originalFileName?: string;
+  pageCount?: number;
+  wordCount?: number;
+  categories?: string[];
+  tags?: string[];
+  supersedes?: string; // Protocol number this replaces
+  relatedProtocols?: string[];
+  changeLog?: string;
+}
+
+/**
+ * Agency organization accounts
+ * Represents fire departments, EMS agencies, hospitals, state offices
+ */
+export const agencies = mysqlTable("agencies", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 100 }).unique().notNull(),
+  stateCode: varchar("stateCode", { length: 2 }).notNull(),
+  agencyType: mysqlEnum("agencyType", ["fire_dept", "ems_agency", "hospital", "state_office", "regional_council"]),
+  logoUrl: varchar("logoUrl", { length: 500 }),
+  contactEmail: varchar("contactEmail", { length: 320 }),
+  contactPhone: varchar("contactPhone", { length: 20 }),
+  address: text("address"),
+  supabaseAgencyId: int("supabaseAgencyId"), // Links to manus_agencies in Supabase
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  subscriptionTier: mysqlEnum("subscriptionTier", ["starter", "professional", "enterprise"]).default("starter"),
+  subscriptionStatus: varchar("subscriptionStatus", { length: 50 }),
+  settings: json("settings").$type<AgencySettings>(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type Agency = typeof agencies.$inferSelect;
+export type InsertAgency = typeof agencies.$inferInsert;
+
+/**
+ * Agency staff memberships
+ * Tracks which users belong to which agencies and their roles
+ */
+export const agencyMembers = mysqlTable("agency_members", {
+  id: int("id").autoincrement().primaryKey(),
+  agencyId: int("agencyId").notNull(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["owner", "admin", "protocol_author", "member"]).default("member"),
+  invitedBy: int("invitedBy"),
+  invitedAt: timestamp("invitedAt"),
+  acceptedAt: timestamp("acceptedAt"),
+  status: mysqlEnum("status", ["pending", "active", "suspended"]).default("pending"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type AgencyMember = typeof agencyMembers.$inferSelect;
+export type InsertAgencyMember = typeof agencyMembers.$inferInsert;
+
+/**
+ * Protocol versions for agency management
+ * Enables version control for agency protocols
+ */
+export const protocolVersions = mysqlTable("protocol_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  agencyId: int("agencyId").notNull(),
+  protocolNumber: varchar("protocolNumber", { length: 50 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  version: varchar("version", { length: 20 }).notNull(),
+  status: mysqlEnum("status", ["draft", "review", "approved", "published", "archived"]).default("draft"),
+  sourceFileUrl: varchar("sourceFileUrl", { length: 500 }), // Original PDF
+  effectiveDate: timestamp("effectiveDate"),
+  expiresDate: timestamp("expiresDate"),
+  approvedBy: int("approvedBy"),
+  approvedAt: timestamp("approvedAt"),
+  publishedAt: timestamp("publishedAt"),
+  chunksGenerated: int("chunksGenerated").default(0),
+  metadata: json("metadata").$type<ProtocolMetadata>(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  createdBy: int("createdBy").notNull(),
+});
+
+export type ProtocolVersion = typeof protocolVersions.$inferSelect;
+export type InsertProtocolVersion = typeof protocolVersions.$inferInsert;
+
+/**
+ * Protocol upload jobs
+ * Tracks the status of protocol PDF processing
+ */
+export const protocolUploads = mysqlTable("protocol_uploads", {
+  id: int("id").autoincrement().primaryKey(),
+  agencyId: int("agencyId").notNull(),
+  userId: int("userId").notNull(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  fileUrl: varchar("fileUrl", { length: 500 }).notNull(),
+  fileSize: int("fileSize"),
+  mimeType: varchar("mimeType", { length: 100 }),
+  status: mysqlEnum("status", ["pending", "processing", "chunking", "embedding", "completed", "failed"]).default("pending"),
+  progress: int("progress").default(0),
+  chunksCreated: int("chunksCreated").default(0),
+  errorMessage: text("errorMessage"),
+  processingStartedAt: timestamp("processingStartedAt"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type ProtocolUpload = typeof protocolUploads.$inferSelect;
+export type InsertProtocolUpload = typeof protocolUploads.$inferInsert;
+
+/**
+ * Agency invitations
+ * Tracks pending invitations to join agencies
+ */
+export const agencyInvitations = mysqlTable("agency_invitations", {
+  id: int("id").autoincrement().primaryKey(),
+  agencyId: int("agencyId").notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  role: mysqlEnum("role", ["admin", "protocol_author", "member"]).default("member"),
+  invitedBy: int("invitedBy").notNull(),
+  token: varchar("token", { length: 64 }).notNull().unique(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  acceptedAt: timestamp("acceptedAt"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type AgencyInvitation = typeof agencyInvitations.$inferSelect;
+export type InsertAgencyInvitation = typeof agencyInvitations.$inferInsert;
