@@ -43,15 +43,15 @@ export const TIER_CONFIG = {
 export const PRICING = {
   pro: {
     monthly: {
-      amount: 499, // in cents
-      display: "$4.99",
+      amount: 999, // in cents
+      display: "$9.99",
       interval: "month" as const,
     },
     annual: {
-      amount: 3900, // in cents
-      display: "$39",
+      amount: 8900, // in cents
+      display: "$89",
       interval: "year" as const,
-      savings: "35%",
+      savings: "25%",
     },
   },
 } as const;
