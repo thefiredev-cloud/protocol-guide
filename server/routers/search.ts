@@ -129,7 +129,22 @@ export const searchRouter = router({
         stateCode = input.stateFilter;
       }
 
-      // Step 4: Execute optimized search with the normalized query
+      // Step 4: Determine optimization options based on query type
+      // Enable multi-query fusion for medication/safety queries (higher accuracy needed)
+      const isMedicationQuery = normalized.intent === 'medication_dosing' ||
+        normalized.intent === 'contraindication_check' ||
+        normalized.extractedMedications.length > 0;
+
+      const searchOptions: OptimizedSearchOptions = {
+        // Use multi-query fusion for medication queries (safety-critical)
+        enableMultiQueryFusion: isMedicationQuery || normalized.isComplex,
+        // Always use advanced re-ranking
+        enableAdvancedRerank: true,
+        // Enable context boost when agency/state is specified
+        enableContextBoost: !!(agencyId || stateCode),
+      };
+
+      // Step 5: Execute optimized search with the normalized query
       const optimizedResult = await optimizedSearch(
         {
           query: normalized.normalized,
@@ -157,7 +172,8 @@ export const searchRouter = router({
             similarity: r.similarity,
             imageUrls: r.image_urls,
           }));
-        }
+        },
+        searchOptions
       );
 
       // Step 5: Build response
