@@ -4,18 +4,17 @@ const path = require("path");
 
 const config = getDefaultConfig(__dirname);
 
-// Optimize bundle size by excluding server-side code and unnecessary files
+// Optimize bundle size by excluding test files and skill templates
+// Note: We can't exclude server directory as some types might be shared
 config.resolver.blockList = [
-  // Exclude server-side code from web builds
-  /server\/.*/,
   // Exclude test files
   /.*\.test\.(ts|tsx|js|jsx)$/,
   // Exclude benchmark files
   /.*\.bench\.(ts|tsx|js|jsx)$/,
   // Exclude stories
   /.*\.stories\.(ts|tsx|js|jsx)$/,
-  // Exclude skills and templates
-  /\.(agents|opencode|claude|cursor|factory|gemini|github|codex)\/skills\/.*/,
+  // Exclude skill templates (but not node_modules)
+  /^(?!.*node_modules).*\/(\.agents|\.opencode|\.claude|\.cursor|\.factory|\.gemini|\.github|\.codex)\/skills\/.*/,
 ];
 
 // Optimize module resolution
