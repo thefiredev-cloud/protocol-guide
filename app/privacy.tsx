@@ -58,6 +58,7 @@ export default function PrivacyPolicyScreen() {
           <BulletPoint>Service providers who assist in operating our Service (e.g., Stripe for payments, cloud hosting providers)</BulletPoint>
           <BulletPoint>Law enforcement when required by law or to protect our rights</BulletPoint>
           <BulletPoint>Business partners in the event of a merger or acquisition</BulletPoint>
+          <BulletPoint>AI Processing: Protocol searches are processed using third-party artificial intelligence services (Anthropic Claude for response generation, Voyage AI for semantic search). These services receive your search queries to provide relevant protocol information. We do not share personal identifiers with these services.</BulletPoint>
         </Section>
 
         <Section title="5. Data Security">
