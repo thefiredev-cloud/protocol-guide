@@ -340,4 +340,381 @@ export function SkeletonProtocolCard({
   );
 }
 
+/**
+ * Profile header skeleton with avatar, name, and tier badge
+ */
+export function SkeletonProfileHeader({
+  style,
+  testID,
+}: {
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          alignItems: 'center',
+          paddingTop: spacing.sm,
+          paddingBottom: spacing.lg,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      {/* Avatar */}
+      <Skeleton
+        variant="circle"
+        width={80}
+        height={80}
+        style={{ marginBottom: spacing.md }}
+      />
+
+      {/* Name */}
+      <Skeleton
+        variant="text"
+        width={140}
+        height={22}
+        style={{ marginBottom: spacing.sm }}
+      />
+
+      {/* Email */}
+      <Skeleton
+        variant="text"
+        width={180}
+        height={14}
+        style={{ marginBottom: spacing.md }}
+      />
+
+      {/* Tier badge */}
+      <Skeleton
+        width={70}
+        height={28}
+        borderRadius={radii.full}
+      />
+    </View>
+  );
+}
+
+/**
+ * Subscription status card skeleton
+ */
+export function SkeletonSubscriptionCard({
+  style,
+  testID,
+}: {
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.surface,
+          borderRadius: radii.lg,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      {/* Header row */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
+        <Skeleton
+          variant="circle"
+          width={36}
+          height={36}
+          style={{ marginRight: spacing.md }}
+        />
+        <Skeleton variant="text" width={140} height={17} />
+      </View>
+
+      {/* Details rows */}
+      <View style={{ gap: spacing.sm }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Skeleton variant="text" width={60} height={14} />
+          <Skeleton variant="text" width={80} height={14} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Skeleton variant="text" width={50} height={14} />
+          <Skeleton variant="text" width={70} height={14} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Skeleton variant="text" width={55} height={14} />
+          <Skeleton variant="text" width={90} height={14} />
+        </View>
+      </View>
+
+      {/* Button */}
+      <Skeleton
+        width="100%"
+        height={44}
+        borderRadius={radii.md}
+        style={{ marginTop: spacing.lg }}
+      />
+    </View>
+  );
+}
+
+/**
+ * Usage progress card skeleton
+ */
+export function SkeletonUsageCard({
+  style,
+  testID,
+}: {
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.surface,
+          borderRadius: radii.lg,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      {/* Header row */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
+        <Skeleton
+          variant="circle"
+          width={36}
+          height={36}
+          style={{ marginRight: spacing.md }}
+        />
+        <Skeleton variant="text" width={100} height={17} />
+      </View>
+
+      {/* Progress bar */}
+      <Skeleton
+        width="100%"
+        height={8}
+        borderRadius={radii.sm}
+        style={{ marginBottom: spacing.sm }}
+      />
+
+      {/* Usage text */}
+      <Skeleton variant="text" width={160} height={14} />
+    </View>
+  );
+}
+
+/**
+ * Query history item skeleton
+ */
+export function SkeletonQueryItem({
+  style,
+  testID,
+}: {
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.surface,
+          borderRadius: radii.lg,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+        <View style={{ flex: 1, marginRight: spacing.md }}>
+          {/* Query text */}
+          <Skeleton
+            variant="text"
+            width="80%"
+            height={15}
+            style={{ marginBottom: spacing.sm }}
+          />
+
+          {/* Protocol badge */}
+          <View style={{ flexDirection: 'row', marginBottom: spacing.sm }}>
+            <Skeleton
+              width={120}
+              height={24}
+              borderRadius={radii.sm}
+            />
+          </View>
+
+          {/* Response preview */}
+          <Skeleton
+            variant="text"
+            width="100%"
+            height={13}
+            style={{ marginBottom: spacing.xs }}
+          />
+          <Skeleton
+            variant="text"
+            width="70%"
+            height={13}
+            style={{ marginBottom: spacing.md }}
+          />
+
+          {/* Meta row */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <Skeleton width={80} height={20} borderRadius={radii.sm} />
+            <Skeleton width={60} height={11} />
+          </View>
+        </View>
+
+        {/* Delete button area */}
+        <Skeleton variant="circle" width={24} height={24} />
+      </View>
+    </View>
+  );
+}
+
+/**
+ * Recent queries list skeleton
+ */
+export function SkeletonRecentQueries({
+  count = 3,
+  style,
+  testID,
+}: {
+  count?: number;
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.surface,
+          borderRadius: radii.lg,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Skeleton
+            variant="circle"
+            width={36}
+            height={36}
+            style={{ marginRight: spacing.md }}
+          />
+          <Skeleton variant="text" width={110} height={17} />
+        </View>
+        <Skeleton variant="text" width={50} height={14} />
+      </View>
+
+      {/* Query items */}
+      <View style={{ gap: spacing.md }}>
+        {Array.from({ length: count }).map((_, index) => (
+          <View
+            key={index}
+            style={{
+              paddingVertical: spacing.sm,
+              borderBottomWidth: index < count - 1 ? 1 : 0,
+              borderBottomColor: colors.border,
+            }}
+          >
+            <Skeleton variant="text" width="85%" height={14} style={{ marginBottom: spacing.xs }} />
+            <Skeleton variant="text" width="40%" height={12} />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+/**
+ * History list skeleton with multiple items
+ */
+export function SkeletonHistoryList({
+  count = 5,
+  style,
+  testID,
+}: {
+  count?: number;
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  return (
+    <View style={[{ gap: spacing.md }, style]} testID={testID}>
+      {Array.from({ length: count }).map((_, index) => (
+        <SkeletonQueryItem key={index} />
+      ))}
+    </View>
+  );
+}
+
+/**
+ * Stats card skeleton for coverage screen
+ */
+export function SkeletonStatsCard({
+  style,
+  testID,
+}: {
+  style?: ViewStyle;
+  testID?: string;
+}) {
+  const colors = useColors();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.surface,
+          borderRadius: radii.xl,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
+      {/* Icon circle */}
+      <Skeleton
+        variant="circle"
+        width={40}
+        height={40}
+        style={{ marginBottom: spacing.sm }}
+      />
+
+      {/* Value */}
+      <Skeleton
+        variant="text"
+        width={80}
+        height={28}
+        style={{ marginBottom: spacing.xs }}
+      />
+
+      {/* Label */}
+      <Skeleton variant="text" width={90} height={12} />
+    </View>
+  );
+}
+
 export default Skeleton;
