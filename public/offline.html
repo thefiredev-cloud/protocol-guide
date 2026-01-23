@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Protocol Guide - Offline</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        text-align: center;
+        max-width: 500px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+      }
+      p {
+        font-size: 18px;
+        line-height: 1.6;
+        opacity: 0.9;
+        margin-bottom: 30px;
+      }
+      .retry-btn {
+        background: #fff;
+        color: #667eea;
+        border: none;
+        padding: 14px 32px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px 0 rgba(255, 255, 255, 0.2);
+      }
+      .retry-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(255, 255, 255, 0.3);
+      }
+      .retry-btn:active {
+        transform: translateY(0);
+      }
+      .status {
+        margin-top: 20px;
+        font-size: 14px;
+        opacity: 0.7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon">📡</div>
+      <h1>You're Offline</h1>
+      <p>
+        Protocol Guide requires an internet connection to function. Please check your connection and try again.
+      </p>
+      <button class="retry-btn" onclick="window.location.reload()">
+        Retry Connection
+      </button>
+      <div class="status" id="status"></div>
+    </div>
+
+    <script>
+      // Check connection status
+      function updateStatus() {
+        const status = document.getElementById('status');
+        if (navigator.onLine) {
+          status.textContent = '✓ Connection restored';
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          status.textContent = '⚠ No internet connection';
+        }
+      }
+
+      // Listen for online/offline events
+      window.addEventListener('online', updateStatus);
+      window.addEventListener('offline', updateStatus);
+
+      // Initial status check
+      updateStatus();
+
+      // Periodic connection check
+      setInterval(() => {
+        fetch('/manifest.json', { method: 'HEAD', cache: 'no-cache' })
+          .then(() => {
+            if (!navigator.onLine) {
+              // Browser thinks we're offline but we can reach the server
+              window.location.reload();
+            }
+          })
+          .catch(() => {
+            // Still offline
+          });
+      }, 5000);
+    </script>
+  </body>
+</html>
