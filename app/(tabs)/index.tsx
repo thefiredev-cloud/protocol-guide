@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   Modal,
+  Platform,
 } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -15,6 +16,7 @@ import { ChatInput } from "@/components/chat-input";
 import { UserMessageCard, LoadingCard } from "@/components/response-card";
 import { OfflineBanner } from "@/components/offline-banner";
 import { RecentSearches, addRecentSearch } from "@/components/recent-searches";
+import { VoiceSearchButton } from "@/components/VoiceSearchButton";
 import { getApiBaseUrl } from "@/constants/oauth";
 import { trpc } from "@/lib/trpc";
 import * as Haptics from "@/lib/haptics";
