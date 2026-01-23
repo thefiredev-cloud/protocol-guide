@@ -52,14 +52,37 @@ export function SimulationSection() {
   const protocolTimerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
 
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (protocolTimerRef.current) clearInterval(protocolTimerRef.current);
+    };
+  }, []);
+
   const resetAnimation = useCallback(() => {
+    // Clear any running timers
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (protocolTimerRef.current) {
+      clearInterval(protocolTimerRef.current);
+      protocolTimerRef.current = null;
+    }
+
     manualWidth.setValue(0);
     protocolWidth.setValue(0);
     protocolBounce.setValue(1);
     completeBadgeScale.setValue(0);
+    protocolFoundScale.setValue(0);
+    checkmarkRotate.setValue(0);
     setShowCelebration(false);
+    setManualElapsedTime(0);
+    setProtocolElapsedTime(0);
+    setProtocolComplete(false);
     setState("idle");
-  }, [manualWidth, protocolWidth, protocolBounce, completeBadgeScale]);
+  }, [manualWidth, protocolWidth, protocolBounce, completeBadgeScale, protocolFoundScale, checkmarkRotate]);
 
   const runSimulation = useCallback(() => {
     if (state === "complete") {

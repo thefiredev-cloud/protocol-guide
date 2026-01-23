@@ -34,6 +34,10 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
+    infoPlist: {
+      NSMicrophoneUsageDescription: "Protocol Guide uses the microphone for voice-activated protocol search",
+      NSSpeechRecognitionUsageDescription: "Protocol Guide uses speech recognition for hands-free protocol lookup",
+    },
   },
   android: {
     // Android config kept for potential future native builds
