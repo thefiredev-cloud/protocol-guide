@@ -14,6 +14,7 @@ import {
   StyleSheet,
   Platform,
   Pressable,
+  useWindowDimensions,
 } from "react-native";
 
 // Color Palette - Dark Theme
