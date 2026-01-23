@@ -39,7 +39,7 @@ export async function signInWithGoogleMobile(): Promise<{
 }> {
   try {
     const redirectUri = getRedirectUri();
-    const state = await generateState();
+    const state = await generateOAuthState("google");
 
     console.log("[GoogleAuth] Starting OAuth flow with redirect:", redirectUri);
 
