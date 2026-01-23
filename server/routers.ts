@@ -801,6 +801,9 @@ export const appRouter = router({
 
   // Agency Admin router for B2B agency management
   agencyAdmin: agencyAdminRouter,
+
+  // Integration partner tracking
+  integration: integrationRouter,
 });
 
 export type AppRouter = typeof appRouter;
