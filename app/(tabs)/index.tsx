@@ -565,7 +565,17 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-          {statesLoading ? (
+          {coverageError ? (
+            <View className="flex-1 items-center justify-center px-4 py-8">
+              <IconSymbol name="exclamationmark.triangle.fill" size={32} color={colors.error} />
+              <Text className="text-base font-medium mt-3" style={{ color: colors.error }}>
+                Unable to Load States
+              </Text>
+              <Text className="text-sm text-center mt-1" style={{ color: colors.muted }}>
+                Check your connection and try again
+              </Text>
+            </View>
+          ) : statesLoading ? (
             <View className="flex-1 px-4 pt-4">
               <View style={{ gap: 8 }}>
                 <SkeletonListItem showAvatar={false} lines={1} />
