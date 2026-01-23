@@ -147,7 +147,7 @@ export function DisclaimerConsentModal({ visible, onAcknowledged }: DisclaimerCo
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">No Warranty:</Text> Information provided "as is" without warranty of accuracy
+                <Text className="font-bold">No Warranty:</Text> Information provided &quot;as is&quot; without warranty of accuracy
               </Text>
             </BulletPoint>
           </View>
