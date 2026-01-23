@@ -391,3 +391,40 @@ export const agencyInvitations = mysqlTable("agency_invitations", {
 
 export type AgencyInvitation = typeof agencyInvitations.$inferSelect;
 export type InsertAgencyInvitation = typeof agencyInvitations.$inferInsert;
+
+// ============ Phase 5: Integration Tracking Tables ============
+
+/**
+ * Integration partners enum
+ */
+export const integrationPartnerEnum = mysqlEnum("integration_partner", [
+  "imagetrend",
+  "esos",
+  "zoll",
+  "emscloud",
+  "none",
+]);
+
+/**
+ * Integration access logs
+ * Tracks when integration partners access Protocol Guide
+ * Used for analytics and partnership reporting
+ */
+export const integrationLogs = mysqlTable("integration_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  partner: integrationPartnerEnum.notNull(),
+  agencyId: varchar("agencyId", { length: 100 }), // Partner's agency identifier
+  agencyName: varchar("agencyName", { length: 255 }),
+  searchTerm: varchar("searchTerm", { length: 500 }),
+  userAge: int("userAge"), // Patient age if provided
+  impression: varchar("impression", { length: 255 }), // Clinical impression
+  responseTimeMs: int("responseTimeMs"),
+  resultCount: int("resultCount"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: varchar("userAgent", { length: 500 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type IntegrationLog = typeof integrationLogs.$inferSelect;
+export type InsertIntegrationLog = typeof integrationLogs.$inferInsert;
+export type IntegrationPartner = "imagetrend" | "esos" | "zoll" | "emscloud" | "none";
