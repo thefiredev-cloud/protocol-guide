@@ -13,6 +13,7 @@ import { useColors } from "@/hooks/use-colors";
 import { getApiBaseUrl } from "@/constants/oauth";
 import { useRouter } from "expo-router";
 import Animated, { FadeIn, FadeOut, SlideInRight } from "react-native-reanimated";
+import { SkeletonListItem } from "@/components/ui/Skeleton";
 
 // Agency data from the Rust API
 interface Agency {
