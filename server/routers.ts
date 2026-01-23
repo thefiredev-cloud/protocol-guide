@@ -24,66 +24,15 @@ import {
   latencyMonitor,
   type RetrievalResult
 } from "./_core/rag-optimizer";
-import { getRedis, isRedisAvailable } from "./_core/redis";
 
-// ============================================================================
-// REDIS CACHE HELPERS FOR SEARCH RESULTS
-// ============================================================================
-
-const SEARCH_CACHE_TTL_SECONDS = 5 * 60; // 5 minutes
-const SEARCH_CACHE_PREFIX = "pg:search:";
-
-/**
- * Generate cache key for search query
- */
-function generateSearchCacheKey(params: {
-  query: string;
-  agencyId?: number | null;
-  stateFilter?: string | null;
-}): string {
-  const normalizedQuery = params.query.toLowerCase().trim();
-  const agencyPart = params.agencyId ?? "all";
-  const statePart = params.stateFilter ?? "all";
-  return `${SEARCH_CACHE_PREFIX}${normalizedQuery}:${agencyPart}:${statePart}`;
-}
-
-/**
- * Get cached search results from Redis
- */
-async function getCachedSearchResults<T>(cacheKey: string): Promise<T | null> {
-  if (!isRedisAvailable()) return null;
-
-  const redis = getRedis();
-  if (!redis) return null;
-
-  try {
-    const cached = await redis.get(cacheKey);
-    if (cached) {
-      console.log(`[Search] Redis cache HIT for ${cacheKey}`);
-      return cached as T;
-    }
-  } catch (error) {
-    console.error("[Search] Redis cache get error:", error);
-  }
-  return null;
-}
-
-/**
- * Cache search results in Redis
- */
-async function cacheSearchResults<T>(cacheKey: string, results: T): Promise<void> {
-  if (!isRedisAvailable()) return;
-
-  const redis = getRedis();
-  if (!redis) return;
-
-  try {
-    await redis.set(cacheKey, results, { ex: SEARCH_CACHE_TTL_SECONDS });
-    console.log(`[Search] Redis cache SET for ${cacheKey} (TTL: ${SEARCH_CACHE_TTL_SECONDS}s)`);
-  } catch (error) {
-    console.error("[Search] Redis cache set error:", error);
-  }
-}
+// Redis search cache module - provides MD5 hashed keys, structured logging, and cache stats
+import {
+  getSearchCacheKey,
+  getCachedSearchResults,
+  cacheSearchResults,
+  getSearchCacheStats,
+  type SearchCacheParams,
+} from "./_core/search-cache";
 
 export const appRouter = router({
   system: systemRouter,
