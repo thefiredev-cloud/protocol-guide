@@ -350,7 +350,7 @@ describe("Protocol Search Accuracy - Critical EMS Scenarios", () => {
         limit: 10,
       });
 
-      expect(mockMapCountyIdToAgencyId).toHaveBeenCalledWith(123);
+      expect(vi.mocked(mapCountyIdToAgencyId)).toHaveBeenCalledWith(123);
       expect(mockSemanticSearch).toHaveBeenCalledWith(
         expect.objectContaining({
           agencyId: 1,
@@ -496,7 +496,7 @@ describe("Protocol Search Accuracy - Critical EMS Scenarios", () => {
         limit: 10,
       });
 
-      expect(mockMapCountyIdToAgencyId).toHaveBeenCalledWith(456);
+      expect(vi.mocked(mapCountyIdToAgencyId)).toHaveBeenCalledWith(456);
       expect(mockGetAgencyByCountyId).toHaveBeenCalledWith(456);
     });
   });
