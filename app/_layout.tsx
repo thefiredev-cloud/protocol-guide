@@ -83,6 +83,7 @@ export default function RootLayout() {
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="oauth/callback" />
               </Stack>
+              <InstallPrompt />
             </AppProvider>
             <StatusBar style="auto" />
           </QueryClientProvider>
