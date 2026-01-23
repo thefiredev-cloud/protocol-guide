@@ -123,8 +123,24 @@ export default function PrivacyPolicyScreen() {
           Website: https://protocol-guide.com/contact
         </Section>
 
-        <Section title="12. Healthcare Regulatory Status">
-          Protocol Guide is a reference tool for healthcare professionals and is not a HIPAA-covered entity. We do not collect, store, or process Protected Health Information (PHI) or individually identifiable health information about patients.
+        <Section title="12. Healthcare Regulatory Status and HIPAA Awareness">
+          Protocol Guide is a reference tool designed for Emergency Medical Services (EMS) professionals and is not a HIPAA-covered entity.
+          {"\n\n"}
+          <Text className="font-semibold">PHI and Patient Data:</Text>
+          <BulletPoint>We do not collect, store, or process Protected Health Information (PHI) or individually identifiable health information about patients.</BulletPoint>
+          <BulletPoint>The Service is not designed for patient documentation, charting, or medical record-keeping.</BulletPoint>
+          <BulletPoint>Users must not enter patient names, identifiers, or specific patient health information into the application.</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">AI Services and PHI:</Text>
+          <BulletPoint>Our AI-powered search features are designed exclusively for protocol reference queries, not patient care documentation.</BulletPoint>
+          <BulletPoint>No PHI is transmitted to third-party AI providers (Anthropic Claude, Voyage AI).</BulletPoint>
+          <BulletPoint>If a user inadvertently includes patient information in a search query, that data is not retained after the session and is not used for AI model training.</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">Clinical Guidance Disclaimer:</Text>
+          <BulletPoint>Protocol information provided through this Service is for reference purposes only.</BulletPoint>
+          <BulletPoint>Always follow your agency's specific protocols and medical director guidance.</BulletPoint>
+          <BulletPoint>Protocol Guide does not provide medical advice, diagnosis, or treatment recommendations for specific patients.</BulletPoint>
+          <BulletPoint>Users are responsible for exercising appropriate clinical judgment in all patient care situations.</BulletPoint>
         </Section>
 
         <View className="h-8" />

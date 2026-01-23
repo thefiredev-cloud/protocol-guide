@@ -206,9 +206,10 @@ interface FeatureCardProps {
   index: number;
   isVisible: boolean;
   isMobile: boolean;
+  isTablet?: boolean;
 }
 
-function FeatureCard({ feature, index, isVisible, isMobile }: FeatureCardProps) {
+function FeatureCard({ feature, index, isVisible, isMobile, isTablet = false }: FeatureCardProps) {
   const progress = useSharedValue(0);
   const hoverScale = useSharedValue(1);
   const hoverElevation = useSharedValue(0);

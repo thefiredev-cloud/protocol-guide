@@ -17,6 +17,7 @@ import {
   getSearchCacheKey,
   getCachedSearchResults,
   cacheSearchResults,
+  setSearchCacheHeaders,
 } from "../_core/search-cache";
 import * as db from "../db";
 
