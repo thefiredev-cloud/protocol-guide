@@ -819,10 +819,50 @@ const styles = StyleSheet.create({
   barSection: {
     marginBottom: 16,
   },
+  barLabelRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+  },
   barLabel: {
     color: COLORS.textWhite,
     fontSize: 13,
-    marginBottom: 6,
+  },
+  elapsedTime: {
+    color: COLORS.chartYellow,
+    fontSize: 14,
+    fontWeight: "700",
+    fontVariant: ["tabular-nums"],
+  },
+  elapsedTimeProtocol: {
+    color: COLORS.primaryRed,
+    fontSize: 14,
+    fontWeight: "700",
+    fontVariant: ["tabular-nums"],
+  },
+  protocolStatusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  protocolFoundBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.celebrationGreen,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  protocolFoundText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "700",
+  },
+  checkmark: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "700",
   },
   barTrack: {
     height: 24,

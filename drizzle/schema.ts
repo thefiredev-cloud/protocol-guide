@@ -296,6 +296,8 @@ export const agencies = mysqlTable("agencies", {
   stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
   subscriptionTier: mysqlEnum("subscriptionTier", ["starter", "professional", "enterprise"]).default("starter"),
   subscriptionStatus: varchar("subscriptionStatus", { length: 50 }),
+  seatCount: int("seatCount").default(1).notNull(), // Number of licensed seats for the agency
+  annualBilling: boolean("annualBilling").default(false).notNull(), // Whether agency is on annual billing
   settings: json("settings").$type<AgencySettings>(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),

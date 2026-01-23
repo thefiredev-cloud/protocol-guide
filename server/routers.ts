@@ -238,7 +238,7 @@ export const appRouter = router({
         });
 
         type CachedResult = {
-          results: Array<{
+          results: {
             id: number;
             protocolNumber: string;
             protocolTitle: string;
@@ -251,7 +251,7 @@ export const appRouter = router({
             protocolEffectiveDate: null;
             lastVerifiedAt: null;
             protocolYear: null;
-          }>;
+          }[];
           totalFound: number;
           query: string;
           normalizedQuery: string;
