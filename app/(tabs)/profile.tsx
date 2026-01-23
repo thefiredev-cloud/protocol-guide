@@ -35,21 +35,22 @@ export default function ProfileScreen() {
     message: "",
   });
   
-  const { data: usage, isLoading: usageLoading } = trpc.user.usage.useQuery(undefined, {
+  const { data: usage, isLoading: usageLoading, error: usageError } = trpc.user.usage.useQuery(undefined, {
     enabled: isAuthenticated,
   });
 
-  const { data: subscriptionStatus, isLoading: subscriptionLoading } = trpc.subscription.status.useQuery(undefined, {
+  const { data: subscriptionStatus, isLoading: subscriptionLoading, error: subscriptionError } = trpc.subscription.status.useQuery(undefined, {
     enabled: isAuthenticated,
   });
 
-  const { data: recentQueries, isLoading: queriesLoading } = trpc.user.queries.useQuery(
+  const { data: recentQueries, isLoading: queriesLoading, error: queriesError } = trpc.user.queries.useQuery(
     { limit: 5 },
     { enabled: isAuthenticated }
   );
 
-  // Check if profile data is still loading
+  // Check if profile data is still loading or has errors
   const isProfileLoading = usageLoading || subscriptionLoading || queriesLoading;
+  const hasProfileError = usageError || subscriptionError || queriesError;
   
   const { cachedProtocols, cacheSize, clearCache, itemCount } = useOfflineCache();
   const { favorites, removeFavorite } = useFavorites();
