@@ -118,8 +118,23 @@ export function useAuth(options?: UseAuthOptions) {
       }
     );
 
+    // Start session monitor for automatic refresh
+    const stopMonitor = startSessionMonitor(
+      (refreshedSession) => {
+        console.log("[useAuth] Session refreshed automatically");
+        setSession(refreshedSession);
+        setUser(mapSupabaseUser(refreshedSession.user));
+      },
+      () => {
+        console.log("[useAuth] Session expired, logging out");
+        setSession(null);
+        setUser(null);
+      }
+    );
+
     return () => {
       subscription.unsubscribe();
+      stopMonitor();
     };
   }, [autoFetch, fetchUser, mapSupabaseUser]);
 

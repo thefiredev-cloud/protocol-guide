@@ -23,6 +23,29 @@ vi.mock("../../server/_core/env", () => ({
   validateEnv: vi.fn().mockReturnValue({ valid: true }),
 }));
 
+// Mock Anthropic SDK
+vi.mock("@anthropic-ai/sdk", () => ({
+  default: vi.fn().mockImplementation(() => ({
+    messages: {
+      create: vi.fn().mockResolvedValue({
+        content: [{ text: "Based on the protocols..." }],
+        model: "claude-3-haiku-20240307",
+        usage: { input_tokens: 100, output_tokens: 50 },
+      }),
+    },
+  })),
+}));
+
+// Mock Claude client
+vi.mock("../../server/_core/claude", () => ({
+  invokeClaudeRAG: vi.fn().mockResolvedValue({
+    content: "Based on the protocols, for cardiac arrest you should...",
+    model: "claude-3-haiku-20240307",
+    inputTokens: 1000,
+    outputTokens: 500,
+  }),
+}));
+
 // Mock external services
 vi.mock("../../server/_core/embeddings", () => ({
   semanticSearchProtocols: vi.fn().mockResolvedValue([
