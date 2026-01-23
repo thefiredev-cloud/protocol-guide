@@ -36,7 +36,8 @@ export const protocolProcedures = router({
     .input(z.object({
       agencyId: z.number(),
       fileName: z.string().max(255),
-      fileBase64: z.string(),
+      // Max 20MB base64 (actual file ~15MB after encoding overhead)
+      fileBase64: z.string().max(20_000_000, "PDF file exceeds 20MB limit"),
       mimeType: z.string().default("application/pdf"),
       protocolNumber: z.string().max(50),
       title: z.string().max(255),
