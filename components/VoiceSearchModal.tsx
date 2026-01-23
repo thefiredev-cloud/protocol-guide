@@ -303,6 +303,7 @@ export function VoiceSearchModal({
   // Reset state when modal opens/closes
   useEffect(() => {
     if (visible) {
+      stateRef.current = "idle";
       setRecordingState("idle");
       setErrorType(null);
       setTranscriptionPreview("");
@@ -310,6 +311,7 @@ export function VoiceSearchModal({
     } else {
       cleanupRecording();
       stopPulseAnimation();
+      stateRef.current = "idle";
     }
   }, [visible, cleanupRecording, stopPulseAnimation]);
 

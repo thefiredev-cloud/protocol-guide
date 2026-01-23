@@ -1,19 +1,15 @@
 /**
- * Protocol Guide - Client-Side Sentry Configuration
+ * Protocol Guide - Client-Side Error Reporting
  *
- * Provides error tracking and performance monitoring for React Native/Expo.
- * Works on both mobile and web platforms.
+ * Provides error tracking by reporting to the server-side Sentry.
+ * Works on both mobile and web platforms without requiring native SDK.
  *
  * Usage:
- *   import { initSentryClient, captureError, captureMessage } from '@/lib/sentry-client';
- *   await initSentryClient();
+ *   import { captureError, captureMessage, addBreadcrumb } from '@/lib/sentry-client';
  */
 
 import { Platform } from 'react-native';
-
-// Sentry client state
-let sentryInitialized = false;
-let sentryModule: typeof import('@sentry/react-native') | null = null;
+import { getApiBaseUrl } from '@/constants/oauth';
 
 // Error context types
 export type ErrorContext = {
@@ -26,80 +22,20 @@ export type ErrorContext = {
 // Severity levels
 export type SeverityLevel = 'fatal' | 'error' | 'warning' | 'info' | 'debug';
 
-/**
- * Initialize Sentry for client-side error tracking
- *
- * Call this early in app startup (before rendering).
- * Safe to call multiple times - will only initialize once.
- */
-export async function initSentryClient(): Promise<void> {
-  if (sentryInitialized) return;
+// Breadcrumb storage (in-memory, limited to last 20)
+const breadcrumbs: {
+  message: string;
+  category: string;
+  data?: Record<string, unknown>;
+  timestamp: string;
+}[] = [];
+const MAX_BREADCRUMBS = 20;
 
-  const dsn = process.env.EXPO_PUBLIC_SENTRY_DSN;
-
-  if (!dsn) {
-    if (__DEV__) {
-      console.log('[Sentry Client] No EXPO_PUBLIC_SENTRY_DSN configured, error tracking disabled');
-    } else {
-      console.warn(
-        '[Sentry Client] WARNING: EXPO_PUBLIC_SENTRY_DSN not configured in production!\n' +
-        '[Sentry Client] Client-side error tracking is disabled.'
-      );
-    }
-    return;
-  }
-
-  try {
-    // Dynamic import to handle cases where Sentry might not be installed
-    if (Platform.OS === 'web') {
-      // Web uses browser SDK which is bundled differently
-      // For now, we'll use a fetch-based fallback for web
-      sentryInitialized = true;
-      console.log('[Sentry Client] Web platform - using lightweight error reporting');
-    } else {
-      // Native platforms use @sentry/react-native
-      const Sentry = await import('@sentry/react-native');
-      sentryModule = Sentry;
-
-      Sentry.init({
-        dsn,
-        environment: __DEV__ ? 'development' : 'production',
-        // Sample 10% of transactions in production
-        tracesSampleRate: __DEV__ ? 1.0 : 0.1,
-        // Enable native crash reporting
-        enableNative: true,
-        // Auto-capture breadcrumbs
-        enableAutoSessionTracking: true,
-        // Filter out expected errors
-        beforeSend(event) {
-          const message = event?.message || '';
-
-          // Don't send rate limit errors
-          if (message.includes('rate limit') || message.includes('Too Many Requests')) {
-            return null;
-          }
-
-          // Don't send network timeout errors (often transient)
-          if (message.includes('timeout') && message.includes('network')) {
-            return null;
-          }
-
-          return event;
-        },
-      });
-
-      sentryInitialized = true;
-      console.log('[Sentry Client] Initialized for', __DEV__ ? 'development' : 'production');
-    }
-  } catch (error) {
-    // Sentry not available - graceful degradation
-    console.warn('[Sentry Client] Could not initialize:', error);
-    sentryInitialized = false;
-  }
-}
+// User context
+let currentUser: { id?: string; email?: string } | null = null;
 
 /**
- * Capture an error to Sentry with optional context
+ * Capture an error to server-side Sentry with optional context
  *
  * @param error - The error to capture
  * @param context - Additional context about where/why the error occurred
@@ -108,50 +44,28 @@ export function captureError(error: Error, context?: ErrorContext): void {
   // Always log to console
   console.error('[Error]', error.message);
   if (context?.componentStack) {
-    console.error('[Component Stack]', context.componentStack);
+    console.error('[Component Stack]', context.componentStack.slice(0, 500));
   }
 
-  if (!sentryInitialized) return;
-
-  if (Platform.OS === 'web') {
-    // Web fallback: POST to server-side endpoint
-    reportErrorToServer(error, context);
-  } else if (sentryModule) {
-    // Native: use Sentry SDK
-    sentryModule.withScope((scope) => {
-      if (context?.section) {
-        scope.setTag('section', context.section);
-      }
-      if (context?.userId) {
-        scope.setUser({ id: context.userId });
-      }
-      if (context?.componentStack) {
-        scope.setExtra('componentStack', context.componentStack);
-      }
-      if (context?.extra) {
-        Object.entries(context.extra).forEach(([key, value]) => {
-          scope.setExtra(key, value);
-        });
-      }
-      sentryModule?.captureException(error);
-    });
+  // Don't report errors in development unless explicitly enabled
+  if (__DEV__ && !process.env.EXPO_PUBLIC_REPORT_DEV_ERRORS) {
+    return;
   }
+
+  reportErrorToServer(error, context);
 }
 
 /**
- * Capture a message to Sentry
+ * Capture a message to server-side Sentry
  */
 export function captureMessage(message: string, level: SeverityLevel = 'info'): void {
   if (__DEV__) {
     console.log(`[Sentry ${level}]`, message);
   }
 
-  if (!sentryInitialized) return;
-
-  if (Platform.OS === 'web') {
+  // Only report warnings and above in production
+  if (!__DEV__ && (level === 'warning' || level === 'error' || level === 'fatal')) {
     reportMessageToServer(message, level);
-  } else if (sentryModule) {
-    sentryModule.captureMessage(message, level);
   }
 }
 
@@ -159,11 +73,7 @@ export function captureMessage(message: string, level: SeverityLevel = 'info'): 
  * Set user context for error tracking
  */
 export function setUser(user: { id?: string; email?: string } | null): void {
-  if (!sentryInitialized) return;
-
-  if (sentryModule) {
-    sentryModule.setUser(user);
-  }
+  currentUser = user;
 }
 
 /**
@@ -174,46 +84,57 @@ export function addBreadcrumb(
   category: string,
   data?: Record<string, unknown>
 ): void {
-  if (!sentryInitialized) return;
+  breadcrumbs.push({
+    message,
+    category,
+    data,
+    timestamp: new Date().toISOString(),
+  });
 
-  if (sentryModule) {
-    sentryModule.addBreadcrumb({
-      message,
-      category,
-      data,
-      level: 'info',
-    });
+  // Keep only last N breadcrumbs
+  while (breadcrumbs.length > MAX_BREADCRUMBS) {
+    breadcrumbs.shift();
   }
 }
 
 /**
- * Check if Sentry is initialized
+ * Clear breadcrumbs (e.g., after successful navigation)
  */
-export function isSentryInitialized(): boolean {
-  return sentryInitialized;
+export function clearBreadcrumbs(): void {
+  breadcrumbs.length = 0;
 }
 
-// Web fallback: report errors to server endpoint
+// Report errors to server endpoint
 async function reportErrorToServer(error: Error, context?: ErrorContext): Promise<void> {
   try {
     const payload = {
-      type: 'error',
-      message: error.message,
-      stack: error.stack,
-      name: error.name,
-      context: {
-        section: context?.section,
-        componentStack: context?.componentStack,
-        extra: context?.extra,
-        platform: 'web',
-        url: typeof window !== 'undefined' ? window.location.href : undefined,
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+      type: 'error' as const,
+      error: {
+        message: error.message,
+        stack: error.stack?.slice(0, 2000), // Limit stack trace size
+        name: error.name,
       },
+      context: {
+        section: context?.section || 'general',
+        componentStack: context?.componentStack?.slice(0, 1000),
+        extra: context?.extra,
+        platform: Platform.OS,
+        url: Platform.OS === 'web' && typeof window !== 'undefined'
+          ? window.location.href
+          : undefined,
+        userAgent: Platform.OS === 'web' && typeof navigator !== 'undefined'
+          ? navigator.userAgent
+          : undefined,
+      },
+      user: currentUser,
+      breadcrumbs: [...breadcrumbs],
       timestamp: new Date().toISOString(),
     };
 
+    const apiUrl = getApiBaseUrl();
+
     // Fire and forget - don't block on error reporting
-    fetch('/api/client-error', {
+    fetch(`${apiUrl}/api/client-error`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -228,17 +149,22 @@ async function reportErrorToServer(error: Error, context?: ErrorContext): Promis
 async function reportMessageToServer(message: string, level: SeverityLevel): Promise<void> {
   try {
     const payload = {
-      type: 'message',
+      type: 'message' as const,
       message,
       level,
       context: {
-        platform: 'web',
-        url: typeof window !== 'undefined' ? window.location.href : undefined,
+        platform: Platform.OS,
+        url: Platform.OS === 'web' && typeof window !== 'undefined'
+          ? window.location.href
+          : undefined,
       },
+      user: currentUser,
       timestamp: new Date().toISOString(),
     };
 
-    fetch('/api/client-error', {
+    const apiUrl = getApiBaseUrl();
+
+    fetch(`${apiUrl}/api/client-error`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
