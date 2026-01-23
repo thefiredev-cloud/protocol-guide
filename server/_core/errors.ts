@@ -3,10 +3,14 @@
  *
  * Specific error types for Claude and Voyage API failures.
  * Provides user-friendly messages while preserving technical details for logging.
+ * Includes distributed tracing support with request ID propagation.
  */
+
+import type { TraceContext } from "./tracing";
 
 /**
  * Base error class for all Protocol Guide API errors
+ * Supports distributed tracing with optional request ID
  */
 export class ProtocolGuideError extends Error {
   public readonly code: string;
@@ -14,6 +18,12 @@ export class ProtocolGuideError extends Error {
   public readonly statusCode: number;
   public readonly retryable: boolean;
   public readonly originalError?: Error;
+  /** Request ID for distributed tracing */
+  public requestId?: string;
+  /** Full trace context for debugging */
+  public traceContext?: TraceContext;
+  /** Timestamp when error occurred */
+  public readonly timestamp: string;
 
   constructor(params: {
     code: string;
@@ -22,6 +32,8 @@ export class ProtocolGuideError extends Error {
     statusCode?: number;
     retryable?: boolean;
     originalError?: Error;
+    requestId?: string;
+    traceContext?: TraceContext;
   }) {
     super(params.message);
     this.name = 'ProtocolGuideError';
@@ -30,9 +42,21 @@ export class ProtocolGuideError extends Error {
     this.statusCode = params.statusCode ?? 500;
     this.retryable = params.retryable ?? false;
     this.originalError = params.originalError;
+    this.requestId = params.requestId || params.traceContext?.requestId;
+    this.traceContext = params.traceContext;
+    this.timestamp = new Date().toISOString();
 
     // Maintains proper stack trace
     Error.captureStackTrace?.(this, this.constructor);
+  }
+
+  /**
+   * Attach trace context to an existing error
+   */
+  withTrace(traceContext: TraceContext): this {
+    this.requestId = traceContext.requestId;
+    this.traceContext = traceContext;
+    return this;
   }
 
   toJSON() {
@@ -41,6 +65,29 @@ export class ProtocolGuideError extends Error {
       message: this.userMessage,
       statusCode: this.statusCode,
       retryable: this.retryable,
+      requestId: this.requestId,
+      timestamp: this.timestamp,
+    };
+  }
+
+  /**
+   * Convert to a detailed object for logging
+   */
+  toLogObject() {
+    return {
+      error: this.code,
+      message: this.message,
+      userMessage: this.userMessage,
+      statusCode: this.statusCode,
+      retryable: this.retryable,
+      requestId: this.requestId,
+      timestamp: this.timestamp,
+      stack: this.stack,
+      originalError: this.originalError ? {
+        name: this.originalError.name,
+        message: this.originalError.message,
+        stack: this.originalError.stack,
+      } : undefined,
     };
   }
 }
