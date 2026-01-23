@@ -23,12 +23,13 @@ jobs:
   health-check:
     name: Health Check
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Check production health endpoint
         id: health
         run: |
-          # Get the health check URL from secrets or use default
+          # Get the health check URL from environment input or use default
           HEALTH_URL="${HEALTH_CHECK_URL:-https://protocol-guide.netlify.app/api/health}"
 
           echo "Checking health endpoint: ${HEALTH_URL}"
@@ -58,7 +59,7 @@ jobs:
             echo "healthy=false" >> $GITHUB_OUTPUT
           fi
         env:
-          HEALTH_CHECK_URL: ${{ secrets.HEALTH_CHECK_URL }}
+          HEALTH_CHECK_URL: ${{ inputs.environment == 'staging' && 'https://staging-protocol-guide.netlify.app/api/health' || 'https://protocol-guide.netlify.app/api/health' }}
 
       - name: Check liveness endpoint
         id: liveness
