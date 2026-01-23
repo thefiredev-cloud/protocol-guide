@@ -19,16 +19,38 @@ export const staffProcedures = router({
     .query(async ({ input }) => {
       const members = await db.getAgencyMembers(input.agencyId);
 
-      // Get user details for each member
-      const membersWithUsers = await Promise.all(
-        members.map(async (member) => {
-          const user = await db.getUserById(member.userId);
-          return {
-            ...member,
-            user: user ? { id: user.id, name: user.name, email: user.email } : null,
-          };
-        })
-      );
+      // OPTIMIZED: Batch fetch all users in single query (prevents N+1)
+      const dbInstance = await db.getDb();
+      if (!dbInstance || members.length === 0) {
+        return members.map(member => ({
+          ...member,
+          user: null,
+        }));
+      }
+
+      const { users } = await import("../../../drizzle/schema");
+      const { inArray } = await import("drizzle-orm");
+
+      // Get all unique user IDs
+      const userIds = [...new Set(members.map(m => m.userId))];
+
+      // Single batch query for all users
+      const userList = await dbInstance
+        .select()
+        .from(users)
+        .where(inArray(users.id, userIds));
+
+      // Create user lookup map for O(1) access
+      const userMap = new Map(userList.map(u => [u.id, u]));
+
+      // Merge members with users
+      const membersWithUsers = members.map(member => {
+        const user = userMap.get(member.userId);
+        return {
+          ...member,
+          user: user ? { id: user.id, name: user.name, email: user.email } : null,
+        };
+      });
 
       return membersWithUsers;
     }),

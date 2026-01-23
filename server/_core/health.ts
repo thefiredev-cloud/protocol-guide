@@ -6,11 +6,14 @@
  * - Supabase (PostgreSQL + pgvector)
  * - Claude API (Anthropic)
  * - Voyage AI (embeddings)
+ * - Redis cache
  * - Memory/resource status
+ * - Service resilience status
  */
 
 import { createClient } from '@supabase/supabase-js';
 import { ENV } from './env';
+import { ServiceRegistry, getResilientRedis } from './resilience';
 
 // Health check result types
 export interface ServiceHealth {
