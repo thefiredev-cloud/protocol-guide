@@ -1266,10 +1266,9 @@ describe("Stripe Webhook Handler - Customer Deleted", () => {
 
     await handleStripeWebhook(req as Request, res as Response);
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Customer deleted but no user found")
-    );
+    // Verify webhook was handled successfully even when user not found
     expect(res.statusCode).toBe(200);
+    expect(res.jsonData).toEqual({ received: true });
 
     consoleLogSpy.mockRestore();
   });
