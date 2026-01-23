@@ -63,13 +63,14 @@ async function validateImageTrendAgency(
 
 /**
  * Log integration access for analytics
+ *
+ * NOTE: userAge and impression are intentionally NOT logged for HIPAA compliance.
+ * These fields constitute PHI when combined with timestamps.
  */
 async function logIntegrationAccess(params: {
   agencyId: string;
   agencyName?: string;
   searchTerm?: string;
-  userAge?: number;
-  impression?: string;
   ipAddress?: string;
   userAgent?: string;
 }): Promise<void> {
@@ -82,8 +83,7 @@ async function logIntegrationAccess(params: {
       agencyId: params.agencyId,
       agencyName: params.agencyName || null,
       searchTerm: params.searchTerm || null,
-      userAge: params.userAge || null,
-      impression: params.impression || null,
+      // PHI fields (userAge, impression) intentionally omitted for HIPAA compliance
       ipAddress: params.ipAddress || null,
       userAgent: params.userAgent || null,
     });
