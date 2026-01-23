@@ -17,6 +17,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { VoiceInput } from "@/components/voice-input";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useLocalSearchParams } from "expo-router";
+import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 
 type SearchResult = {
   id: number;

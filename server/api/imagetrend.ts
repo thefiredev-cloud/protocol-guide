@@ -43,12 +43,16 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 /**
  * Validate agency has ImageTrend integration enabled
+ *
+ * HIPAA COMPLIANCE: This function only logs operational errors, not query parameters
  */
 async function validateImageTrendAgency(
-  agencyId: string
+  agencyId: string,
+  requestId: string
 ): Promise<{ valid: boolean; agencyName?: string; error?: string }> {
   if (!supabaseUrl || !supabaseKey) {
-    console.warn("[ImageTrend] Supabase not configured");
+    // Safe log: only request ID, no PHI
+    console.warn(`[ImageTrend] Supabase not configured - requestId=${requestId}`);
     return { valid: true }; // Allow in dev mode without Supabase
   }
 
@@ -71,7 +75,9 @@ async function validateImageTrendAgency(
 
     return { valid: true, agencyName: data.name };
   } catch (err) {
-    console.error("[ImageTrend] Agency validation error:", err);
+    // Safe error logging: only log error type and request ID, not full error which may contain query data
+    const errorType = err instanceof Error ? err.name : "UnknownError";
+    console.error(`[ImageTrend] Agency validation failed - requestId=${requestId}, errorType=${errorType}`);
     return { valid: true }; // Fail open in case of errors
   }
 }

@@ -97,6 +97,12 @@ export const searchRouter = router({
       if (cachedResults) {
         const latencyMs = Date.now() - searchStartTime;
         latencyMonitor.record('totalRetrieval', latencyMs);
+
+        // Set cache headers for cache hit
+        if (ctx.res) {
+          setSearchCacheHeaders(ctx.res, true);
+        }
+
         return {
           ...cachedResults,
           fromCache: true,
