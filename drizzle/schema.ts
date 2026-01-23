@@ -323,3 +323,12 @@ export type InsertContactSubmission = typeof contactSubmissions.$inferInsert;
 
 export type IntegrationLog = typeof integrationLogs.$inferSelect;
 export type InsertIntegrationLog = typeof integrationLogs.$inferInsert;
+
+export type UserCounty = typeof userCounties.$inferSelect;
+export type InsertUserCounty = typeof userCounties.$inferInsert;
+
+export type SearchHistory = typeof searchHistory.$inferSelect;
+export type InsertSearchHistory = typeof searchHistory.$inferInsert;
+
+export type StripeWebhookEvent = typeof stripeWebhookEvents.$inferSelect;
+export type InsertStripeWebhookEvent = typeof stripeWebhookEvents.$inferInsert;
