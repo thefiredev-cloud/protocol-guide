@@ -226,9 +226,17 @@ export function StateDetailView({
           </Text>
 
           {isLoading ? (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <ActivityIndicator size="large" color={colors.primary} />
-              <Text style={{ color: colors.muted, marginTop: 12 }}>Loading agencies...</Text>
+            <View style={{ flex: 1, paddingTop: 8 }}>
+              <Text style={{ color: colors.muted, marginBottom: 12, fontSize: 13 }}>
+                Loading agencies...
+              </Text>
+              <View style={{ gap: 10 }}>
+                <SkeletonListItem showAvatar={false} lines={2} />
+                <SkeletonListItem showAvatar={false} lines={2} />
+                <SkeletonListItem showAvatar={false} lines={2} />
+                <SkeletonListItem showAvatar={false} lines={2} />
+                <SkeletonListItem showAvatar={false} lines={2} />
+              </View>
             </View>
           ) : error ? (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
