@@ -61,8 +61,8 @@ export async function getUserCounties(userId: number): Promise<SavedCounty[]> {
     id: r.id,
     userId: r.userId,
     countyId: r.countyId,
-    isPrimary: r.isPrimary,
-    createdAt: r.createdAt,
+    isPrimary: Boolean(r.isPrimary),
+    createdAt: new Date(r.createdAt),
     county: r.countyName ? {
       id: r.countyId,
       name: r.countyName,

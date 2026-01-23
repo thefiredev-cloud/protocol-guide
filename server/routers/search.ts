@@ -112,15 +112,15 @@ export const searchRouter = router({
         };
       }
 
-      // Step 3: Map MySQL county ID to Supabase agency_id
+      // Step 3: Map MySQL county ID to Supabase agency_id (OPTIMIZED - single query)
       let agencyId: number | null = null;
       let agencyName: string | null = null;
       let stateCode: string | null = null;
 
       if (input.countyId) {
-        agencyId = await mapCountyIdToAgencyId(input.countyId);
-        const agency = await getAgencyByCountyId(input.countyId);
+        const agency = await getAgencyByCountyIdOptimized(input.countyId);
         if (agency) {
+          agencyId = agency.id;
           agencyName = agency.name;
           stateCode = agency.state_code;
         }
