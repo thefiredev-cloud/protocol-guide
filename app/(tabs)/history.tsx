@@ -202,7 +202,10 @@ export default function HistoryScreen() {
     <ScreenContainer>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.foreground }]}>History</Text>
+        <View style={styles.titleRow}>
+          <Text style={[styles.title, { color: colors.foreground }]}>History</Text>
+          {isFreeTier && <ProBadge size="medium" />}
+        </View>
 
         {/* Search Bar */}
         <View style={[styles.searchBar, { backgroundColor: '#FFFFFF', borderColor: colors.border }]}>
@@ -214,6 +217,7 @@ export default function HistoryScreen() {
             placeholderTextColor={colors.muted}
             style={[styles.searchInput, { color: colors.foreground }]}
             returnKeyType="search"
+            editable={!isFreeTier}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery("")} style={styles.clearButton}>
