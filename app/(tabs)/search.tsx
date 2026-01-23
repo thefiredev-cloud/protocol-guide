@@ -505,6 +505,11 @@ export default function SearchScreen() {
           onPress={() => setShowStateFilter(!showStateFilter)}
           className="flex-row items-center justify-between rounded-xl px-4 py-3"
           style={{ backgroundColor: colors.surface }}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`Filter by state: ${selectedState || 'All States'}`}
+          accessibilityHint={showStateFilter ? "Collapse state filter list" : "Expand state filter list"}
+          accessibilityState={{ expanded: showStateFilter }}
         >
           <View className="flex-row items-center">
             <IconSymbol name="location.fill" size={18} color={selectedState ? colors.primary : colors.muted} />
@@ -520,14 +525,18 @@ export default function SearchScreen() {
                   handleStateSelect(null);
                 }}
                 className="p-1 mr-1"
+                {...createButtonA11y(
+                  MEDICAL_A11Y_LABELS.filter.clear,
+                  "Remove state filter and show all states"
+                )}
               >
                 <IconSymbol name="xmark" size={16} color={colors.muted} />
               </TouchableOpacity>
             )}
-            <IconSymbol 
-              name={showStateFilter ? "chevron.left" : "chevron.right"} 
-              size={16} 
-              color={colors.muted} 
+            <IconSymbol
+              name={showStateFilter ? "chevron.left" : "chevron.right"}
+              size={16}
+              color={colors.muted}
             />
           </View>
         </TouchableOpacity>
