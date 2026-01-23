@@ -15,6 +15,9 @@ const PRICE_IDS = {
   proAnnual: process.env.STRIPE_PRO_ANNUAL_PRICE_ID || "",
 };
 
+// Trial period configuration - default 7 days, can be overridden via env var
+export const TRIAL_PERIOD_DAYS = parseInt(process.env.STRIPE_TRIAL_PERIOD_DAYS || "7", 10);
+
 export interface CreateCheckoutSessionParams {
   userId: number;
   userEmail: string;
