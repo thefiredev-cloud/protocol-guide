@@ -32,9 +32,9 @@ import { feedbackRouter } from "./routers/feedback";
 import { contactRouter } from "./routers/contact";
 import { subscriptionRouter } from "./routers/subscription";
 import { adminRouter } from "./routers/admin";
-import { agencyAdminRouter } from "./routers/agency-admin";
+import { agencyAdminRouter } from "./routers/agency-admin/index";
 import { integrationRouter } from "./routers/integration";
-import { referralRouter } from "./routers/referral";
+import { referralRouter } from "./routers/referral/index";
 
 export const appRouter = router({
   system: systemRouter,
