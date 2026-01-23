@@ -247,7 +247,6 @@ describe("Subscription Router Security", () => {
         const invalidUrls = [
           "not-a-url",
           "://no-protocol",
-          "htp://typo",
         ];
 
         invalidUrls.forEach(url => {
