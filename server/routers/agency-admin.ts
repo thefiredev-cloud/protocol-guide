@@ -11,7 +11,8 @@ import { storagePut } from "../storage";
 import crypto from "crypto";
 
 // Agency admin middleware - checks if user is agency admin
-const agencyAdminProcedure = protectedProcedure.use(async ({ ctx, next, rawInput }) => {
+const agencyAdminProcedure = protectedProcedure.use(async ({ ctx, next, getRawInput }) => {
+  const rawInput = await getRawInput();
   const input = rawInput as { agencyId?: number };
   if (!input.agencyId) {
     throw new TRPCError({ code: "BAD_REQUEST", message: "Agency ID required" });
