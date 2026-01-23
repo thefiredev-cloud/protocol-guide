@@ -28,52 +28,91 @@ type VoiceInputStateComputed = VoiceInputState & {
 
 export function useVoiceInput(onTranscription: (text: string) => void) {
   const [state, setState] = useState<VoiceInputState>({
-    isRecording: false,
-    isProcessing: false,
+    recordingState: "idle",
     error: null,
   });
 
+  // Use ref to track current state synchronously (prevents race conditions)
+  const stateRef = useRef<RecordingState>("idle");
+
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
-  
+
   const uploadMutation = trpc.voice.uploadAudio.useMutation();
   const transcribeMutation = trpc.voice.transcribe.useMutation();
 
-  const startRecording = useCallback(async () => {
-    try {
-      setState({ isRecording: true, isProcessing: false, error: null });
+  // State machine transition function - validates transitions
+  const transitionTo = useCallback((newState: RecordingState): boolean => {
+    const currentState = stateRef.current;
+    const validNextStates = VALID_TRANSITIONS[currentState];
 
-      // Request permissions
+    if (!validNextStates.includes(newState)) {
+      console.warn(`useVoiceInput: Invalid state transition: ${currentState} -> ${newState}`);
+      return false;
+    }
+
+    stateRef.current = newState;
+    setState(prev => ({ ...prev, recordingState: newState }));
+    return true;
+  }, []);
+
+  const startRecording = useCallback(async () => {
+    // Guard: Only allow starting from idle state
+    if (stateRef.current !== "idle") {
+      console.warn(`startRecording called in invalid state: ${stateRef.current}`);
+      return;
+    }
+
+    try {
+      // Request permissions first (before changing state)
       const status = await AudioModule.requestRecordingPermissionsAsync();
       if (!status.granted) {
-        setState({ isRecording: false, isProcessing: false, error: "Microphone permission denied" });
+        setState(prev => ({ ...prev, error: "Microphone permission denied" }));
         if (Platform.OS !== "web") {
           Alert.alert("Permission Required", "Please enable microphone access in settings.");
         }
         return;
       }
 
+      // Verify state hasn't changed during async operation
+      if (stateRef.current !== "idle") {
+        console.warn("State changed during permission check, aborting startRecording");
+        return;
+      }
+
+      // Transition to recording state
+      if (!transitionTo("recording")) return;
+      setState(prev => ({ ...prev, error: null }));
+
       // Start recording
       await audioRecorder.record();
     } catch (error) {
       console.error("Failed to start recording:", error);
-      setState({ 
-        isRecording: false, 
-        isProcessing: false, 
-        error: "Failed to start recording" 
+      stateRef.current = "idle";
+      setState({
+        recordingState: "idle",
+        error: "Failed to start recording"
       });
     }
-  }, [audioRecorder]);
+  }, [audioRecorder, transitionTo]);
 
   const stopRecording = useCallback(async () => {
+    // Guard: Only allow stopping from recording state
+    if (stateRef.current !== "recording") {
+      console.warn(`stopRecording called in invalid state: ${stateRef.current}`);
+      return;
+    }
+
     try {
-      setState(prev => ({ ...prev, isRecording: false, isProcessing: true }));
+      // Transition to processing state
+      if (!transitionTo("processing")) return;
 
       // Stop recording
       await audioRecorder.stop();
       const uri = audioRecorder.uri;
 
       if (!uri) {
-        setState({ isRecording: false, isProcessing: false, error: "No recording found" });
+        transitionTo("idle");
+        setState(prev => ({ ...prev, error: "No recording found" }));
         return;
       }
 
@@ -95,14 +134,22 @@ export function useVoiceInput(onTranscription: (text: string) => void) {
       });
 
       if (result.success && result.text) {
+        // Transition to complete, then back to idle
+        transitionTo("complete");
         onTranscription(result.text);
-        setState({ isRecording: false, isProcessing: false, error: null });
+        // Reset to idle after completion
+        setTimeout(() => {
+          if (stateRef.current === "complete") {
+            transitionTo("idle");
+          }
+        }, 100);
+        setState(prev => ({ ...prev, error: null }));
       } else {
-        setState({ 
-          isRecording: false, 
-          isProcessing: false, 
-          error: result.error || "Transcription failed" 
-        });
+        transitionTo("idle");
+        setState(prev => ({
+          ...prev,
+          error: result.error || "Transcription failed"
+        }));
       }
 
       // Clean up the local file
@@ -113,24 +160,33 @@ export function useVoiceInput(onTranscription: (text: string) => void) {
       }
     } catch (error) {
       console.error("Failed to process recording:", error);
-      setState({ 
-        isRecording: false, 
-        isProcessing: false, 
-        error: "Failed to process recording" 
+      stateRef.current = "idle";
+      setState({
+        recordingState: "idle",
+        error: "Failed to process recording"
       });
     }
-  }, [audioRecorder, uploadMutation, transcribeMutation, onTranscription]);
+  }, [audioRecorder, transitionTo, uploadMutation, transcribeMutation, onTranscription]);
 
   const toggleRecording = useCallback(async () => {
-    if (state.isRecording) {
+    const currentState = stateRef.current;
+    if (currentState === "recording") {
       await stopRecording();
-    } else {
+    } else if (currentState === "idle") {
       await startRecording();
     }
-  }, [state.isRecording, startRecording, stopRecording]);
+    // Ignore toggle during processing or complete states
+  }, [startRecording, stopRecording]);
+
+  // Compute legacy boolean flags for backwards compatibility
+  const computedState: VoiceInputStateComputed = {
+    ...state,
+    isRecording: state.recordingState === "recording",
+    isProcessing: state.recordingState === "processing",
+  };
 
   return {
-    ...state,
+    ...computedState,
     startRecording,
     stopRecording,
     toggleRecording,

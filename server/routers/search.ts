@@ -7,7 +7,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc";
 import { semanticSearchProtocols } from "../_core/embeddings";
-import { mapCountyIdToAgencyId, getAgencyByCountyId } from "../db-agency-mapping";
+import { getAgencyByCountyIdOptimized } from "../db-agency-mapping";
 import { normalizeEmsQuery } from "../_core/ems-query-normalizer";
 import {
   optimizedSearch,
