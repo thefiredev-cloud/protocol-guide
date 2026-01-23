@@ -342,8 +342,8 @@ export function SimulationSection() {
           <Text style={styles.xAxisTitle}>Seconds Elapsed</Text>
         </View>
 
-        {/* Comparison Cards - stack on mobile */}
-        <View style={[styles.cardsRow, isMobile && styles.cardsRowMobile]}>
+        {/* Comparison Cards - stack on mobile, side by side on tablet/desktop */}
+        <View style={[styles.cardsRow, isMobile && styles.cardsRowMobile, isTablet && { gap: 16 }]}>
           <ComparisonCard
             label="Current Standard"
             value="~90s"
