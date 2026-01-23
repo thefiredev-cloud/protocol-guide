@@ -141,11 +141,11 @@ export default function ProtocolsScreen() {
                 <View
                   style={[
                     styles.statusBadge,
-                    { backgroundColor: getStatusColor(protocol.status) + "20" },
+                    { backgroundColor: getStatusColor(protocol.status ?? "draft") + "20" },
                   ]}
                 >
-                  <Text style={[styles.statusText, { color: getStatusColor(protocol.status) }]}>
-                    {protocol.status}
+                  <Text style={[styles.statusText, { color: getStatusColor(protocol.status ?? "draft") }]}>
+                    {protocol.status ?? "draft"}
                   </Text>
                 </View>
               </View>
