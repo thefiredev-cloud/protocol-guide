@@ -499,16 +499,25 @@ export function VoiceSearchButton({
             opacity: disabled ? 0.5 : 1,
           },
         ]}
+        accessible={true}
         accessibilityLabel={
           recordingState === "idle"
-            ? "Start voice search"
+            ? MEDICAL_A11Y_LABELS.search.voiceSearch
             : recordingState === "recording"
-            ? "Stop recording"
-            : "Processing voice input"
+            ? MEDICAL_A11Y_LABELS.search.stopVoice
+            : MEDICAL_A11Y_LABELS.voice.processing
         }
         accessibilityRole="button"
+        accessibilityHint={
+          recordingState === "idle"
+            ? "Activates voice recording for hands-free search"
+            : recordingState === "recording"
+            ? "Stops voice recording and processes your speech"
+            : undefined
+        }
         accessibilityState={{
           disabled: disabled || recordingState === "processing",
+          busy: recordingState === "processing",
         }}
       >
         {recordingState === "processing" ? (
