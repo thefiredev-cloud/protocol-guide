@@ -324,18 +324,25 @@ export function TimeCalculatorSection() {
                 aria-valuenow={calls}
                 aria-valuetext={`${calls} calls per shift`}
               />
-            ) : null}
-
-            {/* Visual Thumb (hidden on web, shown on native) */}
-            {Platform.OS !== "web" && (
-              <View
-                style={[
-                  styles.thumb,
-                  isMobile && styles.thumbMobile,
-                  {
-                    left: `${sliderPercentage}%`,
-                  },
-                ]}
+            ) : (
+              /* Native Slider for iOS/Android with 48px touch target */
+              <Slider
+                style={styles.nativeSlider}
+                minimumValue={1}
+                maximumValue={20}
+                step={1}
+                value={calls}
+                onValueChange={handleSliderChange}
+                minimumTrackTintColor={COLORS.primaryRed}
+                maximumTrackTintColor={COLORS.trackBg}
+                thumbTintColor={COLORS.primaryRed}
+                accessibilityLabel="Number of calls per shift"
+                accessibilityValue={{
+                  min: 1,
+                  max: 20,
+                  now: calls,
+                  text: `${calls} calls per shift`,
+                }}
               />
             )}
           </View>

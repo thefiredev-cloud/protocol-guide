@@ -155,13 +155,12 @@ export async function imageTrendLaunchHandler(
   const searchQuery = search_term ? String(search_term).trim() : undefined;
   const clinicalImpression = impression ? String(impression).trim() : undefined;
 
-  // Log the integration access
+  // Log the integration access (PHI fields intentionally excluded for HIPAA compliance)
   await logIntegrationAccess({
     agencyId: agency_id,
     agencyName: validation.agencyName,
     searchTerm: searchQuery,
-    userAge: parsedAge && !isNaN(parsedAge) ? parsedAge : undefined,
-    impression: clinicalImpression,
+    // NOTE: userAge and impression are NOT logged - they constitute PHI
     ipAddress,
     userAgent,
   });
