@@ -129,12 +129,18 @@ async function logIntegrationAccess(params: {
  * GET /api/imagetrend/launch
  *
  * Validates the agency, logs the access, and redirects to protocol search
+ *
+ * HIPAA COMPLIANCE:
+ * - Request ID used for log correlation instead of PHI
+ * - user_age and impression are used for functionality but NOT logged
+ * - search_term logged to database but NOT to console (may contain clinical context)
  */
 export async function imageTrendLaunchHandler(
   req: Request,
   res: Response
 ): Promise<void> {
   const startTime = Date.now();
+  const requestId = generateRequestId();
 
   // Check feature flag
   const flags = getFlags();
@@ -165,7 +171,7 @@ export async function imageTrendLaunchHandler(
   }
 
   // Validate agency has ImageTrend integration
-  const validation = await validateImageTrendAgency(agency_id);
+  const validation = await validateImageTrendAgency(agency_id, requestId);
   if (!validation.valid) {
     res.status(403).json({
       error: validation.error || "Agency not authorized",
@@ -182,16 +188,18 @@ export async function imageTrendLaunchHandler(
   const userAgent = req.headers["user-agent"] || undefined;
 
   // Parse optional parameters
+  // HIPAA: These PHI values are used for functionality but NOT logged
   const parsedAge = user_age ? parseInt(user_age as string, 10) : undefined;
   const searchQuery = search_term ? String(search_term).trim() : undefined;
   const clinicalImpression = impression ? String(impression).trim() : undefined;
 
-  // Log the integration access (PHI fields intentionally excluded for HIPAA compliance)
+  // Log the integration access to database (PHI fields intentionally excluded for HIPAA compliance)
   await logIntegrationAccess({
+    requestId,
     agencyId: agency_id,
     agencyName: validation.agencyName,
     searchTerm: searchQuery,
-    // NOTE: userAge and impression are NOT logged - they constitute PHI
+    // HIPAA COMPLIANCE: userAge and impression are NOT logged - they constitute PHI
     ipAddress,
     userAgent,
   });
@@ -219,10 +227,10 @@ export async function imageTrendLaunchHandler(
 
   const redirectUrl = `${baseUrl}/app/protocol-search?${searchParams.toString()}`;
 
-  // Log response time
+  // HIPAA-compliant logging: only operational metrics, no PHI or search content
   const responseTime = Date.now() - startTime;
   console.log(
-    `[ImageTrend] Launch: agency=${agency_id}, search="${searchQuery || "none"}", time=${responseTime}ms`
+    `[ImageTrend] Launch complete - requestId=${requestId}, agency=${agency_id}, responseTime=${responseTime}ms`
   );
 
   // Redirect to protocol search
