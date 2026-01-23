@@ -1,0 +1,207 @@
+/**
+ * Dose/Weight Calculator Data
+ * Medication database and category configuration
+ */
+
+import type { Medication, MedicationCategory } from "./types";
+
+// Common EMS medications with weight-based dosing
+export const MEDICATIONS: Medication[] = [
+  // Cardiac
+  {
+    id: "epinephrine-cardiac",
+    name: "Epinephrine (Cardiac Arrest)",
+    category: "cardiac",
+    dosePerKg: 0.01,
+    unit: "mg",
+    maxDose: 1,
+    route: "IV/IO",
+    notes: "1:10,000 concentration",
+    concentration: "0.1 mg/mL",
+  },
+  {
+    id: "amiodarone",
+    name: "Amiodarone",
+    category: "cardiac",
+    dosePerKg: 5,
+    unit: "mg",
+    maxDose: 300,
+    route: "IV/IO",
+    notes: "For VF/pulseless VT",
+  },
+  {
+    id: "lidocaine",
+    name: "Lidocaine",
+    category: "cardiac",
+    dosePerKg: 1,
+    unit: "mg",
+    maxDose: 100,
+    route: "IV/IO",
+    notes: "Alternative to amiodarone",
+  },
+  {
+    id: "adenosine",
+    name: "Adenosine",
+    category: "cardiac",
+    dosePerKg: 0.1,
+    unit: "mg",
+    maxDose: 6,
+    route: "IV",
+    notes: "Rapid push, follow with flush",
+  },
+  // Respiratory
+  {
+    id: "epinephrine-anaphylaxis",
+    name: "Epinephrine (Anaphylaxis)",
+    category: "respiratory",
+    dosePerKg: 0.01,
+    unit: "mg",
+    maxDose: 0.5,
+    route: "IM",
+    notes: "1:1,000 concentration",
+    concentration: "1 mg/mL",
+  },
+  {
+    id: "albuterol",
+    name: "Albuterol",
+    category: "respiratory",
+    dosePerKg: 0.15,
+    unit: "mg",
+    maxDose: 5,
+    minDose: 2.5,
+    route: "Nebulized",
+    notes: "May repeat x3",
+  },
+  {
+    id: "diphenhydramine",
+    name: "Diphenhydramine",
+    category: "respiratory",
+    dosePerKg: 1,
+    unit: "mg",
+    maxDose: 50,
+    route: "IV/IM",
+    notes: "For allergic reactions",
+  },
+  // Analgesia/Sedation
+  {
+    id: "morphine",
+    name: "Morphine",
+    category: "analgesia",
+    dosePerKg: 0.1,
+    unit: "mg",
+    maxDose: 10,
+    route: "IV/IM",
+    notes: "Titrate to effect",
+  },
+  {
+    id: "fentanyl",
+    name: "Fentanyl",
+    category: "analgesia",
+    dosePerKg: 1,
+    unit: "mcg",
+    maxDose: 100,
+    route: "IV/IN",
+    notes: "1 mcg/kg IV or 2 mcg/kg IN",
+  },
+  {
+    id: "ketamine",
+    name: "Ketamine (Pain)",
+    category: "analgesia",
+    dosePerKg: 0.3,
+    unit: "mg",
+    maxDose: 30,
+    route: "IV",
+    notes: "Sub-dissociative dose",
+  },
+  {
+    id: "midazolam",
+    name: "Midazolam (Seizures)",
+    category: "analgesia",
+    dosePerKg: 0.1,
+    unit: "mg",
+    maxDose: 5,
+    route: "IV/IM/IN",
+    notes: "May repeat once",
+  },
+  // Overdose
+  {
+    id: "naloxone",
+    name: "Naloxone",
+    category: "overdose",
+    dosePerKg: 0.1,
+    unit: "mg",
+    maxDose: 2,
+    minDose: 0.4,
+    route: "IV/IM/IN",
+    notes: "May repeat q2-3min",
+  },
+  {
+    id: "dextrose",
+    name: "Dextrose 10%",
+    category: "overdose",
+    dosePerKg: 5,
+    unit: "mL",
+    maxDose: 250,
+    route: "IV",
+    notes: "0.5g/kg = 5mL/kg of D10",
+  },
+  {
+    id: "glucagon",
+    name: "Glucagon",
+    category: "overdose",
+    dosePerKg: 0.03,
+    unit: "mg",
+    maxDose: 1,
+    minDose: 0.5,
+    route: "IM/IV",
+    notes: "For hypoglycemia",
+  },
+  // Pediatric-specific
+  {
+    id: "atropine",
+    name: "Atropine",
+    category: "pediatric",
+    dosePerKg: 0.02,
+    unit: "mg",
+    maxDose: 0.5,
+    minDose: 0.1,
+    route: "IV/IO",
+    notes: "For bradycardia",
+    pediatricOnly: true,
+  },
+  {
+    id: "diazepam",
+    name: "Diazepam",
+    category: "pediatric",
+    dosePerKg: 0.2,
+    unit: "mg",
+    maxDose: 5,
+    route: "IV/PR",
+    notes: "For seizures",
+    pediatricOnly: true,
+  },
+];
+
+export const CATEGORY_LABELS: Record<MedicationCategory, string> = {
+  cardiac: "Cardiac",
+  respiratory: "Respiratory/Allergic",
+  analgesia: "Pain/Sedation",
+  pediatric: "Pediatric-Specific",
+  overdose: "Overdose/Metabolic",
+};
+
+export const CATEGORY_ICONS: Record<MedicationCategory, string> = {
+  cardiac: "heart.fill",
+  respiratory: "lungs.fill",
+  analgesia: "pills.fill",
+  pediatric: "figure.child",
+  overdose: "cross.vial.fill",
+};
+
+export const CATEGORY_COLORS: Record<MedicationCategory, string> = {
+  cardiac: "#DC2626",
+  respiratory: "#2563EB",
+  analgesia: "#7C3AED",
+  pediatric: "#0891B2",
+  overdose: "#EA580C",
+};
