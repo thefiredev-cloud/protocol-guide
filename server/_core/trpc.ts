@@ -2,9 +2,48 @@ import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from "../../shared/const.js";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import type { TrpcContext } from "./context";
+import {
+  logProcedureStart,
+  logProcedureComplete,
+  logProcedureError,
+  createTraceLogger,
+} from "./tracing";
 
 const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
+  /**
+   * Error formatter that includes request ID in all error responses
+   * This enables clients to report errors with trace context for debugging
+   */
+  errorFormatter({ shape, error, ctx }) {
+    const requestId = ctx?.trace?.requestId;
+    const traceLogger = ctx?.trace ? createTraceLogger(ctx.trace) : null;
+
+    // Log the error with full trace context
+    if (traceLogger) {
+      traceLogger.error(
+        {
+          code: shape.code,
+          httpStatus: shape.data?.httpStatus,
+          path: shape.data?.path,
+          errorMessage: error.message,
+          errorCause: error.cause,
+        },
+        `tRPC error: ${error.message}`
+      );
+    }
+
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        // Include request ID in error response for client-side debugging
+        requestId,
+        // Include timestamp for correlation
+        timestamp: new Date().toISOString(),
+      },
+    };
+  },
 });
 
 export const router = t.router;
