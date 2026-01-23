@@ -398,6 +398,8 @@ function generateAgenciesForState(state: StateData): AgencyRecord[] {
       const cityName = cityNames[agencyIndex % cityNames.length];
       const tribeName = tribeNames[agencyIndex % tribeNames.length];
 
+      // Add unique index to prevent duplicate names within state
+      const uniqueIndex = agencyIndex + 1;
       const name = template
         .replace("{City}", cityName)
         .replace("{County}", `${cityName} County`)
@@ -413,7 +415,7 @@ function generateAgenciesForState(state: StateData): AgencyRecord[] {
       else tier = "low";
 
       agencies.push({
-        name: `${name} - ${state.code}`,
+        name: `${name} #${uniqueIndex}`,
         state: state.name,
         state_code: state.code,
         agency_type: type as AgencyType,
