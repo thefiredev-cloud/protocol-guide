@@ -12,6 +12,7 @@ import * as dbUserCounties from "./db-user-counties";
 import * as stripe from "./stripe";
 import { mapCountyIdToAgencyId, getAgencyByCountyId } from "./db-agency-mapping";
 import { TRPCError } from "@trpc/server";
+import { agencyAdminRouter } from "./routers/agency-admin";
 
 export const appRouter = router({
   system: systemRouter,
