@@ -45,6 +45,7 @@ export default function SearchScreen() {
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedState, setSelectedState] = useState<string | null>(params.stateFilter || null);
   const [showStateFilter, setShowStateFilter] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
   const inputRef = useRef<TextInput>(null);
   
   // Update state filter when navigation params change
