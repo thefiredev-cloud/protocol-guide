@@ -58,7 +58,36 @@ export default function PrivacyPolicyScreen() {
           <BulletPoint>Service providers who assist in operating our Service (e.g., Stripe for payments, cloud hosting providers)</BulletPoint>
           <BulletPoint>Law enforcement when required by law or to protect our rights</BulletPoint>
           <BulletPoint>Business partners in the event of a merger or acquisition</BulletPoint>
-          <BulletPoint>AI Processing: Protocol searches are processed using third-party artificial intelligence services (Anthropic Claude for response generation, Voyage AI for semantic search). These services receive your search queries to provide relevant protocol information. We do not share personal identifiers with these services.</BulletPoint>
+          <BulletPoint>AI service providers as described in Section 5 below</BulletPoint>
+        </Section>
+
+        <Section title="5. Artificial Intelligence (AI) and Large Language Model (LLM) Usage">
+          Protocol Guide uses artificial intelligence and large language model technologies to enhance your experience. This section describes how these technologies are used and what data is processed.
+          {"\n\n"}
+          <Text className="font-semibold">AI Services We Use:</Text>
+          <BulletPoint>Anthropic Claude: Powers natural language search queries and generates contextual responses to help you find relevant protocol information.</BulletPoint>
+          <BulletPoint>Voyage AI: Provides semantic search capabilities through text embeddings to match your queries with the most relevant protocols.</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">Data Sent to AI Services:</Text>
+          <BulletPoint>Search queries and questions you submit to the protocol search feature</BulletPoint>
+          <BulletPoint>Protocol content necessary to generate relevant responses</BulletPoint>
+          <BulletPoint>Conversation context within a single search session to improve response relevance</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">Data NOT Sent to AI Services:</Text>
+          <BulletPoint>Your name, email address, or account credentials</BulletPoint>
+          <BulletPoint>Payment or billing information</BulletPoint>
+          <BulletPoint>Device identifiers or location data</BulletPoint>
+          <BulletPoint>Any Protected Health Information (PHI) or patient data</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">AI Data Retention:</Text>
+          <BulletPoint>Search queries sent to Anthropic Claude are not retained by Anthropic for model training when using their API service.</BulletPoint>
+          <BulletPoint>Voyage AI embeddings are processed in real-time and not stored by Voyage AI.</BulletPoint>
+          <BulletPoint>We may retain anonymized, aggregated search analytics to improve our Service, but individual queries are not linked to user accounts after 30 days.</BulletPoint>
+          {"\n\n"}
+          <Text className="font-semibold">Important Limitations:</Text>
+          <BulletPoint>AI-generated responses are for reference purposes only and should not replace clinical judgment or consultation with your medical director.</BulletPoint>
+          <BulletPoint>Users should not input patient-specific information, PHI, or personally identifiable information into search queries.</BulletPoint>
+          <BulletPoint>AI responses may occasionally be inaccurate or incomplete; always verify critical information against official protocol documents.</BulletPoint>
         </Section>
 
         <Section title="5. Data Security">
