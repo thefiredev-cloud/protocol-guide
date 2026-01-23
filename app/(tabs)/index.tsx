@@ -681,6 +681,13 @@ export default function HomeScreen() {
         currentCounties={currentCounties}
         maxCounties={maxCounties}
       />
+
+      {/* P0 CRITICAL: Medical Disclaimer Consent Modal - Legal Compliance */}
+      {/* Blocks access to protocol search until acknowledged */}
+      <DisclaimerConsentModal
+        visible={showDisclaimerModal}
+        onAcknowledged={handleDisclaimerAcknowledged}
+      />
     </ScreenContainer>
   );
 }
