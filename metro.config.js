@@ -20,6 +20,10 @@ config.resolver.blockList = [
 // Optimize module resolution
 config.resolver.sourceExts = ["tsx", "ts", "jsx", "js", "json"];
 
+// Unstable feature to enable package exports resolution
+// This fixes the @trpc/react-query resolution issue
+config.resolver.unstable_enablePackageExports = true;
+
 // Enable minification in production
 if (process.env.NODE_ENV === "production") {
   config.transformer = {
