@@ -129,7 +129,7 @@ export function InstallPrompt() {
             <Text style={{ fontSize: 14, color: '#666', lineHeight: 20 }}>
               Tap the share button{' '}
               <Text style={{ fontSize: 16 }}>⬆️</Text>{' '}
-              and select "Add to Home Screen"
+              and select &ldquo;Add to Home Screen&rdquo;
             </Text>
           ) : (
             <Text style={{ fontSize: 14, color: '#666', lineHeight: 20 }}>

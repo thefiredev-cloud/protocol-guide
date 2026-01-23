@@ -516,7 +516,7 @@ export default function HomeScreen() {
         onRequestClose={() => setShowAgencyDropdown(false)}
       >
         <View className="flex-1 bg-background">
-          <View 
+          <View
             className="flex-row items-center justify-between px-4 py-3 border-b"
             style={{ borderBottomColor: colors.border }}
           >
@@ -525,7 +525,7 @@ export default function HomeScreen() {
               <IconSymbol name="xmark.circle.fill" size={26} color={colors.muted} />
             </TouchableOpacity>
           </View>
-          
+
           {agenciesLoading ? (
             <View className="flex-1 items-center justify-center">
               <ActivityIndicator size="large" color={colors.primary} />
@@ -537,8 +537,19 @@ export default function HomeScreen() {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {
+                    // Check county restriction before allowing selection
+                    // If user already has an agency selected, they can switch freely
+                    // If they don't have one, check if they can add
+                    if (!selectedAgency && !checkCanAddCounty()) {
+                      setShowAgencyDropdown(false);
+                      return; // Modal will be shown by the hook
+                    }
                     setSelectedAgency(item);
                     setShowAgencyDropdown(false);
+                    // Track that user has selected a county
+                    if (!selectedAgency) {
+                      incrementCountyCount();
+                    }
                   }}
                   className="flex-row items-center justify-between px-4 py-3 border-b"
                   style={{ borderBottomColor: colors.border }}
@@ -568,6 +579,14 @@ export default function HomeScreen() {
           )}
         </View>
       </Modal>
+
+      {/* County Limit Modal - shown when free user tries to add 2nd county */}
+      <CountyLimitModal
+        visible={showUpgradeModal}
+        onDismiss={closeUpgradeModal}
+        currentCounties={currentCounties}
+        maxCounties={maxCounties}
+      />
     </ScreenContainer>
   );
 }
