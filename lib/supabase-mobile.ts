@@ -5,10 +5,10 @@
 
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
-import * as Crypto from "expo-crypto";
 import { Platform } from "react-native";
 import { supabase } from "./supabase";
 import Constants from "expo-constants";
+import { generateOAuthState, validateOAuthState, clearOAuthState } from "./oauth-state-validation";
 
 // Ensure web browser auth sessions are completed
 WebBrowser.maybeCompleteAuthSession();

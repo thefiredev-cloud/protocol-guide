@@ -280,6 +280,77 @@ async function checkVoyage(): Promise<ServiceHealth> {
 }
 
 /**
+ * Check Redis connectivity (with fallback awareness)
+ */
+async function checkRedis(): Promise<ServiceHealth> {
+  const start = Date.now();
+  const now = new Date().toISOString();
+
+  try {
+    const resilientRedis = getResilientRedis();
+    const health = await resilientRedis.healthCheck();
+    const latency = Date.now() - start;
+
+    if (health.redis) {
+      ServiceRegistry.markHealthy('redis');
+      return {
+        status: latency < 100 ? 'healthy' : 'degraded',
+        latencyMs: latency,
+        message: latency >= 100 ? 'High latency detected' : undefined,
+        lastChecked: now,
+      };
+    }
+
+    // Redis unavailable but fallback is working
+    if (health.fallback) {
+      ServiceRegistry.markUnhealthy('redis', 'Using in-memory fallback');
+      return {
+        status: 'degraded',
+        latencyMs: latency,
+        message: 'Redis unavailable, using in-memory fallback',
+        lastChecked: now,
+      };
+    }
+
+    ServiceRegistry.markUnhealthy('redis', 'Redis and fallback unavailable');
+    return {
+      status: 'unhealthy',
+      latencyMs: latency,
+      message: 'Redis and fallback both unavailable',
+      lastChecked: now,
+    };
+  } catch (error) {
+    ServiceRegistry.markUnhealthy('redis', error instanceof Error ? error.message : 'Check failed');
+    return {
+      status: 'unhealthy',
+      latencyMs: Date.now() - start,
+      message: error instanceof Error ? error.message : 'Redis check failed',
+      lastChecked: now,
+    };
+  }
+}
+
+/**
+ * Get resilience status from ServiceRegistry
+ */
+function getResilienceStatus(): HealthCheckResult['resilience'] {
+  const stats = ServiceRegistry.getStats();
+  const circuitBreakers: Record<string, { state: string; available: boolean }> = {};
+
+  for (const [name, status] of Object.entries(stats.services)) {
+    circuitBreakers[name] = {
+      state: status.circuitState,
+      available: status.available,
+    };
+  }
+
+  return {
+    overallHealth: stats.overallHealth,
+    circuitBreakers,
+  };
+}
+
+/**
  * Get memory usage statistics
  */
 function getResourceUsage() {

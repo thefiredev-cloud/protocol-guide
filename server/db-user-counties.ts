@@ -307,7 +307,7 @@ export async function getUserPrimaryCounty(userId: number): Promise<SavedCounty 
     })
     .from(userCounties)
     .leftJoin(counties, eq(userCounties.countyId, counties.id))
-    .where(and(eq(userCounties.userId, userId), eq(userCounties.isPrimary, true)))
+    .where(and(eq(userCounties.userId, userId), eq(userCounties.isPrimary, 1)))
     .limit(1);
 
   if (!result) return null;
@@ -316,8 +316,8 @@ export async function getUserPrimaryCounty(userId: number): Promise<SavedCounty 
     id: result.id,
     userId: result.userId,
     countyId: result.countyId,
-    isPrimary: result.isPrimary,
-    createdAt: result.createdAt,
+    isPrimary: Boolean(result.isPrimary),
+    createdAt: new Date(result.createdAt),
     county: result.countyName ? {
       id: result.countyId,
       name: result.countyName,
