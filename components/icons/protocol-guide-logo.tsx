@@ -209,7 +209,7 @@ function getSvgDataUri(
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
-/** Native version using react-native-svg - Star of Life */
+/** Native version using react-native-svg - Caduceus logo */
 function NativeLogo({
   size,
   color,
@@ -219,20 +219,15 @@ function NativeLogo({
   color: string;
   variant?: LogoVariant;
 }) {
-  const bgColor = "#0F172A"; // Dark background for rod contrast
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Svg width={size} height={size} viewBox="0 0 600 685">
       {variant === "inverted" && (
-        <Rect width="24" height="24" rx="4" fill={INVERTED_BG_COLOR} />
+        <Rect width="600" height="685" rx="20" fill={INVERTED_BG_COLOR} />
       )}
-      <Path d={STAR_OF_LIFE_PATH} fill={color} />
-      <Path
-        d={ROD_PATH}
-        fill="none"
-        stroke={variant === "inverted" ? INVERTED_BG_COLOR : bgColor}
-        strokeWidth="1"
-        strokeLinecap="round"
-      />
+      <G transform="translate(0,685) scale(0.1,-0.1)" fill={color} stroke="none">
+        <Path d={CADUCEUS_PATH} />
+        <Path d={SECONDARY_PATH} />
+      </G>
     </Svg>
   );
 }
