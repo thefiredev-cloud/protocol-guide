@@ -47,7 +47,50 @@ const t = initTRPC.context<TrpcContext>().create({
 });
 
 export const router = t.router;
-export const publicProcedure = t.procedure;
+
+// ============================================================================
+// TRACING MIDDLEWARE
+// ============================================================================
+
+/**
+ * Tracing middleware that logs all procedure calls with request context
+ * Automatically tracks timing, logs start/complete/error, and enriches context
+ */
+const tracingMiddleware = t.middleware(async (opts) => {
+  const { ctx, path, type, next } = opts;
+  const startTime = Date.now();
+
+  // Log procedure start
+  logProcedureStart(ctx.trace, path, type, opts.rawInput);
+
+  try {
+    const result = await next({
+      ctx: {
+        ...ctx,
+        // Add trace-aware logger to context for use in procedures
+        log: createTraceLogger(ctx.trace),
+      },
+    });
+
+    // Log procedure completion
+    const durationMs = Date.now() - startTime;
+    logProcedureComplete(ctx.trace, path, type, durationMs, true);
+
+    return result;
+  } catch (error) {
+    // Log procedure error
+    const durationMs = Date.now() - startTime;
+    logProcedureError(ctx.trace, path, type, error, durationMs);
+
+    throw error;
+  }
+});
+
+/**
+ * Base procedure with tracing enabled
+ * All procedures automatically get request ID tracking and logging
+ */
+export const publicProcedure = t.procedure.use(tracingMiddleware);
 
 const requireUser = t.middleware(async (opts) => {
   const { ctx, next } = opts;
