@@ -1621,11 +1621,10 @@ export async function updateProtocolVersionStatus(
 
   const updateData: Partial<InsertProtocolVersion> = { status };
   if (status === "approved" && approvedBy) {
-    updateData.approvedBy = approvedBy;
-    updateData.approvedAt = new Date();
+    updateData.publishedBy = approvedBy;
   }
   if (status === "published") {
-    updateData.publishedAt = new Date();
+    updateData.publishedAt = new Date().toISOString();
   }
 
   await db.update(protocolVersions).set(updateData).where(eq(protocolVersions.id, versionId));

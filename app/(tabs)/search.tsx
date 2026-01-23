@@ -601,9 +601,18 @@ export default function SearchScreen() {
           backgroundColor: query.trim() ? colors.primary : colors.muted,
           opacity: query.trim() ? 1 : 0.5,
         }}
+        {...createButtonA11y(
+          MEDICAL_A11Y_LABELS.search.button,
+          query.trim() ? "Search for medical protocols" : "Enter a search query first",
+          !query.trim() || isSearching
+        )}
+        accessibilityState={{
+          disabled: !query.trim() || isSearching,
+          busy: isSearching,
+        }}
       >
         {isSearching ? (
-          <ActivityIndicator color={colors.background} />
+          <ActivityIndicator color={colors.background} accessibilityLabel="Searching" />
         ) : (
           <Text className="text-base font-semibold text-background">
             Search Protocols
@@ -616,6 +625,7 @@ export default function SearchScreen() {
         <View
           className="rounded-xl p-4 mb-4 flex-row items-start"
           style={{ backgroundColor: colors.error + "15" }}
+          {...createStatusA11y(searchError, "error")}
         >
           <IconSymbol name="exclamationmark.triangle.fill" size={20} color={colors.error} />
           <Text className="text-sm text-foreground ml-2 flex-1">{searchError}</Text>
