@@ -29,7 +29,7 @@ export default function AdminLayout() {
   const colors = useColors();
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [selectedAgencyId, setSelectedAgencyId] = useState<number | null>(null);
 
   // Fetch user's agencies
