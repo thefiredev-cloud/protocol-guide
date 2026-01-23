@@ -7,18 +7,10 @@
  * 3. OAuth flow proceeds normally
  */
 
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  ActivityIndicator,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, TextInput, ActivityIndicator, Platform, KeyboardAvoidingView } from "react-native";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-
 import { useAuth } from "@/hooks/use-auth";
 import { ScreenContainer } from "@/components/screen-container";
 import { signInWithGoogle, signInWithApple } from "@/lib/supabase";
