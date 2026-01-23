@@ -80,7 +80,7 @@ jobs:
             echo "alive=false" >> $GITHUB_OUTPUT
           fi
         env:
-          LIVENESS_URL: ${{ secrets.LIVENESS_URL }}
+          LIVENESS_URL: ${{ inputs.environment == 'staging' && 'https://staging-protocol-guide.netlify.app/api/live' || 'https://protocol-guide.netlify.app/api/live' }}
 
       - name: Create health check summary
         env:
