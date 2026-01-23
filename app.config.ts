@@ -33,7 +33,7 @@ const config: ExpoConfig = {
   newArchEnabled: true,
 
   // EAS Project Configuration
-  owner: "protocol-guide",  // Update with your Expo account username
+  owner: "tannero19",  // Expo account username
   extra: {
     eas: {
       projectId: "REPLACE_WITH_EAS_PROJECT_ID"  // From `eas project:init`
