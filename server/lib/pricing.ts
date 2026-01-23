@@ -78,11 +78,14 @@ export function calculateDepartmentPrice(
  * Determine the appropriate tier based on seat count
  */
 export function getTierForSeatCount(seatCount: number): SubscriptionTier {
-  if (seatCount <= DEPARTMENT_PRICING.starter.maxSeats) {
-    return "starter";
+  if (seatCount < DEPARTMENT_PRICING.small.minSeats) {
+    return "small"; // Default to small tier, but caller should handle this
   }
-  if (seatCount <= DEPARTMENT_PRICING.professional.maxSeats) {
-    return "professional";
+  if (seatCount <= DEPARTMENT_PRICING.small.maxSeats) {
+    return "small";
+  }
+  if (seatCount <= DEPARTMENT_PRICING.large.maxSeats) {
+    return "large";
   }
   return "enterprise";
 }
