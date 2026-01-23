@@ -328,10 +328,11 @@ export const agencyAdminRouter = router({
         archived: ["draft"],
       };
 
-      if (!validTransitions[version.status]?.includes(input.status)) {
+      const currentStatus = version.status ?? "draft";
+      if (!validTransitions[currentStatus]?.includes(input.status)) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `Cannot transition from ${version.status} to ${input.status}`,
+          message: `Cannot transition from ${currentStatus} to ${input.status}`,
         });
       }
 
