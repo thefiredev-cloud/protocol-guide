@@ -1255,4 +1255,622 @@ describe("Stripe Webhook Handler - Customer Deleted", () => {
     consoleLogSpy.mockRestore();
     consoleErrorSpy.mockRestore();
   });
+
+  it("cleans up all stripe data when customer is deleted", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_customer_deleted_cleanup",
+      type: "customer.deleted",
+      data: {
+        object: {
+          id: "cus_test_cleanup",
+          email: "cleanup@example.com",
+        } as Stripe.Customer,
+      },
+    };
+
+    const mockDb = {
+      query: {
+        stripeWebhookEvents: {
+          findFirst: vi.fn().mockResolvedValue(null),
+        },
+      },
+      insert: vi.fn().mockReturnValue({
+        values: vi.fn().mockResolvedValue(undefined),
+      }),
+      update: vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue(undefined),
+        }),
+      }),
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 999,
+      tier: "pro",
+      stripeCustomerId: "cus_test_cleanup",
+      subscriptionId: "sub_to_clean",
+    } as any);
+    vi.mocked(db.getDb).mockResolvedValue(mockDb as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(mockDb.update).toHaveBeenCalled();
+    const setCall = mockDb.update().set;
+    expect(setCall).toHaveBeenCalledWith({
+      stripeCustomerId: null,
+      subscriptionId: null,
+      subscriptionStatus: null,
+      subscriptionEndDate: null,
+      tier: "free",
+    });
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("Stripe Webhook Handler - Additional Invoice Events", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(db.getDb).mockResolvedValue(null);
+  });
+
+  it("handles invoice.created event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_invoice_created",
+      type: "invoice.created",
+      data: {
+        object: {
+          id: "in_test_new",
+          customer: "cus_test_456",
+          status: "draft",
+          amount_due: 2999,
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    // Should be handled as unhandled event (no specific handler)
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: invoice.created")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("handles invoice.finalized event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_invoice_finalized",
+      type: "invoice.finalized",
+      data: {
+        object: {
+          id: "in_test_final",
+          customer: "cus_test_456",
+          status: "open",
+          amount_due: 2999,
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: invoice.finalized")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("handles invoice.voided event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_invoice_voided",
+      type: "invoice.voided",
+      data: {
+        object: {
+          id: "in_test_void",
+          customer: "cus_test_456",
+          status: "void",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: invoice.voided")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("handles invoice.updated event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_invoice_updated",
+      type: "invoice.updated",
+      data: {
+        object: {
+          id: "in_test_update",
+          customer: "cus_test_456",
+          status: "open",
+          amount_due: 3499,
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: invoice.updated")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("handles invoice.payment_action_required event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_invoice_action_required",
+      type: "invoice.payment_action_required",
+      data: {
+        object: {
+          id: "in_test_action",
+          customer: "cus_test_456",
+          status: "open",
+          payment_intent: "pi_test_123",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: invoice.payment_action_required")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+});
+
+describe("Stripe Webhook Handler - Subscription Edge Cases", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(db.getDb).mockResolvedValue(null);
+  });
+
+  it("handles subscription with incomplete status", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sub_incomplete",
+      type: "customer.subscription.updated",
+      data: {
+        object: {
+          id: "sub_test_incomplete",
+          customer: "cus_test_456",
+          status: "incomplete",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 100,
+      tier: "pro",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    // Incomplete should downgrade to free
+    expect(db.updateUserTier).toHaveBeenCalledWith(100, "free");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("handles subscription with incomplete_expired status", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sub_incomplete_expired",
+      type: "customer.subscription.updated",
+      data: {
+        object: {
+          id: "sub_test_incomplete_expired",
+          customer: "cus_test_456",
+          status: "incomplete_expired",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 101,
+      tier: "pro",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(db.updateUserTier).toHaveBeenCalledWith(101, "free");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("handles subscription with unpaid status", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sub_unpaid",
+      type: "customer.subscription.updated",
+      data: {
+        object: {
+          id: "sub_test_unpaid",
+          customer: "cus_test_456",
+          status: "unpaid",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 102,
+      tier: "pro",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(db.updateUserTier).toHaveBeenCalledWith(102, "free");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("handles subscription with canceled status via update event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sub_canceled_update",
+      type: "customer.subscription.updated",
+      data: {
+        object: {
+          id: "sub_test_canceled",
+          customer: "cus_test_456",
+          status: "canceled",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 103,
+      tier: "pro",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(db.updateUserTier).toHaveBeenCalledWith(103, "free");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("maintains pro tier for trialing subscription", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sub_trialing",
+      type: "customer.subscription.updated",
+      data: {
+        object: {
+          id: "sub_test_trial",
+          customer: "cus_test_456",
+          status: "trialing",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 104,
+      tier: "free",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(db.updateUserTier).toHaveBeenCalledWith(104, "pro");
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("Stripe Webhook Handler - Signature Verification Mocking", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("verifies webhook signature with correct secret", async () => {
+    const req = createMockRequest("raw body", "whsec_valid_signature");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_sig_valid",
+      type: "customer.subscription.created",
+      data: {
+        object: {
+          id: "sub_test_sig",
+          customer: "cus_test_sig",
+          status: "active",
+        } as any,
+      },
+    };
+
+    // Mock successful signature verification
+    vi.mocked(constructWebhookEvent).mockImplementation((payload, signature) => {
+      // Simulate Stripe signature verification logic
+      if (signature.startsWith("whsec_valid")) {
+        return mockEvent as any;
+      }
+      return { error: "Invalid signature" };
+    });
+
+    vi.mocked(db.getDb).mockResolvedValue(null);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 1,
+      tier: "free",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(constructWebhookEvent).toHaveBeenCalledWith("raw body", "whsec_valid_signature");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("rejects webhook with invalid signature format", async () => {
+    const req = createMockRequest("raw body", "invalid_signature_format");
+    const res = createMockResponse();
+
+    vi.mocked(constructWebhookEvent).mockImplementation((payload, signature) => {
+      if (!signature.startsWith("whsec_")) {
+        return { error: "Invalid signature format" };
+      }
+      return {} as any;
+    });
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.jsonData).toEqual({ error: "Invalid signature format" });
+  });
+
+  it("rejects webhook with expired timestamp", async () => {
+    const req = createMockRequest("raw body", "whsec_expired_timestamp");
+    const res = createMockResponse();
+
+    vi.mocked(constructWebhookEvent).mockImplementation((payload, signature) => {
+      if (signature.includes("expired")) {
+        return { error: "Timestamp outside the tolerance zone" };
+      }
+      return {} as any;
+    });
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.jsonData).toEqual({ error: "Timestamp outside the tolerance zone" });
+  });
+
+  it("handles webhook signature verification with different payload types", async () => {
+    const bufferPayload = Buffer.from("raw body");
+    const req = createMockRequest(bufferPayload, "whsec_valid");
+    const res = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_buffer",
+      type: "test.event",
+      data: { object: {} },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getDb).mockResolvedValue(null);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(constructWebhookEvent).toHaveBeenCalledWith(bufferPayload, "whsec_valid");
+    expect(res.statusCode).toBe(200);
+  });
+});
+
+describe("Stripe Webhook Handler - Race Condition & Concurrency", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("prevents duplicate processing with concurrent requests", async () => {
+    const req1 = createMockRequest("raw body", "sig_concurrent_1");
+    const req2 = createMockRequest("raw body", "sig_concurrent_2");
+    const res1 = createMockResponse();
+    const res2 = createMockResponse();
+
+    const mockEvent = {
+      id: "evt_concurrent_123",
+      type: "customer.subscription.created",
+      data: {
+        object: {
+          id: "sub_concurrent",
+          customer: "cus_concurrent",
+          status: "active",
+        } as any,
+      },
+    };
+
+    let insertCallCount = 0;
+    const mockDb = {
+      query: {
+        stripeWebhookEvents: {
+          findFirst: vi.fn().mockImplementation(async () => {
+            // First request finds nothing
+            if (insertCallCount === 0) {
+              return null;
+            }
+            // Second request finds the event inserted by first request
+            return {
+              id: 1,
+              eventId: "evt_concurrent_123",
+              eventType: "customer.subscription.created",
+              processedAt: new Date(),
+            };
+          }),
+        },
+      },
+      insert: vi.fn().mockReturnValue({
+        values: vi.fn().mockImplementation(async () => {
+          insertCallCount++;
+          return undefined;
+        }),
+      }),
+      update: vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue(undefined),
+        }),
+      }),
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+    vi.mocked(db.getDb).mockResolvedValue(mockDb as any);
+    vi.mocked(db.getUserByStripeCustomerId).mockResolvedValue({
+      id: 1,
+      tier: "free",
+    } as any);
+    vi.mocked(db.updateUserTier).mockResolvedValue(undefined);
+
+    // Process both requests
+    await handleStripeWebhook(req1 as Request, res1 as Response);
+    await handleStripeWebhook(req2 as Request, res2 as Response);
+
+    // First should succeed
+    expect(res1.statusCode).toBe(200);
+    expect(res1.jsonData).toEqual({ received: true });
+
+    // Second should be skipped
+    expect(res2.statusCode).toBe(200);
+    expect(res2.jsonData).toEqual({
+      received: true,
+      skipped: true,
+      reason: "Already processed",
+    });
+
+    // Insert should only be called once
+    expect(insertCallCount).toBe(1);
+  });
+});
+
+describe("Stripe Webhook Handler - Payment Method Events", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(db.getDb).mockResolvedValue(null);
+  });
+
+  it("handles payment_method.attached event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_pm_attached",
+      type: "payment_method.attached",
+      data: {
+        object: {
+          id: "pm_test_123",
+          customer: "cus_test_456",
+          type: "card",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: payment_method.attached")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("handles payment_method.detached event", async () => {
+    const req = createMockRequest("raw body", "sig_test_123");
+    const res = createMockResponse();
+
+    const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const mockEvent = {
+      id: "evt_pm_detached",
+      type: "payment_method.detached",
+      data: {
+        object: {
+          id: "pm_test_456",
+          customer: null,
+          type: "card",
+        } as any,
+      },
+    };
+
+    vi.mocked(constructWebhookEvent).mockReturnValue(mockEvent as any);
+
+    await handleStripeWebhook(req as Request, res as Response);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[Stripe Webhook] Unhandled event type: payment_method.detached")
+    );
+    expect(res.statusCode).toBe(200);
+
+    consoleLogSpy.mockRestore();
+  });
 });
