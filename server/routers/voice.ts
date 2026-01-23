@@ -56,7 +56,8 @@ export const voiceRouter = router({
 
   uploadAudio: protectedProcedure
     .input(z.object({
-      audioBase64: z.string(),
+      // Max 10MB base64 (actual file ~7.5MB after encoding overhead)
+      audioBase64: z.string().max(10_000_000, "Audio file exceeds 10MB limit"),
       mimeType: z.string(),
     }))
     .mutation(async ({ ctx, input }) => {
