@@ -497,7 +497,7 @@ describe("Protocol Search Accuracy - Critical EMS Scenarios", () => {
       });
 
       expect(vi.mocked(mapCountyIdToAgencyId)).toHaveBeenCalledWith(456);
-      expect(mockGetAgencyByCountyId).toHaveBeenCalledWith(456);
+      expect(vi.mocked(getAgencyByCountyId)).toHaveBeenCalledWith(456);
     });
   });
 });
