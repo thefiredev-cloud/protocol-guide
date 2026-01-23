@@ -310,15 +310,22 @@ export default function HistoryScreen() {
         </Text>
       </View>
 
-      {/* History List */}
-      <FlatList
-        data={filteredProtocols}
-        keyExtractor={(item) => item.id}
-        renderItem={renderHistoryItem}
-        contentContainerStyle={styles.listContent}
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
-      />
+      {/* History List - wrapped with ProFeatureLock for free users */}
+      <ProFeatureLock
+        locked={isFreeTier}
+        featureName="Offline History"
+        description="Upgrade to Pro to save and access your protocol search history offline"
+        style={styles.listWrapper}
+      >
+        <FlatList
+          data={filteredProtocols}
+          keyExtractor={(item) => item.id}
+          renderItem={renderHistoryItem}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+        />
+      </ProFeatureLock>
     </ScreenContainer>
   );
 }
