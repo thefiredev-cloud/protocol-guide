@@ -18,6 +18,11 @@ import {
   invalidateAllSearchCache,
   getSearchCacheStats,
   resetSearchCacheStats,
+  getSearchCacheHeaders,
+  setSearchCacheHeaders,
+  CACHE_TTL,
+  CACHE_HEADER_MAX_AGE,
+  CACHE_HEADER_STALE_WHILE_REVALIDATE,
   type SearchCacheParams,
   type CachedSearchResult,
 } from "../server/_core/search-cache";

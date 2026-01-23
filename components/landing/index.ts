@@ -12,3 +12,6 @@ export { FooterSection } from "./footer-section";
 
 // Reusable animation components
 export { AnimatedPressable, AnimatedNavLink } from "./animated-pressable";
+
+// Social proof components
+export { StarRating, TrustedBadge, TestimonialQuote, DepartmentUsage } from "./social-proof";
