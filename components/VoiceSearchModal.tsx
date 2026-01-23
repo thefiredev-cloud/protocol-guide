@@ -43,7 +43,7 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from "react-native-reanimated";
-import { BlurView } from "expo-blur";
+// Note: expo-blur not installed, using simple overlay instead
 
 // Recording state types
 type RecordingState = "idle" | "permission_required" | "recording" | "processing" | "error";

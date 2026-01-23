@@ -85,10 +85,13 @@ async function validateImageTrendAgency(
 /**
  * Log integration access for analytics
  *
- * NOTE: userAge and impression are intentionally NOT logged for HIPAA compliance.
- * These fields constitute PHI when combined with timestamps.
+ * HIPAA COMPLIANCE:
+ * - userAge and impression are intentionally NOT logged - they constitute PHI
+ * - searchTerm is logged for analytics but should not contain patient identifiers
+ * - Only operational data (agency, timing, counts) is persisted
  */
 async function logIntegrationAccess(params: {
+  requestId: string;
   agencyId: string;
   agencyName?: string;
   searchTerm?: string;
@@ -96,7 +99,11 @@ async function logIntegrationAccess(params: {
   userAgent?: string;
 }): Promise<void> {
   const db = await getDb();
-  if (!db) return;
+  if (!db) {
+    // Safe log: only request ID
+    console.warn(`[ImageTrend] Database unavailable for logging - requestId=${params.requestId}`);
+    return;
+  }
 
   try {
     await db.insert(integrationLogs).values({
@@ -104,12 +111,15 @@ async function logIntegrationAccess(params: {
       agencyId: params.agencyId,
       agencyName: params.agencyName || null,
       searchTerm: params.searchTerm || null,
-      // PHI fields (userAge, impression) intentionally omitted for HIPAA compliance
+      // HIPAA COMPLIANCE: PHI fields (userAge, impression) intentionally omitted
+      // DO NOT ADD patient age, clinical impressions, or any patient identifiers
       ipAddress: params.ipAddress || null,
       userAgent: params.userAgent || null,
     });
   } catch (err) {
-    console.error("[ImageTrend] Failed to log access:", err);
+    // Safe error logging: only log error type and request ID, not full error
+    const errorType = err instanceof Error ? err.name : "UnknownError";
+    console.error(`[ImageTrend] Log access failed - requestId=${params.requestId}, errorType=${errorType}`);
     // Don't fail the request if logging fails
   }
 }

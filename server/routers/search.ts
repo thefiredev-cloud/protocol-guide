@@ -11,7 +11,9 @@ import { mapCountyIdToAgencyId, getAgencyByCountyId } from "../db-agency-mapping
 import { normalizeEmsQuery } from "../_core/ems-query-normalizer";
 import {
   optimizedSearch,
+  highAccuracySearch,
   latencyMonitor,
+  type OptimizedSearchOptions,
 } from "../_core/rag-optimizer";
 import {
   getSearchCacheKey,
