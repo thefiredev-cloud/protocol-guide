@@ -13,6 +13,12 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
+// Import after mocking
+import { appRouter } from "../server/routers";
+import type { TrpcContext } from "../server/_core/context";
+import { semanticSearchProtocols } from "../server/_core/embeddings";
+import { mapCountyIdToAgencyId, getAgencyByCountyId } from "../server/db-agency-mapping";
+
 // Mock the embeddings module - use inline mock to avoid hoisting issues
 vi.mock("../server/_core/embeddings", () => ({
   semanticSearchProtocols: vi.fn(),
@@ -46,12 +52,6 @@ vi.mock("../server/db", async () => {
     }),
   };
 });
-
-// Import after mocking
-import { appRouter } from "../server/routers";
-import type { TrpcContext } from "../server/_core/context";
-import { semanticSearchProtocols } from "../server/_core/embeddings";
-import { mapCountyIdToAgencyId, getAgencyByCountyId } from "../server/db-agency-mapping";
 
 // Test context helper
 function createTestContext(): TrpcContext {

@@ -805,6 +805,9 @@ export const appRouter = router({
 
   // Integration partner tracking
   integration: integrationRouter,
+
+  // Referral system for viral growth
+  referral: referralRouter,
 });
 
 export type AppRouter = typeof appRouter;
