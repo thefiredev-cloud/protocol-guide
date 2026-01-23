@@ -316,42 +316,5 @@ describe("Search Performance Benchmarks", () => {
   });
 });
 
-// Vitest bench for continuous performance tracking
-describe("Performance Benchmarks (Vitest Bench)", () => {
-  bench(
-    "simple search - cardiac arrest",
-    async () => {
-      await semanticSearchProtocols({
-        query: "cardiac arrest",
-        limit: 10,
-        threshold: 0.3,
-      });
-    },
-    { time: 10000, iterations: 5 }
-  );
-
-  bench(
-    "complex search - natural language",
-    async () => {
-      await semanticSearchProtocols({
-        query: "what do I do for a patient having a heart attack",
-        limit: 10,
-        threshold: 0.3,
-      });
-    },
-    { time: 10000, iterations: 5 }
-  );
-
-  bench(
-    "state-filtered search",
-    async () => {
-      await semanticSearchProtocols({
-        query: "stroke protocol",
-        stateCode: "CA",
-        limit: 10,
-        threshold: 0.3,
-      });
-    },
-    { time: 10000, iterations: 5 }
-  );
-});
+// Note: Vitest bench tests are in a separate file (benchmark-search.bench.ts)
+// Run with: pnpm bench
