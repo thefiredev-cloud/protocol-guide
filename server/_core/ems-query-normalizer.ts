@@ -182,9 +182,7 @@ export const EMS_ABBREVIATIONS: Record<string, string> = {
   'toxic': 'toxic exposure poisoning',
 
   // Procedures
-  'defib': 'defibrillation',
-  'cardioversion': 'synchronized cardioversion',
-  'pacing': 'transcutaneous pacing',
+  'sync cardioversion': 'synchronized cardioversion',
   'intubation': 'endotracheal intubation',
   'needle decompression': 'needle thoracostomy',
   'chest decompression': 'needle thoracostomy',
