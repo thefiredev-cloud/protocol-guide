@@ -126,8 +126,18 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 }
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  const userId = session.client_reference_id || session.metadata?.userId;
   const customerId = session.customer as string;
+
+  // Check if this is a department/agency subscription
+  const subscriptionType = session.metadata?.subscriptionType;
+
+  if (subscriptionType === "department") {
+    await handleDepartmentCheckoutCompleted(session, customerId);
+    return;
+  }
+
+  // Individual subscription
+  const userId = session.client_reference_id || session.metadata?.userId;
 
   if (!userId) {
     console.error("[Stripe Webhook] No userId in checkout session");
@@ -138,9 +148,43 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   // Update user with Stripe customer ID
   await db.updateUserStripeCustomerId(parseInt(userId), customerId);
-  
+
   // Update user tier to pro
   await db.updateUserTier(parseInt(userId), "pro");
+}
+
+async function handleDepartmentCheckoutCompleted(
+  session: Stripe.Checkout.Session,
+  customerId: string
+) {
+  const agencyId = session.metadata?.agencyId;
+  const tier = session.metadata?.tier as "starter" | "professional" | "enterprise" | undefined;
+  const seatCount = session.metadata?.seatCount;
+
+  if (!agencyId) {
+    console.error("[Stripe Webhook] No agencyId in department checkout session");
+    return;
+  }
+
+  console.log(`[Stripe Webhook] Department checkout completed for agency ${agencyId}`);
+
+  const dbInstance = await db.getDb();
+  if (!dbInstance) {
+    console.error("[Stripe Webhook] Database connection failed");
+    return;
+  }
+
+  const { agencies } = await import("../../drizzle/schema.js");
+  const { eq } = await import("drizzle-orm");
+
+  // Update agency with Stripe customer ID and subscription tier
+  await dbInstance.update(agencies).set({
+    stripeCustomerId: customerId,
+    subscriptionTier: tier || "starter",
+    subscriptionStatus: "active",
+  }).where(eq(agencies.id, parseInt(agencyId)));
+
+  console.log(`[Stripe Webhook] Updated agency ${agencyId} with customer ${customerId}, tier: ${tier}`);
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
