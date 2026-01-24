@@ -120,7 +120,7 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
 async function parseExcelOrFallback(filePath: string): Promise<NCBContract[]> {
   // Try to dynamically import xlsx
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const XLSX = require('xlsx');
     const workbook = XLSX.readFile(filePath);
     const sheetName = workbook.SheetNames[0];

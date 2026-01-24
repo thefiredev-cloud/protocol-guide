@@ -1,0 +1,89 @@
+# Protocol Guide Drip Email Sender
+# Sends onboarding emails to users based on signup date
+# - Day 3: Tips email
+# - Day 7: Pro pitch email (free users only)
+
+name: Send Drip Emails
+
+on:
+  # Run daily at 9 AM UTC (4 AM EST / 1 AM PST)
+  schedule:
+    - cron: '0 9 * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  send-drip-emails:
+    name: Send Drip Emails
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger drip email job
+        id: drip
+        run: |
+          echo "Triggering drip email job..."
+
+          # Call the tRPC endpoint
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            --connect-timeout 30 \
+            --max-time 120 \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"json\":{\"secret\":\"${CRON_SECRET}\"}}" \
+            "${API_URL}/api/trpc/jobs.runDripEmails" || echo -e "\n000")
+
+          # Split response body and status code
+          HTTP_BODY=$(echo "${RESPONSE}" | head -n -1)
+          HTTP_STATUS=$(echo "${RESPONSE}" | tail -n 1)
+
+          echo "HTTP Status: ${HTTP_STATUS}"
+          echo "Response: ${HTTP_BODY}"
+
+          # Set outputs
+          echo "status=${HTTP_STATUS}" >> $GITHUB_OUTPUT
+          echo "body=${HTTP_BODY}" >> $GITHUB_OUTPUT
+
+          # Check if successful
+          if [ "${HTTP_STATUS}" -ge 200 ] && [ "${HTTP_STATUS}" -lt 300 ]; then
+            echo "Drip email job completed successfully"
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "Drip email job failed"
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+        env:
+          API_URL: ${{ vars.API_URL || 'https://protocol-guide-production.up.railway.app' }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+      - name: Create job summary
+        if: always()
+        env:
+          HTTP_STATUS: ${{ steps.drip.outputs.status }}
+          HTTP_BODY: ${{ steps.drip.outputs.body }}
+          SUCCESS: ${{ steps.drip.outputs.success }}
+        run: |
+          echo "## Drip Email Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${SUCCESS}" = "true" ]; then
+            echo "| Status | Result |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Job Execution | Success |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Response" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo "${HTTP_BODY}" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Job Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "HTTP Status: ${HTTP_STATUS}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "${HTTP_BODY}" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
