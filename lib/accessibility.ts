@@ -372,8 +372,6 @@ export interface UseFocusTrapReturn {
  * ```
  */
 export function useFocusTrap(options: UseFocusTrapOptions): UseFocusTrapReturn {
-  const { useRef, useEffect, useCallback } = require("react");
-
   const { visible, onClose, allowEscapeClose = true, initialFocusSelector } = options;
 
   const containerRef = useRef<any>(null);
