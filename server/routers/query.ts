@@ -56,7 +56,7 @@ export const queryRouter = router({
 
       // SECURITY FIX: Use atomic increment-and-check to prevent TOCTOU race condition
       // Get tier limit for atomic check
-      const features = await db.getUserTierFeatures(ctx.user.id);
+      const features = await getUserTierFeatures(ctx.user.id);
       const tierLimit = features.dailyQueryLimit;
 
       // Skip atomic check if unlimited (Infinity)
