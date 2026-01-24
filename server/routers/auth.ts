@@ -5,7 +5,7 @@
 
 import { COOKIE_NAME } from "../../shared/const.js";
 import { getSessionCookieOptions } from "../_core/cookies";
-import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
+import { publicProcedure, csrfProtectedProcedure, protectedProcedure, router } from "../_core/trpc";
 import { revokeUserTokens } from "../_core/token-blacklist";
 import { createClient } from "@supabase/supabase-js";
 import { logger } from "../_core/logger";
@@ -19,11 +19,12 @@ export const authRouter = router({
   me: publicProcedure.query((opts) => opts.ctx.user),
 
   /**
-   * Logout - requires CSRF protection via protectedProcedure
-   * This prevents CSRF attacks where malicious sites log users out
-   * Also revokes the token on Supabase for immediate invalidation
+   * Logout - requires CSRF protection but NOT authentication
+   * - CSRF protection prevents malicious sites from logging users out
+   * - Works for both authenticated and unauthenticated users (to clear cookies)
+   * - Revokes the token on Supabase if user is authenticated
    */
-  logout: protectedProcedure.mutation(async ({ ctx }) => {
+  logout: csrfProtectedProcedure.mutation(async ({ ctx }) => {
     const authHeader = ctx.req.headers.authorization;
     const token = authHeader?.replace("Bearer ", "");
 
