@@ -38,6 +38,31 @@ afterAll(() => {
 });
 
 // Export test utilities
+
+/**
+ * Create a mock trace context for testing
+ * Matches the TraceContext interface from server/_core/tracing.ts
+ */
+export function createMockTraceContext(overrides: Partial<{
+  requestId: string;
+  startTime: number;
+  parentTraceId?: string;
+  spanId?: string;
+  source?: "web" | "mobile" | "api" | "internal";
+  userId?: string;
+  userTier?: string;
+}> = {}) {
+  return {
+    requestId: overrides.requestId ?? "test-request-id",
+    startTime: overrides.startTime ?? Date.now(),
+    spanId: overrides.spanId ?? "test-span-id",
+    source: overrides.source ?? "api" as const,
+    userId: overrides.userId ?? "test-user",
+    userTier: overrides.userTier ?? "free",
+    parentTraceId: overrides.parentTraceId,
+  };
+}
+
 export function createMockRequest(overrides: Record<string, unknown> = {}) {
   return {
     protocol: "https",
