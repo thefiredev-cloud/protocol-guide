@@ -38,8 +38,58 @@ interface AuthEvent {
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-webhook-signature',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-webhook-signature, x-webhook-timestamp',
 };
+
+/**
+ * Verify webhook signature using HMAC-SHA256
+ * Uses constant-time comparison to prevent timing attacks
+ */
+async function verifyWebhookSignature(
+  payload: string,
+  signature: string,
+  secret: string
+): Promise<boolean> {
+  try {
+    const encoder = new TextEncoder();
+
+    // Import secret key for HMAC
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    // Sign the payload
+    const signatureBuffer = await crypto.subtle.sign(
+      'HMAC',
+      key,
+      encoder.encode(payload)
+    );
+
+    // Convert to hex string
+    const expectedSignature = new TextDecoder().decode(
+      encode(new Uint8Array(signatureBuffer))
+    );
+
+    // Constant-time comparison to prevent timing attacks
+    if (signature.length !== expectedSignature.length) {
+      return false;
+    }
+
+    let result = 0;
+    for (let i = 0; i < signature.length; i++) {
+      result |= signature.charCodeAt(i) ^ expectedSignature.charCodeAt(i);
+    }
+
+    return result === 0;
+  } catch (error) {
+    console.error('[AuthEvents] Error verifying signature:', error);
+    return false;
+  }
+}
 
 async function revokeTokensInRedis(
   userId: string,
