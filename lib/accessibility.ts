@@ -413,9 +413,7 @@ export function useFocusTrap(options: UseFocusTrapOptions): UseFocusTrapReturn {
 
       // Tab key traps focus within modal
       if (event.key === "Tab" && containerRef.current) {
-        const focusableElements = containerRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
+        const focusableElements = containerRef.current.querySelectorAll(FOCUSABLE_SELECTOR);
 
         if (focusableElements.length === 0) return;
 
