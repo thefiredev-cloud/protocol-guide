@@ -220,9 +220,9 @@ const requireUser = t.middleware(async (opts) => {
 });
 
 /**
- * Protected procedure with tracing - requires authenticated user
+ * Protected procedure with tracing and CSRF protection - requires authenticated user
  */
-export const protectedProcedure = publicProcedure.use(requireUser);
+export const protectedProcedure = publicProcedure.use(csrfProtection).use(requireUser);
 
 /**
  * Admin procedure with tracing - requires admin role
