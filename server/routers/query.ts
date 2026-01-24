@@ -16,7 +16,7 @@ import {
   selectModel,
   latencyMonitor,
   type OptimizedSearchOptions,
-} from "../_core/rag-optimizer";
+} from "../_core/rag";
 import { validateTier, validateQueryLimit, validateSubscriptionActive, validateTierValue, getUserTierFeatures } from "../_core/tier-validation";
 import * as db from "../db";
 import * as dbUserCounties from "../db-user-counties";
