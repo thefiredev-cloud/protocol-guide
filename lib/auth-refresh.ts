@@ -215,7 +215,7 @@ export function getRefreshStatus(): Readonly<RefreshStatus> {
  * Reset refresh status (for testing)
  */
 export function resetRefreshStatus(): void {
-  refreshStatus.isRefreshing = false;
+  refreshPromise = null;
   refreshStatus.lastRefresh = null;
   refreshStatus.consecutiveFailures = 0;
 }
