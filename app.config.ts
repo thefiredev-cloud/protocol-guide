@@ -80,8 +80,8 @@ const config: ExpoConfig = {
       // Face ID for secure access (optional)
       NSFaceIDUsageDescription: "Protocol Guide uses Face ID for secure, quick access to the app and protected patient information.",
 
-      // Background audio for voice guidance
-      UIBackgroundModes: ["audio", "fetch"],
+      // Background modes for voice guidance and push notifications
+      UIBackgroundModes: ["audio", "fetch", "remote-notification"],
 
       // App Transport Security - Allow connections to your API
       NSAppTransportSecurity: {
