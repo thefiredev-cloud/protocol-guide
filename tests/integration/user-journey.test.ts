@@ -235,15 +235,16 @@ const proUser = {
 };
 
 // Helper to create tRPC caller with context
+// Uses proper mock request/response with CSRF tokens and trace context
 function createCaller(user: typeof testUser | null = testUser) {
   const ctx: TrpcContext = {
-    req: {} as any,
-    res: {
-      setHeader: vi.fn(),
-      clearCookie: vi.fn(),
-    } as any,
+    req: createMockRequest() as any,
+    res: createMockResponse() as any,
     user,
-    trace: createMockTraceContext(),
+    trace: createMockTraceContext({
+      userId: user?.id?.toString(),
+      userTier: user?.tier,
+    }),
   };
 
   return appRouter.createCaller(ctx);
