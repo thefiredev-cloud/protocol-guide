@@ -1,3 +1,15 @@
+/**
+ * PostgreSQL Schema for Protocol Guide (Primary Database)
+ *
+ * This is the SOURCE OF TRUTH for all database tables.
+ * MySQL schema (mysql-schema.ts) should mirror this file.
+ *
+ * @see /drizzle/mysql-schema.ts - MySQL mirror schema
+ * @see /drizzle/shared-types.ts - Shared type definitions
+ * @see /drizzle/relations.ts - Table relationships
+ * @see /docs/database/SCHEMA_CONSOLIDATION.md - Architecture docs
+ */
+
 import { pgTable, pgEnum, serial, integer, varchar, text, timestamp, index, json, boolean, smallint } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
