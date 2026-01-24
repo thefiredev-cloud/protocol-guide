@@ -1,219 +1,88 @@
 /**
- * CSRF Protection Middleware
- * Protects auth endpoints from Cross-Site Request Forgery attacks
+ * CSRF Protection - DEPRECATED
+ *
+ * This file contains legacy Express-based CSRF protection that has been
+ * migrated to tRPC's built-in CSRF middleware.
+ *
+ * MIGRATION NOTES:
+ * ================
+ *
+ * 1. tRPC Implementation (server/_core/trpc.ts)
+ *    - Built-in CSRF protection for all mutations
+ *    - Uses double-submit cookie pattern (x-csrf-token header + csrf_token cookie)
+ *    - SameSite=Strict cookies prevent cross-site attacks
+ *    - Constant-time comparison prevents timing attacks
+ *    - Queries are automatically exempt (safe from CSRF)
+ *
+ * 2. Protected Procedures
+ *    - protectedProcedure: CSRF + authentication required
+ *    - adminProcedure: CSRF + admin role required
+ *    - paidProcedure: CSRF + paid tier required
+ *    - rateLimitedProcedure: CSRF + rate limiting
+ *
+ * 3. CSRF Token Flow (Automatic)
+ *    - Client makes request with credentials
+ *    - Server sets csrf_token cookie (httpOnly, secure, SameSite=Strict)
+ *    - Client reads cookie and sends value in x-csrf-token header
+ *    - Server validates header matches cookie (constant-time)
+ *
+ * 4. Why tRPC is Better
+ *    - No in-memory storage (works in distributed systems)
+ *    - Automatic protection (no manual middleware application)
+ *    - Type-safe (TypeScript end-to-end)
+ *    - Better error handling (structured tRPC errors)
+ *    - Integration with authentication middleware
+ *
+ * SECURITY CONSIDERATIONS:
+ * ========================
+ *
+ * - Double-submit cookie pattern is secure when combined with SameSite=Strict
+ * - Constant-time comparison prevents timing side-channel attacks
+ * - httpOnly cookies prevent XSS-based token theft
+ * - Secure flag ensures HTTPS-only transmission
+ * - Mutations only (queries are safe from CSRF by design)
+ *
+ * DO NOT USE THIS FILE - It exists only for documentation and will be removed.
+ * Use tRPC's built-in CSRF protection instead.
  */
 
 import { Request, Response, NextFunction } from "express";
-import { logger } from "./logger";
-import crypto from "crypto";
-
-const CSRF_TOKEN_HEADER = "x-csrf-token";
-const CSRF_COOKIE_NAME = "csrf_token";
-const TOKEN_EXPIRY_MS = 3600000; // 1 hour
-
-interface CsrfTokenData {
-  token: string;
-  createdAt: number;
-}
-
-// In-memory store for CSRF tokens (use Redis in production for distributed systems)
-const tokenStore = new Map<string, CsrfTokenData>();
-
-// Clean up expired tokens periodically
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, data] of tokenStore.entries()) {
-    if (now - data.createdAt > TOKEN_EXPIRY_MS) {
-      tokenStore.delete(key);
-    }
-  }
-}, 300000); // Clean every 5 minutes
 
 /**
- * Generate a CSRF token
+ * @deprecated Use tRPC's csrfProtection middleware instead
+ * This function is no longer used and will be removed.
  */
-export function generateCsrfToken(): string {
-  return crypto.randomBytes(32).toString("hex");
-}
-
-/**
- * Store CSRF token
- */
-function storeToken(sessionId: string, token: string): void {
-  tokenStore.set(sessionId, {
-    token,
-    createdAt: Date.now(),
-  });
-}
-
-/**
- * Validate CSRF token
- */
-function validateToken(sessionId: string, token: string): boolean {
-  const stored = tokenStore.get(sessionId);
-
-  if (!stored) {
-    return false;
-  }
-
-  // Check expiration
-  if (Date.now() - stored.createdAt > TOKEN_EXPIRY_MS) {
-    tokenStore.delete(sessionId);
-    return false;
-  }
-
-  // Compare tokens (constant-time comparison to prevent timing attacks)
-  return crypto.timingSafeEqual(
-    Buffer.from(stored.token),
-    Buffer.from(token)
+export function csrfProtection(_req: Request, _res: Response, next: NextFunction): void {
+  console.warn(
+    "[DEPRECATED] Legacy csrfProtection middleware called. Migrate to tRPC procedures."
   );
-}
-
-/**
- * Get session ID from request (use existing session cookie or create temp ID)
- */
-function getSessionId(req: Request): string {
-  // Use existing session cookie if available
-  const sessionCookie = req.cookies?.app_session_id;
-  if (sessionCookie) {
-    return sessionCookie;
-  }
-
-  // For unauthenticated requests, use IP + User-Agent as identifier
-  const ip = req.ip || req.socket.remoteAddress || "unknown";
-  const ua = req.headers["user-agent"] || "unknown";
-  return crypto.createHash("sha256").update(`${ip}:${ua}`).digest("hex");
-}
-
-/**
- * CSRF middleware - generates and validates tokens
- */
-export function csrfProtection(req: Request, res: Response, next: NextFunction): void {
-  const sessionId = getSessionId(req);
-
-  // For GET requests, generate and send token
-  if (req.method === "GET") {
-    const token = generateCsrfToken();
-    storeToken(sessionId, token);
-
-    // Send token in cookie (httpOnly for security)
-    res.cookie(CSRF_COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: req.protocol === "https",
-      sameSite: "strict",
-      maxAge: TOKEN_EXPIRY_MS,
-    });
-
-    return next();
-  }
-
-  // For state-changing methods (POST, PUT, DELETE), validate token
-  if (["POST", "PUT", "DELETE", "PATCH"].includes(req.method)) {
-    const token = req.headers[CSRF_TOKEN_HEADER] as string;
-    const cookieToken = req.cookies?.[CSRF_COOKIE_NAME];
-
-    // Token must be present in both header and cookie
-    if (!token || !cookieToken) {
-      logger.warn(
-        {
-          method: req.method,
-          path: req.path,
-          ip: req.ip,
-          hasToken: !!token,
-          hasCookie: !!cookieToken,
-        },
-        "CSRF token missing"
-      );
-
-      return res.status(403).json({
-        error: "CSRF token missing",
-        code: "CSRF_MISSING",
-      });
-    }
-
-    // Tokens must match
-    if (token !== cookieToken) {
-      logger.warn(
-        {
-          method: req.method,
-          path: req.path,
-          ip: req.ip,
-        },
-        "CSRF token mismatch"
-      );
-
-      return res.status(403).json({
-        error: "CSRF token mismatch",
-        code: "CSRF_MISMATCH",
-      });
-    }
-
-    // Validate stored token
-    if (!validateToken(sessionId, token)) {
-      logger.warn(
-        {
-          method: req.method,
-          path: req.path,
-          ip: req.ip,
-        },
-        "CSRF token invalid or expired"
-      );
-
-      return res.status(403).json({
-        error: "CSRF token invalid or expired",
-        code: "CSRF_INVALID",
-      });
-    }
-
-    // Token is valid - regenerate for next request
-    const newToken = generateCsrfToken();
-    storeToken(sessionId, newToken);
-
-    res.cookie(CSRF_COOKIE_NAME, newToken, {
-      httpOnly: true,
-      secure: req.protocol === "https",
-      sameSite: "strict",
-      maxAge: TOKEN_EXPIRY_MS,
-    });
-
-    logger.debug(
-      {
-        method: req.method,
-        path: req.path,
-      },
-      "CSRF token validated successfully"
-    );
-  }
-
   next();
 }
 
 /**
- * Get CSRF token for client use
+ * @deprecated CSRF tokens are handled automatically by tRPC
+ * This function is no longer used and will be removed.
  */
-export function getCsrfToken(req: Request, res: Response): void {
-  const token = req.cookies?.[CSRF_COOKIE_NAME];
-
-  if (!token) {
-    const sessionId = getSessionId(req);
-    const newToken = generateCsrfToken();
-    storeToken(sessionId, newToken);
-
-    res.cookie(CSRF_COOKIE_NAME, newToken, {
-      httpOnly: true,
-      secure: req.protocol === "https",
-      sameSite: "strict",
-      maxAge: TOKEN_EXPIRY_MS,
-    });
-
-    return res.json({ csrfToken: newToken });
-  }
-
-  res.json({ csrfToken: token });
+export function getCsrfToken(_req: Request, res: Response): void {
+  console.warn(
+    "[DEPRECATED] Legacy getCsrfToken endpoint called. Use tRPC auth procedures instead."
+  );
+  res.status(410).json({
+    error: "This endpoint has been deprecated",
+    message: "CSRF protection is now handled automatically by tRPC. No action needed.",
+    migration: "Use tRPC mutations which include automatic CSRF protection",
+  });
 }
 
 /**
- * Exempt specific routes from CSRF protection (e.g., webhooks)
+ * @deprecated Not used with tRPC-based CSRF protection
+ */
+export function generateCsrfToken(): string {
+  throw new Error("generateCsrfToken is deprecated. Use tRPC's automatic CSRF protection.");
+}
+
+/**
+ * @deprecated Not needed with tRPC
  */
 export function csrfExempt(_req: Request, _res: Response, next: NextFunction): void {
   next();

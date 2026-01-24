@@ -236,7 +236,8 @@ export const searchRouter = router({
     }),
 
   // Get protocol statistics
-  stats: publicProcedure.query(async () => {
+  // Rate limited to prevent abuse of stats endpoint (expensive queries)
+  stats: publicRateLimitedProcedure.query(async () => {
     return db.getProtocolStats();
   }),
 
