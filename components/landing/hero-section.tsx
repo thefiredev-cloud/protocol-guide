@@ -306,7 +306,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
 
         {!showMobileMenu && (
           <View
-            style={{ flexDirection: "row", alignItems: "center", gap: isTablet ? 24 : 32 }}
+            style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: isTablet ? 24 : 32 }}
             accessibilityLabel="Main navigation"
           >
             <AnimatedNavLink
