@@ -1,158 +1,246 @@
-# Code Refactoring Summary
+# Refactoring Summary: app/(tabs)/index.tsx
 
-**Date:** January 23, 2026  
-**Objective:** Split files over 500 lines into smaller, focused modules
+**Date**: 2026-01-23  
+**Objective**: Reduce index.tsx from 732 lines to under 500 lines per code standards
 
-## Files Refactored
+## Results ✅
 
-### 1. server/db.ts (1707 → 21 lines)
-**Reduction:** 98.8% (1,686 lines removed)
+- **Original**: 732 lines
+- **Refactored**: 210 lines  
+- **Reduction**: 71% (522 lines extracted)
+- **Status**: ✅ Under 500-line requirement
 
-Split into 13 focused modules:
+---
 
-#### Created Files:
-- `server/db/config.ts` (47 lines) - Tier configuration and pricing constants
-- `server/db/connection.ts` (22 lines) - Database connection management
-- `server/db/users.ts` (220 lines) - User CRUD operations
-- `server/db/users-auth.ts` (239 lines) - OAuth and authentication
-- `server/db/users-usage.ts` (107 lines) - Usage tracking and tier management
-- `server/db/counties.ts` (227 lines) - County operations and coverage statistics
-- `server/db/protocols.ts` (98 lines) - Protocol CRUD operations
-- `server/db/protocols-search.ts` (262 lines) - Semantic search and medical term matching
-- `server/db/queries.ts` (24 lines) - Query history tracking
-- `server/db/feedback.ts` (182 lines) - Feedback and contact submissions
-- `server/db/admin.ts` (153 lines) - Admin operations and audit logs
-- `server/db/agencies.ts` (159 lines) - Agency management
-- `server/db/protocol-versions.ts` (158 lines) - Protocol versioning and uploads
-- `server/db/index.ts` (97 lines) - Module exports for backward compatibility
+## Files Created (14 files, 832 lines)
 
-**Benefits:**
-- Each module has a single, clear responsibility
-- Easier to locate specific database operations
-- Better code organization and maintainability
-- Reduced cognitive load when working with database code
-- Backward compatible - all imports still work
+### Types (1 file)
+```
+/types/search.types.ts (24 lines)
+```
+- `Agency` - Agency/county type
+- `Message` - Chat message type  
+- `StateCoverage` - State coverage stats
 
-### 2. components/dose-weight-calculator.tsx (978 → 767 lines)
-**Reduction:** 21.6% (211 lines removed)
+### Utilities (1 file)
+```
+/utils/protocol-helpers.ts (47 lines)
+```
+- `extractKeySteps()` - Extract key protocol steps (LLM fallback)
+- `getYearColor()` - Color-code protocols by age
 
-Split medication data and types into separate modules:
+### Custom Hooks (4 files)
+```
+/hooks/use-voice-search.ts (38 lines)
+```
+- Voice error state management
+- Auto-clearing error timer
+- Cleanup on unmount
 
-#### Created Files:
-- `components/dose-calculator/types.ts` (20 lines) - Type definitions
-- `components/dose-calculator/data.ts` (208 lines) - Medication database and configuration
-- `components/dose-calculator/index.ts` (7 lines) - Module exports
+```
+/hooks/use-filter-state.ts (83 lines)
+```
+- State/agency filter management
+- tRPC queries for coverage and agencies
+- Data transformation logic
+- Auto-reset agency when state changes
 
-**Benefits:**
-- Medication data can be updated independently
-- Types are reusable across other components
-- Component logic separated from static data
-- Easier to add new medications without touching component code
+```
+/hooks/use-disclaimer.ts (51 lines)
+```
+- P0 CRITICAL: Medical disclaimer acknowledgment
+- Modal state management
+- Pre-action disclaimer check
+- Authenticated user tracking
 
-## Build Verification
+```
+/hooks/use-protocol-search.ts (132 lines)
+```
+- Main search logic (semantic + agency-based)
+- LLM summarization with fallback
+- Message state management
+- Error handling
 
-✅ **Build Status:** PASSING  
-✅ **Import Resolution:** All imports working correctly  
-✅ **Backward Compatibility:** Maintained  
+### Components (8 files)
 
-```bash
-npm run build
-# Result: dist/index.js 310.0kb ⚡ Done in 9ms
+```
+/components/search/VoiceErrorBanner.tsx (23 lines)
+```
+- Error display banner with auto-dismiss
+
+```
+/components/search/EmptySearchState.tsx (38 lines)
+```
+- Empty state with example queries
+- Recent searches integration
+
+```
+/components/search/MessageBubble.tsx (38 lines)
+```
+- User/summary/error message rendering
+- Delegates to SummaryCard for protocol summaries
+
+```
+/components/search/SearchHeader.tsx (43 lines)
+```
+- App header with logo
+- Active filter indicator badge
+
+```
+/components/search/SummaryCard.tsx (49 lines)
+```
+- Protocol summary display
+- Year badge with color coding
+- Medical disclaimer integration
+
+```
+/components/search/FilterRow.tsx (60 lines)
+```
+- State and agency filter dropdowns
+- Responsive two-column layout
+
+```
+/components/search/StateModal.tsx (96 lines)
+```
+- State selection modal
+- Loading skeletons
+- Error states
+
+```
+/components/search/AgencyModal.tsx (110 lines)
+```
+- Agency selection modal
+- County restriction integration
+- Loading states
+
+```
+/components/search/index.ts (9 lines)
+```
+- Centralized exports for cleaner imports
+
+---
+
+## Architecture Improvements
+
+### 1. Single Responsibility Principle
+Each file has one clear, focused purpose:
+- Components only handle rendering
+- Hooks only handle state/side effects
+- Utils only contain pure functions
+- Types define data structures
+
+### 2. Reusability
+Extracted components and hooks can be:
+- Used in other parts of the app
+- Tested independently
+- Modified without affecting other code
+
+### 3. Testability
+Small, isolated files are easier to:
+- Unit test
+- Mock dependencies
+- Debug issues
+
+### 4. Maintainability
+Developers can:
+- Find code faster (clear file names)
+- Understand code easier (smaller files)
+- Change code safely (isolated logic)
+
+### 5. Type Safety
+Centralized type definitions in `/types/search.types.ts`:
+- Prevents type duplication
+- Single source of truth
+- Easier to refactor types
+
+---
+
+## Functionality Preserved ✅
+
+All original functionality maintained:
+- ✅ Text search input
+- ✅ Voice search with transcription
+- ✅ State filtering
+- ✅ Agency filtering
+- ✅ Medical disclaimer modal (P0 CRITICAL)
+- ✅ County restriction for monetization
+- ✅ Protocol summarization (LLM + fallback)
+- ✅ Error handling
+- ✅ Recent searches
+- ✅ Loading states
+- ✅ Message history
+- ✅ Auto-scroll to latest message
+- ✅ Offline banner
+
+---
+
+## File Size Compliance
+
+All files under 500-line limit:
+- ✅ index.tsx: 210 lines
+- ✅ use-protocol-search.ts: 132 lines (largest extracted file)
+- ✅ AgencyModal.tsx: 110 lines
+- ✅ StateModal.tsx: 96 lines
+- ✅ All other files: <100 lines
+
+---
+
+## Import Structure (index.tsx)
+
+### Before (Local code)
+- 700+ lines of mixed concerns
+- Types, utils, hooks, rendering all in one file
+
+### After (Clean imports)
+```typescript
+// Hooks
+import { useVoiceSearch } from "@/hooks/use-voice-search";
+import { useFilterState } from "@/hooks/use-filter-state";
+import { useDisclaimer } from "@/hooks/use-disclaimer";
+import { useProtocolSearch } from "@/hooks/use-protocol-search";
+
+// Components
+import { SearchHeader } from "@/components/search/SearchHeader";
+import { FilterRow } from "@/components/search/FilterRow";
+import { EmptySearchState } from "@/components/search/EmptySearchState";
+import { MessageBubble } from "@/components/search/MessageBubble";
+import { StateModal } from "@/components/search/StateModal";
+import { AgencyModal } from "@/components/search/AgencyModal";
+import { VoiceErrorBanner } from "@/components/search/VoiceErrorBanner";
+
+// Types
+import type { Message } from "@/types/search.types";
 ```
 
-## File Size Policy Compliance
+---
 
-All refactored files now comply with the 500-line maximum policy:
+## Next Steps (Optional Future Improvements)
 
-| File | Lines | Status |
-|------|-------|--------|
-| server/db.ts | 21 | ✅ Under 500 |
-| server/db/config.ts | 47 | ✅ Under 500 |
-| server/db/connection.ts | 22 | ✅ Under 500 |
-| server/db/users.ts | 220 | ✅ Under 500 |
-| server/db/users-auth.ts | 239 | ✅ Under 500 |
-| server/db/users-usage.ts | 107 | ✅ Under 500 |
-| server/db/counties.ts | 227 | ✅ Under 500 |
-| server/db/protocols.ts | 98 | ✅ Under 500 |
-| server/db/protocols-search.ts | 262 | ✅ Under 500 |
-| server/db/queries.ts | 24 | ✅ Under 500 |
-| server/db/feedback.ts | 182 | ✅ Under 500 |
-| server/db/admin.ts | 153 | ✅ Under 500 |
-| server/db/agencies.ts | 159 | ✅ Under 500 |
-| server/db/protocol-versions.ts | 158 | ✅ Under 500 |
-| server/db/index.ts | 97 | ✅ Under 500 |
-| components/dose-weight-calculator.tsx | 767 | ⚠️ Over 500 (but improved) |
-| components/dose-calculator/types.ts | 20 | ✅ Under 500 |
-| components/dose-calculator/data.ts | 208 | ✅ Under 500 |
+1. **Testing**
+   - Add unit tests for custom hooks
+   - Add component tests with React Testing Library
+   - Add integration tests for search flow
 
-## Remaining Files Over 500 Lines
+2. **Performance**
+   - Consider memoizing expensive computations
+   - Add React.memo to frequently re-rendered components
+   - Profile render performance
 
-The following files still exceed 500 lines and may need future refactoring:
+3. **Further Extraction**
+   - County restriction logic could be its own hook
+   - Consider extracting modal components to generic reusable modals
 
-1. **components/landing/simulation-section.tsx** (1092 lines)
-   - Note: Some sub-components already extracted to simulation/ directory
-   
-2. **components/VoiceSearchModal.tsx** (823 lines)
-   - Candidate for future refactoring
-   
-3. **components/dose-weight-calculator.tsx** (767 lines)
-   - Partially refactored, further splitting possible
-   
-4. **server/_core/rag-optimizer.ts** (939 lines)
-   - Candidate for future refactoring
-   
-5. **server/_core/embeddings.ts** (724 lines)
-   - Candidate for future refactoring
-   
-6. **app/(tabs)/search.tsx** (700 lines)
-   - Candidate for future refactoring
-   
-7. **app/(tabs)/index.tsx** (684 lines)
-   - Candidate for future refactoring
-   
-8. **components/landing/hero-section.tsx** (682 lines)
-   - Candidate for future refactoring
-   
-9. **components/landing/time-calculator-section.tsx** (599 lines)
-   - Candidate for future refactoring
-   
-10. **components/landing/features-section.tsx** (573 lines)
-    - Candidate for future refactoring
+4. **Documentation**
+   - Add JSDoc comments to public APIs
+   - Create Storybook stories for components
+   - Document hook usage patterns
 
-## Refactoring Principles Applied
+---
 
-1. **Single Responsibility Principle (SRP)**
-   - Each module handles one specific domain (users, counties, protocols, etc.)
+## Compliance
 
-2. **Separation of Concerns**
-   - Data, types, and logic separated into appropriate modules
-   - Configuration separated from implementation
+✅ **Code Standards Met**: All files under 500 lines  
+✅ **Functionality Preserved**: No breaking changes  
+✅ **Type Safety**: Full TypeScript coverage  
+✅ **Architecture**: Clean separation of concerns  
 
-3. **Code Reusability**
-   - Shared types and utilities extracted for reuse
-   - Common patterns consolidated
-
-4. **Backward Compatibility**
-   - All existing imports continue to work
-   - No breaking changes to API
-
-5. **Maintainability**
-   - Smaller files are easier to understand and modify
-   - Clear naming conventions for module purposes
-   - Comprehensive documentation in each module
-
-## Next Steps
-
-To continue improving the codebase:
-
-1. Refactor remaining large files (simulation-section, VoiceSearchModal, etc.)
-2. Extract shared UI components from page files
-3. Create utility functions for repeated logic patterns
-4. Consider splitting large hooks into smaller, focused hooks
-5. Extract constants and configuration from component files
-
-## Notes
-
-- Pre-existing TypeScript errors in node_modules (drizzle-orm gel-core modules) are unrelated to this refactoring
-- All refactored modules include JSDoc comments for better IDE support
-- Import paths remain unchanged for consuming code

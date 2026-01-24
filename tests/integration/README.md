@@ -284,11 +284,24 @@ When APIs change:
 
 ## Key Metrics
 
-- **Test Count:** 27 integration tests
+### Database Integration Tests
+- **Test Count:** 50+ real database tests
+- **Test Files:** 4 (users, protocols, search, subscriptions)
+- **Execution Time:** ~5-10 seconds
+- **Transaction Rollback:** 100% coverage (zero database pollution)
+- **Database Operations:** Real PostgreSQL with Drizzle ORM
+
+### User Journey Tests
+- **Test Count:** 27 router integration tests
 - **Critical Flows Covered:** 4 (auth, subscription, search, bookmarks)
 - **Execution Time:** ~2-3 seconds
 - **Lines of Code:** ~750
 - **Mocked Services:** 8 external dependencies
+
+### Combined
+- **Total Tests:** 77+ integration tests
+- **Combined Execution:** ~10-15 seconds
+- **Coverage:** Critical paths + database operations
 
 ## Future Enhancements
 
