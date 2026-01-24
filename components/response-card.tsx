@@ -19,8 +19,18 @@ export const ResponseCard = memo(function ResponseCard({ text, protocolRefs, tim
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [showActions, setShowActions] = useState(false);
+  const copyTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const sections = useMemo(() => parseResponse(text), [text]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleCopy = useCallback(async () => {
     await Clipboard.setStringAsync(text);
@@ -28,10 +38,11 @@ export const ResponseCard = memo(function ResponseCard({ text, protocolRefs, tim
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
-    const timer = setTimeout(() => setCopied(false), 2000);
-    // Note: Timer is self-contained in callback, cleanup happens when component unmounts
-    // Store timer ref if component might unmount during the 2s window
-    return () => clearTimeout(timer);
+    // Clear existing timer before setting new one
+    if (copyTimerRef.current) {
+      clearTimeout(copyTimerRef.current);
+    }
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }, [text]);
 
   const handleReportError = useCallback(() => {
