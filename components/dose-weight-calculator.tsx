@@ -329,6 +329,9 @@ export function DoseWeightCalculator({
             },
           ]}
           activeOpacity={0.7}
+          accessibilityLabel="Show all medication categories"
+          accessibilityRole="button"
+          accessibilityState={{ selected: !selectedCategory }}
         >
           <Text
             style={[
