@@ -47,8 +47,9 @@ function createAuthContext(): { ctx: TrpcContext; clearedCookies: CookieCall[] }
         clearedCookies.push({ name, options });
       },
     } as TrpcContext["res"],
+    trace: createMockTraceContext(),
   };
-  
+
   return { ctx, clearedCookies };
 }
 
