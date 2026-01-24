@@ -95,7 +95,16 @@ export async function findOrCreateUserBySupabaseAuth(
       .where(eq(users.id, (newUser as { id: number }).id))
       .limit(1);
 
-    return created.length > 0 ? created[0] : null;
+    const createdUser = created.length > 0 ? created[0] : null;
+
+    // Send welcome email to new user (fire and forget - don't block auth flow)
+    if (createdUser?.email) {
+      sendWelcomeEmail(createdUser.email, createdUser.name || undefined).catch((err) => {
+        console.error("[Auth] Failed to send welcome email:", err);
+      });
+    }
+
+    return createdUser;
   } catch (error) {
     console.error("[Database] Failed to find/create user by supabaseAuth:", error);
     return null;
