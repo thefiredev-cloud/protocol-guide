@@ -97,7 +97,7 @@ export const userProcedures = router({
       SELECT * FROM user_referral_stats WHERE userId = ${userId} LIMIT 1
     `);
 
-    const stats = (statsResult[0] as any[])?.[0];
+    const stats = statsResult.rows[0];
 
     if (!stats) {
       // Initialize stats for new user
