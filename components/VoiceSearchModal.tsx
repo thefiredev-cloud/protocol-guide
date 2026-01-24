@@ -142,17 +142,16 @@ export function VoiceSearchModal({
   // Reset state when modal opens/closes
   useEffect(() => {
     if (visible) {
-      stateRef.current = "idle";
-      setRecordingState("idle");
+      resetState();
       setErrorType(null);
       setTranscriptionPreview("");
       setRecordingDuration(0);
     } else {
       cleanupRecording();
-      stopPulseAnimation();
-      stateRef.current = "idle";
+      stopPulseAnimation(animationValues);
+      resetState();
     }
-  }, [visible, cleanupRecording, stopPulseAnimation]);
+  }, [visible, cleanupRecording, resetState, animationValues]);
 
   // Check and request permissions
   const checkPermissions = useCallback(async (): Promise<boolean> => {
