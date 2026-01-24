@@ -65,18 +65,6 @@ export function VoiceSearchModal({
     onClose,
     allowEscapeClose: true,
   });
-  const [errorType, setErrorType] = useState<VoiceError | null>(null);
-  const [transcriptionPreview, setTranscriptionPreview] = useState("");
-  const [recordingDuration, setRecordingDuration] = useState(0);
-
-  const recordingRef = useRef<Recording | null>(null);
-  const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const maxDurationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // tRPC mutations
-  const uploadMutation = trpc.voice.uploadAudio.useMutation();
-  const transcribeMutation = trpc.voice.transcribe.useMutation();
 
   // Animation values
   const animationValues: RippleAnimationValues = {
@@ -91,6 +79,22 @@ export function VoiceSearchModal({
 
   // Animated styles for ripple effect
   const { pulseStyle1, pulseStyle2, pulseStyle3, micAnimatedStyle } = createRippleStyles(animationValues);
+
+  // Recording hook
+  const {
+    errorType,
+    setErrorType,
+    transcriptionPreview,
+    recordingDuration,
+    cleanupRecording,
+    handleMicPress,
+  } = useVoiceRecording({
+    stateRef,
+    transitionTo,
+    animationValues,
+    onTranscription,
+    onClose,
+  });
 
   // Clear only timeouts/intervals (safe to call anytime)
   const clearTimers = useCallback(() => {
