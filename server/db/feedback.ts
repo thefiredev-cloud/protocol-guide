@@ -112,8 +112,8 @@ export async function createContactSubmission(data: InsertContactSubmission) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const result = await db.insert(contactSubmissions).values(data);
-  return result[0].insertId;
+  const [result] = await db.insert(contactSubmissions).values(data).returning({ id: contactSubmissions.id });
+  return result.id;
 }
 
 export async function getAllContactSubmissionsPaginated(options: {
