@@ -333,6 +333,19 @@ export const stripeWebhookEvents = mysqlTable("stripe_webhook_events", {
 	index("idx_stripe_events_processed").on(table.processed),
 ]);
 
+export const pushTokens = mysqlTable("push_tokens", {
+	id: int().autoincrement().primaryKey().notNull(),
+	userId: int().notNull(),
+	token: text().notNull(),
+	platform: varchar({ length: 20 }),
+	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	lastUsedAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+},
+(table) => [
+	index("push_tokens_user_idx").on(table.userId),
+	index("push_tokens_token_idx").on(table.token),
+]);
+
 // ========================================
 // Type exports
 // ========================================
