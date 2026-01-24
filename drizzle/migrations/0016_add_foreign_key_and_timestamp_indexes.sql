@@ -56,13 +56,13 @@ CREATE INDEX IF NOT EXISTS idx_users_subscription_end ON users(subscriptionEndDa
 -- AUDIT LOGS TABLE
 -- ============================================
 -- Composite index for entity-specific audit lookups
-CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON auditLogs(entityType, entityId);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON audit_logs(entityType, entityId);
 
 -- Composite index for user + action timeline
-CREATE INDEX IF NOT EXISTS idx_audit_logs_user_action ON auditLogs(userId, action, createdAt DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_user_action ON audit_logs(userId, action, createdAt DESC);
 
 -- Index for IP-based security analysis
-CREATE INDEX IF NOT EXISTS idx_audit_logs_ip ON auditLogs(ipAddress);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_ip ON audit_logs(ipAddress);
 
 -- ============================================
 -- USER AUTH PROVIDERS TABLE
