@@ -14,23 +14,18 @@
  * - Dark mode optimized for low-light environments
  */
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
   Modal,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
   Pressable,
   StyleSheet,
 } from "react-native";
-import { Audio, Recording } from "@/lib/audio";
-import { uriToBase64 } from "@/lib/blob-utils";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
-import { trpc } from "@/lib/trpc";
-import * as Haptics from "@/lib/haptics";
 import Animated, {
   useSharedValue,
   FadeIn,
@@ -38,24 +33,13 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from "react-native-reanimated";
+import { useFocusTrap } from "@/lib/accessibility";
 import {
-  createButtonA11y,
-  createLiveRegionA11y,
-  announceForAccessibility,
-  MEDICAL_A11Y_LABELS,
-  useFocusTrap,
-} from "@/lib/accessibility";
-import {
-  RecordingState,
-  VoiceError,
   ERROR_MESSAGES,
-  SILENCE_THRESHOLD_MS,
-  MAX_RECORDING_DURATION_MS,
-
-  startPulseAnimation,
   stopPulseAnimation,
   createRippleStyles,
-  RippleAnimationValues} from "@/components/voice";
+  RippleAnimationValues,
+} from "@/components/voice";
 import { useVoiceStateMachine } from "@/hooks/use-voice-state-machine";
 import { useVoiceRecording } from "@/hooks/use-voice-recording";
 
