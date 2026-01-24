@@ -166,6 +166,14 @@ export function VoiceSearchButton({
   const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const maxDurationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Use ref to avoid stale closures in setTimeout callbacks
+  const recordingStateRef = useRef<RecordingState>("idle");
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    recordingStateRef.current = recordingState;
+  }, [recordingState]);
+
   // tRPC mutations
   const uploadMutation = trpc.voice.uploadAudio.useMutation();
   const transcribeMutation = trpc.voice.transcribe.useMutation();
