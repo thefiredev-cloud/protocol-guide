@@ -53,8 +53,8 @@ export async function createProtocolVersion(data: InsertProtocolVersion): Promis
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const result = await db.insert(protocolVersions).values(data);
-  return result[0].insertId;
+  const [result] = await db.insert(protocolVersions).values(data).returning({ id: protocolVersions.id });
+  return result.id;
 }
 
 /**
