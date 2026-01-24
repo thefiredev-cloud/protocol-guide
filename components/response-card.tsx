@@ -367,8 +367,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   smallIconButton: {
-    padding: 4,
+    padding: 12,
     marginLeft: 8,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   userMessageContainer: {
     flexDirection: 'row',
