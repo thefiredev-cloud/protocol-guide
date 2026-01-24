@@ -101,7 +101,7 @@ export const searchRouter = router({
         stateFilter: input.stateFilter,
       });
 
-      const cachedResults = await getCachedSearchResults<CachedSearchResult>(cacheKey);
+      const cachedResults = await getCachedSearchResults(cacheKey);
       if (cachedResults) {
         const latencyMs = Date.now() - searchStartTime;
         latencyMonitor.record('totalRetrieval', latencyMs);
@@ -303,7 +303,7 @@ export const searchRouter = router({
         agencyId: input.agencyId,
       });
 
-      const cachedResults = await getCachedSearchResults<CachedSearchResult>(cacheKey);
+      const cachedResults = await getCachedSearchResults(cacheKey);
       if (cachedResults) {
         const latencyMs = Date.now() - searchStartTime;
         latencyMonitor.record('totalRetrieval', latencyMs);
