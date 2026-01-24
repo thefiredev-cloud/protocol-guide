@@ -244,17 +244,23 @@ export const protocolVersions = mysqlTable("protocol_versions", {
 
 export const protocolUploads = mysqlTable("protocol_uploads", {
 	id: int().autoincrement().primaryKey().notNull(),
-	versionId: int().notNull(),
+	agencyId: int().notNull(),
+	userId: int().notNull(),
 	fileName: varchar({ length: 255 }).notNull(),
-	fileUrl: text().notNull(),
+	fileUrl: varchar({ length: 500 }).notNull(),
 	fileSize: int(),
 	mimeType: varchar({ length: 100 }),
-	uploadedBy: int().notNull(),
+	status: mysqlEnum(['pending','processing','chunking','embedding','completed','failed']).default('pending'),
+	progress: int().default(0),
+	chunksCreated: int().default(0),
+	errorMessage: text(),
+	processingStartedAt: timestamp({ mode: 'string' }),
+	completedAt: timestamp({ mode: 'string' }),
 	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
 },
 (table) => [
-	index("idx_protocol_uploads_version").on(table.versionId),
-	index("idx_protocol_uploads_uploader").on(table.uploadedBy),
+	index("idx_protocol_uploads_agency").on(table.agencyId),
+	index("idx_protocol_uploads_user").on(table.userId),
 ]);
 
 export const userCounties = mysqlTable("user_counties", {
