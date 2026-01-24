@@ -115,12 +115,12 @@ psql $SUPABASE_DB_URL -f drizzle/migrations/0027_add_row_level_security_policies
 
 ### 2. Run Tests
 ```bash
-psql $DB -f drizzle/migrations/0027_test_rls_policies.sql
+psql $SUPABASE_DB_URL -f drizzle/migrations/0027_test_rls_policies.sql
 ```
 
 ### 3. Verify
 ```bash
-psql $DB -c "SELECT COUNT(*) FROM pg_policies WHERE schemaname = 'public';"
+psql $SUPABASE_DB_URL -c "SELECT COUNT(*) FROM pg_policies WHERE schemaname = 'public';"
 # Expected: 80+
 ```
 
