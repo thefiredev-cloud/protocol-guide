@@ -64,7 +64,8 @@ function generateSearchCacheKey(params: {
 export const searchRouter = router({
   // Semantic search across all protocols using Voyage AI embeddings + pgvector
   // Optimized with query normalization, Redis caching, and latency monitoring
-  semantic: publicProcedure
+  // Rate limited: 10 requests per 15 minutes per IP to prevent DoS and abuse
+  semantic: publicRateLimitedProcedure
     .input(z.object({
       query: z.string().min(1).max(500),
       countyId: z.number().optional(),
