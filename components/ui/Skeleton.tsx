@@ -164,12 +164,12 @@ export const SkeletonText = memo(function SkeletonText({
       ))}
     </View>
   );
-}
+});
 
 /**
  * Card skeleton with image and text
  */
-export function SkeletonCard({
+export const SkeletonCard = memo(function SkeletonCard({
   showImage = true,
   imageHeight = 160,
   lines = 2,
