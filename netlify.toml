@@ -6,7 +6,8 @@
   # Build server, export web app, inject PWA meta tags, copy PWA assets
   # Note: pnpm check removed - RN Web has known type mismatches with accessibility props
   # Note: NODE_ENV not set globally - install needs devDeps for NativeWind cache generation
-  command = "NODE_ENV=development pnpm install && NODE_ENV=production pnpm build && NODE_ENV=production pnpm build:web"
+  # Fix NativeWind cache: copy from top-level react-native-css-interop if nested exists without cache
+  command = "pnpm install && node scripts/fix-nativewind-cache.js && NODE_ENV=production pnpm build && NODE_ENV=production pnpm build:web"
   # Expo web export outputs to dist/ by default
   publish = "dist"
 
