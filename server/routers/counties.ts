@@ -4,11 +4,12 @@
  */
 
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
+import { publicProcedure, publicRateLimitedProcedure, router } from "../_core/trpc";
 import * as db from "../db";
 
 export const countiesRouter = router({
-  list: publicProcedure.query(async () => {
+  // Rate limited to prevent abuse and scraping of county data
+  list: publicRateLimitedProcedure.query(async () => {
     const counties = await db.getAllCounties();
     // Group by state
     const grouped: Record<string, typeof counties> = {};
