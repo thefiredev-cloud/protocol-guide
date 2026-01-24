@@ -327,6 +327,9 @@ export default function SearchScreen() {
           <TouchableOpacity
             onPress={() => setSelectedProtocol(null)}
             className="p-2 -ml-2"
+            accessibilityLabel="Back to search results"
+            accessibilityRole="button"
+            accessibilityHint="Returns to protocol search results list"
           >
             <IconSymbol name="chevron.left" size={24} color={colors.primary} />
           </TouchableOpacity>
