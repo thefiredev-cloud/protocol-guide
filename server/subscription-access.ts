@@ -285,7 +285,7 @@ export async function addAgencySubscription(
       accessLevel: options?.accessLevel || "view",
       isPrimary: options?.isPrimary ? 1 : 0,
       role: options?.role,
-      expiresAt: options?.expiresAt,
+      expiresAt: options?.expiresAt?.toISOString(),
     });
     return { success: true };
   } catch (error) {
