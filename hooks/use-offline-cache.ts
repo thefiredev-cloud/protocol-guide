@@ -52,7 +52,7 @@ export function useOfflineCache() {
   // Load cached protocols on mount
   useEffect(() => {
     loadCache();
-  }, []);
+  }, [loadCache]);
 
   const loadCache = useCallback(async () => {
     setState((prev) => ({ ...prev, isLoading: true }));
