@@ -57,7 +57,8 @@ export function DoseWeightCalculator({
 }: DoseWeightCalculatorProps) {
   const colors = useColors();
   const { width } = useWindowDimensions();
-  const isMobile = width < 768;
+  // Consistent with landing page breakpoints (640px mobile threshold)
+  const isMobile = width < 640;
 
   // State
   const [weight, setWeight] = useState(initialWeight);
