@@ -59,7 +59,6 @@ export async function findOrCreateUserBySupabaseAuth(
         await linkAuthProvider(user.id, {
           provider: metadata.provider,
           providerUserId: metadata.providerUserId,
-          email: metadata.email,
         });
       }
 
