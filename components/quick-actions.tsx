@@ -136,6 +136,11 @@ export function SuggestedQueries({ onSelect, disabled }: QuickActionsProps) {
             key={index}
             onPress={() => onSelect(suggestion)}
             disabled={disabled}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={`Suggested query: ${suggestion}`}
+            accessibilityHint="Double tap to search with this query"
+            accessibilityState={{ disabled: disabled ?? false }}
             activeOpacity={0.7}
             style={[
               styles.suggestionButton,
