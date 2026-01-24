@@ -198,6 +198,7 @@ class TokenCache {
     return {
       hasCachedSession: !!this.cache,
       refreshInProgress: !!this.refreshInProgress,
+      fetchInProgress: !!this.fetchInProgress,
       cacheExpiry: this.cache?.expiresAt,
       cacheAge: this.cache ? Date.now() - this.cache.refreshedAt : null,
     };
