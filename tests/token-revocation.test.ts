@@ -62,9 +62,9 @@ type AuthenticatedUser = NonNullable<TrpcContext["user"]>;
 
 function createAuthenticatedContext(userOverrides: Partial<AuthenticatedUser> = {}): {
   ctx: TrpcContext;
-  clearedCookies: Array<{ name: string; options: Record<string, unknown> }>;
+  clearedCookies: { name: string; options: Record<string, unknown> }[];
 } {
-  const clearedCookies: Array<{ name: string; options: Record<string, unknown> }> = [];
+  const clearedCookies: { name: string; options: Record<string, unknown> }[] = [];
 
   const user: AuthenticatedUser = {
     id: 1,
