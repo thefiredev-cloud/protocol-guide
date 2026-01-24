@@ -78,6 +78,11 @@ export function QuickActions({ onSelect, disabled }: QuickActionsProps) {
             key={action.id}
             onPress={() => onSelect(action.query)}
             disabled={disabled}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={`${action.label}: Search for ${action.query}`}
+            accessibilityHint="Double tap to search for this protocol type"
+            accessibilityState={{ disabled: disabled ?? false }}
             activeOpacity={0.8}
             style={[
               styles.actionButton,
