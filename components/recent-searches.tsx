@@ -122,10 +122,18 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    minHeight: 44,
+    borderRadius: 22,
     maxWidth: "48%",
+  },
+  clearButtonTouchable: {
+    minHeight: 44,
+    minWidth: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
   },
   chipText: {
     fontSize: 14,
