@@ -23,8 +23,8 @@ export async function getCountyById(id: number) {
 export async function createCounty(data: InsertCounty) {
   const db = await getDb();
 
-  const result = await db.insert(counties).values(data);
-  return result[0].insertId;
+  const [result] = await db.insert(counties).values(data).returning({ id: counties.id });
+  return result.id;
 }
 
 /**
