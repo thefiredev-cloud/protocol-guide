@@ -16,7 +16,8 @@ const supabaseAdmin = createClient(
 );
 
 export const authRouter = router({
-  me: publicProcedure.query((opts) => opts.ctx.user),
+  // Rate limited to prevent account enumeration attacks and brute force attempts
+  me: publicRateLimitedProcedure.query((opts) => opts.ctx.user),
 
   /**
    * Logout - requires CSRF protection but NOT authentication
