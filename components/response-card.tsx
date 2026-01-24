@@ -67,7 +67,7 @@ export const ResponseCard = memo(function ResponseCard({ text, protocolRefs, tim
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setShowActions(!showActions)}
+              onPress={toggleActions}
               activeOpacity={0.7}
               style={styles.iconButton}
             >
