@@ -193,7 +193,7 @@ export const OfflineCache = {
       const metadata: CacheMetadata = {
         lastUpdated: Date.now(),
         itemCount: cache.length,
-        totalSize: new Blob([cacheString]).size,
+        totalSize: getByteLength(cacheString),
       };
       await AsyncStorage.setItem(CACHE_METADATA_KEY, JSON.stringify(metadata));
     } catch (error) {
