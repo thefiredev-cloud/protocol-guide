@@ -170,7 +170,7 @@ vi.mock("../../server/_core/search-cache", () => ({
   setSearchCacheHeaders: vi.fn(),
 }));
 
-vi.mock("../../server/_core/rag-optimizer", () => ({
+vi.mock("../../server/_core/rag", () => ({
   optimizedSearch: vi.fn(async (params, searchFn) => {
     const results = await searchFn(params);
     return {
