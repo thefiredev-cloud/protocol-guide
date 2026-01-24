@@ -39,7 +39,7 @@ export const queryRouter = router({
         });
       }
 
-      const userTier: UserTier = (user.tier as UserTier) || 'free';
+      const userTier: UserTier = validateTierValue(user.tier);
 
       // Validate subscription is active for paid tiers
       if (userTier !== 'free') {
