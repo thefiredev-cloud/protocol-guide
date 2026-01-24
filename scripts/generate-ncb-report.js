@@ -65,8 +65,7 @@ const doc = new Document({
             new Paragraph({ numbering: { reference: "bullets", level: 0 }, children: [new TextRun(`${patterns.filter(p => p.type === 'MEGA_CONTRACTS').length > 0 ? patterns.find(p => p.type === 'MEGA_CONTRACTS').contracts.length : 0} contracts exceed $10M without competition`)] }),
             new Paragraph({ numbering: { reference: "bullets", level: 0 }, children: [new TextRun(`Top vendor received ${fmt(topVendors[0]?.totalAmount || 0)} across ${topVendors[0]?.contractCount || 0} no-bid contracts`)] }),
             new Paragraph({ numbering: { reference: "bullets", level: 0 }, spacing: { after: 100 }, children: [new TextRun(`Dept of Corrections accounts for ${((topDepts.find(d => d[0].includes('Corrections'))?.[1]?.amount || 0) / data.totalAmount * 100).toFixed(1)}% of total NCB spending`)] }),
-          ] })] }
-      ] }),
+          ] })] })] }),
 
       new Paragraph({ children: [new PageBreak()] }),
 
