@@ -262,7 +262,8 @@ export const searchRouter = router({
     }),
 
   // Get all agencies with protocols (optionally filtered by state)
-  agenciesWithProtocols: publicProcedure
+  // Rate limited to prevent scraping and database abuse
+  agenciesWithProtocols: publicRateLimitedProcedure
     .input(z.object({ state: z.string().optional() }).optional())
     .query(async ({ input }) => {
       return db.getAgenciesWithProtocols(input?.state);
