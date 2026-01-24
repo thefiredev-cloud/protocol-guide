@@ -21,6 +21,7 @@ import {
   cacheSearchResults,
   setSearchCacheHeaders,
 } from "../_core/search-cache";
+import { validateSearchLimit } from "../_core/tier-validation";
 import * as db from "../db";
 
 // Search result types
