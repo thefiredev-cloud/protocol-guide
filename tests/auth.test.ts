@@ -7,6 +7,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { appRouter } from "../server/routers";
 import { COOKIE_NAME } from "../shared/const";
 import type { TrpcContext } from "../server/_core/context";
+import { createMockTraceContext } from "./setup";
 
 // Mock the database module
 vi.mock("../server/db", () => ({
