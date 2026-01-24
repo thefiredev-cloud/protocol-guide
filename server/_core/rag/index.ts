@@ -13,7 +13,6 @@
  */
 
 import { normalizeEmsQuery } from '../ems-query-normalizer';
-import type { OptimizedSearchParams } from './index';
 
 // ============================================================================
 // CONFIGURATION
