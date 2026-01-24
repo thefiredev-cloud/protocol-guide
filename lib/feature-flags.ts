@@ -68,7 +68,7 @@ export function getEnabledFeatures(): (keyof FeatureFlags)[] {
  * In production, these could be loaded from environment variables or a remote config
  */
 export function getFeatureFlagsForEnvironment(): FeatureFlags {
-  const env = process.env.NODE_ENV || "development";
+  const env = (process.env.NODE_ENV || "development") as string;
 
   // Development overrides - enable more features for testing
   if (env === "development") {

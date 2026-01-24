@@ -25,7 +25,7 @@ const envSchema = z.object({
 
   PORT: z
     .coerce
-    .number({ invalid_type_error: 'PORT must be a number' })
+    .number()
     .int('PORT must be an integer')
     .positive('PORT must be positive')
     .max(65535, 'PORT must be between 1 and 65535')
