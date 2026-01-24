@@ -1,0 +1,747 @@
+{
+  "generatedAt": "2026-01-24T03:53:37.427Z",
+  "source": "LA County CEO Budget Analysis (FY 2024-25)",
+  "totalBids": 51,
+  "bids": [
+    {
+      "bidNumber": "BRC-2024001",
+      "title": "Homeless Services Program - RFP 2026",
+      "department": "Public Social Services",
+      "closingDate": "2026-02-27",
+      "estimatedValue": 3823887,
+      "category": "Transportation",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024002",
+      "title": "Child Support Services Services Contract - RFP 2026",
+      "department": "Child Support Services",
+      "closingDate": "2026-03-12",
+      "estimatedValue": 6240939,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024003",
+      "title": "Detention Facility Food Services - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-03-16",
+      "estimatedValue": 1863024,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024004",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-02-09",
+      "estimatedValue": 5178411,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024005",
+      "title": "Enterprise Software Licensing - RFP 2026",
+      "department": "Internal Services",
+      "closingDate": "2026-03-30",
+      "estimatedValue": 3274378,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024006",
+      "title": "Pharmacy Distribution Services - RFP 2026",
+      "department": "Health Services",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 8906101,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024007",
+      "title": "Emergency Medical Supplies - RFP 2026",
+      "department": "Fire",
+      "closingDate": "2026-02-08",
+      "estimatedValue": 3089188,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024008",
+      "title": "Agricultural Commissioner Services Contract - RFP 2026",
+      "department": "Agricultural Commissioner",
+      "closingDate": "2026-02-23",
+      "estimatedValue": 1589391,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024009",
+      "title": "Case Management System - RFP 2026",
+      "department": "Public Social Services",
+      "closingDate": "2026-04-07",
+      "estimatedValue": 3557710,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024010",
+      "title": "Cloud Migration Services - RFP 2026",
+      "department": "Internal Services",
+      "closingDate": "2026-03-01",
+      "estimatedValue": 2630006,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024011",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 9870697,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024012",
+      "title": "Assessor Services Contract - RFP 2026",
+      "department": "Assessor",
+      "closingDate": "2026-03-31",
+      "estimatedValue": 18760010,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024013",
+      "title": "Employment Services Provider - RFP 2026",
+      "department": "Public Social Services",
+      "closingDate": "2026-02-05",
+      "estimatedValue": 5460551,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024014",
+      "title": "Jail Medical Services - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-02-04",
+      "estimatedValue": 20180239,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024015",
+      "title": "Trail Development Project - RFP 2026",
+      "department": "Parks and Recreation",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 3094383,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024016",
+      "title": "Jail Medical Services - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-03-12",
+      "estimatedValue": 13190069,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024017",
+      "title": "Dispatch System Modernization - RFP 2026",
+      "department": "Fire",
+      "closingDate": "2026-02-07",
+      "estimatedValue": 3531415,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024018",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-04-12",
+      "estimatedValue": 3342172,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024019",
+      "title": "Alternate Public Defender Services Contract - RFP 2026",
+      "department": "Alternate Public Defender",
+      "closingDate": "2026-03-31",
+      "estimatedValue": 2498116,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024020",
+      "title": "Alternate Public Defender Services Contract - RFP 2026",
+      "department": "Alternate Public Defender",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 3167711,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024021",
+      "title": "Child Support Services Services Contract - RFP 2026",
+      "department": "Child Support Services",
+      "closingDate": "2026-03-18",
+      "estimatedValue": 2514253,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024022",
+      "title": "Assessor Services Contract - RFP 2026",
+      "department": "Assessor",
+      "closingDate": "2026-03-01",
+      "estimatedValue": 2075492,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024023",
+      "title": "Park Facility Renovation - RFP 2026",
+      "department": "Parks and Recreation",
+      "closingDate": "2026-03-27",
+      "estimatedValue": 1676754,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024024",
+      "title": "Assessor Services Contract - RFP 2026",
+      "department": "Assessor",
+      "closingDate": "2026-02-03",
+      "estimatedValue": 10010921,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024025",
+      "title": "Pharmacy Distribution Services - RFP 2026",
+      "department": "Health Services",
+      "closingDate": "2026-02-15",
+      "estimatedValue": 2056100,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024026",
+      "title": "Security Technology Integration - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-02-18",
+      "estimatedValue": 1694120,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024027",
+      "title": "Clinical Laboratory Services - RFP 2026",
+      "department": "Health Services",
+      "closingDate": "2026-03-23",
+      "estimatedValue": 7324415,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024028",
+      "title": "Fire Apparatus Replacement - RFP 2026",
+      "department": "Fire",
+      "closingDate": "2026-03-29",
+      "estimatedValue": 1365040,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024029",
+      "title": "CEO Services Contract - RFP 2026",
+      "department": "CEO",
+      "closingDate": "2026-03-09",
+      "estimatedValue": 19907966,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024030",
+      "title": "Probation Services Contract - RFP 2026",
+      "department": "Probation",
+      "closingDate": "2026-04-22",
+      "estimatedValue": 6604232,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024031",
+      "title": "CEO Services Contract - RFP 2026",
+      "department": "CEO",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 9970254,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024032",
+      "title": "Trail Development Project - RFP 2026",
+      "department": "Parks and Recreation",
+      "closingDate": "2026-02-23",
+      "estimatedValue": 3117004,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024033",
+      "title": "Telehealth Platform Implementation - RFP 2026",
+      "department": "Mental Health",
+      "closingDate": "2026-02-07",
+      "estimatedValue": 5966560,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024034",
+      "title": "Agricultural Commissioner Services Contract - RFP 2026",
+      "department": "Agricultural Commissioner",
+      "closingDate": "2026-04-09",
+      "estimatedValue": 5333107,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024035",
+      "title": "Probation Services Contract - RFP 2026",
+      "department": "Probation",
+      "closingDate": "2026-04-20",
+      "estimatedValue": 5314044,
+      "category": "Transportation",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024036",
+      "title": "Agricultural Commissioner Services Contract - RFP 2026",
+      "department": "Agricultural Commissioner",
+      "closingDate": "2026-01-31",
+      "estimatedValue": 11529320,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024037",
+      "title": "Park Facility Renovation - RFP 2026",
+      "department": "Parks and Recreation",
+      "closingDate": "2026-04-01",
+      "estimatedValue": 7289273,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024038",
+      "title": "Child Support Services Services Contract - RFP 2026",
+      "department": "Child Support Services",
+      "closingDate": "2026-04-18",
+      "estimatedValue": 2674036,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024039",
+      "title": "Pharmacy Distribution Services - RFP 2026",
+      "department": "Health Services",
+      "closingDate": "2026-02-14",
+      "estimatedValue": 2001467,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024040",
+      "title": "Alternate Public Defender Services Contract - RFP 2026",
+      "department": "Alternate Public Defender",
+      "closingDate": "2026-02-20",
+      "estimatedValue": 3204985,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024041",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-02-18",
+      "estimatedValue": 6114546,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024042",
+      "title": "CEO Services Contract - RFP 2026",
+      "department": "CEO",
+      "closingDate": "2026-04-15",
+      "estimatedValue": 2931952,
+      "category": "Transportation",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024043",
+      "title": "Probation Services Contract - RFP 2026",
+      "department": "Probation",
+      "closingDate": "2026-04-12",
+      "estimatedValue": 10746210,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024044",
+      "title": "Agricultural Commissioner Services Contract - RFP 2026",
+      "department": "Agricultural Commissioner",
+      "closingDate": "2026-03-02",
+      "estimatedValue": 3472395,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024045",
+      "title": "Child Support Services Services Contract - RFP 2026",
+      "department": "Child Support Services",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 10803161,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024046",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-04-16",
+      "estimatedValue": 4038506,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024047",
+      "title": "Assessor Services Contract - RFP 2026",
+      "department": "Assessor",
+      "closingDate": "2026-04-02",
+      "estimatedValue": 3696435,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024048",
+      "title": "Communications System Upgrade - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-02-17",
+      "estimatedValue": 9784128,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024049",
+      "title": "CEO Services Contract - RFP 2026",
+      "department": "CEO",
+      "closingDate": "2026-02-12",
+      "estimatedValue": 2973551,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024050",
+      "title": "Homeless Services Program - RFP 2026",
+      "department": "Public Social Services",
+      "closingDate": "2026-03-27",
+      "estimatedValue": 3035152,
+      "category": "Facilities Management",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024051",
+      "title": "Alternate Public Defender Services Contract - RFP 2026",
+      "department": "Alternate Public Defender",
+      "closingDate": "2026-02-21",
+      "estimatedValue": 12032006,
+      "category": "Construction",
+      "status": "Open"
+    }
+  ],
+  "byDepartment": {
+    "Public Social Services": {
+      "count": 4,
+      "totalValue": 15877300,
+      "bids": [
+        "BRC-2024001",
+        "BRC-2024009",
+        "BRC-2024013",
+        "BRC-2024050"
+      ]
+    },
+    "Child Support Services": {
+      "count": 4,
+      "totalValue": 22232389,
+      "bids": [
+        "BRC-2024002",
+        "BRC-2024021",
+        "BRC-2024038",
+        "BRC-2024045"
+      ]
+    },
+    "Sheriff": {
+      "count": 5,
+      "totalValue": 46711580,
+      "bids": [
+        "BRC-2024003",
+        "BRC-2024014",
+        "BRC-2024016",
+        "BRC-2024026",
+        "BRC-2024048"
+      ]
+    },
+    "Registrar-Recorder": {
+      "count": 5,
+      "totalValue": 28544332,
+      "bids": [
+        "BRC-2024004",
+        "BRC-2024011",
+        "BRC-2024018",
+        "BRC-2024041",
+        "BRC-2024046"
+      ]
+    },
+    "Internal Services": {
+      "count": 2,
+      "totalValue": 5904384,
+      "bids": [
+        "BRC-2024005",
+        "BRC-2024010"
+      ]
+    },
+    "Health Services": {
+      "count": 4,
+      "totalValue": 20288083,
+      "bids": [
+        "BRC-2024006",
+        "BRC-2024025",
+        "BRC-2024027",
+        "BRC-2024039"
+      ]
+    },
+    "Fire": {
+      "count": 3,
+      "totalValue": 7985643,
+      "bids": [
+        "BRC-2024007",
+        "BRC-2024017",
+        "BRC-2024028"
+      ]
+    },
+    "Agricultural Commissioner": {
+      "count": 4,
+      "totalValue": 21924213,
+      "bids": [
+        "BRC-2024008",
+        "BRC-2024034",
+        "BRC-2024036",
+        "BRC-2024044"
+      ]
+    },
+    "Assessor": {
+      "count": 4,
+      "totalValue": 34542858,
+      "bids": [
+        "BRC-2024012",
+        "BRC-2024022",
+        "BRC-2024024",
+        "BRC-2024047"
+      ]
+    },
+    "Parks and Recreation": {
+      "count": 4,
+      "totalValue": 15177414,
+      "bids": [
+        "BRC-2024015",
+        "BRC-2024023",
+        "BRC-2024032",
+        "BRC-2024037"
+      ]
+    },
+    "Alternate Public Defender": {
+      "count": 4,
+      "totalValue": 20902818,
+      "bids": [
+        "BRC-2024019",
+        "BRC-2024020",
+        "BRC-2024040",
+        "BRC-2024051"
+      ]
+    },
+    "CEO": {
+      "count": 4,
+      "totalValue": 35783723,
+      "bids": [
+        "BRC-2024029",
+        "BRC-2024031",
+        "BRC-2024042",
+        "BRC-2024049"
+      ]
+    },
+    "Probation": {
+      "count": 3,
+      "totalValue": 22664486,
+      "bids": [
+        "BRC-2024030",
+        "BRC-2024035",
+        "BRC-2024043"
+      ]
+    },
+    "Mental Health": {
+      "count": 1,
+      "totalValue": 5966560,
+      "bids": [
+        "BRC-2024033"
+      ]
+    }
+  },
+  "byCategory": {
+    "Transportation": {
+      "count": 3,
+      "totalValue": 12069883
+    },
+    "IT Services": {
+      "count": 11,
+      "totalValue": 56903561
+    },
+    "Professional Services": {
+      "count": 11,
+      "totalValue": 26852757
+    },
+    "Medical/Health": {
+      "count": 9,
+      "totalValue": 82167539
+    },
+    "Facilities Management": {
+      "count": 11,
+      "totalValue": 31695543
+    },
+    "Construction": {
+      "count": 6,
+      "totalValue": 94816500
+    }
+  },
+  "valueDistribution": {
+    "under100k": 0,
+    "from100kTo500k": 0,
+    "from500kTo1M": 0,
+    "from1MTo5M": 28,
+    "over5M": 23,
+    "unknown": 0
+  },
+  "upcomingClosings": [
+    {
+      "bidNumber": "BRC-2024036",
+      "title": "Agricultural Commissioner Services Contract - RFP 2026",
+      "department": "Agricultural Commissioner",
+      "closingDate": "2026-01-31",
+      "estimatedValue": 11529320,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024006",
+      "title": "Pharmacy Distribution Services - RFP 2026",
+      "department": "Health Services",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 8906101,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024011",
+      "title": "Registrar-Recorder Services Contract - RFP 2026",
+      "department": "Registrar-Recorder",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 9870697,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024015",
+      "title": "Trail Development Project - RFP 2026",
+      "department": "Parks and Recreation",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 3094383,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024020",
+      "title": "Alternate Public Defender Services Contract - RFP 2026",
+      "department": "Alternate Public Defender",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 3167711,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024031",
+      "title": "CEO Services Contract - RFP 2026",
+      "department": "CEO",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 9970254,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024045",
+      "title": "Child Support Services Services Contract - RFP 2026",
+      "department": "Child Support Services",
+      "closingDate": "2026-02-02",
+      "estimatedValue": 10803161,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024024",
+      "title": "Assessor Services Contract - RFP 2026",
+      "department": "Assessor",
+      "closingDate": "2026-02-03",
+      "estimatedValue": 10010921,
+      "category": "Medical/Health",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024014",
+      "title": "Jail Medical Services - RFP 2026",
+      "department": "Sheriff",
+      "closingDate": "2026-02-04",
+      "estimatedValue": 20180239,
+      "category": "Construction",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024013",
+      "title": "Employment Services Provider - RFP 2026",
+      "department": "Public Social Services",
+      "closingDate": "2026-02-05",
+      "estimatedValue": 5460551,
+      "category": "IT Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024017",
+      "title": "Dispatch System Modernization - RFP 2026",
+      "department": "Fire",
+      "closingDate": "2026-02-07",
+      "estimatedValue": 3531415,
+      "category": "Professional Services",
+      "status": "Open"
+    },
+    {
+      "bidNumber": "BRC-2024033",
+      "title": "Telehealth Platform Implementation - RFP 2026",
+      "department": "Mental Health",
+      "closingDate": "2026-02-07",
+      "estimatedValue": 5966560,
+      "category": "IT Services",
+      "status": "Open"
+    }
+  ]
+}
