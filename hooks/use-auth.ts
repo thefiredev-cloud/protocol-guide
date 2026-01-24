@@ -170,6 +170,8 @@ export function useAuth(options?: UseAuthOptions) {
       await supabaseSignOut();
       // Clear token cache to prevent stale tokens
       clearTokenCache();
+      // Clear E2E mock session if present
+      clearE2EMockSession();
       setUser(null);
       setSession(null);
       setError(null);
@@ -177,6 +179,7 @@ export function useAuth(options?: UseAuthOptions) {
       console.error("[Auth] Logout failed:", err);
       // Clear state and cache anyway
       clearTokenCache();
+      clearE2EMockSession();
       setUser(null);
       setSession(null);
     } finally {
