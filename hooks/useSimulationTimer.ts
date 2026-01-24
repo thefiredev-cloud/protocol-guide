@@ -86,6 +86,24 @@ export function useSimulationTimer(updateInterval = 100): UseSimulationTimerRetu
   const startTimeRef = useRef<number>(0);
   const pausedElapsedRef = useRef<number>(0);
 
+  // Use refs to avoid stale closures in callbacks
+  const isRunningRef = useRef(false);
+  const isPausedRef = useRef(false);
+  const elapsedMsRef = useRef(0);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+  }, [isRunning]);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
+    elapsedMsRef.current = elapsedMs;
+  }, [elapsedMs]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -121,19 +139,21 @@ export function useSimulationTimer(updateInterval = 100): UseSimulationTimerRetu
   }, [startTimer]);
 
   const pause = useCallback(() => {
-    if (isRunning && !isPaused) {
+    // Use refs to access current state without stale closure
+    if (isRunningRef.current && !isPausedRef.current) {
       clearTimer();
-      pausedElapsedRef.current = elapsedMs;
+      pausedElapsedRef.current = elapsedMsRef.current;
       setIsPaused(true);
     }
-  }, [isRunning, isPaused, clearTimer, elapsedMs]);
+  }, [clearTimer]);
 
   const resume = useCallback(() => {
-    if (isRunning && isPaused) {
+    // Use refs to access current state without stale closure
+    if (isRunningRef.current && isPausedRef.current) {
       setIsPaused(false);
       startTimer();
     }
-  }, [isRunning, isPaused, startTimer]);
+  }, [startTimer]);
 
   const reset = useCallback(() => {
     clearTimer();
@@ -144,12 +164,13 @@ export function useSimulationTimer(updateInterval = 100): UseSimulationTimerRetu
   }, [clearTimer]);
 
   const togglePause = useCallback(() => {
-    if (isPaused) {
+    // Use ref to access current state without stale closure
+    if (isPausedRef.current) {
       resume();
     } else {
       pause();
     }
-  }, [isPaused, pause, resume]);
+  }, [pause, resume]);
 
   return {
     elapsedMs,
