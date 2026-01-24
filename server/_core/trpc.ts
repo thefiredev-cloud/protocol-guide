@@ -149,10 +149,14 @@ const requirePaidTier = t.middleware(async (opts) => {
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
   }
 
-  if (ctx.user.tier !== "pro" && ctx.user.tier !== "enterprise") {
+  const isPaidTier = ctx.user.tier === "pro" || ctx.user.tier === "enterprise";
+  const isActive = ctx.user.subscriptionStatus === "active" || ctx.user.subscriptionStatus === "trialing";
+  const notExpired = !ctx.user.subscriptionEndDate || new Date(ctx.user.subscriptionEndDate) > new Date();
+
+  if (!isPaidTier || !isActive || !notExpired) {
     throw new TRPCError({
       code: "FORBIDDEN",
-      message: "This feature requires a Pro or Enterprise subscription",
+      message: "Active Pro or Enterprise subscription required",
     });
   }
 
