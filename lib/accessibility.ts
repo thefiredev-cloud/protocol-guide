@@ -458,9 +458,7 @@ export function useFocusTrap(options: UseFocusTrapOptions): UseFocusTrapReturn {
 
           // Fall back to first focusable element
           if (!elementToFocus) {
-            const focusableElements = containerRef.current.querySelectorAll(
-              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-            );
+            const focusableElements = containerRef.current.querySelectorAll(FOCUSABLE_SELECTOR);
             elementToFocus = focusableElements[0] as HTMLElement;
           }
 
