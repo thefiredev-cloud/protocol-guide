@@ -243,6 +243,7 @@ function createCaller(user: typeof testUser | null = testUser) {
       clearCookie: vi.fn(),
     } as any,
     user,
+    trace: createMockTraceContext(),
   };
 
   return appRouter.createCaller(ctx);
