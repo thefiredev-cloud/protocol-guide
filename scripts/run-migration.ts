@@ -1,8 +1,8 @@
 /**
- * Script to manually run SQL migrations against the database
+ * Script to manually run SQL migrations against the database (PostgreSQL)
  */
 
-import * as mysql from "mysql2/promise";
+import { Pool } from "pg";
 import * as fs from "fs/promises";
 import * as path from "path";
 
@@ -21,67 +21,35 @@ async function runMigration() {
 
   console.log(`🔄 Running migration: ${migrationFile}\n`);
 
-  const connection = await mysql.createConnection(DATABASE_URL);
+  const pool = new Pool({ connectionString: DATABASE_URL });
+  const client = await pool.connect();
 
   try {
     // Read migration file
     const migrationPath = path.join(process.cwd(), migrationFile);
     const sql = await fs.readFile(migrationPath, "utf-8");
 
-    // Remove comments and split by semicolon
-    const cleanedSql = sql
-      .split("\n")
-      .filter((line) => !line.trim().startsWith("--"))
-      .join("\n")
-      .replace(/\/\*[\s\S]*?\*\//g, ""); // Remove /* */ comments
+    // For PostgreSQL, execute the entire script at once (handles DO $$ blocks properly)
+    console.log(`📝 Executing migration...\n`);
 
-    const statements = cleanedSql
-      .split(";")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
-
-    console.log(`📝 Found ${statements.length} SQL statements\n`);
-
-    // Execute each statement
-    for (let i = 0; i < statements.length; i++) {
-      const statement = statements[i];
-      if (statement) {
-        // Extract index name from CREATE INDEX statement for logging
-        const indexMatch = statement.match(/CREATE INDEX (\w+)/i);
-
-        try {
-          if (indexMatch) {
-            const indexName = indexMatch[1];
-            process.stdout.write(`  Creating index: ${indexName}...`);
-          }
-
-          await connection.query(statement);
-
-          if (indexMatch) {
-            console.log(" ✓");
-          }
-        } catch (error: any) {
-          // Skip if index already exists
-          if (error.code === "ER_DUP_KEYNAME" || error.message.includes("already exists")) {
-            if (indexMatch) {
-              console.log(" ⊗ (already exists)");
-            }
-          } else {
-            console.error(`\n❌ Error executing statement ${i + 1}:`, error.message);
-            console.error("Statement:", statement.substring(0, 200));
-            throw error;
-          }
-        }
+    try {
+      await client.query(sql);
+      console.log("\n✅ Migration completed successfully!");
+    } catch (error: any) {
+      // Check for duplicate object errors
+      if (error.code === '42P07' || error.message.includes('already exists')) {
+        console.log(" ⊗ (objects already exist, continuing)");
+      } else {
+        console.error(`\n❌ Error executing migration:`, error.message);
+        throw error;
       }
     }
-
-    console.log("\n✅ Migration completed successfully!");
   } catch (error) {
     console.error("\n❌ Migration failed:", error);
     throw error;
   } finally {
-    // Always close connection, even on error
-    await connection.end();
+    client.release();
+    await pool.end();
   }
 }
 
