@@ -6,6 +6,7 @@
 import { eq, and } from "drizzle-orm";
 import { users, userAuthProviders, type User, type UserAuthProvider } from "../../drizzle/schema";
 import { getDb } from "./connection";
+import { sendWelcomeEmail } from "../_core/email";
 
 /**
  * Find or create user by Supabase auth with provider info
