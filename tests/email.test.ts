@@ -122,12 +122,12 @@ describe('email service', () => {
         data: { name: 'Test' },
       });
 
-      // Verify Resend was called with reply_to
+      // Verify Resend was called with replyTo
       const mockResendInstance = vi.mocked(Resend).mock.results[0]?.value;
       if (mockResendInstance) {
         expect(mockResendInstance.emails.send).toHaveBeenCalledWith(
           expect.objectContaining({
-            reply_to: 'support@example.com',
+            replyTo: 'support@example.com',
           })
         );
       }
