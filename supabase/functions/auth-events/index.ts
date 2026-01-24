@@ -155,9 +155,42 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Verify webhook signature (basic security)
-    const signature = req.headers.get('x-webhook-signature');
-    if (WEBHOOK_SECRET && signature !== WEBHOOK_SECRET) {
+    // SECURITY: Webhook secret must be configured
+    if (!WEBHOOK_SECRET) {
+      console.error('[AuthEvents] AUTH_WEBHOOK_SECRET not configured - rejecting request');
+      return new Response(
+        JSON.stringify({ error: 'Webhook not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // SECURITY: Validate timestamp to prevent replay attacks
+    const timestamp = req.headers.get('x-webhook-timestamp');
+    if (!timestamp) {
+      console.warn('[AuthEvents] Missing webhook timestamp');
+      return new Response(
+        JSON.stringify({ error: 'Missing timestamp' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const requestTime = parseInt(timestamp, 10);
+    const now = Date.now();
+    const fiveMinutes = 5 * 60 * 1000;
+
+    if (Math.abs(now - requestTime) > fiveMinutes) {
+      console.warn('[AuthEvents] Webhook timestamp too old/new - possible replay attack');
+      return new Response(
+        JSON.stringify({ error: 'Timestamp invalid' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // SECURITY: Verify HMAC-SHA256 signature
+    const body = await req.text();
+    const signature = req.headers.get('x-webhook-signature') || '';
+
+    if (!await verifyWebhookSignature(body, signature, WEBHOOK_SECRET)) {
       console.warn('[AuthEvents] Invalid webhook signature');
       return new Response(
         JSON.stringify({ error: 'Invalid signature' }),
@@ -165,7 +198,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const event: AuthEvent = await req.json();
+    const event: AuthEvent = JSON.parse(body);
     console.log('[AuthEvents] Received event:', event.type, 'for user:', event.user.id);
 
     switch (event.type) {
