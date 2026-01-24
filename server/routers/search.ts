@@ -271,7 +271,8 @@ export const searchRouter = router({
 
   // Search by specific agency using Voyage AI + pgvector
   // Optimized with query normalization and Redis caching
-  searchByAgency: publicProcedure
+  // Rate limited: 10 requests per 15 minutes per IP to prevent abuse
+  searchByAgency: publicRateLimitedProcedure
     .input(z.object({
       query: z.string().min(1).max(500),
       agencyId: z.number(), // MySQL county ID (will be mapped)
