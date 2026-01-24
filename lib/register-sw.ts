@@ -109,13 +109,9 @@ function showUpdateNotification(onUpdate: () => void): void {
   }
 
   // Auto-update after 5 seconds (optional - remove if you want manual updates)
-  const autoUpdateTimer = setTimeout(() => {
+  // Clear any existing auto-update timer first
+  if (autoUpdateTimerId) clearTimeout(autoUpdateTimerId);
+  autoUpdateTimerId = setTimeout(() => {
     onUpdate();
   }, 5000);
-
-  // Note: Timer cleanup not critical here as update handler reloads the page
-  // But included for completeness
-  window.addEventListener('beforeunload', () => {
-    clearTimeout(autoUpdateTimer);
-  }, { once: true });
 }
