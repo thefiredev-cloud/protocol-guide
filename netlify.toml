@@ -60,7 +60,7 @@
     Content-Security-Policy = """
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'sha256-oFgClRU4Ehoik1pRJieVXsCrbQAwssqUDdL4hnGQ6to=';
+      style-src 'self' 'unsafe-inline';
       img-src 'self' data: blob: https://*.supabase.co;
       font-src 'self' data: https://fonts.gstatic.com;
       connect-src 'self' https://*.supabase.co https://api.anthropic.com wss://*.supabase.co https://protocol-guide-production.up.railway.app https://api.protocol-guide.com;
