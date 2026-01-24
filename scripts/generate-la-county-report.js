@@ -1,7 +1,6 @@
 /**
  * LA County Bids DOCX Report Generator
- *
- * Generates a professional Word document from real LA County solicitation data.
+ * Addressed to IAFF Local 1014 President David Gillotte
  *
  * Input:  scripts/output/la-county-bids-data.json
  * Output: scripts/output/LA-County-Bids-Report.docx
@@ -24,7 +23,6 @@ const {
   PageNumber,
   PageBreak,
   LevelFormat,
-  ExternalHyperlink,
 } = require('docx');
 const fs = require('fs');
 const path = require('path');
@@ -42,7 +40,6 @@ const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 const border = { style: BorderStyle.SINGLE, size: 1, color: 'CCCCCC' };
 const borders = { top: border, bottom: border, left: border, right: border };
 
-// Cell helper
 function makeCell(text, opts = {}) {
   const { header, right, center, bold, color, size, fill } = opts;
   return new TableCell({
@@ -66,8 +63,7 @@ function makeCell(text, opts = {}) {
 
 // Prepare data
 const topDepts = Object.entries(data.byDepartment)
-  .sort((a, b) => b[1].count - a[1].count)
-  .slice(0, 15);
+  .sort((a, b) => b[1].count - a[1].count);
 
 const bidTypes = Object.entries(data.byBidType)
   .sort((a, b) => b[1].count - a[1].count);
@@ -79,52 +75,75 @@ const topCommodities = Object.entries(data.byCommodity)
 const upcomingBids = (data.upcomingClosings || []).slice(0, 15);
 const closingSoon = (data.closingSoon || []).slice(0, 10);
 
+// Fire Department specific data
+const fireBids = data.bids.filter(b => b.department === 'Fire Department');
+const fireCount = data.byDepartment['Fire Department']?.count || 0;
+
+// Public safety related (Fire + Sheriff + Health)
+const sheriffCount = data.byDepartment['Sheriff']?.count || 0;
+const healthCount = data.byDepartment['Health Services']?.count || 0;
+const publicSafetyTotal = fireCount + sheriffCount + healthCount;
+
+// Format date
+const reportDate = new Date().toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
 // Build document content
 const children = [
-  // Title
+  // Letterhead / Date
   new Paragraph({
-    heading: HeadingLevel.TITLE,
-    children: [new TextRun('Los Angeles County')],
-  }),
-  new Paragraph({
-    heading: HeadingLevel.TITLE,
-    spacing: { after: 100 },
-    children: [new TextRun('Open Solicitations Report')],
-  }),
-  new Paragraph({
-    alignment: AlignmentType.CENTER,
+    alignment: AlignmentType.RIGHT,
     spacing: { after: 400 },
+    children: [new TextRun({ text: reportDate, size: 22 })],
+  }),
+
+  // Recipient
+  new Paragraph({
+    spacing: { after: 0 },
+    children: [new TextRun({ text: 'David Gillotte', bold: true, size: 24 })],
+  }),
+  new Paragraph({
+    spacing: { after: 0 },
+    children: [new TextRun({ text: 'President, IAFF Local 1014', size: 22 })],
+  }),
+  new Paragraph({
+    spacing: { after: 0 },
+    children: [new TextRun({ text: 'Los Angeles County Fire Fighters', size: 22 })],
+  }),
+  new Paragraph({
+    spacing: { after: 400 },
+    children: [new TextRun({ text: 'Los Angeles, California', size: 22 })],
+  }),
+
+  // Subject Line
+  new Paragraph({
+    spacing: { after: 300 },
     children: [
-      new TextRun({
-        text: `Generated: ${new Date(data.generatedAt).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        })}`,
-        size: 20,
-        color: '666666',
-      }),
+      new TextRun({ text: 'RE: ', bold: true, size: 22 }),
+      new TextRun({ text: 'Los Angeles County Open Solicitations Analysis', bold: true, size: 22 }),
     ],
   }),
 
-  // Executive Summary
+  // Salutation
   new Paragraph({
-    heading: HeadingLevel.HEADING_1,
-    children: [new TextRun('Executive Summary')],
+    spacing: { after: 200 },
+    children: [new TextRun({ text: 'President Gillotte,', size: 22 })],
   }),
+
+  // Opening paragraph
   new Paragraph({
-    spacing: { after: 150 },
+    spacing: { after: 200 },
     children: [
-      new TextRun('This report contains '),
-      new TextRun({ text: `${data.totalBids} active open solicitations`, bold: true }),
-      new TextRun(' currently available from Los Angeles County government departments. '),
-      new TextRun('Data is sourced directly from the official LA County Bids Portal maintained by the Internal Services Department.'),
+      new TextRun({ text: 'Please find enclosed a comprehensive analysis of Los Angeles County\'s current open solicitations. This report was generated from official data published by the LA County Internal Services Department Bids Portal on ', size: 22 }),
+      new TextRun({ text: new Date(data.generatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }), bold: true, size: 22 }),
+      new TextRun({ text: '.', size: 22 }),
     ],
   }),
 
-  // Key Statistics Box
+  // Key findings box
   new Table({
     columnWidths: [9360],
     rows: [
@@ -132,28 +151,47 @@ const children = [
         children: [
           new TableCell({
             borders,
-            shading: { fill: 'E8F6F3', type: ShadingType.CLEAR },
+            shading: { fill: 'EBF5FB', type: ShadingType.CLEAR },
             children: [
               new Paragraph({
-                spacing: { before: 100 },
-                children: [new TextRun({ text: 'KEY STATISTICS', bold: true, size: 24, color: '117864' })],
+                spacing: { before: 150 },
+                children: [new TextRun({ text: 'KEY FINDINGS', bold: true, size: 26, color: '1a5276' })],
               }),
               new Paragraph({
                 numbering: { reference: 'bullets', level: 0 },
-                children: [new TextRun(`${data.totalBids} total open solicitations`)],
+                children: [
+                  new TextRun({ text: `${data.totalBids} `, bold: true, size: 22 }),
+                  new TextRun({ text: 'total open solicitations across LA County', size: 22 }),
+                ],
               }),
               new Paragraph({
                 numbering: { reference: 'bullets', level: 0 },
-                children: [new TextRun(`${topDepts.length} departments with active bids`)],
+                children: [
+                  new TextRun({ text: `${fireCount} `, bold: true, size: 22 }),
+                  new TextRun({ text: 'solicitation(s) directly from LA County Fire Department', size: 22 }),
+                ],
               }),
               new Paragraph({
                 numbering: { reference: 'bullets', level: 0 },
-                children: [new TextRun(`${closingSoon.length} solicitations closing within 3 days`)],
+                children: [
+                  new TextRun({ text: `${publicSafetyTotal} `, bold: true, size: 22 }),
+                  new TextRun({ text: 'solicitations from public safety departments (Fire, Sheriff, Health Services)', size: 22 }),
+                ],
               }),
               new Paragraph({
                 numbering: { reference: 'bullets', level: 0 },
-                spacing: { after: 100 },
-                children: [new TextRun(`${upcomingBids.length} solicitations closing within 14 days`)],
+                children: [
+                  new TextRun({ text: `${Object.keys(data.byDepartment).length} `, bold: true, size: 22 }),
+                  new TextRun({ text: 'County departments with active procurement activity', size: 22 }),
+                ],
+              }),
+              new Paragraph({
+                numbering: { reference: 'bullets', level: 0 },
+                spacing: { after: 150 },
+                children: [
+                  new TextRun({ text: `${upcomingBids.length} `, bold: true, size: 22 }),
+                  new TextRun({ text: 'solicitations closing within the next 14 days', size: 22 }),
+                ],
               }),
             ],
           }),
@@ -162,45 +200,39 @@ const children = [
     ],
   }),
 
-  // Urgent Alert if there are bids closing soon
-  ...(closingSoon.length > 0
+  new Paragraph({ spacing: { after: 200 }, children: [] }),
+
+  // Fire Department specific section
+  ...(fireBids.length > 0
     ? [
-        new Paragraph({ spacing: { before: 200 }, children: [] }),
-        new Table({
-          columnWidths: [9360],
-          rows: [
-            new TableRow({
-              children: [
-                new TableCell({
-                  borders,
-                  shading: { fill: 'FDEDEC', type: ShadingType.CLEAR },
-                  children: [
-                    new Paragraph({
-                      spacing: { before: 100 },
-                      children: [new TextRun({ text: '⚠️ CLOSING WITHIN 3 DAYS', bold: true, size: 22, color: 'C0392B' })],
-                    }),
-                    ...closingSoon.slice(0, 5).map(
-                      (bid) =>
-                        new Paragraph({
-                          spacing: { before: 50 },
-                          children: [
-                            new TextRun({ text: `${bid.bidNumber}: `, bold: true, size: 18 }),
-                            new TextRun({ text: bid.title.substring(0, 60) + (bid.title.length > 60 ? '...' : ''), size: 18 }),
-                            new TextRun({ text: ` (${bid.closingDate})`, size: 18, color: 'C0392B' }),
-                          ],
-                        })
-                    ),
-                    new Paragraph({ spacing: { after: 100 }, children: [] }),
-                  ],
-                }),
-              ],
-            }),
-          ],
+        new Paragraph({
+          spacing: { before: 100 },
+          children: [new TextRun({ text: 'Fire Department Solicitations:', bold: true, size: 22, color: 'C0392B' })],
         }),
+        ...fireBids.map(bid => new Paragraph({
+          spacing: { before: 100 },
+          children: [
+            new TextRun({ text: `• ${bid.bidNumber}: `, bold: true, size: 22 }),
+            new TextRun({ text: bid.title, size: 22 }),
+            new TextRun({ text: ` (Closes: ${bid.closingDate})`, size: 20, color: '666666' }),
+          ],
+        })),
+        new Paragraph({ spacing: { after: 200 }, children: [] }),
       ]
     : []),
 
   new Paragraph({ children: [new PageBreak()] }),
+
+  // Title for detailed section
+  new Paragraph({
+    heading: HeadingLevel.TITLE,
+    children: [new TextRun('Los Angeles County')],
+  }),
+  new Paragraph({
+    heading: HeadingLevel.TITLE,
+    spacing: { after: 300 },
+    children: [new TextRun('Open Solicitations Analysis')],
+  }),
 
   // Department Analysis
   new Paragraph({
@@ -209,10 +241,10 @@ const children = [
   }),
   new Paragraph({
     spacing: { after: 200 },
-    children: [new TextRun('Distribution of open solicitations across LA County departments:')],
+    children: [new TextRun(`Complete breakdown of all ${data.totalBids} open solicitations by issuing department:`)],
   }),
   new Table({
-    columnWidths: [6000, 1800, 1560],
+    columnWidths: [5500, 1800, 2060],
     rows: [
       new TableRow({
         tableHeader: true,
@@ -225,21 +257,34 @@ const children = [
       ...topDepts.map(([dept, stats], i) =>
         new TableRow({
           children: [
-            makeCell(dept.length > 50 ? dept.slice(0, 47) + '...' : dept, {
-              fill: i % 2 === 0 ? 'F4F6F6' : 'FFFFFF',
+            makeCell(dept.length > 45 ? dept.slice(0, 42) + '...' : dept, {
+              fill: dept === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'F4F6F6' : 'FFFFFF',
+              bold: dept === 'Fire Department',
             }),
-            makeCell(stats.count, { center: true, fill: i % 2 === 0 ? 'F4F6F6' : 'FFFFFF' }),
+            makeCell(stats.count, {
+              center: true,
+              fill: dept === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'F4F6F6' : 'FFFFFF',
+              bold: dept === 'Fire Department',
+            }),
             makeCell(`${((stats.count / data.totalBids) * 100).toFixed(1)}%`, {
               right: true,
-              fill: i % 2 === 0 ? 'F4F6F6' : 'FFFFFF',
+              fill: dept === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'F4F6F6' : 'FFFFFF',
             }),
           ],
         })
       ),
+      // Total row
+      new TableRow({
+        children: [
+          makeCell('TOTAL', { bold: true, fill: '1a5276', color: 'FFFFFF' }),
+          makeCell(data.totalBids, { center: true, bold: true, fill: '1a5276', color: 'FFFFFF' }),
+          makeCell('100.0%', { right: true, bold: true, fill: '1a5276', color: 'FFFFFF' }),
+        ],
+      }),
     ],
   }),
 
-  new Paragraph({ spacing: { after: 300 }, children: [] }),
+  new Paragraph({ children: [new PageBreak()] }),
 
   // Bid Types
   new Paragraph({
@@ -248,17 +293,17 @@ const children = [
   }),
   new Paragraph({
     spacing: { after: 200 },
-    children: [new TextRun('Breakdown by procurement type:')],
+    children: [new TextRun('Breakdown by procurement category:')],
   }),
   new Table({
-    columnWidths: [5000, 2000, 1360],
+    columnWidths: [5000, 2000, 2360],
     rows: [
       new TableRow({
         tableHeader: true,
         children: [
           makeCell('Type', { header: true }),
           makeCell('Count', { header: true, center: true }),
-          makeCell('% of Total', { header: true, right: true }),
+          makeCell('Percentage', { header: true, right: true }),
         ],
       }),
       ...bidTypes.map(([type, stats], i) =>
@@ -276,16 +321,16 @@ const children = [
     ],
   }),
 
-  new Paragraph({ children: [new PageBreak()] }),
+  new Paragraph({ spacing: { after: 300 }, children: [] }),
 
-  // Commodity Categories
+  // Top Commodities
   new Paragraph({
     heading: HeadingLevel.HEADING_1,
     children: [new TextRun('Top Commodity Categories')],
   }),
   new Paragraph({
     spacing: { after: 200 },
-    children: [new TextRun('Most common procurement categories:')],
+    children: [new TextRun('Most common procurement categories by volume:')],
   }),
   new Table({
     columnWidths: [6500, 1500, 1360],
@@ -329,7 +374,7 @@ const children = [
   ...(upcomingBids.length > 0
     ? [
         new Table({
-          columnWidths: [1500, 4000, 2000, 1860],
+          columnWidths: [1800, 3700, 2000, 1860],
           rows: [
             new TableRow({
               tableHeader: true,
@@ -343,18 +388,24 @@ const children = [
             ...upcomingBids.map((bid, i) =>
               new TableRow({
                 children: [
-                  makeCell(bid.bidNumber, { fill: i % 2 === 0 ? 'FEF9E7' : 'FFFFFF', size: 18 }),
-                  makeCell(bid.title.length > 40 ? bid.title.slice(0, 37) + '...' : bid.title, {
-                    fill: i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
+                  makeCell(bid.bidNumber, {
+                    fill: bid.department === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
+                    size: 18,
+                  }),
+                  makeCell(bid.title.length > 38 ? bid.title.slice(0, 35) + '...' : bid.title, {
+                    fill: bid.department === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
                     size: 18,
                   }),
                   makeCell(
                     bid.department.length > 18 ? bid.department.slice(0, 15) + '...' : bid.department,
-                    { fill: i % 2 === 0 ? 'FEF9E7' : 'FFFFFF', size: 18 }
+                    {
+                      fill: bid.department === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
+                      size: 18,
+                    }
                   ),
                   makeCell(bid.closingDate.split(' ')[0], {
                     center: true,
-                    fill: i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
+                    fill: bid.department === 'Fire Department' ? 'FADBD8' : i % 2 === 0 ? 'FEF9E7' : 'FFFFFF',
                     color: 'B7950B',
                     size: 18,
                   }),
@@ -368,83 +419,10 @@ const children = [
 
   new Paragraph({ children: [new PageBreak()] }),
 
-  // Sample Bid Details
+  // Data Source & Verification
   new Paragraph({
     heading: HeadingLevel.HEADING_1,
-    children: [new TextRun('Sample Solicitation Details')],
-  }),
-  new Paragraph({
-    spacing: { after: 200 },
-    children: [new TextRun('Detailed information for 5 representative solicitations:')],
-  }),
-  ...data.bids.slice(0, 5).flatMap((bid, idx) => [
-    new Table({
-      columnWidths: [9360],
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              borders,
-              shading: { fill: 'EBF5FB', type: ShadingType.CLEAR },
-              children: [
-                new Paragraph({
-                  spacing: { before: 100 },
-                  children: [
-                    new TextRun({ text: bid.bidNumber, bold: true, size: 22, color: '1a5276' }),
-                  ],
-                }),
-                new Paragraph({
-                  children: [new TextRun({ text: bid.title, bold: true, size: 20 })],
-                }),
-                new Paragraph({
-                  spacing: { before: 80 },
-                  children: [
-                    new TextRun({ text: 'Department: ', bold: true, size: 18 }),
-                    new TextRun({ text: bid.department, size: 18 }),
-                  ],
-                }),
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: 'Type: ', bold: true, size: 18 }),
-                    new TextRun({ text: bid.bidType, size: 18 }),
-                  ],
-                }),
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: 'Commodity: ', bold: true, size: 18 }),
-                    new TextRun({ text: bid.commodityDescription || 'N/A', size: 18 }),
-                  ],
-                }),
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: 'Opens: ', bold: true, size: 18 }),
-                    new TextRun({ text: bid.openDate, size: 18 }),
-                    new TextRun({ text: '  |  Closes: ', bold: true, size: 18 }),
-                    new TextRun({ text: bid.closingDate, size: 18, color: 'C0392B' }),
-                  ],
-                }),
-                new Paragraph({
-                  spacing: { after: 100 },
-                  children: [
-                    new TextRun({ text: 'Contact: ', bold: true, size: 18 }),
-                    new TextRun({ text: `${bid.contactName} - ${bid.contactPhone} - ${bid.contactEmail}`, size: 18 }),
-                  ],
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-    new Paragraph({ spacing: { after: 150 }, children: [] }),
-  ]),
-
-  new Paragraph({ children: [new PageBreak()] }),
-
-  // Data Source
-  new Paragraph({
-    heading: HeadingLevel.HEADING_1,
-    children: [new TextRun('Data Source & Methodology')],
+    children: [new TextRun('Data Source & Verification')],
   }),
   new Paragraph({
     spacing: { after: 150 },
@@ -464,18 +442,43 @@ const children = [
     spacing: { after: 150 },
     children: [
       new TextRun({ text: 'Data Retrieved: ', bold: true }),
-      new TextRun(new Date(data.generatedAt).toLocaleString()),
+      new TextRun(new Date(data.generatedAt).toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      })),
     ],
   }),
   new Paragraph({
-    spacing: { after: 200 },
+    spacing: { after: 300 },
     children: [
-      new TextRun({ text: 'Total Records: ', bold: true }),
+      new TextRun({ text: 'Total Records Analyzed: ', bold: true }),
       new TextRun(`${data.totalBids} open solicitations`),
     ],
   }),
 
+  // Closing
+  new Paragraph({
+    spacing: { before: 200, after: 150 },
+    children: [
+      new TextRun({
+        text: 'This data is publicly available and can be independently verified at the LA County Bids Portal. Should you require additional analysis or have questions regarding specific solicitations, please do not hesitate to reach out.',
+        size: 22,
+      }),
+    ],
+  }),
+
+  new Paragraph({
+    spacing: { before: 300 },
+    children: [new TextRun({ text: 'Respectfully submitted,', size: 22 })],
+  }),
+
   // Disclaimer
+  new Paragraph({ spacing: { before: 400 }, children: [] }),
   new Table({
     columnWidths: [9360],
     rows: [
@@ -483,7 +486,7 @@ const children = [
         children: [
           new TableCell({
             borders,
-            shading: { fill: 'EBF5FB', type: ShadingType.CLEAR },
+            shading: { fill: 'F8F9F9', type: ShadingType.CLEAR },
             children: [
               new Paragraph({
                 spacing: { before: 100, after: 100 },
@@ -491,7 +494,7 @@ const children = [
                   new TextRun({ text: 'DISCLAIMER: ', bold: true, size: 18 }),
                   new TextRun({
                     text:
-                      'This report is generated from publicly available data on the LA County Bids Portal. Solicitation details may change. Always verify current information directly at camisvr.co.la.ca.us/lacobids before submitting bids.',
+                      'This report is generated from publicly available data published by the Los Angeles County Internal Services Department. All figures reflect the official records as of the retrieval date. Solicitation details are subject to change. Verify current information at camisvr.co.la.ca.us/lacobids.',
                     size: 18,
                     italics: true,
                   }),
@@ -526,15 +529,6 @@ const doc = new Document({
         run: { size: 32, bold: true, color: '1a5276' },
         paragraph: { spacing: { before: 300, after: 150 }, outlineLevel: 0 },
       },
-      {
-        id: 'Heading2',
-        name: 'Heading 2',
-        basedOn: 'Normal',
-        next: 'Normal',
-        quickFormat: true,
-        run: { size: 26, bold: true, color: '2d3748' },
-        paragraph: { spacing: { before: 200, after: 100 }, outlineLevel: 1 },
-      },
     ],
   },
   numbering: {
@@ -563,7 +557,7 @@ const doc = new Document({
               alignment: AlignmentType.RIGHT,
               children: [
                 new TextRun({
-                  text: 'LA County Open Solicitations',
+                  text: 'LA County Open Solicitations - Confidential',
                   italics: true,
                   size: 18,
                   color: '666666',
@@ -598,6 +592,8 @@ Packer.toBuffer(doc).then((buffer) => {
   const outPath = path.join(__dirname, 'output/LA-County-Bids-Report.docx');
   fs.writeFileSync(outPath, buffer);
   console.log(`Report saved: ${outPath}`);
+  console.log(`Addressed to: David Gillotte, President IAFF Local 1014`);
   console.log(`Total solicitations: ${data.totalBids}`);
+  console.log(`Fire Department bids: ${fireCount}`);
   console.log(`Source: ${data.source}`);
 });
