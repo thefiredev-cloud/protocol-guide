@@ -460,12 +460,12 @@ export const SkeletonSubscriptionCard = memo(function SkeletonSubscriptionCard({
       />
     </View>
   );
-}
+});
 
 /**
  * Usage progress card skeleton
  */
-export function SkeletonUsageCard({
+export const SkeletonUsageCard = memo(function SkeletonUsageCard({
   style,
   testID,
 }: {
