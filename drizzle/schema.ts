@@ -415,3 +415,22 @@ export type InsertStripeWebhookEvent = typeof stripeWebhookEvents.$inferInsert;
 
 export type PushToken = typeof pushTokens.$inferSelect;
 export type InsertPushToken = typeof pushTokens.$inferInsert;
+
+// ========================================
+// Drip Email Tracking
+// ========================================
+
+export const dripEmailsSent = mysqlTable("drip_emails_sent", {
+	id: int().autoincrement().primaryKey().notNull(),
+	userId: int().notNull(),
+	emailType: varchar({ length: 50 }).notNull(),
+	sentAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+},
+(table) => [
+	index("idx_drip_emails_user").on(table.userId),
+	index("idx_drip_emails_type").on(table.emailType),
+	index("idx_drip_emails_user_type").on(table.userId, table.emailType),
+]);
+
+export type DripEmailSent = typeof dripEmailsSent.$inferSelect;
+export type InsertDripEmailSent = typeof dripEmailsSent.$inferInsert;
