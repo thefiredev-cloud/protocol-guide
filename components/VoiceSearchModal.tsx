@@ -51,13 +51,11 @@ import {
   ERROR_MESSAGES,
   SILENCE_THRESHOLD_MS,
   MAX_RECORDING_DURATION_MS,
-} from "@/components/voice";
-import {
+
   startPulseAnimation,
   stopPulseAnimation,
   createRippleStyles,
-  RippleAnimationValues,
-} from "@/components/voice";
+  RippleAnimationValues} from "@/components/voice";
 import { useVoiceStateMachine } from "@/hooks/use-voice-state-machine";
 
 // Recording state types - proper state machine
