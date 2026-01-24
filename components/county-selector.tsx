@@ -33,6 +33,13 @@ export function CountySelector({ visible, onClose }: CountySelectorProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const { selectedCounty, setSelectedCounty } = useAppContext();
 
+  // Focus trap for accessibility (WCAG 2.4.3)
+  const { containerRef, containerProps } = useFocusTrap({
+    visible,
+    onClose,
+    allowEscapeClose: true,
+  });
+
   const { data, isLoading } = trpc.counties.list.useQuery(undefined, {
     enabled: visible,
   });
