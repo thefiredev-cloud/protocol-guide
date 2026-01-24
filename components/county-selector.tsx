@@ -129,7 +129,18 @@ export function CountySelector({ visible, onClose }: CountySelectorProps) {
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-3 border-b" style={{ borderBottomColor: colors.border }}>
           <Text className="text-xl font-bold text-foreground">Select County</Text>
-          <TouchableOpacity onPress={onClose} className="p-2">
+          <TouchableOpacity
+            onPress={onClose}
+            style={{
+              padding: 8,
+              minWidth: 48,
+              minHeight: 48,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            accessibilityLabel="Close county selector"
+            accessibilityRole="button"
+          >
             <IconSymbol name="xmark" size={24} color={colors.foreground} />
           </TouchableOpacity>
         </View>
