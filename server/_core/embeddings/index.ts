@@ -63,50 +63,6 @@ interface VoyageEmbeddingResponse {
 }
 
 /**
- * Search result type from the RPC function
- */
-export type SearchResult = {
-  id: number;
-  agency_id: number;
-  protocol_number: string;
-  protocol_title: string;
-  section: string | null;
-  content: string;
-  image_urls: string[] | null;
-  similarity: number;
-};
-
-/**
- * Enhanced search result with inheritance info
- */
-export type InheritedSearchResult = SearchResult & {
-  source_level: 'agency' | 'regional' | 'state' | 'inherited';
-  agency_name?: string;
-  inheritance_level?: number;
-};
-
-/**
- * Protocol inheritance chain entry
- */
-export type InheritanceChainEntry = {
-  level: number;
-  id: number;
-  name: string;
-  agency_type: string;
-  state_code: string;
-};
-
-/**
- * Protocol coverage by source
- */
-export type ProtocolCoverage = {
-  source_agency_id: number;
-  source_agency_name: string;
-  source_level: string;
-  protocol_count: number;
-};
-
-/**
  * Generate embedding for a single text
  * Uses LRU cache to avoid redundant API calls for identical queries
  */
