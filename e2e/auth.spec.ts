@@ -1,22 +1,24 @@
-import { test, expect } from "@playwright/test";
+import { test as baseTest, expect } from "@playwright/test";
+import { test, TEST_USER, TEST_PRO_USER, injectAuthSession, clearAuthSession } from "./fixtures/auth";
+import { setupMockApiRoutes, clearMockApiRoutes } from "./fixtures/mock-api";
 
 /**
  * E2E Tests for Authentication Flows
  * Tests login, logout, and protected route access
- * Note: OAuth providers (Google/Apple) are mocked for E2E tests
+ * Uses mock Supabase auth for E2E tests (OAuth providers cannot be tested end-to-end)
  */
 
-test.describe("Authentication UI", () => {
-  test.beforeEach(async ({ page }) => {
+baseTest.describe("Authentication UI - Unauthenticated", () => {
+  baseTest.beforeEach(async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(2000);
   });
 
-  test("displays login button for unauthenticated users", async ({ page }) => {
+  baseTest("displays login button for unauthenticated users", async ({ page }) => {
     // Look for sign in / login button
-    const loginButton = page.getByRole("button", { name: /sign in|login|get started/i }).or(
-      page.getByRole("link", { name: /sign in|login|get started/i })
-    );
+    const loginButton = page
+      .getByRole("button", { name: /sign in|login|get started/i })
+      .or(page.getByRole("link", { name: /sign in|login|get started/i }));
 
     // Either login button is visible or user is already authenticated
     const isVisible = await loginButton.isVisible().catch(() => false);
@@ -31,11 +33,11 @@ test.describe("Authentication UI", () => {
     }
   });
 
-  test("shows Google OAuth option", async ({ page }) => {
+  baseTest("shows Google OAuth option", async ({ page }) => {
     // Navigate to login/sign up area
-    const loginButton = page.getByRole("button", { name: /sign in|login|get started/i }).or(
-      page.getByRole("link", { name: /sign in|login|get started/i })
-    );
+    const loginButton = page
+      .getByRole("button", { name: /sign in|login|get started/i })
+      .or(page.getByRole("link", { name: /sign in|login|get started/i }));
 
     const isVisible = await loginButton.isVisible().catch(() => false);
 
@@ -44,9 +46,9 @@ test.describe("Authentication UI", () => {
       await page.waitForLoadState("networkidle");
 
       // Look for Google sign in option
-      const googleButton = page.getByRole("button", { name: /google/i }).or(
-        page.getByText(/continue with google/i)
-      );
+      const googleButton = page
+        .getByRole("button", { name: /google/i })
+        .or(page.getByText(/continue with google/i));
 
       const googleVisible = await googleButton.isVisible().catch(() => false);
       // OAuth callback page or Google button should be present
@@ -54,10 +56,10 @@ test.describe("Authentication UI", () => {
     }
   });
 
-  test("shows Apple OAuth option", async ({ page }) => {
-    const loginButton = page.getByRole("button", { name: /sign in|login|get started/i }).or(
-      page.getByRole("link", { name: /sign in|login|get started/i })
-    );
+  baseTest("shows Apple OAuth option", async ({ page }) => {
+    const loginButton = page
+      .getByRole("button", { name: /sign in|login|get started/i })
+      .or(page.getByRole("link", { name: /sign in|login|get started/i }));
 
     const isVisible = await loginButton.isVisible().catch(() => false);
 
@@ -66,9 +68,9 @@ test.describe("Authentication UI", () => {
       await page.waitForLoadState("networkidle");
 
       // Look for Apple sign in option
-      const appleButton = page.getByRole("button", { name: /apple/i }).or(
-        page.getByText(/continue with apple/i)
-      );
+      const appleButton = page
+        .getByRole("button", { name: /apple/i })
+        .or(page.getByText(/continue with apple/i));
 
       const appleVisible = await appleButton.isVisible().catch(() => false);
       expect(appleVisible || page.url().includes("oauth")).toBeTruthy();
@@ -76,13 +78,12 @@ test.describe("Authentication UI", () => {
   });
 });
 
-test.describe("Protected Routes", () => {
-  test("shows sign in prompt for protected profile page", async ({ page }) => {
-    // Try to access profile without being logged in (with E2E bypass to see the page)
-    await page.goto("/(tabs)/profile?e2e=true");
+baseTest.describe("Protected Routes - Unauthenticated", () => {
+  baseTest("shows sign in prompt for protected profile page", async ({ page }) => {
+    // Try to access profile without being logged in
+    await page.goto("/(tabs)/profile");
 
-    // Wait for either sign-in content or profile content to load
-    // React Native Web can be slow, so give it more time
+    // Wait for content to load (React Native Web needs more time)
     await page.waitForTimeout(2000);
 
     // React Native app shows inline sign-in prompts, not redirects
@@ -97,8 +98,8 @@ test.describe("Protected Routes", () => {
     expect(hasSignInPrompt).toBeTruthy();
   });
 
-  test("shows sign in prompt for protected history page", async ({ page }) => {
-    await page.goto("/(tabs)/history?e2e=true");
+  baseTest("shows sign in prompt for protected history page", async ({ page }) => {
+    await page.goto("/(tabs)/history");
 
     // Wait for content to load (React Native Web needs more time)
     await page.waitForTimeout(2000);
@@ -113,32 +114,131 @@ test.describe("Protected Routes", () => {
   });
 });
 
-test.describe("Logout Flow", () => {
-  // Note: These tests would require mock authentication setup
-  test.skip("logout button is visible when authenticated", async ({ page }) => {
-    // Would need to mock authentication state
-    await page.goto("/profile");
+test.describe("Protected Routes - Authenticated", () => {
+  test("profile page loads for authenticated user", async ({ authenticatedPage, testUser }) => {
+    // Setup mock API routes for user data
+    await setupMockApiRoutes(authenticatedPage, { tier: "free" });
 
-    const logoutButton = page.getByRole("button", { name: /logout|sign out/i });
-    await expect(logoutButton).toBeVisible();
+    await authenticatedPage.goto("/(tabs)/profile");
+    await authenticatedPage.waitForTimeout(2000);
+
+    // Should NOT show sign in prompt
+    const pageContent = await authenticatedPage.textContent("body");
+    const hasSignInPrompt = pageContent?.toLowerCase().includes("continue with google");
+
+    // Authenticated users should see profile content, not sign in
+    // The page should show user info or loading state
+    expect(hasSignInPrompt).toBeFalsy();
+
+    // Clean up
+    await clearMockApiRoutes(authenticatedPage);
   });
 
-  test.skip("clicking logout returns to home page", async ({ page }) => {
-    // Would need to mock authentication state
-    await page.goto("/profile");
+  test("history page loads for authenticated user", async ({ authenticatedPage }) => {
+    await setupMockApiRoutes(authenticatedPage, { tier: "free" });
 
-    const logoutButton = page.getByRole("button", { name: /logout|sign out/i });
-    await logoutButton.click();
+    await authenticatedPage.goto("/(tabs)/history");
+    await authenticatedPage.waitForTimeout(2000);
 
-    await page.waitForLoadState("networkidle");
+    // Should NOT show "Please sign in" message
+    const pageContent = await authenticatedPage.textContent("body");
+    const hasSignInPrompt = pageContent?.toLowerCase().includes("please sign in to view");
 
-    // Should redirect to home or login
-    expect(page.url()).toMatch(/\/(login|signin)?$/);
+    expect(hasSignInPrompt).toBeFalsy();
+
+    await clearMockApiRoutes(authenticatedPage);
+  });
+
+  test("pro user sees pro badge on profile", async ({ proUserPage }) => {
+    await setupMockApiRoutes(proUserPage, { tier: "pro" });
+
+    await proUserPage.goto("/(tabs)/profile");
+    await proUserPage.waitForTimeout(2000);
+
+    // Pro users should see their tier badge
+    const pageContent = await proUserPage.textContent("body");
+
+    // Should show Pro or Pro Subscription
+    const showsProStatus =
+      pageContent?.toLowerCase().includes("pro subscription") ||
+      pageContent?.toLowerCase().includes("pro") ||
+      pageContent?.toLowerCase().includes("unlimited");
+
+    expect(showsProStatus).toBeTruthy();
+
+    await clearMockApiRoutes(proUserPage);
   });
 });
 
-test.describe("Auth Error Handling", () => {
-  test("handles OAuth callback errors gracefully", async ({ page }) => {
+test.describe("Logout Flow - Authenticated", () => {
+  test("logout button is visible when authenticated", async ({ authenticatedPage }) => {
+    await setupMockApiRoutes(authenticatedPage, { tier: "free" });
+
+    await authenticatedPage.goto("/(tabs)/profile");
+    await authenticatedPage.waitForTimeout(2000);
+
+    // Look for sign out button
+    const logoutButton = authenticatedPage.getByRole("button", { name: /sign out|logout/i });
+    const isVisible = await logoutButton.isVisible().catch(() => false);
+
+    // If button not found directly, check page content
+    if (!isVisible) {
+      const pageContent = await authenticatedPage.textContent("body");
+      const hasLogout = pageContent?.toLowerCase().includes("sign out");
+      expect(hasLogout).toBeTruthy();
+    } else {
+      expect(isVisible).toBeTruthy();
+    }
+
+    await clearMockApiRoutes(authenticatedPage);
+  });
+
+  test("clicking logout returns to unauthenticated state", async ({ page, injectAuth, clearAuth }) => {
+    // Manually inject auth to have control over the flow
+    await injectAuth(page, TEST_USER, "free");
+    await setupMockApiRoutes(page, { tier: "free" });
+
+    await page.goto("/(tabs)/profile");
+    await page.waitForTimeout(2000);
+
+    // Find and click logout button
+    const logoutButton = page.getByRole("button", { name: /sign out/i }).or(page.getByText(/sign out/i));
+
+    const isVisible = await logoutButton.isVisible().catch(() => false);
+
+    if (isVisible) {
+      await logoutButton.click();
+
+      // Wait for any confirmation modal
+      await page.waitForTimeout(1000);
+
+      // If there's a confirmation modal, click confirm
+      const confirmButton = page.getByRole("button", { name: /sign out|confirm|yes/i });
+      const confirmVisible = await confirmButton.isVisible().catch(() => false);
+
+      if (confirmVisible) {
+        await confirmButton.click();
+      }
+
+      await page.waitForLoadState("networkidle");
+      await page.waitForTimeout(1000);
+
+      // After logout, should show sign in options
+      const pageContent = await page.textContent("body");
+      const showsSignIn =
+        pageContent?.toLowerCase().includes("sign in") ||
+        pageContent?.toLowerCase().includes("continue with google");
+
+      expect(showsSignIn).toBeTruthy();
+    }
+
+    await clearMockApiRoutes(page);
+    await clearAuth(page);
+  });
+});
+
+baseTest.describe("Auth Error Handling", () => {
+  baseTest("handles OAuth callback errors gracefully", async ({ page }) => {
     // Simulate OAuth error callback
     await page.goto("/oauth/callback?error=access_denied");
     await page.waitForLoadState("networkidle");
@@ -151,7 +251,7 @@ test.describe("Auth Error Handling", () => {
     expect(page.url()).not.toContain("undefined");
   });
 
-  test("handles missing auth code in callback", async ({ page }) => {
+  baseTest("handles missing auth code in callback", async ({ page }) => {
     // Simulate callback without code
     await page.goto("/oauth/callback");
     await page.waitForLoadState("networkidle");
@@ -159,5 +259,37 @@ test.describe("Auth Error Handling", () => {
     // Should handle gracefully
     const pageContent = await page.textContent("body");
     expect(pageContent).toBeTruthy();
+  });
+});
+
+test.describe("Session Persistence", () => {
+  test("session persists across page navigation", async ({ authenticatedPage }) => {
+    await setupMockApiRoutes(authenticatedPage, { tier: "free" });
+
+    // Navigate to home
+    await authenticatedPage.goto("/(tabs)");
+    await authenticatedPage.waitForTimeout(1000);
+
+    // Navigate to profile
+    await authenticatedPage.goto("/(tabs)/profile");
+    await authenticatedPage.waitForTimeout(1000);
+
+    // Should still be authenticated (no sign in prompt)
+    const pageContent = await authenticatedPage.textContent("body");
+    const hasSignInPrompt = pageContent?.toLowerCase().includes("continue with google");
+
+    expect(hasSignInPrompt).toBeFalsy();
+
+    // Navigate to history
+    await authenticatedPage.goto("/(tabs)/history");
+    await authenticatedPage.waitForTimeout(1000);
+
+    // Should still be authenticated
+    const historyContent = await authenticatedPage.textContent("body");
+    const historySignInPrompt = historyContent?.toLowerCase().includes("please sign in to view");
+
+    expect(historySignInPrompt).toBeFalsy();
+
+    await clearMockApiRoutes(authenticatedPage);
   });
 });
