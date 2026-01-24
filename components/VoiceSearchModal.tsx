@@ -401,19 +401,8 @@ export function VoiceSearchModal({
         throw new Error("No recording URI");
       }
 
-      // Convert to base64 and upload
-      const response = await fetch(uri);
-      const blob = await response.blob();
-
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const result = reader.result as string;
-          resolve(result.split(",")[1]); // Remove data URL prefix
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      // Convert to base64 and upload (cross-platform)
+      const base64 = await uriToBase64(uri);
 
       // Upload audio to server
       const { url: audioUrl } = await uploadMutation.mutateAsync({
