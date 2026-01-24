@@ -108,9 +108,13 @@ export function useAuth(options?: UseAuthOptions) {
         if (newSession) {
           setSession(newSession);
           setUser(mapSupabaseUser(newSession.user));
+          // Update token cache to prevent stale cache
+          tokenCache.updateCache(newSession);
         } else {
           setSession(null);
           setUser(null);
+          // Clear cache on logout/session end
+          clearTokenCache();
         }
         setLoading(false);
       }
