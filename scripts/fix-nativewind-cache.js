@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * Fix NativeWind cache for Netlify builds
  *
@@ -11,8 +12,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const TOP_LEVEL_CACHE = path.join(__dirname, '../node_modules/react-native-css-interop/.cache');
-const NESTED_PKG = path.join(__dirname, '../node_modules/nativewind/node_modules/react-native-css-interop');
+const ROOT_DIR = path.resolve(__dirname, '..');
+const TOP_LEVEL_CACHE = path.join(ROOT_DIR, 'node_modules/react-native-css-interop/.cache');
+const NESTED_PKG = path.join(ROOT_DIR, 'node_modules/nativewind/node_modules/react-native-css-interop');
 const NESTED_CACHE = path.join(NESTED_PKG, '.cache');
 
 console.log('[fix-nativewind-cache] Checking NativeWind cache directories...');
