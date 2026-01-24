@@ -233,24 +233,22 @@ export const protectedProcedure = csrfProtectedProcedure.use(requireUser);
 /**
  * Admin procedure with tracing and CSRF protection - requires admin role
  */
-export const adminProcedure = publicProcedure
-  .use(csrfProtection)
-  .use(
-    t.middleware(async (opts) => {
-      const { ctx, next } = opts;
+export const adminProcedure = csrfProtectedProcedure.use(
+  t.middleware(async (opts) => {
+    const { ctx, next } = opts;
 
-      if (!ctx.user || ctx.user.role !== "admin") {
-        throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });
-      }
+    if (!ctx.user || ctx.user.role !== "admin") {
+      throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });
+    }
 
-      return next({
-        ctx: {
-          ...ctx,
-          user: ctx.user,
-        },
-      });
-    }),
-  );
+    return next({
+      ctx: {
+        ...ctx,
+        user: ctx.user,
+      },
+    });
+  })
+);
 
 // Middleware that requires paid tier (pro or enterprise)
 const requirePaidTier = t.middleware(async (opts) => {
