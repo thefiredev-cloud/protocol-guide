@@ -103,7 +103,7 @@ export const codeProcedures = router({
         SELECT id FROM referral_redemptions WHERE referredUserId = ${newUserId} LIMIT 1
       `);
 
-      if ((existingRedemption[0] as any[])?.length > 0) {
+      if (existingRedemption.rows.length > 0) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You have already used a referral code",
