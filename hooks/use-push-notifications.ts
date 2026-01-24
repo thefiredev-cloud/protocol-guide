@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import type { EventSubscription } from 'expo-modules-core';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotifications } from '@/lib/notifications';
 import { trpc } from '@/lib/trpc';
 
 export function usePushNotifications() {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  const notificationListener = useRef<EventSubscription>();
+  const responseListener = useRef<EventSubscription>();
 
   const savePushToken = trpc.user.savePushToken.useMutation();
 
@@ -31,12 +32,8 @@ export function usePushNotifications() {
     );
 
     return () => {
-      if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(notificationListener.current);
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
     };
   }, []);
 
