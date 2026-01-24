@@ -202,6 +202,16 @@ function ProgressBar({ progress, label }: ProgressBarProps) {
 
 export function ReferralDashboard() {
   const [copied, setCopied] = useState(false);
+  const copyTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timer on unmount
+  React.useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
 
   // Fetch referral code
   const {
