@@ -205,10 +205,15 @@ export function InstallPrompt() {
             onPress={handleDismiss}
             style={{
               backgroundColor: '#f0f0f0',
-              padding: 12,
+              paddingVertical: 14,
+              paddingHorizontal: 12,
+              minHeight: 48,
               borderRadius: 8,
               alignItems: 'center',
+              justifyContent: 'center',
             }}
+            accessibilityLabel="Dismiss install instructions"
+            accessibilityRole="button"
           >
             <Text style={{ color: '#666', fontWeight: '600', fontSize: 16 }}>
               Got it
