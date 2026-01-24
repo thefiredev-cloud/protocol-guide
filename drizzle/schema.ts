@@ -462,3 +462,20 @@ export const dripEmailsSent = pgTable("drip_emails_sent", {
 
 export type DripEmailSent = typeof dripEmailsSent.$inferSelect;
 export type InsertDripEmailSent = typeof dripEmailsSent.$inferInsert;
+
+// Re-export shared types for convenience
+export type {
+  ContactStatus,
+  FeedbackCategory,
+  FeedbackStatus,
+  IntegrationPartner,
+  UserRole,
+  UserTier,
+  AgencyType,
+  SubscriptionTier,
+  MemberRole,
+  MemberStatus,
+  ProtocolStatus,
+  UploadStatus,
+  AccessLevel,
+} from "./shared-types";
