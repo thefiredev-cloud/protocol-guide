@@ -137,11 +137,32 @@ export async function canUserAccessState(userId: number, stateCode: string): Pro
 
 /**
  * Check if user can access a specific agency's protocols
+ * SECURITY: Validates subscription status before granting access to paid tiers
  */
 export async function canUserAccessAgency(userId: number, agencyId: number): Promise<boolean> {
   const access = await getUserAccess(userId);
 
-  // Enterprise users have full access
+  // For paid tiers, validate subscription is active BEFORE checking tier privileges
+  if (access.tier !== "free") {
+    const db = await getDb();
+    if (!db) return false;
+
+    const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (!user) return false;
+
+    // Validate subscription status and expiration
+    try {
+      const { validateSubscriptionActive } = await import("./_core/tier-validation.js");
+      await validateSubscriptionActive(user);
+    } catch (error) {
+      // Subscription invalid/expired - deny access
+      console.warn(`[SubscriptionAccess] User ${userId} has tier ${access.tier} but invalid subscription`);
+      return false;
+    }
+  }
+
+  // Now safe to check tier privileges
+  // Enterprise users have full access (only if subscription is active)
   if (access.tier === "enterprise") return true;
 
   // Check if agency is in subscribed agencies
