@@ -71,8 +71,8 @@ const tracingMiddleware = t.middleware(async (opts) => {
   const { ctx, path, type, next } = opts;
   const startTime = Date.now();
 
-  // Log procedure start
-  logProcedureStart(ctx.trace, path, type, opts.rawInput);
+  // Log procedure start (input not available in middleware pre-validation)
+  logProcedureStart(ctx.trace, path, type, undefined);
 
   try {
     const result = await next({
