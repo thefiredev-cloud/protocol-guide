@@ -4,7 +4,7 @@
 
 import { useRef } from "react";
 import { View, Text, Animated, StyleSheet, Platform } from "react-native";
-import { COLORS } from "./animation-utils";
+import { COLORS } from "./constants";
 
 interface ComparisonCardProps {
   label: string;
