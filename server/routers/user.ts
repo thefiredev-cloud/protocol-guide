@@ -122,19 +122,20 @@ export const userRouter = router({
       const userId = ctx.user.id;
 
       // Upsert - update lastUsedAt if exists, insert if new
-      const existing = await ctx.db
+      const database = await getDb();
+      const existing = await database
         .select()
         .from(pushTokens)
         .where(and(eq(pushTokens.userId, userId), eq(pushTokens.token, token)))
         .limit(1);
 
       if (existing.length > 0) {
-        await ctx.db
+        await database
           .update(pushTokens)
           .set({ lastUsedAt: sql`CURRENT_TIMESTAMP` })
           .where(eq(pushTokens.id, existing[0].id));
       } else {
-        await ctx.db.insert(pushTokens).values({ userId, token, platform });
+        await database.insert(pushTokens).values({ userId, token, platform });
       }
 
       return { success: true };
