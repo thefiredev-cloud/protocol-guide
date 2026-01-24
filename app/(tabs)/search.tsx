@@ -537,10 +537,9 @@ export default function SearchScreen() {
                   handleStateSelect(null);
                 }}
                 className="p-1 mr-1"
-                {...createButtonA11y(
-                  MEDICAL_A11Y_LABELS.filter.clear,
-                  "Remove state filter and show all states"
-                )}
+                accessibilityLabel="Clear state filter"
+                accessibilityRole="button"
+                accessibilityHint="Remove state filter and show all states"
               >
                 <IconSymbol name="xmark" size={16} color={colors.muted} />
               </TouchableOpacity>
