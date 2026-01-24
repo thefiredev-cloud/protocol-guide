@@ -129,7 +129,7 @@ export const integrationRouter = router({
 
       try {
         // Build conditions
-        const conditions = [gte(integrationLogs.createdAt, cutoffDate)];
+        const conditions = [gte(integrationLogs.createdAt, cutoffDate.toISOString())];
         if (partner) {
           conditions.push(eq(integrationLogs.partner, partner));
         }
