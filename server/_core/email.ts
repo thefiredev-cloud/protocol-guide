@@ -150,10 +150,10 @@ async function renderTemplate(template: EmailTemplate, data: Record<string, unkn
     }
 
     return await renderer(data);
-  } catch (error) {
+  } catch (_err) {
     // If templates don't exist yet, return a placeholder
     // This allows the service to be tested before templates are created
-    console.warn(`[Email] Template ${template} not found, using placeholder`);
+    console.warn(`[Email] Template ${template} not found, using placeholder`, _err);
     return `
       <html>
         <body>
