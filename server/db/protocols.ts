@@ -34,8 +34,8 @@ export async function createProtocolChunk(data: InsertProtocolChunk) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const result = await db.insert(protocolChunks).values(data);
-  return result[0].insertId;
+  const [result] = await db.insert(protocolChunks).values(data).returning({ id: protocolChunks.id });
+  return result.id;
 }
 
 /**
