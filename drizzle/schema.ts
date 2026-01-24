@@ -339,7 +339,7 @@ export const pushTokens = mysqlTable("push_tokens", {
 	token: text().notNull(),
 	platform: varchar({ length: 20 }),
 	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
-	lastUsedAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	lastUsedAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("push_tokens_user_idx").on(table.userId),
