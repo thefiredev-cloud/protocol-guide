@@ -252,10 +252,11 @@ async function startServer() {
   app.get("/api/imagetrend/launch", publicLimiter, imageTrendLaunchHandler);
   app.get("/api/imagetrend/health", publicLimiter, imageTrendHealthHandler);
 
-  // tRPC routes - search/AI procedures use stricter limits internally
+  // tRPC routes - use general public limiter
+  // Search-specific limits are enforced by publicRateLimitedProcedure in tRPC procedures
   app.use(
     "/api/trpc",
-    searchLimiter, // 30 req/min for tRPC (mostly search queries)
+    publicLimiter, // General limit for all tRPC procedures
     createExpressMiddleware({
       router: appRouter,
       createContext,
