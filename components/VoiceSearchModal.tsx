@@ -70,7 +70,9 @@ export function VoiceSearchModal({
   onTranscription,
 }: VoiceSearchModalProps) {
   const colors = useColors();
-  const [recordingState, setRecordingState] = useState<RecordingState>("idle");
+
+  // State machine hook
+  const { recordingState, stateRef, transitionTo, resetState } = useVoiceStateMachine();
 
   // Focus trap for accessibility (WCAG 2.4.3)
   const { containerRef, containerProps } = useFocusTrap({
@@ -86,24 +88,6 @@ export function VoiceSearchModal({
   const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const maxDurationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Use ref to track current state synchronously (prevents race conditions)
-  const stateRef = useRef<RecordingState>("idle");
-
-  // State machine transition function - validates transitions and prevents invalid state changes
-  const transitionTo = useCallback((newState: RecordingState): boolean => {
-    const currentState = stateRef.current;
-    const validNextStates = VALID_TRANSITIONS[currentState];
-
-    if (!validNextStates.includes(newState)) {
-      console.warn(`Invalid state transition: ${currentState} -> ${newState}`);
-      return false;
-    }
-
-    stateRef.current = newState;
-    setRecordingState(newState);
-    return true;
-  }, []);
 
   // tRPC mutations
   const uploadMutation = trpc.voice.uploadAudio.useMutation();
