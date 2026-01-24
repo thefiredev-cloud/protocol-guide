@@ -33,13 +33,6 @@ import { trpc } from "@/lib/trpc";
 import * as Haptics from "@/lib/haptics";
 import Animated, {
   useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  withSequence,
-  cancelAnimation,
-  withDelay,
-  Easing,
   FadeIn,
   FadeOut,
   SlideInDown,
@@ -52,6 +45,20 @@ import {
   MEDICAL_A11Y_LABELS,
   useFocusTrap,
 } from "@/lib/accessibility";
+import {
+  RecordingState,
+  VoiceError,
+  ERROR_MESSAGES,
+  SILENCE_THRESHOLD_MS,
+  MAX_RECORDING_DURATION_MS,
+} from "@/components/voice";
+import {
+  startPulseAnimation,
+  stopPulseAnimation,
+  createRippleStyles,
+  RippleAnimationValues,
+} from "@/components/voice";
+import { useVoiceStateMachine } from "@/hooks/use-voice-state-machine";
 
 // Recording state types - proper state machine
 type RecordingState = "idle" | "permission_required" | "recording" | "processing" | "complete" | "error";

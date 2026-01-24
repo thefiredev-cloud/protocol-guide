@@ -1,11 +1,17 @@
 /**
- * Pulsing Button - Animated CTA button with pulse ring effect
+ * PulsingButton - Animated CTA button with continuous pulse effect
  */
 
-import * as React from "react";
-import { useRef, useEffect } from "react";
-import { View, Text, Pressable, Animated, Easing, StyleSheet, Platform, ViewStyle } from "react-native";
-import { COLORS } from "./constants";
+import { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  Animated,
+  StyleSheet,
+  Platform,
+  Pressable,
+} from "react-native";
+import { COLORS } from "./animation-utils";
 
 interface PulsingButtonProps {
   onPress: () => void;
@@ -14,76 +20,140 @@ interface PulsingButtonProps {
 }
 
 export function PulsingButton({ onPress, label, isRunning }: PulsingButtonProps) {
-  const pulseScale = useRef(new Animated.Value(1)).current;
-  const pulseOpacity = useRef(new Animated.Value(0.6)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const glowAnim = useRef(new Animated.Value(0)).current;
+  const [reducedMotion, setReducedMotion] = useState(false);
 
+  // Check for reduced motion preference
   useEffect(() => {
-    if (isRunning) {
-      pulseScale.setValue(1);
-      pulseOpacity.setValue(0);
-      return;
+    if (Platform.OS === "web") {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setReducedMotion(mediaQuery.matches);
+      const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
     }
+  }, []);
 
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.parallel([
-          Animated.timing(pulseScale, {
-            toValue: 1.15,
-            duration: 1000,
-            easing: Easing.inOut(Easing.ease),
+  // Continuous pulse animation when idle
+  useEffect(() => {
+    if (!isRunning && label === "Simulate Call" && !reducedMotion) {
+      const pulseLoop = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.08,
+            duration: 1200,
             useNativeDriver: true,
           }),
-          Animated.timing(pulseOpacity, {
-            toValue: 0,
-            duration: 1000,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-        ]),
-        Animated.parallel([
-          Animated.timing(pulseScale, {
+          Animated.timing(pulseAnim, {
             toValue: 1,
-            duration: 0,
+            duration: 1200,
             useNativeDriver: true,
           }),
-          Animated.timing(pulseOpacity, {
-            toValue: 0.6,
-            duration: 0,
-            useNativeDriver: true,
-          }),
-        ]),
-      ])
-    );
+        ])
+      );
 
-    pulseAnimation.start();
-    return () => pulseAnimation.stop();
-  }, [isRunning, pulseScale, pulseOpacity]);
+      const glowLoop = Animated.loop(
+        Animated.sequence([
+          Animated.timing(glowAnim, {
+            toValue: 1,
+            duration: 1200,
+            useNativeDriver: false,
+          }),
+          Animated.timing(glowAnim, {
+            toValue: 0,
+            duration: 1200,
+            useNativeDriver: false,
+          }),
+        ])
+      );
+
+      pulseLoop.start();
+      glowLoop.start();
+
+      return () => {
+        pulseLoop.stop();
+        glowLoop.stop();
+      };
+    } else {
+      pulseAnim.setValue(1);
+      glowAnim.setValue(0);
+    }
+  }, [isRunning, label, pulseAnim, glowAnim, reducedMotion]);
+
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      friction: 5,
+      tension: 200,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      friction: 4,
+      tension: 200,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const glowOpacity = glowAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.3, 0.7],
+  });
 
   return (
-    <View style={styles.buttonContainer}>
-      {/* Pulse ring */}
+    <Pressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={isRunning}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: isRunning }}
+    >
       <Animated.View
         style={[
-          styles.pulseRing,
+          styles.buttonContainer,
           {
-            opacity: pulseOpacity,
-            transform: [{ scale: pulseScale }],
+            transform: [{ scale: Animated.multiply(pulseAnim, scaleAnim) }],
           },
         ]}
-      />
-      <Pressable
-        onPress={onPress}
-        style={({ pressed, hovered }) =>
-          [
-            styles.button,
-            pressed && styles.buttonPressed,
-            hovered && styles.buttonHovered,
-          ] as ViewStyle[]
-        }
       >
-        <Text style={styles.buttonText}>{isRunning ? "Running..." : label}</Text>
-      </Pressable>
-    </View>
+        {/* Glow effect layer */}
+        {label === "Simulate Call" && !reducedMotion && (
+          <Animated.View
+            style={[
+              styles.buttonGlow,
+              {
+                opacity: glowOpacity,
+              },
+            ]}
+          />
+        )}
+
+        <View
+          style={[
+            styles.button,
+            isRunning && styles.buttonDisabled,
+            label === "Simulate Call" && styles.buttonPrimary,
+          ]}
+        >
+          <Text
+            style={[
+              styles.buttonText,
+              isRunning && styles.buttonTextDisabled,
+              label === "Simulate Call" && styles.buttonTextPrimary,
+            ]}
+          >
+            {label}
+          </Text>
+        </View>
+      </Animated.View>
+    </Pressable>
   );
 }
 
@@ -91,7 +161,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: "relative",
   },
-  pulseRing: {
+  buttonGlow: {
     position: "absolute",
     top: -4,
     left: -4,
@@ -99,42 +169,39 @@ const styles = StyleSheet.create({
     bottom: -4,
     backgroundColor: COLORS.primaryRed,
     borderRadius: 10,
+    opacity: 0.3,
+    ...(Platform.OS === "web"
+      ? {
+          filter: "blur(8px)",
+        }
+      : {}),
   },
   button: {
-    backgroundColor: COLORS.primaryRed,
-    paddingHorizontal: 16,
+    backgroundColor: COLORS.bgSurface,
     paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 6,
-    position: "relative",
-    zIndex: 1,
-    ...(Platform.OS === "web"
-      ? {
-          transitionProperty: "transform, background-color",
-          transitionDuration: "150ms",
-        }
-      : {}),
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    minWidth: 110,
+    alignItems: "center",
   },
-  buttonHovered: {
-    backgroundColor: "#7A1C2A",
-    ...(Platform.OS === "web"
-      ? {
-          transform: [{ scale: 1.02 }],
-        }
-      : {}),
+  buttonPrimary: {
+    backgroundColor: COLORS.primaryRed,
+    borderColor: COLORS.primaryRed,
   },
-  buttonPressed: {
-    backgroundColor: "#6B1825",
-    ...(Platform.OS === "web"
-      ? {
-          transform: [{ scale: 0.98 }],
-        }
-      : {}),
+  buttonDisabled: {
+    opacity: 0.5,
   },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 14,
+    color: COLORS.textWhite,
+    fontSize: 13,
     fontWeight: "600",
   },
+  buttonTextPrimary: {
+    color: "#FFFFFF",
+  },
+  buttonTextDisabled: {
+    color: COLORS.textMuted,
+  },
 });
-
-export default PulsingButton;

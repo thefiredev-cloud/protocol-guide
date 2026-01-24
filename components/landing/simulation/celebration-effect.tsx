@@ -1,120 +1,136 @@
 /**
- * Celebration Effect - Confetti animation for simulation completion
+ * CelebrationEffect - Confetti/flash effect on simulation completion
  */
 
-import * as React from "react";
 import { useRef, useEffect } from "react";
-import { View, Animated, Easing, StyleSheet } from "react-native";
-import { COLORS, CONFETTI_COUNT } from "./constants";
+import { View, Animated, StyleSheet } from "react-native";
+import { COLORS } from "./animation-utils";
 
-// Confetti particle component
-function ConfettiParticle({ delay, startX }: { delay: number; startX: number }) {
-  const translateY = useRef(new Animated.Value(-20)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const animations = Animated.parallel([
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 800,
-          delay: 600,
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.spring(scale, {
-          toValue: 1,
-          friction: 4,
-          tension: 100,
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(translateY, {
-          toValue: 120,
-          duration: 1600,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(translateX, {
-          toValue: (Math.random() - 0.5) * 100,
-          duration: 1600,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(rotate, {
-          toValue: (Math.random() - 0.5) * 4,
-          duration: 1600,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]);
-
-    animations.start();
-  }, [delay, opacity, scale, translateY, translateX, rotate]);
-
-  const colors = [
-    COLORS.primaryRed,
-    COLORS.celebrationGold,
-    COLORS.celebrationGreen,
-    COLORS.chartYellow,
-  ];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  const size = 8 + Math.random() * 8;
-
-  return (
-    <Animated.View
-      style={{
-        position: "absolute",
-        left: startX,
-        top: 0,
-        width: size,
-        height: size,
-        borderRadius: Math.random() > 0.5 ? size / 2 : 2,
-        backgroundColor: color,
-        opacity,
-        transform: [
-          { translateY },
-          { translateX },
-          { scale },
-          {
-            rotate: rotate.interpolate({
-              inputRange: [-4, 4],
-              outputRange: ["-720deg", "720deg"],
-            }),
-          },
-        ],
-      }}
-    />
-  );
+interface CelebrationEffectProps {
+  visible: boolean;
 }
 
-// Celebration overlay component
-export function CelebrationEffect({ visible }: { visible: boolean }) {
-  if (!visible) return null;
+export function CelebrationEffect({ visible }: CelebrationEffectProps) {
+  const flashAnim = useRef(new Animated.Value(0)).current;
+  const confettiAnims = useRef(
+    Array.from({ length: 12 }, () => ({
+      translateY: new Animated.Value(0),
+      translateX: new Animated.Value(0),
+      rotate: new Animated.Value(0),
+      opacity: new Animated.Value(0),
+    }))
+  ).current;
+
+  useEffect(() => {
+    if (visible) {
+      // Flash effect
+      Animated.sequence([
+        Animated.timing(flashAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(flashAnim, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
+
+      // Confetti burst
+      const confettiAnimations = confettiAnims.map((anim, index) => {
+        const angle = (index / confettiAnims.length) * Math.PI * 2;
+        const distance = 80 + Math.random() * 40;
+
+        return Animated.parallel([
+          Animated.timing(anim.translateY, {
+            toValue: Math.sin(angle) * distance,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.translateX, {
+            toValue: Math.cos(angle) * distance,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.rotate, {
+            toValue: Math.random() * 720 - 360,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          Animated.sequence([
+            Animated.timing(anim.opacity, {
+              toValue: 1,
+              duration: 100,
+              useNativeDriver: true,
+            }),
+            Animated.delay(400),
+            Animated.timing(anim.opacity, {
+              toValue: 0,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+          ]),
+        ]);
+      });
+
+      Animated.parallel(confettiAnimations).start(() => {
+        // Reset
+        confettiAnims.forEach((anim) => {
+          anim.translateY.setValue(0);
+          anim.translateX.setValue(0);
+          anim.rotate.setValue(0);
+          anim.opacity.setValue(0);
+        });
+      });
+    }
+  }, [visible, flashAnim, confettiAnims]);
+
+  const confettiColors = [
+    COLORS.primaryRed,
+    COLORS.celebrationGreen,
+    COLORS.chartYellow,
+    "#3B82F6",
+    "#8B5CF6",
+  ];
 
   return (
     <View style={styles.celebrationContainer} pointerEvents="none">
-      {Array.from({ length: CONFETTI_COUNT }).map((_, i) => (
-        <ConfettiParticle key={i} delay={i * 50} startX={20 + (i / CONFETTI_COUNT) * 260} />
+      {/* Flash overlay */}
+      <Animated.View
+        style={[
+          styles.flashOverlay,
+          {
+            opacity: flashAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 0.3],
+            }),
+          },
+        ]}
+      />
+
+      {/* Confetti pieces */}
+      {confettiAnims.map((anim, index) => (
+        <Animated.View
+          key={index}
+          style={[
+            styles.confettiPiece,
+            {
+              backgroundColor: confettiColors[index % confettiColors.length],
+              transform: [
+                { translateY: anim.translateY },
+                { translateX: anim.translateX },
+                {
+                  rotate: anim.rotate.interpolate({
+                    inputRange: [-360, 360],
+                    outputRange: ["-360deg", "360deg"],
+                  }),
+                },
+              ],
+              opacity: anim.opacity,
+            },
+          ]}
+        />
       ))}
     </View>
   );
@@ -123,12 +139,27 @@ export function CelebrationEffect({ visible }: { visible: boolean }) {
 const styles = StyleSheet.create({
   celebrationContainer: {
     position: "absolute",
-    top: 20,
+    top: 0,
     left: 0,
     right: 0,
-    height: 150,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 10,
   },
+  flashOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: COLORS.celebrationGreen,
+    borderRadius: 12,
+  },
+  confettiPiece: {
+    position: "absolute",
+    width: 8,
+    height: 8,
+    borderRadius: 2,
+  },
 });
-
-export default CelebrationEffect;
