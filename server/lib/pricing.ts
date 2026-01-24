@@ -9,7 +9,7 @@
  */
 
 export const DEPARTMENT_PRICING = {
-  small: {
+  starter: {
     // 5-20 users - per-seat pricing
     perSeat: {
       monthly: 7.99,
@@ -18,7 +18,7 @@ export const DEPARTMENT_PRICING = {
     minSeats: 5,
     maxSeats: 20,
   },
-  large: {
+  professional: {
     // 20+ users - volume pricing
     perSeat: {
       monthly: 5.99,
@@ -34,7 +34,7 @@ export const DEPARTMENT_PRICING = {
   },
 } as const;
 
-export type SubscriptionTier = "small" | "large" | "enterprise";
+export type SubscriptionTier = "starter" | "professional" | "enterprise";
 export type BillingInterval = "monthly" | "annual";
 
 /**
