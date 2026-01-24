@@ -54,15 +54,21 @@ export const queryRouter = router({
         }
       }
 
-      // Validate query limit based on tier
-      try {
-        await validateQueryLimit(ctx.user.id);
-      } catch (error) {
-        return {
-          success: false,
-          error: error instanceof TRPCError ? error.message : "Query limit exceeded",
-          response: null,
-        };
+      // SECURITY FIX: Use atomic increment-and-check to prevent TOCTOU race condition
+      // Get tier limit for atomic check
+      const features = await db.getUserTierFeatures(ctx.user.id);
+      const tierLimit = features.dailyQueryLimit;
+
+      // Skip atomic check if unlimited (Infinity)
+      if (tierLimit !== Infinity) {
+        const { allowed, newCount } = await db.incrementAndCheckQueryLimit(ctx.user.id, tierLimit);
+        if (!allowed) {
+          return {
+            success: false,
+            error: `Daily query limit (${tierLimit}) exceeded. Current count: ${newCount}. Upgrade to Pro for unlimited queries.`,
+            response: null,
+          };
+        }
       }
 
       // Get agency name for context
