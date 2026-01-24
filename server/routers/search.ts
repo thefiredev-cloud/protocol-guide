@@ -5,7 +5,7 @@
  */
 
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
+import { publicProcedure, publicRateLimitedProcedure, router } from "../_core/trpc";
 import { semanticSearchProtocols } from "../_core/embeddings";
 import { getAgencyByCountyIdOptimized } from "../db-agency-mapping";
 import { normalizeEmsQuery } from "../_core/ems-query-normalizer";
