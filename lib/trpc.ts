@@ -29,9 +29,10 @@ export function createTRPCClient() {
         // tRPC v11: transformer MUST be inside httpBatchLink, not at root
         transformer: superjson,
         async headers() {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.access_token) {
-            return { Authorization: `Bearer ${session.access_token}` };
+          // Use token cache to prevent race conditions during concurrent requests
+          const accessToken = await getAccessToken();
+          if (accessToken) {
+            return { Authorization: `Bearer ${accessToken}` };
           }
           return {};
         },
