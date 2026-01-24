@@ -715,6 +715,6 @@ export const SkeletonStatsCard = memo(function SkeletonStatsCard({
       <Skeleton variant="text" width={90} height={12} />
     </View>
   );
-}
+});
 
 export default Skeleton;
