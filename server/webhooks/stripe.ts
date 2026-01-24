@@ -303,6 +303,19 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       subscriptionEndDate: null,
     }).where(eq(users.id, user.id));
   }
+
+  // Send cancellation email (fire and forget)
+  if (user?.email) {
+    const endDate = new Date(subscription.current_period_end * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    sendCancellationEmail(user.email, user.name || undefined, endDate).catch((err) => {
+      console.error('[Stripe] Failed to send cancellation email:', err);
+    });
+  }
 }
 
 async function handleDepartmentSubscriptionDeleted(
