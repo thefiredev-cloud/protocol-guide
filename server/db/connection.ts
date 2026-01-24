@@ -51,7 +51,7 @@ function getPoolConfig() {
     waitForConnections: true,
     enableKeepAlive: true,
     keepAliveInitialDelay: 10000, // 10s before first keepalive
-    acquireTimeout: 10000, // 10s max wait for connection
+    connectTimeout: 10000, // 10s connection timeout (replaces deprecated acquireTimeout)
     // Connection validation - ping connection before use
     connectionLimit: config.connectionLimit,
     queueLimit: config.queueLimit, // Prevent unbounded queue
