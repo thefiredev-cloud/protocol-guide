@@ -24,6 +24,8 @@ const CORS_WHITELIST = [
   "https://protocol-guide.com",
   "https://www.protocol-guide.com",
   "https://protocol-guide.netlify.app",
+  // Railway backend (allows cross-origin from frontend)
+  "https://protocol-guide-production.up.railway.app",
   // Development only
   ...(ENV.isProduction ? [] : [
     "http://localhost:8081",
