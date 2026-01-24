@@ -260,7 +260,7 @@ export default function SearchScreen() {
   };
 
   // Get color based on protocol currency
-  const getDateColor = (protocolYear: number | null, lastVerifiedAt: Date | null): string => {
+  const getDateColor = (protocolYear: number | null, lastVerifiedAt: string | null): string => {
     const currentYear = new Date().getFullYear();
     
     // Check protocol year first
