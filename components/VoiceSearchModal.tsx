@@ -292,7 +292,7 @@ export function VoiceSearchModal({
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }
     }
-  }, [clearTimers, stopPulseAnimation, transitionTo, uploadMutation, transcribeMutation, onTranscription, onClose]);
+  }, [clearTimers, animationValues, transitionTo, uploadMutation, transcribeMutation, onTranscription, onClose]);
 
   // Start recording
   const startRecording = useCallback(async () => {
