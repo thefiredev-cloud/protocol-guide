@@ -89,6 +89,9 @@ export function registerServiceWorker(): () => void {
   window.addEventListener('offline', () => {
     console.log('[SW] Gone offline');
   });
+
+  // Return cleanup function for app to call on unmount
+  return cleanupServiceWorker;
 }
 
 /**
