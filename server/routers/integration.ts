@@ -265,7 +265,7 @@ export const integrationRouter = router({
       cutoffDate.setDate(cutoffDate.getDate() - days);
 
       try {
-        const conditions = [gte(integrationLogs.createdAt, cutoffDate)];
+        const conditions = [gte(integrationLogs.createdAt, cutoffDate.toISOString())];
         if (partner) {
           conditions.push(eq(integrationLogs.partner, partner));
         }
