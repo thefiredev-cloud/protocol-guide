@@ -156,6 +156,16 @@ export function createMockUser(overrides: Record<string, unknown> = {}) {
 }
 
 /**
+ * Rate limit info interface for mock context
+ */
+export interface RateLimitInfo {
+  limit: number;
+  remaining: number;
+  reset: number;
+  retryAfter?: number;
+}
+
+/**
  * Create a complete tRPC context for testing
  * Includes properly configured request, response, trace context, and optional user
  *
@@ -167,8 +177,9 @@ export function createMockContext(options: {
   user?: ReturnType<typeof createMockUser> | null;
   requestOverrides?: Record<string, unknown>;
   traceOverrides?: Parameters<typeof createMockTraceContext>[0];
+  rateLimitInfo?: RateLimitInfo;
 } = {}) {
-  const { user = null, requestOverrides = {}, traceOverrides = {} } = options;
+  const { user = null, requestOverrides = {}, traceOverrides = {}, rateLimitInfo } = options;
 
   return {
     req: createMockRequest(requestOverrides),
@@ -179,5 +190,6 @@ export function createMockContext(options: {
       userTier: user?.tier as string,
       ...traceOverrides,
     }),
+    rateLimitInfo,
   };
 }
