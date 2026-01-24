@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 import { spacing, radii, durations, opacity, touchTargets } from "@/lib/design-tokens";
+import { useFocusTrap } from "@/lib/accessibility";
 
 export interface ModalButton {
   /** Button label text */
