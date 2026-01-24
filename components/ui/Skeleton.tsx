@@ -493,27 +493,27 @@ export const SkeletonSubscriptionCard = memo(function SkeletonSubscriptionCard({
       testID={testID}
     >
       {/* Header row */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
+      <View style={[skeletonStyles.rowAligned, skeletonStyles.marginBottomLg]}>
         <Skeleton
           variant="circle"
           width={36}
           height={36}
-          style={{ marginRight: spacing.md }}
+          style={skeletonStyles.marginRightMd}
         />
         <Skeleton variant="text" width={140} height={17} />
       </View>
 
       {/* Details rows */}
-      <View style={{ gap: spacing.sm }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={skeletonStyles.gapSm}>
+        <View style={skeletonStyles.rowSpaceBetween}>
           <Skeleton variant="text" width={60} height={14} />
           <Skeleton variant="text" width={80} height={14} />
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={skeletonStyles.rowSpaceBetween}>
           <Skeleton variant="text" width={50} height={14} />
           <Skeleton variant="text" width={70} height={14} />
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={skeletonStyles.rowSpaceBetween}>
           <Skeleton variant="text" width={55} height={14} />
           <Skeleton variant="text" width={90} height={14} />
         </View>
@@ -524,7 +524,7 @@ export const SkeletonSubscriptionCard = memo(function SkeletonSubscriptionCard({
         width="100%"
         height={44}
         borderRadius={radii.md}
-        style={{ marginTop: spacing.lg }}
+        style={skeletonStyles.marginTopLg}
       />
     </View>
   );
