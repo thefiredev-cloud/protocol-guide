@@ -5,7 +5,7 @@
  * Free users are limited to 1 county, Pro/Enterprise users have unlimited.
  */
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/hooks/use-auth";
 
