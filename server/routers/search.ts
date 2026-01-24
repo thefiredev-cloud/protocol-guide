@@ -242,7 +242,8 @@ export const searchRouter = router({
   }),
 
   // Get protocol coverage by state
-  coverageByState: publicProcedure.query(async () => {
+  // Rate limited to prevent abuse of coverage queries (expensive aggregations)
+  coverageByState: publicRateLimitedProcedure.query(async () => {
     return db.getProtocolCoverageByState();
   }),
 
