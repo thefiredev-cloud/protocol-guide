@@ -163,7 +163,18 @@ export function CountySelector({ visible, onClose }: CountySelectorProps) {
               autoCorrect={false}
             />
             {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery("")}>
+              <TouchableOpacity
+                onPress={() => setSearchQuery("")}
+                style={{
+                  minWidth: 44,
+                  minHeight: 44,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 4,
+                }}
+                accessibilityLabel="Clear search"
+                accessibilityRole="button"
+              >
                 <IconSymbol name="xmark" size={18} color={colors.muted} />
               </TouchableOpacity>
             )}
