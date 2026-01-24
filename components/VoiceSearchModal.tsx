@@ -611,11 +611,13 @@ export function VoiceSearchModal({
           onPress={onClose}
         />
 
-        {/* Content */}
+        {/* Content - Focus trap container */}
         <Animated.View
+          ref={containerRef}
           entering={SlideInDown.springify().damping(15)}
           exiting={SlideOutDown.springify().damping(15)}
           style={styles.content}
+          {...containerProps}
         >
           {/* Close button */}
           <TouchableOpacity
