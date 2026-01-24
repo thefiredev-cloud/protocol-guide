@@ -369,7 +369,7 @@ export function VoiceSearchModal({
       transitionTo("error");
       setErrorType("recording_failed");
     }
-  }, [checkPermissions, transitionTo, startPulseAnimation, resetSilenceTimeout, stopRecording]);
+  }, [checkPermissions, transitionTo, animationValues, resetSilenceTimeout, stopRecording]);
 
   // Handle tap on microphone - uses stateRef for synchronous state checking
   const handleMicPress = useCallback(() => {
