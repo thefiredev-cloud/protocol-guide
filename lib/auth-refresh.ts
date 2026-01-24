@@ -169,7 +169,7 @@ export async function forceRefresh(): Promise<boolean> {
 /**
  * Get refresh status (for debugging/monitoring)
  */
-export function getRefreshStatus(): Readonly<RefreshStatus> {
+export function getRefreshStatus() {
   return {
     ...refreshStatus,
     cacheStatus: tokenCache.getStatus()
