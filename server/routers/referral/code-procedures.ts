@@ -158,7 +158,7 @@ export const codeProcedures = router({
       SELECT code FROM referral_codes WHERE userId = ${ctx.user.id} AND isActive = true LIMIT 1
     `);
 
-    const code = (codeResult[0] as any[])?.[0]?.code || "CREW-XXXXX";
+    const code = (codeResult.rows[0] as any)?.code || "CREW-XXXXX";
     const shareUrl = `https://protocolguide.app/join?ref=${code}`;
 
     return {
