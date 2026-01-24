@@ -56,13 +56,13 @@ export function calculateDepartmentPrice(
     return pricePerSeat * seatCount;
   }
 
-  if (tier === "large") {
-    if (seatCount < DEPARTMENT_PRICING.large.minSeats || seatCount > DEPARTMENT_PRICING.large.maxSeats) {
+  if (tier === "professional") {
+    if (seatCount < DEPARTMENT_PRICING.professional.minSeats || seatCount > DEPARTMENT_PRICING.professional.maxSeats) {
       return null;
     }
     const pricePerSeat = interval === "monthly"
-      ? DEPARTMENT_PRICING.large.perSeat.monthly
-      : DEPARTMENT_PRICING.large.perSeat.annual;
+      ? DEPARTMENT_PRICING.professional.perSeat.monthly
+      : DEPARTMENT_PRICING.professional.perSeat.annual;
     return pricePerSeat * seatCount;
   }
 
@@ -84,8 +84,8 @@ export function getTierForSeatCount(seatCount: number): SubscriptionTier {
   if (seatCount <= DEPARTMENT_PRICING.starter.maxSeats) {
     return "starter";
   }
-  if (seatCount <= DEPARTMENT_PRICING.large.maxSeats) {
-    return "large";
+  if (seatCount <= DEPARTMENT_PRICING.professional.maxSeats) {
+    return "professional";
   }
   return "enterprise";
 }
@@ -138,17 +138,17 @@ export function validateSeatCount(tier: SubscriptionTier, seatCount: number): {
     }
   }
 
-  if (tier === "large") {
-    if (seatCount < DEPARTMENT_PRICING.large.minSeats) {
+  if (tier === "professional") {
+    if (seatCount < DEPARTMENT_PRICING.professional.minSeats) {
       return {
         valid: false,
-        error: `Large Department tier requires at least ${DEPARTMENT_PRICING.large.minSeats} seats. Use Small Department tier instead.`
+        error: `Large Department tier requires at least ${DEPARTMENT_PRICING.professional.minSeats} seats. Use Small Department tier instead.`
       };
     }
-    if (seatCount > DEPARTMENT_PRICING.large.maxSeats) {
+    if (seatCount > DEPARTMENT_PRICING.professional.maxSeats) {
       return {
         valid: false,
-        error: `Large Department tier supports up to ${DEPARTMENT_PRICING.large.maxSeats} seats. Please contact sales for Enterprise pricing.`
+        error: `Large Department tier supports up to ${DEPARTMENT_PRICING.professional.maxSeats} seats. Please contact sales for Enterprise pricing.`
       };
     }
   }
