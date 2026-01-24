@@ -13,6 +13,12 @@ export default defineConfig({
     // Exclude node_modules and e2e tests (run separately with Playwright)
     exclude: ["node_modules", "e2e/**"],
 
+    // Integration tests run sequentially to avoid database conflicts
+    // Unit tests can run in parallel
+    sequence: {
+      concurrent: true,
+    },
+
     // Setup files to run before tests
     setupFiles: ["./tests/setup.ts"],
 
