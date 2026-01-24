@@ -14,7 +14,7 @@ type ResponseCardProps = {
   timestamp?: Date;
 };
 
-export function ResponseCard({ text, protocolRefs, timestamp }: ResponseCardProps) {
+export const ResponseCard = memo(function ResponseCard({ text, protocolRefs, timestamp }: ResponseCardProps) {
   const colors = useColors();
   const router = useRouter();
   const [copied, setCopied] = useState(false);
@@ -22,19 +22,23 @@ export function ResponseCard({ text, protocolRefs, timestamp }: ResponseCardProp
 
   const sections = useMemo(() => parseResponse(text), [text]);
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     await Clipboard.setStringAsync(text);
     setCopied(true);
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, [text]);
 
-  const handleReportError = () => {
+  const handleReportError = useCallback(() => {
     const protocolRef = sections.protocol || protocolRefs?.[0] || "";
     router.push(`/feedback?category=error&protocolRef=${encodeURIComponent(protocolRef)}` as any);
-  };
+  }, [sections.protocol, protocolRefs, router]);
+
+  const toggleActions = useCallback(() => {
+    setShowActions(prev => !prev);
+  }, []);
 
   return (
     <Animated.View 
