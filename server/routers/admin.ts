@@ -105,9 +105,9 @@ export const adminRouter = router({
       await db.logAuditEvent({
         userId: ctx.user.id,
         action: "USER_ROLE_CHANGED",
-        targetType: "user",
-        targetId: String(input.userId),
-        details: {
+        entityType: "user",
+        entityId: String(input.userId),
+        metadata: {
           targetEmail: targetUser.email,
           oldRole,
           newRole: input.role,
