@@ -8,6 +8,8 @@ import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../_core/trpc";
 import * as db from "../db";
 import * as dbUserCounties from "../db-user-counties";
+import { pushTokens } from "../../drizzle/schema";
+import { eq, and, sql } from "drizzle-orm";
 
 export const userRouter = router({
   usage: protectedProcedure.query(async ({ ctx }) => {
