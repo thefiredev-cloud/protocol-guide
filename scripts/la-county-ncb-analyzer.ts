@@ -165,18 +165,27 @@ async function fetchNCBDataFromAPI(): Promise<NCBContract[]> {
       throw new Error('Invalid API response format');
     }
 
-    return data.result.records.map((row: any) => ({
-      ncbNumber: String(row.ncb_number || row.NCB_NUMBER || ''),
-      contractNumber: String(row.contract_number || row.CONTRACT_NUMBER || ''),
-      department: String(row.department || row.DEPARTMENT || row.agency || ''),
-      vendor: String(row.vendor || row.VENDOR || row.contractor || ''),
-      commodityDescription: String(row.commodity_description || row.description || ''),
-      dollarAmount: parseFloat(row.dollar_amount || row.amount || row.value || 0) || 0,
-      startDate: String(row.start_date || row.START_DATE || ''),
-      endDate: String(row.end_date || row.END_DATE || ''),
-      justification: String(row.justification || row.ncb_justification || ''),
-      ncbType: String(row.ncb_type || row.type || ''),
-    }));
+    return data.result.records.map((row: Record<string, unknown>) => {
+      // Parse dollar amounts - handle string formatted numbers
+      const originalAmount = String(row['Total Original Contract Amount'] || '0')
+        .replace(/[$,]/g, '');
+      const amendedAmount = String(row['Amended Contract Amount'] || '0')
+        .replace(/[$,]/g, '');
+      const dollarAmount = parseFloat(amendedAmount) || parseFloat(originalAmount) || 0;
+
+      return {
+        ncbNumber: String(row['Number'] || ''),
+        contractNumber: String(row['Number'] || ''),
+        department: String(row['Requesting Organization'] || ''),
+        vendor: String(row['Contractor or Commodity'] || ''),
+        commodityDescription: String(row['Contractor or Commodity'] || ''),
+        dollarAmount,
+        startDate: String(row['Approved on'] || ''),
+        endDate: '',
+        justification: String(row['Acquisition Type'] || ''),
+        ncbType: String(row['Type'] || ''),
+      };
+    });
   } catch (error) {
     console.error('API fetch failed:', error);
     return [];

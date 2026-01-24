@@ -1,0 +1,270 @@
+[
+  {
+    "type": "REPEAT_VENDOR",
+    "severity": "critical",
+    "description": " received 904 no-bid contracts totaling $0.00M",
+    "contracts": [
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      }
+    ],
+    "totalAmount": 0,
+    "metadata": {
+      "vendorName": "",
+      "contractCount": 904
+    }
+  },
+  {
+    "type": "VENDOR_DEPARTMENT_PATTERN",
+    "severity": "high",
+    "description": " has 904 no-bid contracts with ",
+    "contracts": [
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      }
+    ],
+    "totalAmount": 0
+  },
+  {
+    "type": "VAGUE_JUSTIFICATIONS",
+    "severity": "medium",
+    "description": "904 contracts have minimal or boilerplate justifications",
+    "contracts": [
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      },
+      {
+        "ncbNumber": "",
+        "contractNumber": "",
+        "department": "",
+        "vendor": "",
+        "commodityDescription": "",
+        "dollarAmount": 0,
+        "startDate": "",
+        "endDate": "",
+        "justification": "",
+        "ncbType": ""
+      }
+    ],
+    "totalAmount": 0
+  }
+]
