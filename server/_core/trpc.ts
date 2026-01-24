@@ -14,6 +14,8 @@ import {
   setRateLimitHeaders,
   getNextMidnightUTC,
 } from "./types/rateLimit";
+import crypto from "crypto";
+import { logger } from "./logger";
 
 // Re-export rate limit types and utilities for convenience
 export { RATE_LIMIT_HEADERS, setRateLimitHeaders, type RateLimitInfo } from "./types/rateLimit";
