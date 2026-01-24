@@ -6,6 +6,7 @@
 import { eq, and, sql, gt } from "drizzle-orm";
 import { getDb } from "./db";
 import { users, userStates, userAgencies } from "../drizzle/schema";
+import { validateTierValue } from "./_core/tier-validation";
 
 // Tier configuration with state/agency limits
 export const TIER_ACCESS_CONFIG = {
