@@ -3,11 +3,29 @@
  * Handles service worker registration, updates, and offline capabilities
  */
 
-export function registerServiceWorker(): void {
-  if (typeof window === 'undefined') return;
+// Module-level storage for cleanup
+let updateIntervalId: NodeJS.Timeout | null = null;
+let autoUpdateTimerId: NodeJS.Timeout | null = null;
+
+/**
+ * Cleanup function to clear all timers - call this before app unmount if needed
+ */
+export function cleanupServiceWorker(): void {
+  if (updateIntervalId) {
+    clearInterval(updateIntervalId);
+    updateIntervalId = null;
+  }
+  if (autoUpdateTimerId) {
+    clearTimeout(autoUpdateTimerId);
+    autoUpdateTimerId = null;
+  }
+}
+
+export function registerServiceWorker(): () => void {
+  if (typeof window === 'undefined') return () => {};
   if (!('serviceWorker' in navigator)) {
     console.log('[SW] Service workers not supported');
-    return;
+    return () => {};
   }
 
   window.addEventListener('load', async () => {
@@ -19,14 +37,9 @@ export function registerServiceWorker(): void {
       console.log('[SW] Service worker registered:', registration.scope);
 
       // Check for updates periodically
-      const updateInterval = setInterval(() => {
+      updateIntervalId = setInterval(() => {
         registration.update();
       }, 60 * 60 * 1000); // Check every hour
-
-      // Cleanup function (though service worker registration persists across page loads)
-      window.addEventListener('beforeunload', () => {
-        clearInterval(updateInterval);
-      });
 
       // Handle updates
       registration.addEventListener('updatefound', () => {
