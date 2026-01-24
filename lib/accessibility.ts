@@ -471,7 +471,7 @@ export function useFocusTrap(options: UseFocusTrapOptions): UseFocusTrapReturn {
 
     return () => {
       // Restore focus before removing listeners (prevents race condition)
-      if (previousActiveElementRef.current && typeof previousActiveElementRef.current.focus === 'function') {
+      if (previousActiveElementRef.current instanceof HTMLElement) {
         try {
           previousActiveElementRef.current.focus();
         } catch (e) {
