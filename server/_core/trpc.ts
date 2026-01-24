@@ -274,9 +274,9 @@ const requirePaidTier = t.middleware(async (opts) => {
 });
 
 /**
- * Paid procedure with tracing - requires Pro or Enterprise tier
+ * Paid procedure with tracing and CSRF protection - requires Pro or Enterprise tier
  */
-export const paidProcedure = publicProcedure.use(requirePaidTier);
+export const paidProcedure = publicProcedure.use(csrfProtection).use(requirePaidTier);
 
 // ============================================================================
 // RATE LIMIT MIDDLEWARE
