@@ -37,8 +37,15 @@ export function ThemeToggle({ showLabels = false, compact = false }: ThemeToggle
     return (
       <TouchableOpacity
         onPress={toggleTheme}
-        className="p-2 rounded-lg"
-        style={{ backgroundColor: colors.surface }}
+        style={{
+          backgroundColor: colors.surface,
+          padding: 12,
+          borderRadius: 8,
+          minWidth: 48,
+          minHeight: 48,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
         accessibilityLabel={`Theme: ${currentOption.label}. Tap to change.`}
         accessibilityRole="button"
       >
