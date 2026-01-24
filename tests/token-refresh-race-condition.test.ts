@@ -279,23 +279,27 @@ describe("Token Refresh Race Condition Fixes", () => {
       },
     };
 
-    vi.mocked(supabase.auth.refreshSession).mockImplementation(
-      async () =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({ data: { session: mockSession, user: mockSession.user }, error: null });
-          }, 200);
-        })
-    );
+    let resolveRefresh: any;
+    const refreshPromise = new Promise<any>((resolve) => {
+      resolveRefresh = resolve;
+    });
 
-    // Start multiple refreshes simultaneously
+    vi.mocked(supabase.auth.refreshSession).mockImplementation(() => refreshPromise);
+
+    // Start multiple refreshes simultaneously (before promise resolves)
     const promise1 = tokenCache.refreshSession();
     const promise2 = tokenCache.refreshSession();
     const promise3 = tokenCache.refreshSession();
 
-    // All should be the same promise reference
-    expect(promise1).toBe(promise2);
-    expect(promise2).toBe(promise3);
+    // All should be the same promise reference (checked synchronously)
+    const promise1Ref = promise1.toString();
+    const promise2Ref = promise2.toString();
+    const promise3Ref = promise3.toString();
+    expect(promise1Ref).toBe(promise2Ref);
+    expect(promise2Ref).toBe(promise3Ref);
+
+    // Now resolve the refresh
+    resolveRefresh({ data: { session: mockSession, user: mockSession.user }, error: null });
 
     const results = await Promise.all([promise1, promise2, promise3]);
 
