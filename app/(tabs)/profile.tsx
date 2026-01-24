@@ -467,7 +467,7 @@ export default function ProfileScreen() {
           </View>
           {recentQueries && recentQueries.length > 0 ? (
             <View style={styles.queriesList}>
-              {recentQueries.slice(0, 3).map((query: { id: number; queryText: string; createdAt: Date }, index: number) => (
+              {recentQueries.slice(0, 3).map((query: { id: number; queryText: string; createdAt: string }, index: number) => (
                 <View
                   key={query.id || index}
                   style={[styles.queryItem, index < 2 && { borderBottomWidth: 1, borderBottomColor: colors.border }]}
