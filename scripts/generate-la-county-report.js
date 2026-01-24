@@ -20,7 +20,6 @@ const {
   AlignmentType,
   HeadingLevel,
   BorderStyle,
-  WidthType,
   ShadingType,
   PageNumber,
   PageBreak,
@@ -28,6 +27,7 @@ const {
 } = require('docx');
 const fs = require('fs');
 const path = require('path');
+const scriptDir = __dirname;
 
 // Load data
 const dataPath = path.join(__dirname, 'output/la-county-bids-data.json');
