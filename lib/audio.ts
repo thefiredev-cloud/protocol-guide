@@ -9,6 +9,8 @@
  * This base file re-exports from the web version for TypeScript type checking.
  */
 
+import { Audio } from "./audio.web";
+
 export {
   Audio,
   AudioModule,
@@ -19,5 +21,3 @@ export {
 } from "./audio.web";
 
 export default Audio;
-
-import { Audio } from "./audio.web";
