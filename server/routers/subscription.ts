@@ -5,6 +5,7 @@
 
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
+import { getUserTierInfo } from "../_core/tier-validation";
 import * as db from "../db";
 import * as stripe from "../stripe";
 
