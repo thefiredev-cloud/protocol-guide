@@ -152,6 +152,16 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   // Update user tier to pro
   await db.updateUserTier(parseInt(userId), "pro");
+
+  // Get user details for email
+  const user = await db.getUserById(parseInt(userId));
+
+  // Send tier upgrade email (fire and forget)
+  if (user?.email) {
+    sendTierUpgradeEmail(user.email, user.name || undefined, 'pro').catch((err) => {
+      console.error('[Stripe] Failed to send tier upgrade email:', err);
+    });
+  }
 }
 
 async function handleDepartmentCheckoutCompleted(
