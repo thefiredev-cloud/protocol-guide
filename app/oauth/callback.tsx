@@ -94,6 +94,12 @@ export default function OAuthCallback() {
     };
 
     handleCallback();
+
+    // Cleanup all timers on unmount
+    return () => {
+      timersRef.current.forEach(timer => clearTimeout(timer));
+      timersRef.current = [];
+    };
   }, [router]);
 
   return (
