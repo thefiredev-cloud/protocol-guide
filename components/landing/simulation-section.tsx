@@ -211,8 +211,8 @@ export function SimulationSection() {
       }).start();
 
       // Hide celebration after delay
-      const celebrationTimer = setTimeout(() => setShowCelebration(false), 2500);
-      return () => clearTimeout(celebrationTimer);
+      if (celebrationTimerRef.current) clearTimeout(celebrationTimerRef.current);
+      celebrationTimerRef.current = setTimeout(() => setShowCelebration(false), 2500);
     });
   }, [state, resetAnimation, protocolWidth, protocolBounce, manualWidth, completeBadgeScale, protocolFoundScale, checkmarkRotate, simulationTimer]);
 
