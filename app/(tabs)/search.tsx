@@ -43,6 +43,7 @@ import { useSearchAnnouncements } from "@/hooks/use-search-announcements";
 export default function SearchScreen() {
   const colors = useColors();
   const params = useLocalSearchParams<{ stateFilter?: string }>();
+  const { announceSearchStart, announceSearchResults, announceSearchError } = useSearchAnnouncements();
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [selectedProtocol, setSelectedProtocol] = useState<SearchResult | null>(null);
