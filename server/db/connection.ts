@@ -1,41 +1,36 @@
 /**
- * Database connection management
+ * Database connection management (PostgreSQL)
  * Handles lazy connection initialization with pooling for optimal performance
  *
  * Pool Configuration Best Practices:
- * - connectionLimit: Based on environment (dev: 10, prod: 20)
- * - queueLimit: Prevents memory exhaustion from unbounded queue
- * - acquireTimeout: Prevents indefinite waiting for connections
+ * - max: Based on environment (dev: 10, prod: 20)
  * - Connection validation ensures healthy connections
  * - Idle timeout releases unused connections
  */
 
-import mysql from 'mysql2/promise';
-import { drizzle } from 'drizzle-orm/mysql2';
+import { Pool, PoolClient } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 
-let _pool: mysql.Pool | null = null;
+let _pool: Pool | null = null;
 let _db: ReturnType<typeof drizzle> | null = null;
 let _poolPromise: Promise<void> | null = null; // Mutex to prevent race conditions
 
 // Pool configuration based on environment
 const POOL_CONFIG = {
   development: {
-    connectionLimit: 10,
-    queueLimit: 20,
-    maxIdle: 5,
-    idleTimeout: 30000, // 30s idle timeout
+    max: 10,
+    idleTimeoutMillis: 30000, // 30s idle timeout
+    connectionTimeoutMillis: 10000, // 10s connection timeout
   },
   production: {
-    connectionLimit: 20,
-    queueLimit: 50,
-    maxIdle: 10,
-    idleTimeout: 45000, // 45s idle timeout
+    max: 20,
+    idleTimeoutMillis: 45000, // 45s idle timeout
+    connectionTimeoutMillis: 10000, // 10s connection timeout
   },
   test: {
-    connectionLimit: 5,
-    queueLimit: 10,
-    maxIdle: 2,
-    idleTimeout: 20000, // 20s idle timeout
+    max: 5,
+    idleTimeoutMillis: 20000, // 20s idle timeout
+    connectionTimeoutMillis: 10000, // 10s connection timeout
   },
 };
 
@@ -48,13 +43,7 @@ function getPoolConfig() {
 
   return {
     ...config,
-    waitForConnections: true,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 10000, // 10s before first keepalive
-    connectTimeout: 10000, // 10s connection timeout (replaces deprecated acquireTimeout)
-    // Connection validation - ping connection before use
-    connectionLimit: config.connectionLimit,
-    queueLimit: config.queueLimit, // Prevent unbounded queue
+    allowExitOnIdle: false,
   };
 }
 
@@ -89,43 +78,46 @@ export async function getDb() {
     try {
       const poolConfig = getPoolConfig();
 
-      _pool = mysql.createPool({
-        uri: process.env.DATABASE_URL,
+      _pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
         ...poolConfig,
       });
 
       // Test connection on pool creation
+      let client: PoolClient | null = null;
       try {
-        const connection = await _pool.getConnection();
-        await connection.ping();
-        connection.release();
-        console.log(`[Database] Connection pool initialized (limit: ${poolConfig.connectionLimit}, queue: ${poolConfig.queueLimit})`);
+        client = await _pool.connect();
+        await client.query('SELECT 1');
+        console.log(`[Database] Connection pool initialized (max: ${poolConfig.max})`);
       } catch (pingError) {
         console.error("[Database] Initial connection test failed:", pingError);
         await _pool.end();
         _pool = null;
         _poolPromise = null; // Allow retry on failure
         throw new Error("Database connection test failed");
+      } finally {
+        if (client) {
+          client.release();
+        }
       }
 
       _db = drizzle(_pool);
 
       // Set up pool event handlers for monitoring
+      _pool.on('error', (err) => {
+        console.error('[Database] Unexpected pool error:', err);
+      });
+
+      _pool.on('connect', () => {
+        // New connection created (for monitoring)
+      });
+
       _pool.on('acquire', () => {
         // Connection acquired from pool (for monitoring)
       });
 
-      _pool.on('connection', () => {
-        // New connection created (for monitoring)
-      });
-
-      _pool.on('enqueue', () => {
-        // Connection request queued (for monitoring pool saturation)
-        console.warn("[Database] Connection request queued - pool may be saturated");
-      });
-
-      _pool.on('release', () => {
-        // Connection released back to pool (for monitoring)
+      _pool.on('remove', () => {
+        // Connection removed from pool (for monitoring)
       });
 
     } catch (error) {
@@ -147,7 +139,7 @@ export async function getDb() {
  * Get the raw connection pool for direct access
  * Use with caution - prefer using getDb() for drizzle operations
  */
-export async function getPool(): Promise<mysql.Pool> {
+export async function getPool(): Promise<Pool> {
   if (!_pool) {
     await getDb(); // Initialize pool
   }
