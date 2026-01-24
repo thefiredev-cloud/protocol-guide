@@ -2,7 +2,7 @@ import { mysqlTable, mysqlSchema, AnyMySqlColumn, int, varchar, text, timestamp,
 import { sql } from "drizzle-orm"
 
 export const bookmarks = mysqlTable("bookmarks", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	protocolNumber: varchar({ length: 50 }).notNull(),
 	protocolTitle: varchar({ length: 255 }).notNull(),
@@ -14,7 +14,7 @@ export const bookmarks = mysqlTable("bookmarks", {
 });
 
 export const contactSubmissions = mysqlTable("contact_submissions", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	name: varchar({ length: 255 }).notNull(),
 	email: varchar({ length: 320 }).notNull(),
 	message: text().notNull(),
@@ -23,7 +23,7 @@ export const contactSubmissions = mysqlTable("contact_submissions", {
 });
 
 export const counties = mysqlTable("counties", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	name: varchar({ length: 255 }).notNull(),
 	state: varchar({ length: 64 }).notNull(),
 	usesStateProtocols: tinyint().notNull(),
@@ -35,7 +35,7 @@ export const counties = mysqlTable("counties", {
 ]);
 
 export const feedback = mysqlTable("feedback", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	category: mysqlEnum(['error','suggestion','general']).notNull(),
 	protocolRef: varchar({ length: 255 }),
@@ -61,7 +61,7 @@ export const feedback = mysqlTable("feedback", {
  * See migration: 0012_remove_phi_from_integration_logs.sql
  */
 export const integrationLogs = mysqlTable("integration_logs", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	partner: mysqlEnum(['imagetrend','esos','zoll','emscloud','none']).notNull(),
 	agencyId: varchar({ length: 100 }),
 	agencyName: varchar({ length: 255 }),
@@ -80,7 +80,7 @@ export const integrationLogs = mysqlTable("integration_logs", {
 ]);
 
 export const protocolChunks = mysqlTable("protocolChunks", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	countyId: int().notNull(),
 	protocolNumber: varchar({ length: 50 }).notNull(),
 	protocolTitle: varchar({ length: 255 }).notNull(),
@@ -100,7 +100,7 @@ export const protocolChunks = mysqlTable("protocolChunks", {
 ]);
 
 export const queries = mysqlTable("queries", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	countyId: int().notNull(),
 	queryText: text().notNull(),
@@ -110,7 +110,7 @@ export const queries = mysqlTable("queries", {
 });
 
 export const users = mysqlTable("users", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	openId: varchar({ length: 64 }).notNull(),
 	name: text(),
 	email: varchar({ length: 320 }),
@@ -142,7 +142,7 @@ export const users = mysqlTable("users", {
 // ========================================
 
 export const auditLogs = mysqlTable("audit_logs", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int(),
 	action: varchar({ length: 50 }).notNull(),
 	entityType: varchar({ length: 50 }),
@@ -159,7 +159,7 @@ export const auditLogs = mysqlTable("audit_logs", {
 ]);
 
 export const userAuthProviders = mysqlTable("user_auth_providers", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	provider: varchar({ length: 50 }).notNull(),
 	providerUserId: varchar({ length: 255 }).notNull(),
@@ -175,7 +175,7 @@ export const userAuthProviders = mysqlTable("user_auth_providers", {
 ]);
 
 export const agencies = mysqlTable("agencies", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	name: varchar({ length: 255 }).notNull(),
 	slug: varchar({ length: 100 }).notNull(),
 	state: varchar({ length: 2 }),
@@ -191,7 +191,7 @@ export const agencies = mysqlTable("agencies", {
 ]);
 
 export const agencyMembers = mysqlTable("agency_members", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	agencyId: int().notNull(),
 	userId: int().notNull(),
 	role: varchar({ length: 50 }).notNull().default('member'),
@@ -206,7 +206,7 @@ export const agencyMembers = mysqlTable("agency_members", {
 ]);
 
 export const protocolVersions = mysqlTable("protocol_versions", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	agencyId: int().notNull(),
 	version: varchar({ length: 50 }).notNull(),
 	status: varchar({ length: 20 }).notNull().default('draft'),
@@ -222,7 +222,7 @@ export const protocolVersions = mysqlTable("protocol_versions", {
 ]);
 
 export const protocolUploads = mysqlTable("protocol_uploads", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	versionId: int().notNull(),
 	fileName: varchar({ length: 255 }).notNull(),
 	fileUrl: text().notNull(),
@@ -237,7 +237,7 @@ export const protocolUploads = mysqlTable("protocol_uploads", {
 ]);
 
 export const userCounties = mysqlTable("user_counties", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	countyId: int().notNull(),
 	isPrimary: tinyint().default(0),
@@ -249,7 +249,7 @@ export const userCounties = mysqlTable("user_counties", {
 ]);
 
 export const searchHistory = mysqlTable("search_history", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	countyId: int(),
 	searchQuery: text().notNull(),
@@ -262,7 +262,7 @@ export const searchHistory = mysqlTable("search_history", {
 ]);
 
 export const stripeWebhookEvents = mysqlTable("stripe_webhook_events", {
-	id: int().autoincrement().notNull(),
+	id: int().autoincrement().primaryKey().notNull(),
 	eventId: varchar({ length: 255 }).notNull(),
 	eventType: varchar({ length: 100 }).notNull(),
 	payload: json(),
