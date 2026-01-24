@@ -31,7 +31,7 @@ CREATE INDEX idx_audit_action ON audit_logs(action);
 CREATE INDEX idx_audit_user_created ON audit_logs(userId, createdAt DESC);
 
 -- Index for finding actions on specific entity types
-CREATE INDEX idx_audit_target ON audit_logs(targetType, targetId);
+CREATE INDEX idx_audit_target ON audit_logs(entityType, entityId);
 
 -- ============================================
 -- USER COUNTIES TABLE INDEXES
