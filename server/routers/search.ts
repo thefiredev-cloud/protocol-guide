@@ -342,7 +342,7 @@ export const searchRouter = router({
           agencyId: supabaseAgencyId,
           agencyName,
           stateCode,
-          limit: input.limit,
+          limit: effectiveLimit,
         },
         async (params) => {
           const searchResults = await semanticSearchProtocols({
