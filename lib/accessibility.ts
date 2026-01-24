@@ -326,6 +326,28 @@ export class FocusManager {
 }
 
 /**
+ * Comprehensive focusable element selector (WCAG 2.1)
+ * Includes all interactive elements that can receive keyboard focus
+ */
+const FOCUSABLE_SELECTOR = [
+  'button:not([disabled])',
+  '[href]',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+  '[contenteditable="true"]',
+  'audio[controls]',
+  'video[controls]',
+  'details',
+  'summary',
+  '[role="button"]:not([disabled])',
+  '[role="link"]',
+  '[role="menuitem"]',
+  '[role="tab"]',
+].join(', ');
+
+/**
  * Focus trap hook for modals (WCAG 2.4.3)
  *
  * Traps keyboard focus within a modal when visible.
