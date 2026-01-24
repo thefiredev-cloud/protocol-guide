@@ -37,7 +37,9 @@ const config: ExpoConfig = {
   extra: {
     eas: {
       projectId: "9ab928c4-ba00-4c6e-affc-0a827b869942"
-    }
+    },
+    supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
+    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY,
   },
 
   // Update configuration for OTA updates
