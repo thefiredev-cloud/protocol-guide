@@ -288,12 +288,12 @@ export const SkeletonListItem = memo(function SkeletonListItem({
       </View>
     </View>
   );
-}
+});
 
 /**
  * Protocol card skeleton for search results
  */
-export function SkeletonProtocolCard({
+export const SkeletonProtocolCard = memo(function SkeletonProtocolCard({
   style,
   testID,
 }: {
