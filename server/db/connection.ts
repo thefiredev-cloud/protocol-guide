@@ -81,6 +81,8 @@ export async function getDb() {
       _pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         ...poolConfig,
+        // Force IPv4 - Railway containers don't support IPv6 egress
+        family: 4,
       });
 
       // Test connection on pool creation
