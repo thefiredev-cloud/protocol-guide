@@ -179,9 +179,13 @@ export function createRedisRateLimiter(config: EnhancedRateLimitConfig) {
 
       next();
     } catch (error) {
-      // Log error but don't block request
-      logger.error({ error }, "Rate limiter error");
-      next();
+      // SECURITY: Fail secure - reject requests when rate limiter fails
+      logger.error({ error }, "Rate limiter error - failing secure");
+      res.status(503).json({
+        error: "SERVICE_UNAVAILABLE",
+        message: "Rate limiting service unavailable. Please try again later.",
+      });
+      return;
     }
   };
 }
