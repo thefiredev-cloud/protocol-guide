@@ -511,12 +511,12 @@ export const SkeletonUsageCard = memo(function SkeletonUsageCard({
       <Skeleton variant="text" width={160} height={14} />
     </View>
   );
-}
+});
 
 /**
  * Query history item skeleton
  */
-export function SkeletonQueryItem({
+export const SkeletonQueryItem = memo(function SkeletonQueryItem({
   style,
   testID,
 }: {
