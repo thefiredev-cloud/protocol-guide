@@ -163,10 +163,15 @@ export function InstallPrompt() {
             style={{
               flex: 1,
               backgroundColor: '#C41E3A',
-              padding: 12,
+              paddingVertical: 14,
+              paddingHorizontal: 12,
+              minHeight: 48,
               borderRadius: 8,
               alignItems: 'center',
+              justifyContent: 'center',
             }}
+            accessibilityLabel="Install Protocol Guide app"
+            accessibilityRole="button"
           >
             <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>
               Install
@@ -177,10 +182,15 @@ export function InstallPrompt() {
             style={{
               flex: 1,
               backgroundColor: '#f0f0f0',
-              padding: 12,
+              paddingVertical: 14,
+              paddingHorizontal: 12,
+              minHeight: 48,
               borderRadius: 8,
               alignItems: 'center',
+              justifyContent: 'center',
             }}
+            accessibilityLabel="Dismiss install prompt"
+            accessibilityRole="button"
           >
             <Text style={{ color: '#666', fontWeight: '600', fontSize: 16 }}>
               Not Now
