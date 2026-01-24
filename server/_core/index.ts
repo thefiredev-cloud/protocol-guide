@@ -94,20 +94,75 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // Security headers middleware
+  // Security headers middleware - comprehensive protection
   app.use(helmet({
+    // Content Security Policy - prevents XSS, injection attacks
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"], // Required for React
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https:"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for React hydration
+          ENV.isProduction ? "" : "'unsafe-eval'", // Only in development
+        ].filter(Boolean),
+        styleSrc: ["'self'", "'unsafe-inline'"], // Required for styled-components
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        fontSrc: ["'self'", "data:", "https:"],
+        connectSrc: [
+          "'self'",
+          "https://protocol-guide.com",
+          "https://www.protocol-guide.com",
+          "https://protocol-guide.netlify.app",
+          "https://*.supabase.co", // Supabase API
+          ...(ENV.isProduction ? [] : ["http://localhost:*", "ws://localhost:*"]),
+        ],
+        frameSrc: ["'none'"], // Prevent embedding in iframes
+        objectSrc: ["'none'"], // Prevent Flash/Java/etc plugins
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"], // Prevent site from being framed (redundant with X-Frame-Options)
+        upgradeInsecureRequests: ENV.isProduction ? [] : null, // Force HTTPS in production
       },
     },
+    // Strict-Transport-Security - force HTTPS for 1 year
     hsts: {
-      maxAge: 31536000,
+      maxAge: 31536000,      // 1 year in seconds
       includeSubDomains: true,
-      preload: true,
+      preload: true,          // Submit to browser HSTS preload list
+    },
+    // X-Frame-Options - prevent clickjacking attacks
+    frameguard: {
+      action: "deny", // Don't allow ANY framing
+    },
+    // X-Content-Type-Options - prevent MIME sniffing
+    noSniff: true,
+    // X-DNS-Prefetch-Control - control DNS prefetching
+    dnsPrefetchControl: {
+      allow: false,
+    },
+    // Referrer-Policy - control referrer information leakage
+    referrerPolicy: {
+      policy: "strict-origin-when-cross-origin",
+    },
+    // Permissions-Policy - control browser features (replaces Feature-Policy)
+    permissionsPolicy: {
+      features: {
+        camera: ["'none'"],
+        microphone: ["'none'"],
+        geolocation: ["'self'"],
+        payment: ["'none'"],
+        usb: ["'none'"],
+        magnetometer: ["'none'"],
+        gyroscope: ["'none'"],
+        accelerometer: ["'none'"],
+      },
+    },
+    // X-Powered-By - hide Express framework (already done by helmet by default)
+    hidePoweredBy: true,
+    // Expect-CT - Certificate Transparency (deprecated but still useful)
+    expectCt: {
+      enforce: true,
+      maxAge: 86400, // 24 hours
     },
   }));
 
