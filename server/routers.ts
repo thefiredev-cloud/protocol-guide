@@ -52,6 +52,7 @@ export const appRouter = router({
   agencyAdmin: agencyAdminRouter,
   integration: integrationRouter,
   referral: referralRouter,
+  jobs: jobsRouter,
 });
 
 export type AppRouter = typeof appRouter;
