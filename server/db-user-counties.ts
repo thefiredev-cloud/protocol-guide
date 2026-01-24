@@ -379,7 +379,7 @@ export async function addSearchHistory(
     searchQuery,
     countyId: countyId ?? null,
     resultsCount: resultsCount ?? null,
-  }).$returningId();
+  }).returning({ id: searchHistory.id });
 
   return { success: true, id: result.id };
 }
