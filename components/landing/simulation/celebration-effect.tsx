@@ -4,7 +4,7 @@
 
 import { useRef, useEffect } from "react";
 import { View, Animated, StyleSheet } from "react-native";
-import { COLORS } from "./animation-utils";
+import { COLORS } from "./constants";
 
 interface CelebrationEffectProps {
   visible: boolean;
