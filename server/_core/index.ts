@@ -1,5 +1,4 @@
 import dns from 'dns';
-dns.setDefaultResultOrder('ipv4first');
 
 import "dotenv/config";
 import express from "express";
@@ -23,6 +22,7 @@ import { createSearchLimiter, createAiLimiter, createPublicLimiter } from "./rat
 import { healthHandler, readyHandler, liveHandler } from "./health";
 import { initResilientRedis, initResilientDb, ServiceRegistry } from "./resilience";
 import { cookieMiddleware } from "./cookie-middleware";
+dns.setDefaultResultOrder('ipv4first');
 
 // CORS whitelist - only allow these origins
 const CORS_WHITELIST = [
