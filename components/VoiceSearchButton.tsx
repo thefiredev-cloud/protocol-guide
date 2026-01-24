@@ -383,9 +383,10 @@ export function VoiceSearchButton({
   const handlePress = useCallback(() => {
     if (disabled) return;
 
-    if (recordingState === "idle") {
+    // Use ref to access current state without stale closure
+    if (recordingStateRef.current === "idle") {
       startRecording();
-    } else if (recordingState === "recording") {
+    } else if (recordingStateRef.current === "recording") {
       // Reset silence timeout on tap (user is still engaged)
       if (silenceTimeoutRef.current) {
         clearTimeout(silenceTimeoutRef.current);
@@ -396,7 +397,7 @@ export function VoiceSearchButton({
       stopRecording();
     }
     // Don't do anything while processing
-  }, [recordingState, disabled]);
+  }, [disabled, startRecording, stopRecording]);
 
   // Size configurations (all sizes meet 48pt minimum for EMS glove accessibility)
   const sizeConfig = {
