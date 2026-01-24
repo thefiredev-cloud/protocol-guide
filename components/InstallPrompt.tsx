@@ -143,8 +143,14 @@ export function InstallPrompt() {
         <Pressable
           onPress={handleDismiss}
           style={{
-            padding: 4,
+            padding: 8,
+            minWidth: 44,
+            minHeight: 44,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
+          accessibilityLabel="Dismiss install prompt"
+          accessibilityRole="button"
         >
           <Text style={{ fontSize: 20, color: '#999' }}>✕</Text>
         </Pressable>
