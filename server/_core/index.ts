@@ -163,6 +163,10 @@ async function startServer() {
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
+  // Cookie parsing and CSRF token generation
+  // Must be after express.json() but before routes that need cookies
+  app.use(cookieMiddleware);
+
   registerOAuthRoutes(app);
 
   // Health check endpoints - comprehensive monitoring with rate limiting
