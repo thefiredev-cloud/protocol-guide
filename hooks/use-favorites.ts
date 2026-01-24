@@ -37,18 +37,20 @@ export function useFavorites() {
 
   const addFavorite = useCallback(async (protocol: Omit<FavoriteProtocol, "savedAt">) => {
     try {
-      const newFavorite: FavoriteProtocol = {
-        ...protocol,
-        savedAt: new Date().toISOString(),
-      };
-      
-      const updated = [newFavorite, ...favorites.filter((f) => f.id !== protocol.id)];
-      setFavorites(updated);
-      await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+      setFavorites(prevFavorites => {
+        const newFavorite: FavoriteProtocol = {
+          ...protocol,
+          savedAt: new Date().toISOString(),
+        };
+
+        const updated = [newFavorite, ...prevFavorites.filter((f) => f.id !== protocol.id)];
+        AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated)).catch(console.error);
+        return updated;
+      });
     } catch (error) {
       console.error("Error adding favorite:", error);
     }
-  }, [favorites]);
+  }, []);
 
   const removeFavorite = useCallback(async (protocolId: number) => {
     try {
