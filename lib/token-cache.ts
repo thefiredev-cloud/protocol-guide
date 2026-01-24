@@ -175,6 +175,7 @@ class TokenCache {
    */
   clear(): void {
     console.log("[TokenCache] Clearing cache");
+    this.cleared = true;
     this.cache = null;
     this.refreshInProgress = null;
     this.fetchInProgress = null;
