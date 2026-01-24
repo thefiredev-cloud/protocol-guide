@@ -72,12 +72,15 @@ export function useAuth(options?: UseAuthOptions) {
     try {
       setLoading(true);
       await supabaseSignOut();
+      // Clear token cache to prevent stale tokens
+      clearTokenCache();
       setUser(null);
       setSession(null);
       setError(null);
     } catch (err) {
       console.error("[Auth] Logout failed:", err);
-      // Clear state anyway
+      // Clear state and cache anyway
+      clearTokenCache();
       setUser(null);
       setSession(null);
     } finally {

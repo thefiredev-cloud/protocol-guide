@@ -5,7 +5,7 @@
 
 import { COOKIE_NAME } from "../../shared/const.js";
 import { getSessionCookieOptions } from "../_core/cookies";
-import { publicProcedure, csrfProtectedProcedure, protectedProcedure, router } from "../_core/trpc";
+import { publicProcedure, publicRateLimitedProcedure, csrfProtectedProcedure, protectedProcedure, router } from "../_core/trpc";
 import { revokeUserTokens } from "../_core/token-blacklist";
 import { createClient } from "@supabase/supabase-js";
 import { logger } from "../_core/logger";
