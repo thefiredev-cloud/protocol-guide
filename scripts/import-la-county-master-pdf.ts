@@ -9,11 +9,7 @@
 
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
-import * as pdfParse from 'pdf-parse';
 import { chunkProtocol } from '../server/_core/protocol-chunker';
-
-// pdf-parse default export workaround
-const pdf = (pdfParse as any).default || pdfParse;
 
 // ============================================================================
 // CONFIGURATION
