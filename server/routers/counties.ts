@@ -22,7 +22,8 @@ export const countiesRouter = router({
     return { counties, grouped };
   }),
 
-  get: publicProcedure
+  // Rate limited to prevent scraping individual county records
+  get: publicRateLimitedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
       return db.getCountyById(input.id);
