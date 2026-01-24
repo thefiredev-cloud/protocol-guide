@@ -1,7 +1,73 @@
 import { useEffect, useRef, memo, useMemo } from "react";
-import { View, Animated, ViewStyle, DimensionValue } from "react-native";
+import { View, Animated, ViewStyle, DimensionValue, StyleSheet } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 import { spacing, radii, durations } from "@/lib/design-tokens";
+
+// Extract static styles to prevent re-creating style objects on every render
+const skeletonStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+  },
+  rowWithGap: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  rowWithGapMd: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  rowAligned: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rowAlignedSpaceBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  rowAlignedStart: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  rowSpaceBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  flex1: {
+    flex: 1,
+  },
+  flex1MarginRight: {
+    flex: 1,
+    marginRight: spacing.md,
+  },
+  paddingLg: {
+    padding: spacing.lg,
+  },
+  marginBottomXs: {
+    marginBottom: spacing.xs,
+  },
+  marginBottomSm: {
+    marginBottom: spacing.sm,
+  },
+  marginBottomMd: {
+    marginBottom: spacing.md,
+  },
+  marginBottomLg: {
+    marginBottom: spacing.lg,
+  },
+  marginTopLg: {
+    marginTop: spacing.lg,
+  },
+  marginRightMd: {
+    marginRight: spacing.md,
+  },
+  gapSm: {
+    gap: spacing.sm,
+  },
+  gapMd: {
+    gap: spacing.md,
+  },
+});
 
 interface SkeletonBaseProps {
   /** Width of the skeleton (number for pixels, string for percentage) */
