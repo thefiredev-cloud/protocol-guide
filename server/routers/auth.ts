@@ -5,7 +5,8 @@
 
 import { COOKIE_NAME } from "../../shared/const.js";
 import { getSessionCookieOptions } from "../_core/cookies";
-import { publicProcedure, router } from "../_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
+import { revokeUserTokens } from "../_core/token-blacklist";
 
 export const authRouter = router({
   me: publicProcedure.query((opts) => opts.ctx.user),
