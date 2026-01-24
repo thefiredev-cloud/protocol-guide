@@ -3,8 +3,8 @@
  *
  * Pricing strategy:
  * - Individual: $9.99/month (single user)
- * - Small Department: 5-20 users, $7.99/user/month
- * - Large Department: 20+ users, $5.99/user/month
+ * - Starter: 5-20 users, $7.99/user/month
+ * - Professional: 20+ users, $5.99/user/month
  * - Enterprise: 100+ users, custom pricing (contact sales)
  */
 
