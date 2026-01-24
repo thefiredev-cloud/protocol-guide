@@ -128,6 +128,7 @@ export async function canUserAccessAgency(userId: number, agencyId: number): Pro
 
 /**
  * Add state subscription for user
+ * Validates tier limits and subscription status
  */
 export async function addStateSubscription(
   userId: number,
@@ -139,6 +140,23 @@ export async function addStateSubscription(
 
   const access = await getUserAccess(userId);
   const tierConfig = TIER_ACCESS_CONFIG[access.tier];
+
+  // Validate subscription is active for paid tiers
+  if (access.tier !== "free") {
+    const { validateSubscriptionActive } = await import("./_core/tier-validation.js");
+    const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+
+    if (user) {
+      try {
+        await validateSubscriptionActive(user);
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : "Subscription validation failed",
+        };
+      }
+    }
+  }
 
   // Check if user can add more states
   if (access.subscribedStates.length >= tierConfig.maxStates) {
