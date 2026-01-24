@@ -20,8 +20,11 @@ import { getDb } from "../db";
 import {
   integrationLogs,
   InsertIntegrationLog,
-  IntegrationPartner,
+  integrationPartnerEnum,
 } from "../../drizzle/schema";
+
+// Derive type from the enum
+type IntegrationPartner = (typeof integrationPartnerEnum.enumValues)[number];
 
 // Valid integration partners
 const integrationPartners = ["imagetrend", "esos", "zoll", "emscloud"] as const;
