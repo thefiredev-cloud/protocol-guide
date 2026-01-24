@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo, useMemo } from "react";
 import { View, Animated, ViewStyle, DimensionValue } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 import { spacing, radii, durations } from "@/lib/design-tokens";
