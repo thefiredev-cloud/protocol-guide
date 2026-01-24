@@ -159,9 +159,10 @@ export default function HomeScreen() {
   // Scroll to bottom
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
+      return () => clearTimeout(timer);
     }
   }, [messages]);
 
