@@ -101,3 +101,51 @@ export async function canUserAddCounty(userId: number, currentCountyCount: numbe
   const usage = await getUserUsage(userId);
   return currentCountyCount < usage.features.maxCounties;
 }
+
+/**
+ * SECURITY: Atomic increment-and-check to prevent TOCTOU race condition
+ * This function prevents users from exceeding daily limits via parallel requests
+ *
+ * Previous vulnerable flow:
+ * 1. Check limit (multiple requests see 9/10)
+ * 2. All pass check
+ * 3. All increment (results in 14/10)
+ *
+ * New atomic flow:
+ * 1. Increment count in database transaction
+ * 2. Return whether the new count is within limit
+ *
+ * @param userId - The user ID to increment and check
+ * @param limit - The daily query limit for the user's tier
+ * @returns Object with allowed (boolean) and newCount (number)
+ */
+export async function incrementAndCheckQueryLimit(
+  userId: number,
+  limit: number
+): Promise<{ allowed: boolean; newCount: number }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const today = new Date().toISOString().split('T')[0];
+
+  // Atomic operation: reset if new day, increment, and return new count
+  // This prevents race conditions by doing everything in a single UPDATE
+  const result = await db
+    .update(users)
+    .set({
+      queryCountToday: sql`CASE
+        WHEN ${users.lastQueryDate} != ${today} THEN 1
+        ELSE ${users.queryCountToday} + 1
+      END`,
+      lastQueryDate: today,
+    })
+    .where(eq(users.id, userId))
+    .returning({ newCount: users.queryCountToday });
+
+  const newCount = result[0]?.newCount ?? 1;
+
+  return {
+    allowed: newCount <= limit,
+    newCount,
+  };
+}
