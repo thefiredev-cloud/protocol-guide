@@ -1098,7 +1098,7 @@ COMPLICATIONS:
 
 async function seedProtocols() {
   console.log("Connecting to database...");
-  
+
   const connection = await mysql.createConnection(process.env.DATABASE_URL!);
   const db = drizzle(connection, { schema, mode: "default" });
 
@@ -1118,7 +1118,7 @@ async function seedProtocols() {
 
     // Insert protocols for each county
     let totalInserted = 0;
-    
+
     for (const county of counties) {
       const protocolsToInsert = protocols.map(p => ({
         countyId: county.id,
@@ -1135,11 +1135,11 @@ async function seedProtocols() {
 
     console.log(`\nTotal protocols inserted: ${totalInserted}`);
     console.log("Protocol seeding complete!");
-
   } catch (error) {
     console.error("Error seeding protocols:", error);
     throw error;
   } finally {
+    // Always close connection, even on error
     await connection.end();
   }
 }
