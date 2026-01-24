@@ -44,7 +44,7 @@ type SearchResult = {
   countyId: number;
   // Protocol currency information
   protocolEffectiveDate: string | null;
-  lastVerifiedAt: Date | null;
+  lastVerifiedAt: string | null;
   protocolYear: number | null;
 };
 
