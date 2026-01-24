@@ -10,7 +10,7 @@ export const bookmarks = mysqlTable("bookmarks", {
 	content: text().notNull(),
 	agencyId: int(),
 	agencyName: varchar({ length: 255 }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 });
 
 export const contactSubmissions = mysqlTable("contact_submissions", {
@@ -19,7 +19,7 @@ export const contactSubmissions = mysqlTable("contact_submissions", {
 	email: varchar({ length: 320 }).notNull(),
 	message: text().notNull(),
 	status: mysqlEnum(['pending','reviewed','resolved']).default('pending').notNull(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 });
 
 export const counties = mysqlTable("counties", {
@@ -28,7 +28,7 @@ export const counties = mysqlTable("counties", {
 	state: varchar({ length: 64 }).notNull(),
 	usesStateProtocols: tinyint().notNull(),
 	protocolVersion: varchar({ length: 50 }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_counties_state").on(table.state),
@@ -44,7 +44,7 @@ export const feedback = mysqlTable("feedback", {
 	message: text().notNull(),
 	status: mysqlEnum(['pending','reviewed','resolved','dismissed']).default('pending').notNull(),
 	adminNotes: text(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 });
 
@@ -71,7 +71,7 @@ export const integrationLogs = mysqlTable("integration_logs", {
 	resultCount: int(),
 	ipAddress: varchar({ length: 45 }),
 	userAgent: varchar({ length: 500 }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_integration_logs_partner").on(table.partner),
@@ -87,7 +87,7 @@ export const protocolChunks = mysqlTable("protocolChunks", {
 	section: varchar({ length: 255 }),
 	content: longtext().notNull(),
 	sourcePdfUrl: varchar({ length: 500 }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	protocolEffectiveDate: varchar({ length: 20 }),
 	lastVerifiedAt: timestamp({ mode: 'string' }),
 	protocolYear: int(),
@@ -106,7 +106,7 @@ export const queries = mysqlTable("queries", {
 	queryText: text().notNull(),
 	responseText: text(),
 	protocolRefs: json(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 });
 
 export const users = mysqlTable("users", {
@@ -116,7 +116,7 @@ export const users = mysqlTable("users", {
 	email: varchar({ length: 320 }),
 	loginMethod: varchar({ length: 64 }),
 	role: mysqlEnum(['user','admin']).default('user').notNull(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 	lastSignedIn: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
 	tier: mysqlEnum(['free','pro','enterprise']).default('free').notNull(),
@@ -150,7 +150,7 @@ export const auditLogs = mysqlTable("audit_logs", {
 	metadata: json(),
 	ipAddress: varchar({ length: 45 }),
 	userAgent: text(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_audit_logs_user").on(table.userId),
@@ -166,7 +166,7 @@ export const userAuthProviders = mysqlTable("user_auth_providers", {
 	accessToken: text(),
 	refreshToken: text(),
 	expiresAt: timestamp({ mode: 'string' }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 },
 (table) => [
@@ -191,7 +191,7 @@ export const agencies = mysqlTable("agencies", {
 	subscriptionTier: mysqlEnum(['starter','professional','enterprise']).default('starter'),
 	subscriptionStatus: varchar({ length: 50 }),
 	settings: json(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 },
 (table) => [
@@ -209,7 +209,7 @@ export const agencyMembers = mysqlTable("agency_members", {
 	invitedAt: timestamp({ mode: 'string' }),
 	acceptedAt: timestamp({ mode: 'string' }),
 	status: mysqlEnum(['pending','active','suspended']).default('pending'),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_agency_members_agency").on(table.agencyId),
@@ -233,7 +233,7 @@ export const protocolVersions = mysqlTable("protocol_versions", {
 	chunksGenerated: int().default(0),
 	metadata: json(),
 	changeLog: text(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	createdBy: int().notNull(),
 	updatedAt: timestamp({ mode: 'string' }).defaultNow().onUpdateNow().notNull(),
 },
@@ -256,7 +256,7 @@ export const protocolUploads = mysqlTable("protocol_uploads", {
 	errorMessage: text(),
 	processingStartedAt: timestamp({ mode: 'string' }),
 	completedAt: timestamp({ mode: 'string' }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_protocol_uploads_agency").on(table.agencyId),
@@ -268,7 +268,7 @@ export const userCounties = mysqlTable("user_counties", {
 	userId: int().notNull(),
 	countyId: int().notNull(),
 	isPrimary: tinyint().default(0),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_user_counties_user").on(table.userId),
@@ -310,7 +310,7 @@ export const searchHistory = mysqlTable("search_history", {
 	countyId: int(),
 	searchQuery: text().notNull(),
 	resultsCount: int(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_search_history_user").on(table.userId),
@@ -325,7 +325,7 @@ export const stripeWebhookEvents = mysqlTable("stripe_webhook_events", {
 	processed: tinyint().default(0),
 	processedAt: timestamp({ mode: 'string' }),
 	error: text(),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("idx_stripe_events_id").on(table.eventId),
@@ -338,7 +338,7 @@ export const pushTokens = mysqlTable("push_tokens", {
 	userId: int().notNull(),
 	token: text().notNull(),
 	platform: varchar({ length: 20 }),
-	createdAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	createdAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 	lastUsedAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
 },
 (table) => [
