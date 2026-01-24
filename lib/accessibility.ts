@@ -467,15 +467,19 @@ export function useFocusTrap(options: UseFocusTrapOptions): UseFocusTrapReturn {
           }
         }
       }, 100); // Small delay to ensure modal is rendered
-    } else {
-      // Modal closing - restore focus to previous element
-      if (previousActiveElementRef.current && "focus" in previousActiveElementRef.current) {
-        (previousActiveElementRef.current as HTMLElement).focus();
-      }
     }
 
     return () => {
-      if (Platform.OS === "web") {
+      // Restore focus before removing listeners (prevents race condition)
+      if (previousActiveElementRef.current && typeof previousActiveElementRef.current.focus === 'function') {
+        try {
+          previousActiveElementRef.current.focus();
+        } catch (e) {
+          // Element may no longer be focusable
+        }
+      }
+
+      if (Platform.OS === "web" && typeof document !== 'undefined') {
         document.removeEventListener("keydown", handleKeyDown);
       }
     };
