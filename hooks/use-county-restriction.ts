@@ -110,12 +110,17 @@ export function useCountyRestriction(initialCountyCount = 0): CountyRestrictionS
     if (maxCounties === Infinity) return true;
 
     // Free users check: if they already have a county, show upgrade modal
-    if (currentCounties >= maxCounties) {
-      openUpgradeModal();
-      return false;
-    }
+    // Note: We check against maxCounties in the dependency array, but currentCounties
+    // is managed via setState, so we need to access it from the current state
+    setCurrentCounties((current) => {
+      if (current >= maxCounties) {
+        openUpgradeModal();
+      }
+      return current;
+    });
 
-    return true;
+    // Return the check result based on current state
+    return currentCounties < maxCounties;
   }, [maxCounties, currentCounties, openUpgradeModal]);
 
   // Increment county count after successfully adding
