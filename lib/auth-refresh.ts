@@ -1,12 +1,12 @@
 /**
  * Token Refresh Handler
  * Manages automatic token refresh with fallback and error recovery
+ * FIXED: Now uses tokenCache to prevent race conditions
  */
 
-import { supabase } from "./supabase";
 import { Session } from "@supabase/supabase-js";
+import { tokenCache, getSession as getCachedSession, refreshSession as refreshCachedSession } from "./token-cache";
 
-const REFRESH_BUFFER_MINUTES = 5; // Refresh when less than 5 minutes until expiry
 const CHECK_INTERVAL_MS = 60000; // Check every 60 seconds
 
 interface RefreshStatus {
@@ -18,13 +18,6 @@ const refreshStatus: RefreshStatus = {
   lastRefresh: null,
   consecutiveFailures: 0,
 };
-
-// Promise-based locking to prevent race conditions
-let refreshPromise: Promise<{
-  success: boolean;
-  session: Session | null;
-  error?: string;
-}> | null = null;
 
 /**
  * Calculate minutes until token expires
