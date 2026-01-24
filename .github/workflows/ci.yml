@@ -231,3 +231,29 @@ jobs:
       - name: Post deployment notification
         if: success()
         run: echo "Deployment completed successfully"
+
+  deploy-railway:
+    name: Deploy to Railway
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [build, e2e-tests]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: curl -fsSL https://railway.app/install.sh | sh
+
+      - name: Deploy to Railway
+        run: railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Health check
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          sleep 30
+          curl -f https://protocol-guide-production.up.railway.app/api/health || exit 1
+          echo "Health check passed!"
