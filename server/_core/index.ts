@@ -95,6 +95,13 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
+  // CSP Nonce middleware - generates unique nonce per request for inline scripts/styles
+  // This prevents XSS attacks while allowing necessary inline code
+  app.use((req, res, next) => {
+    res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+    next();
+  });
+
   // Security headers middleware - comprehensive protection
   app.use(helmet({
     // Content Security Policy - prevents XSS, injection attacks
@@ -103,17 +110,34 @@ async function startServer() {
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
-          "'unsafe-inline'", // Required for React hydration
-          ENV.isProduction ? "" : "'unsafe-eval'", // Only in development
+          // SECURITY: Use nonce-based CSP instead of 'unsafe-inline' - prevents XSS attacks
+          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+          ENV.isProduction ? "" : "'unsafe-eval'", // Only in development for HMR
         ].filter(Boolean),
-        styleSrc: ["'self'", "'unsafe-inline'"], // Required for styled-components
-        imgSrc: ["'self'", "data:", "https:", "blob:"],
-        fontSrc: ["'self'", "data:", "https:"],
+        styleSrc: [
+          "'self'",
+          // SECURITY: Use nonce-based CSP for styles - prevents CSS injection attacks
+          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+        ],
+        // SECURITY: Restrict image sources to specific trusted domains only
+        imgSrc: [
+          "'self'",
+          "data:",
+          "blob:",
+          "https://*.supabase.co", // Supabase storage only
+        ],
+        // SECURITY: Restrict font sources to specific trusted domains only
+        fontSrc: [
+          "'self'",
+          "data:",
+          "https://fonts.gstatic.com", // Google Fonts only
+        ],
         connectSrc: [
           "'self'",
           "https://protocol-guide.com",
           "https://www.protocol-guide.com",
           "https://protocol-guide.netlify.app",
+          "https://protocol-guide-production.up.railway.app", // Railway backend
           "https://*.supabase.co", // Supabase API
           ...(ENV.isProduction ? [] : ["http://localhost:*", "ws://localhost:*"]),
         ],
