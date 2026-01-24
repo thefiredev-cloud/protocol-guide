@@ -420,7 +420,7 @@ export const dripEmailsSent = mysqlTable("drip_emails_sent", {
 	id: int().autoincrement().primaryKey().notNull(),
 	userId: int().notNull(),
 	emailType: varchar({ length: 50 }).notNull(),
-	sentAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP').notNull(),
+	sentAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("drip_emails_user_idx").on(table.userId),
