@@ -63,6 +63,7 @@ export function SimulationSection() {
   const checkmarkRotate = useRef(new Animated.Value(0)).current;
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const protocolTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const celebrationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
 
   // Cleanup timers on unmount
@@ -70,6 +71,7 @@ export function SimulationSection() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (protocolTimerRef.current) clearInterval(protocolTimerRef.current);
+      if (celebrationTimerRef.current) clearTimeout(celebrationTimerRef.current);
     };
   }, []);
 
