@@ -42,7 +42,7 @@ interface SkeletonProps extends SkeletonBaseProps {
  * <Skeleton width={200} height={40} borderRadius={8} />
  * ```
  */
-export function Skeleton({
+export const Skeleton = memo(function Skeleton({
   variant = 'rectangle',
   width,
   height,
@@ -76,7 +76,7 @@ export function Skeleton({
     };
   }, [pulseAnim]);
 
-  const getVariantStyles = (): ViewStyle => {
+  const variantStyles = useMemo((): ViewStyle => {
     switch (variant) {
       case 'text':
         return {
@@ -110,7 +110,7 @@ export function Skeleton({
           borderRadius: borderRadius ?? radii.sm,
         };
     }
-  };
+  }, [variant, width, height, borderRadius]);
 
   return (
     <Animated.View
