@@ -396,12 +396,12 @@ export const SkeletonProfileHeader = memo(function SkeletonProfileHeader({
       />
     </View>
   );
-}
+});
 
 /**
  * Subscription status card skeleton
  */
-export function SkeletonSubscriptionCard({
+export const SkeletonSubscriptionCard = memo(function SkeletonSubscriptionCard({
   style,
   testID,
 }: {
