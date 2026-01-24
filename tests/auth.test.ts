@@ -96,6 +96,7 @@ function createUnauthenticatedContext() {
         clearedCookies.push({ name, options });
       },
     } as TrpcContext["res"],
+    trace: createMockTraceContext(),
   };
 
   return { ctx, clearedCookies };
