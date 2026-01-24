@@ -26,6 +26,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Audio, Recording } from "@/lib/audio";
+import { uriToBase64 } from "@/lib/blob-utils";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
