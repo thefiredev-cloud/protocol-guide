@@ -667,12 +667,12 @@ export const SkeletonHistoryList = memo(function SkeletonHistoryList({
       ))}
     </View>
   );
-}
+});
 
 /**
  * Stats card skeleton for coverage screen
  */
-export function SkeletonStatsCard({
+export const SkeletonStatsCard = memo(function SkeletonStatsCard({
   style,
   testID,
 }: {
