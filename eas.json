@@ -81,7 +81,7 @@
       "channel": "production",
       "env": {
         "APP_ENV": "production",
-        "EXPO_PUBLIC_API_URL": "https://protocol-guide.com/api"
+        "EXPO_PUBLIC_API_BASE_URL": "https://protocol-guide-production.up.railway.app"
       }
     }
   },
