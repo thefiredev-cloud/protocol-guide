@@ -4,6 +4,10 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
+// Import after mocking
+import { sendEmail, EmailTemplate, isEmailConfigured } from '@/server/_core/email';
+import { Resend } from 'resend';
+
 // Mock Resend before importing email service
 vi.mock('resend', () => ({
   Resend: vi.fn().mockImplementation(() => ({
@@ -12,10 +16,6 @@ vi.mock('resend', () => ({
     },
   })),
 }));
-
-// Import after mocking
-import { sendEmail, EmailTemplate, isEmailConfigured } from '@/server/_core/email';
-import { Resend } from 'resend';
 
 describe('email service', () => {
   beforeEach(() => {
