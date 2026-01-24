@@ -119,7 +119,7 @@ export async function validateSubscriptionActive(user: {
   subscriptionStatus: string | null;
   subscriptionEndDate: Date | string | null;
 }): Promise<void> {
-  const userTier = user.tier as SubscriptionTier;
+  const userTier = validateTierValue(user.tier);
 
   // Free tier doesn't need subscription validation
   if (userTier === "free") {
