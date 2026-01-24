@@ -85,6 +85,10 @@ export function SimulationSection() {
       clearInterval(protocolTimerRef.current);
       protocolTimerRef.current = null;
     }
+    if (celebrationTimerRef.current) {
+      clearTimeout(celebrationTimerRef.current);
+      celebrationTimerRef.current = null;
+    }
 
     // Reset the live timer
     simulationTimer.reset();
