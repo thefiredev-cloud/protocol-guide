@@ -97,19 +97,31 @@ export function createMockRequest(overrides: Record<string, unknown> = {}) {
   };
 }
 
+/**
+ * Create a mock Express-like response object for tRPC context
+ * Includes all methods needed by middleware (tracing headers, rate limit headers, cookies)
+ */
 export function createMockResponse() {
   const cookies: { name: string; value?: string; options: Record<string, unknown> }[] = [];
+  const headers: Record<string, string | number> = {};
 
   return {
     cookies,
+    headers,
     cookie: vi.fn((name: string, value: string, options: Record<string, unknown>) => {
       cookies.push({ name, value, options });
     }),
     clearCookie: vi.fn((name: string, options: Record<string, unknown>) => {
       cookies.push({ name, options });
     }),
+    setHeader: vi.fn((name: string, value: string | number) => {
+      headers[name] = value;
+    }),
+    getHeader: vi.fn((name: string) => headers[name]),
     json: vi.fn(),
     status: vi.fn().mockReturnThis(),
+    send: vi.fn(),
+    end: vi.fn(),
   };
 }
 
