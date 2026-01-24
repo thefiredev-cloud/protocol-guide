@@ -175,10 +175,10 @@ export const UserMessageCard = memo(function UserMessageCard({ text, timestamp }
       </View>
     </Animated.View>
   );
-}
+});
 
 // Loading indicator
-export function LoadingCard() {
+export const LoadingCard = memo(function LoadingCard() {
   const colors = useColors();
 
   return (
