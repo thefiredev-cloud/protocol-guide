@@ -170,7 +170,7 @@ export async function addUserCounty(
   if (isPrimary) {
     await db
       .update(userCounties)
-      .set({ isPrimary: 0 })
+      .set({ isPrimary: false })
       .where(eq(userCounties.userId, userId));
   }
 
@@ -276,7 +276,7 @@ export async function setUserPrimaryCounty(
   // Unset all primaries for user
   await db
     .update(userCounties)
-    .set({ isPrimary: 0 })
+    .set({ isPrimary: false })
     .where(eq(userCounties.userId, userId));
 
   // Set the new primary
