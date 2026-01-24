@@ -11,7 +11,6 @@ import {
   Text,
   Animated,
   Easing,
-  StyleSheet,
   Platform,
   useWindowDimensions,
 } from "react-native";
@@ -27,6 +26,7 @@ import {
   MAX_TIME,
   SimulationState,
 } from "./simulation";
+import { styles } from "./simulation/simulation-section-styles";
 
 export function SimulationSection() {
   const { width } = useWindowDimensions();
