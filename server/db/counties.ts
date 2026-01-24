@@ -139,13 +139,13 @@ export async function getAgenciesByState(state: string): Promise<AgencyInfo[]> {
       c.state,
       COUNT(pc.id) as protocol_count
     FROM counties c
-    LEFT JOIN protocolChunks pc ON pc.countyId = c.id
+    LEFT JOIN protocol_chunks pc ON pc.county_id = c.id
     WHERE c.state = ${state}
     GROUP BY c.id, c.name, c.state
     ORDER BY protocol_count DESC, c.name ASC
   `);
 
-  const rows = (results[0] as unknown as any[]) || [];
+  const rows = (results.rows as any[]) || [];
 
   return rows.map(row => ({
     id: row.id,
