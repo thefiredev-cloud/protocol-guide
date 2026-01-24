@@ -224,7 +224,13 @@ export default function HistoryScreen() {
             editable={!isFreeTier}
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery("")} style={styles.clearButton}>
+            <TouchableOpacity
+              onPress={() => setSearchQuery("")}
+              style={styles.clearButton}
+              accessibilityLabel="Clear search"
+              accessibilityRole="button"
+              accessibilityHint="Clears the history search input"
+            >
               <IconSymbol name="xmark" size={16} color={colors.muted} />
             </TouchableOpacity>
           )}
