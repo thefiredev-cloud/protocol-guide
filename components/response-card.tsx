@@ -165,10 +165,22 @@ export const ResponseCard = memo(function ResponseCard({ text, protocolRefs, tim
           </Text>
           {!sections.protocol && (
             <View style={styles.footerActions}>
-              <TouchableOpacity onPress={handleCopy} activeOpacity={0.7} style={styles.smallIconButton}>
+              <TouchableOpacity
+                onPress={handleCopy}
+                activeOpacity={0.7}
+                style={styles.smallIconButton}
+                accessibilityLabel={copied ? "Copied" : "Copy response"}
+                accessibilityRole="button"
+              >
                 <IconSymbol name={copied ? "checkmark" : "doc.on.doc"} size={14} color={copied ? colors.success : colors.muted} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleReportError} activeOpacity={0.7} style={styles.smallIconButton}>
+              <TouchableOpacity
+                onPress={handleReportError}
+                activeOpacity={0.7}
+                style={styles.smallIconButton}
+                accessibilityLabel="Report error in protocol"
+                accessibilityRole="button"
+              >
                 <IconSymbol name="exclamationmark.triangle.fill" size={14} color={colors.muted} />
               </TouchableOpacity>
             </View>
