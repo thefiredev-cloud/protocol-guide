@@ -56,7 +56,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
         await dbInstance.insert(stripeWebhookEvents).values({
           eventId,
           eventType: event.type,
-          eventData: event.data.object,
+          payload: event.data.object,
         });
         console.log(`[Stripe Webhook] Marked event ${eventId} as processed`);
       }
