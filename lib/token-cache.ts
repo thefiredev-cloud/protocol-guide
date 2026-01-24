@@ -183,13 +183,19 @@ class TokenCache {
 
   /**
    * Update cache with new session
+   * Public method to allow external updates from auth state changes
    */
-  private updateCache(session: Session): void {
-    this.cache = {
-      session,
-      expiresAt: session.expires_at ? session.expires_at * 1000 : 0,
-      refreshedAt: Date.now(),
-    };
+  updateCache(session: Session | null): void {
+    if (session) {
+      this.cache = {
+        session,
+        expiresAt: session.expires_at ? session.expires_at * 1000 : 0,
+        refreshedAt: Date.now(),
+      };
+      this.cleared = false; // Reset cleared flag when updating cache
+    } else {
+      this.cache = null;
+    }
   }
 
   /**
