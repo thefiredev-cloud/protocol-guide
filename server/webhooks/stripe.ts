@@ -262,6 +262,15 @@ async function handleDepartmentSubscriptionUpdated(
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
+  const subscriptionType = subscription.metadata?.subscriptionType;
+
+  // Check if this is a department/agency subscription
+  if (subscriptionType === "department") {
+    await handleDepartmentSubscriptionDeleted(subscription, customerId);
+    return;
+  }
+
+  // Individual user subscription
   const user = await db.getUserByStripeCustomerId(customerId);
 
   if (!user) {
@@ -273,7 +282,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 
   // Downgrade to free tier
   await db.updateUserTier(user.id, "free");
-  
+
   // Clear subscription details
   const dbInstance = await db.getDb();
   if (dbInstance) {
@@ -283,6 +292,38 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       subscriptionEndDate: null,
     }).where(eq(users.id, user.id));
   }
+}
+
+async function handleDepartmentSubscriptionDeleted(
+  subscription: Stripe.Subscription,
+  customerId: string
+) {
+  const dbInstance = await db.getDb();
+  if (!dbInstance) {
+    console.error("[Stripe Webhook] Database connection failed");
+    return;
+  }
+
+  const { agencies } = await import("../../drizzle/schema.js");
+  const { eq } = await import("drizzle-orm");
+
+  // Find agency by Stripe customer ID
+  const [agency] = await dbInstance.select().from(agencies)
+    .where(eq(agencies.stripeCustomerId, customerId))
+    .limit(1);
+
+  if (!agency) {
+    console.error(`[Stripe Webhook] No agency found for customer ${customerId}`);
+    return;
+  }
+
+  console.log(`[Stripe Webhook] Department subscription deleted for agency ${agency.id}`);
+
+  // Downgrade to starter tier and mark as canceled
+  await dbInstance.update(agencies).set({
+    subscriptionTier: "starter",
+    subscriptionStatus: "canceled",
+  }).where(eq(agencies.id, agency.id));
 }
 
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
