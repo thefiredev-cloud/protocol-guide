@@ -30,19 +30,40 @@ export const queryRouter = router({
     .mutation(async ({ ctx, input }) => {
       const startTime = Date.now();
 
-      // Check usage limits
-      const canQuery = await db.canUserQuery(ctx.user.id);
-      if (!canQuery) {
+      // Get user and validate tier
+      const user = await db.getUserById(ctx.user.id);
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found",
+        });
+      }
+
+      const userTier: UserTier = (user.tier as UserTier) || 'free';
+
+      // Validate subscription is active for paid tiers
+      if (userTier !== 'free') {
+        try {
+          await validateSubscriptionActive(user);
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof TRPCError ? error.message : "Subscription validation failed",
+            response: null,
+          };
+        }
+      }
+
+      // Validate query limit based on tier
+      try {
+        await validateQueryLimit(ctx.user.id);
+      } catch (error) {
         return {
           success: false,
-          error: "Daily query limit reached. Upgrade to Pro for unlimited queries.",
+          error: error instanceof TRPCError ? error.message : "Query limit exceeded",
           response: null,
         };
       }
-
-      // Get user tier for model routing
-      const user = await db.getUserById(ctx.user.id);
-      const userTier: UserTier = (user?.tier as UserTier) || 'free';
 
       // Get agency name for context
       const county = await db.getCountyById(input.countyId);
