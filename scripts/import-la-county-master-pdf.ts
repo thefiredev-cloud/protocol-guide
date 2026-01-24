@@ -127,12 +127,16 @@ function categorizeProtocol(num: string, content: string): string {
 
 async function parsePDF(buffer: Buffer): Promise<{ text: string; numPages: number }> {
   console.log('Parsing PDF...');
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const pdfParse = require('pdf-parse');
-  const data = await pdfParse(buffer);
-  console.log(`  Pages: ${data.numpages}`);
-  console.log(`  Text length: ${data.text.length} characters`);
-  return { text: data.text, numPages: data.numpages };
+
+  const { PDFParse } = require('pdf-parse');
+  const parser = new PDFParse();
+  const data = await parser.loadPDF(buffer);
+  const text = data.getAllText();
+  const numPages = data.numPages || 0;
+
+  console.log(`  Pages: ${numPages}`);
+  console.log(`  Text length: ${text.length} characters`);
+  return { text, numPages };
 }
 
 function extractProtocols(text: string): ParsedProtocol[] {
