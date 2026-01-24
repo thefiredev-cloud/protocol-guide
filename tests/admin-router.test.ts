@@ -181,6 +181,7 @@ function createAdminContext(userOverrides: Partial<AuthenticatedUser> = {}): { c
     res: {
       clearCookie: vi.fn(),
     } as unknown as TrpcContext["res"],
+    trace: createMockTraceContext(),
   };
 
   return { ctx };
