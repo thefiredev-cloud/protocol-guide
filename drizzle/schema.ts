@@ -293,7 +293,7 @@ export const userAgencies = mysqlTable("user_agencies", {
 	userId: int().notNull(),
 	agencyId: int().notNull(),
 	accessLevel: mysqlEnum(['view','contribute','admin']).default('view'),
-	isPrimary: boolean().default(false),
+	isPrimary: tinyint().default(0),
 	role: varchar({ length: 100 }),
 	verifiedAt: timestamp({ mode: 'string' }),
 	subscribedAt: timestamp({ mode: 'string' }).default('CURRENT_TIMESTAMP'),
