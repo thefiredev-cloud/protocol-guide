@@ -1,6 +1,34 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 const CACHE_KEY = "protocol_cache";
+
+/**
+ * Calculate byte length of a string in a platform-safe way
+ * Blob is not available in React Native
+ */
+function getByteLength(str: string): number {
+  if (Platform.OS === "web" && typeof Blob !== "undefined") {
+    return new Blob([str]).size;
+  }
+  // For native platforms, calculate UTF-8 byte length manually
+  let byteLength = 0;
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i);
+    if (code < 0x80) {
+      byteLength += 1;
+    } else if (code < 0x800) {
+      byteLength += 2;
+    } else if (code >= 0xd800 && code <= 0xdbff) {
+      // Surrogate pair (4 bytes for the pair)
+      byteLength += 4;
+      i++; // Skip the low surrogate
+    } else {
+      byteLength += 3;
+    }
+  }
+  return byteLength;
+}
 const CACHE_METADATA_KEY = "protocol_cache_metadata";
 const MAX_CACHED_ITEMS = 50; // Maximum number of cached protocol responses
 
