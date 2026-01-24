@@ -7,3 +7,4 @@
 export * from "./voice-constants";
 export * from "./ripple-animation";
 export * from "./voice-ui-helpers";
+export { styles as voiceModalStyles } from "./voice-modal-styles";
