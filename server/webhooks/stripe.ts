@@ -189,6 +189,15 @@ async function handleDepartmentCheckoutCompleted(
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
+  const subscriptionType = subscription.metadata?.subscriptionType;
+
+  // Check if this is a department/agency subscription
+  if (subscriptionType === "department") {
+    await handleDepartmentSubscriptionUpdated(subscription, customerId);
+    return;
+  }
+
+  // Individual user subscription
   const user = await db.getUserByStripeCustomerId(customerId);
 
   if (!user) {
@@ -203,21 +212,52 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const tier = isActive ? "pro" : "free";
 
   await db.updateUserTier(user.id, tier);
-  
+
   // Update subscription details in database
   const dbInstance = await db.getDb();
   if (dbInstance) {
     // Get period end from subscription items
     const periodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
-    
+
     await dbInstance.update(users).set({
       subscriptionId: subscription.id,
       subscriptionStatus: subscription.status,
-      subscriptionEndDate: periodEnd 
+      subscriptionEndDate: periodEnd
         ? new Date(periodEnd * 1000)
         : null,
     }).where(eq(users.id, user.id));
   }
+}
+
+async function handleDepartmentSubscriptionUpdated(
+  subscription: Stripe.Subscription,
+  customerId: string
+) {
+  const dbInstance = await db.getDb();
+  if (!dbInstance) {
+    console.error("[Stripe Webhook] Database connection failed");
+    return;
+  }
+
+  const { agencies } = await import("../../drizzle/schema.js");
+  const { eq } = await import("drizzle-orm");
+
+  // Find agency by Stripe customer ID
+  const [agency] = await dbInstance.select().from(agencies)
+    .where(eq(agencies.stripeCustomerId, customerId))
+    .limit(1);
+
+  if (!agency) {
+    console.error(`[Stripe Webhook] No agency found for customer ${customerId}`);
+    return;
+  }
+
+  console.log(`[Stripe Webhook] Department subscription updated for agency ${agency.id}: ${subscription.status}`);
+
+  // Update agency subscription status
+  await dbInstance.update(agencies).set({
+    subscriptionStatus: subscription.status,
+  }).where(eq(agencies.id, agency.id));
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
