@@ -201,7 +201,7 @@ export function VoiceSearchModal({
     try {
       // Clear timers but DON'T cleanup recording yet - we need the ref!
       clearTimers();
-      stopPulseAnimation();
+      stopPulseAnimation(animationValues);
 
       // Transition to processing state
       if (!transitionTo("processing")) return;
