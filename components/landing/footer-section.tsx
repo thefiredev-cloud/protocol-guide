@@ -141,8 +141,9 @@ function FooterLink({ label, onPress }: FooterLinkProps) {
 
 export function FooterSection() {
   const { width } = useWindowDimensions();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1024;
+  // Three-tier responsive breakpoints (consistent with other sections)
+  const isMobile = width < 640;
+  const isTablet = width >= 640 && width < 1024;
   const isLargeDesktop = width >= 1440;
   const [isVisible, setIsVisible] = useState(false);
 
