@@ -15,6 +15,7 @@ import { drizzle } from 'drizzle-orm/mysql2';
 
 let _pool: mysql.Pool | null = null;
 let _db: ReturnType<typeof drizzle> | null = null;
+let _poolPromise: Promise<void> | null = null; // Mutex to prevent race conditions
 
 // Pool configuration based on environment
 const POOL_CONFIG = {
