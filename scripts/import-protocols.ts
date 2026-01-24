@@ -146,6 +146,8 @@ async function importProtocols() {
   const pool = mysql.createPool(connectionString);
   const db = drizzle(pool);
 
+  try {
+
   // Read the CSV results
   const csvPath = "/home/ubuntu/scrape_ems_protocols.csv";
   const csvContent = fs.readFileSync(csvPath, "utf-8");
