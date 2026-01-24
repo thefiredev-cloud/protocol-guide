@@ -92,6 +92,10 @@ export function ChatInput({
                 opacity: disabled || isProcessing ? 0.5 : 1,
               }}
               activeOpacity={0.7}
+              accessibilityLabel={isRecording ? "Stop voice recording" : "Start voice search"}
+              accessibilityRole="button"
+              accessibilityHint={isRecording ? "Stops voice recording" : "Opens voice search for hands-free protocol search"}
+              accessibilityState={{ disabled: disabled || isProcessing }}
             >
               <IconSymbol
                 name="mic.fill"
