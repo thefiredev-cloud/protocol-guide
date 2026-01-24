@@ -102,7 +102,7 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
 
     // Add reply-to if configured
     if (process.env.EMAIL_REPLY_TO) {
-      emailOptions.reply_to = process.env.EMAIL_REPLY_TO;
+      emailOptions.replyTo = process.env.EMAIL_REPLY_TO;
     }
 
     // Send email
