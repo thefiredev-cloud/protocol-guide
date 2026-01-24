@@ -1,5 +1,5 @@
 import { test as baseTest, expect } from "@playwright/test";
-import { test, TEST_USER, TEST_PRO_USER, injectAuthSession, clearAuthSession } from "./fixtures/auth";
+import { test, TEST_USER } from "./fixtures/auth";
 import { setupMockApiRoutes, clearMockApiRoutes } from "./fixtures/mock-api";
 
 /**
