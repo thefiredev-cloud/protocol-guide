@@ -140,7 +140,7 @@ export async function semanticSearchByAgency(
   relevanceScore: number;
   countyId: number;
   protocolEffectiveDate: string | null;
-  lastVerifiedAt: Date | null;
+  lastVerifiedAt: string | null;
   protocolYear: number | null;
 }[]> {
   // Use the existing semanticSearchProtocols with countyId filter
