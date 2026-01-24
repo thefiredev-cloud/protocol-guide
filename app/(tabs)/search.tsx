@@ -91,7 +91,7 @@ export default function SearchScreen() {
     setSearchError(null);
 
     // Announce search start for screen readers
-    announceForAccessibility(`Searching for ${query}`);
+    announceSearchStart(query);
 
     try {
       const result = await trpcUtils.search.semantic.fetch({
@@ -102,26 +102,21 @@ export default function SearchScreen() {
 
       if (result && result.results) {
         setSearchResults(result.results);
-        // Announce results
-        const resultCount = result.results.length;
-        announceForAccessibility(
-          resultCount === 0
-            ? "No results found"
-            : `Found ${resultCount} ${resultCount === 1 ? "result" : "results"}`
-        );
+        announceSearchResults(result.results.length);
       } else {
         setSearchResults([]);
-        announceForAccessibility("No results found");
+        announceSearchResults(0);
       }
     } catch (error) {
       console.error("Search error:", error);
-      setSearchError("Search failed. Please check your connection and try again.");
+      const errorMessage = "Search failed. Please check your connection and try again.";
+      setSearchError(errorMessage);
       setSearchResults([]);
-      announceForAccessibility("Search failed. Please check your connection and try again.");
+      announceSearchError(errorMessage);
     } finally {
       setIsSearching(false);
     }
-  }, [query, selectedState, trpcUtils]);
+  }, [query, selectedState, trpcUtils, announceSearchStart, announceSearchResults, announceSearchError]);
 
   const handleClear = useCallback(() => {
     setQuery("");
