@@ -53,6 +53,12 @@ class TokenCache {
       try {
         const { data, error } = await supabase.auth.getSession();
 
+        // Check if cache was cleared during fetch
+        if (this.cleared) {
+          console.log("[TokenCache] Cache was cleared during fetch, ignoring result");
+          return null;
+        }
+
         if (error) {
           console.error("[TokenCache] Error fetching session:", error);
           this.cache = null;
