@@ -222,6 +222,16 @@ const config: ExpoConfig = {
   plugins: [
     "expo-router",
 
+    // Push notifications configuration
+    [
+      "expo-notifications",
+      {
+        icon: "./assets/images/notification-icon.png",
+        color: "#2563eb",
+        sounds: [],
+      }
+    ],
+
     // Build properties for native configuration
     [
       "expo-build-properties",
