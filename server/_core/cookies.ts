@@ -76,3 +76,41 @@ export function getSessionCookieOptions(
     secure: isSecureRequest(req),
   };
 }
+
+/**
+ * CSRF cookie options - MUST have httpOnly:false for double-submit pattern
+ *
+ * The double-submit cookie pattern requires:
+ * 1. Server sets csrf_token cookie with httpOnly:false (so JS can read it)
+ * 2. Client reads the cookie value
+ * 3. Client sends the value in x-csrf-token header
+ * 4. Server validates that header matches cookie
+ *
+ * SECURITY NOTE: httpOnly:false is REQUIRED and safe here because:
+ * - CSRF tokens are not authentication credentials
+ * - They only protect against cross-site attacks
+ * - The pattern relies on same-origin policy preventing attackers from reading the cookie
+ */
+export function getCsrfCookieOptions(
+  req: Request,
+): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
+  const hostname = req.hostname;
+
+  // Same subdomain sharing logic as session cookies
+  const shouldShareSubdomains =
+    process.env.NODE_ENV === "development" || ENABLE_SUBDOMAIN_COOKIES;
+
+  const domain = shouldShareSubdomains
+    ? getParentDomain(hostname)
+    : undefined;
+
+  // CRITICAL: httpOnly MUST be false for CSRF double-submit pattern
+  // This allows JavaScript to read the cookie and send it in headers
+  return {
+    domain,
+    httpOnly: false, // Required for JS to read and send in x-csrf-token header
+    path: "/",
+    sameSite: "strict",
+    secure: isSecureRequest(req),
+  };
+}
