@@ -3,7 +3,7 @@
  * Handles binary data operations using expo-file-system
  */
 
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 
 /**
  * Convert Blob to base64 string (React Native)
