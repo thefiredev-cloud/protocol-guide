@@ -78,8 +78,9 @@ async function runMigration() {
     console.log("\n✅ Migration completed successfully!");
   } catch (error) {
     console.error("\n❌ Migration failed:", error);
-    process.exit(1);
+    throw error;
   } finally {
+    // Always close connection, even on error
     await connection.end();
   }
 }
