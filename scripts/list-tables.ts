@@ -23,9 +23,14 @@ async function listTables() {
     console.log(`\n✅ Total: ${(rows as any[]).length} tables`);
   } catch (error) {
     console.error("❌ Error:", error);
+    throw error;
   } finally {
+    // Always close connection, even on error
     await connection.end();
   }
 }
 
-listTables();
+listTables().catch((error) => {
+  console.error("Fatal error:", error);
+  process.exit(1);
+});
