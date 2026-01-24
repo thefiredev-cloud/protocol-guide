@@ -219,7 +219,7 @@ export async function addStateSubscription(
       userId,
       stateCode,
       accessLevel: "view",
-      expiresAt,
+      expiresAt: expiresAt?.toISOString(),
     });
     return { success: true };
   } catch (error) {
