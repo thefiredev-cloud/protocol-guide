@@ -233,14 +233,8 @@ export const queryRouter = router({
       })),
     }))
     .mutation(async ({ ctx, input }) => {
-      // Check if user is Pro/Enterprise
-      const user = await db.getUserById(ctx.user.id);
-      if (!user || user.tier === 'free') {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Search history sync requires Pro subscription",
-        });
-      }
+      // Validate user has Pro tier or higher
+      await validateTier(ctx, "pro");
 
       const result = await dbUserCounties.syncSearchHistory(
         ctx.user.id,
