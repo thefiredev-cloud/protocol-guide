@@ -297,7 +297,7 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
           width: "100%",
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}>
           <ProtocolGuideLogo size={isMobile ? 32 : isTablet ? 36 : 40} color={COLORS.primaryRed} />
           <Text style={{ color: COLORS.textWhite, fontSize: isMobile ? 16 : isTablet ? 17 : 18, fontWeight: "700" }}>
             Protocol Guide
