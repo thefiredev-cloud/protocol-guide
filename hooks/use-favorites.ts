@@ -54,13 +54,15 @@ export function useFavorites() {
 
   const removeFavorite = useCallback(async (protocolId: number) => {
     try {
-      const updated = favorites.filter((f) => f.id !== protocolId);
-      setFavorites(updated);
-      await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+      setFavorites(prevFavorites => {
+        const updated = prevFavorites.filter((f) => f.id !== protocolId);
+        AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated)).catch(console.error);
+        return updated;
+      });
     } catch (error) {
       console.error("Error removing favorite:", error);
     }
-  }, [favorites]);
+  }, []);
 
   const isFavorite = useCallback((protocolId: number) => {
     return favorites.some((f) => f.id === protocolId);
