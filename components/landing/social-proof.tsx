@@ -95,6 +95,7 @@ export function TrustedBadge({
     >
       <View
         style={{
+          display: "flex",
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
           gap: isMobile ? 8 : 12,
