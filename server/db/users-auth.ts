@@ -78,11 +78,11 @@ export async function findOrCreateUserBySupabaseAuth(
         role: "user",
         queryCountToday: 0,
       })
-      .$returningId();
+      .returning({ id: users.id });
 
     // Link provider for new user
     if (metadata.provider && metadata.providerUserId) {
-      await linkAuthProvider((newUser as { id: number }).id, {
+      await linkAuthProvider(newUser.id, {
         provider: metadata.provider,
         providerUserId: metadata.providerUserId,
       });
@@ -92,7 +92,7 @@ export async function findOrCreateUserBySupabaseAuth(
     const created = await db
       .select()
       .from(users)
-      .where(eq(users.id, (newUser as { id: number }).id))
+      .where(eq(users.id, newUser.id))
       .limit(1);
 
     const createdUser = created.length > 0 ? created[0] : null;
