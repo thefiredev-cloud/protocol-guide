@@ -50,8 +50,8 @@ export function StarRating({ rating, reviewCount }: StarRatingProps) {
   const stars = Array(5).fill(0).map((_, i) => i < fullStars);
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-      <View style={{ flexDirection: "row", gap: 2 }}>
+    <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 4 }}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
         {stars.map((filled, i) => (
           <StarIcon key={i} filled={filled} size={14} />
         ))}
