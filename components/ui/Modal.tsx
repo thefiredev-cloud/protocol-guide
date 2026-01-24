@@ -205,8 +205,10 @@ export function Modal({
           testID={testID ? `${testID}-backdrop` : undefined}
         />
 
-        {/* Modal Content */}
+        {/* Modal Content - Focus trap container */}
         <Animated.View
+          ref={containerRef}
+          {...containerProps}
           style={{
             backgroundColor: colors.surface,
             borderRadius: radii.xl,
