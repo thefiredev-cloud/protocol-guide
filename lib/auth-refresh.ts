@@ -49,85 +49,89 @@ function needsRefresh(session: Session | null): boolean {
 
 /**
  * Refresh session token with error handling
+ * Uses promise-based locking to prevent race conditions
  */
 export async function refreshSession(): Promise<{
   success: boolean;
   session: Session | null;
   error?: string;
 }> {
-  // Prevent concurrent refresh attempts
-  if (refreshStatus.isRefreshing) {
-    console.log("[Auth] Refresh already in progress, skipping");
-    return { success: false, session: null, error: "Refresh in progress" };
+  // Return existing refresh promise if in progress
+  if (refreshPromise) {
+    console.log("[Auth] Refresh already in progress, returning existing promise");
+    return refreshPromise;
   }
 
-  refreshStatus.isRefreshing = true;
+  // Create new refresh promise
+  refreshPromise = (async () => {
+    try {
+      console.log("[Auth] Attempting token refresh");
 
-  try {
-    console.log("[Auth] Attempting token refresh");
+      const { data, error } = await supabase.auth.refreshSession();
 
-    const { data, error } = await supabase.auth.refreshSession();
+      if (error) {
+        refreshStatus.consecutiveFailures++;
+        console.error("[Auth] Token refresh failed:", error.message);
 
-    if (error) {
-      refreshStatus.consecutiveFailures++;
-      console.error("[Auth] Token refresh failed:", error.message);
+        // After 3 consecutive failures, force logout
+        if (refreshStatus.consecutiveFailures >= 3) {
+          console.error("[Auth] Max refresh failures reached, forcing logout");
+          await supabase.auth.signOut();
+          refreshStatus.consecutiveFailures = 0;
+          return {
+            success: false,
+            session: null,
+            error: "Session expired - please sign in again",
+          };
+        }
 
-      // After 3 consecutive failures, force logout
-      if (refreshStatus.consecutiveFailures >= 3) {
-        console.error("[Auth] Max refresh failures reached, forcing logout");
-        await supabase.auth.signOut();
-        refreshStatus.consecutiveFailures = 0;
         return {
           success: false,
           session: null,
-          error: "Session expired - please sign in again",
+          error: error.message,
         };
       }
+
+      if (!data.session) {
+        refreshStatus.consecutiveFailures++;
+        console.error("[Auth] No session returned from refresh");
+
+        return {
+          success: false,
+          session: null,
+          error: "No session returned",
+        };
+      }
+
+      // Success - reset failure counter
+      refreshStatus.consecutiveFailures = 0;
+      refreshStatus.lastRefresh = Date.now();
+
+      console.log("[Auth] Token refresh successful", {
+        expiresAt: data.session.expires_at,
+        minutesUntilExpiry: getMinutesUntilExpiry(data.session),
+      });
+
+      return {
+        success: true,
+        session: data.session,
+      };
+    } catch (err) {
+      refreshStatus.consecutiveFailures++;
+      const error = err instanceof Error ? err : new Error("Unknown error");
+      console.error("[Auth] Token refresh exception:", error);
 
       return {
         success: false,
         session: null,
         error: error.message,
       };
+    } finally {
+      refreshPromise = null;
     }
+  })();
 
-    if (!data.session) {
-      refreshStatus.consecutiveFailures++;
-      console.error("[Auth] No session returned from refresh");
-
-      return {
-        success: false,
-        session: null,
-        error: "No session returned",
-      };
-    }
-
-    // Success - reset failure counter
-    refreshStatus.consecutiveFailures = 0;
-    refreshStatus.lastRefresh = Date.now();
-
-    console.log("[Auth] Token refresh successful", {
-      expiresAt: data.session.expires_at,
-      minutesUntilExpiry: getMinutesUntilExpiry(data.session),
-    });
-
-    return {
-      success: true,
-      session: data.session,
-    };
-  } catch (err) {
-    refreshStatus.consecutiveFailures++;
-    const error = err instanceof Error ? err : new Error("Unknown error");
-    console.error("[Auth] Token refresh exception:", error);
-
-    return {
-      success: false,
-      session: null,
-      error: error.message,
-    };
-  } finally {
-    refreshStatus.isRefreshing = false;
-  }
+  return refreshPromise;
 }
 
 /**
