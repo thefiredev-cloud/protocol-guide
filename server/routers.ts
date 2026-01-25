@@ -2,7 +2,8 @@
  * App Router
  * Composes all domain routers into the main tRPC router
  *
- * Router modules are organized by domain for maintainability:
+ * 15 router modules organized by domain for maintainability:
+ * - system: Health checks and system status
  * - auth: Authentication procedures
  * - counties: County listing and retrieval
  * - user: User profile, counties, and settings
@@ -16,6 +17,7 @@
  * - agencyAdmin: B2B agency management
  * - integration: Partner tracking
  * - referral: Viral growth referral system
+ * - jobs: Background job management
  */
 
 import { systemRouter } from "./_core/systemRouter";
