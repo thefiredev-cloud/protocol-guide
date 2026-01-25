@@ -94,17 +94,18 @@ export async function getProtocolCoverageByState(): Promise<StateCoverage[]> {
 
     for (const row of rows) {
       const stateName = row.state;
+      const rowStateCode = row.state_code;
       if (!stateName || stateName === 'Unknown') continue;
 
-      const stateCode = stateCodeMap[stateName] || stateName;
+      const stateCode = rowStateCode || stateCodeMap[stateName] || stateName;
       const existing = mergedMap.get(stateCode);
 
       const chunkCount = parseInt(row.chunk_count) || 0;
-      const countyCount = parseInt(row.county_count) || 0;
+      const agencyCount = parseInt(row.agency_count) || 0;
 
       if (existing) {
         existing.chunks += chunkCount;
-        existing.counties += countyCount;
+        existing.counties += agencyCount;
       } else {
         // Find the full state name for display
         const displayName = Object.entries(stateCodeMap).find(([name, code]) =>
@@ -113,7 +114,7 @@ export async function getProtocolCoverageByState(): Promise<StateCoverage[]> {
 
         mergedMap.set(stateCode, {
           chunks: chunkCount,
-          counties: countyCount,
+          counties: agencyCount,
           displayName,
         });
       }
