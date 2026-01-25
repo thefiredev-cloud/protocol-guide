@@ -69,8 +69,8 @@ export async function findOrCreateUserBySupabaseAuth(
     const [newUser] = await db
       .insert(users)
       .values({
-        openId: supabaseId,
-        supabaseId,
+        authId: supabaseId,
+        openId: supabaseId, // Legacy compatibility
         email: metadata.email,
         name: metadata.name,
         tier: "free",
