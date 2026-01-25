@@ -49,75 +49,89 @@ export interface StateCoverage {
  * Get protocol coverage statistics by state
  */
 export async function getProtocolCoverageByState(): Promise<StateCoverage[]> {
-  const db = await getDb();
+  try {
+    const db = await getDb();
 
-  // State name to code mapping
-  const stateCodeMap: Record<string, string> = {
-    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
-    'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
-    'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
-    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-    'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
-    'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-    'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
-    'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-    'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
-    'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY',
-    // Handle abbreviations that might be in data
-    'CA': 'CA', 'TX': 'TX', 'FL': 'FL', 'NY': 'NY', 'PA': 'PA', 'IL': 'IL', 'OH': 'OH', 'GA': 'GA',
-  };
+    // State name to code mapping
+    const stateCodeMap: Record<string, string> = {
+      'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
+      'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
+      'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+      'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+      'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
+      'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+      'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+      'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+      'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
+      'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY',
+      // Handle abbreviations that might be in data
+      'CA': 'CA', 'TX': 'TX', 'FL': 'FL', 'NY': 'NY', 'PA': 'PA', 'IL': 'IL', 'OH': 'OH', 'GA': 'GA',
+    };
 
-  const results = await db.execute(sql`
-    SELECT
-      c.state,
-      COUNT(pc.id) as chunk_count,
-      COUNT(DISTINCT c.id) as county_count
-    FROM protocol_chunks pc
-    JOIN counties c ON pc.county_id = c.id
-    GROUP BY c.state
-    ORDER BY chunk_count DESC
-  `);
+    const results = await db.execute(sql`
+      SELECT
+        c.state,
+        COUNT(pc.id) as chunk_count,
+        COUNT(DISTINCT c.id) as county_count
+      FROM protocol_chunks pc
+      JOIN counties c ON pc.county_id = c.id
+      GROUP BY c.state
+      ORDER BY chunk_count DESC
+    `);
 
-  const rows = (results.rows as any[]) || [];
-
-  // Merge duplicate states (e.g., "California" and "CA")
-  const mergedMap = new Map<string, { chunks: number; counties: number; displayName: string }>();
-
-  for (const row of rows) {
-    const stateName = row.state;
-    if (!stateName || stateName === 'Unknown') continue;
-
-    const stateCode = stateCodeMap[stateName] || stateName;
-    const existing = mergedMap.get(stateCode);
-
-    if (existing) {
-      existing.chunks += parseInt(row.chunk_count);
-      existing.counties += parseInt(row.county_count);
-    } else {
-      // Find the full state name for display
-      const displayName = Object.entries(stateCodeMap).find(([name, code]) =>
-        code === stateCode && name.length > 2
-      )?.[0] || stateName;
-
-      mergedMap.set(stateCode, {
-        chunks: parseInt(row.chunk_count),
-        counties: parseInt(row.county_count),
-        displayName,
-      });
+    // Validate response structure
+    if (!results || !Array.isArray(results.rows)) {
+      logger.error({ results: typeof results }, '[Counties] Unexpected DB response in getProtocolCoverageByState');
+      return [];
     }
+
+    const rows = results.rows as any[];
+
+    // Merge duplicate states (e.g., "California" and "CA")
+    const mergedMap = new Map<string, { chunks: number; counties: number; displayName: string }>();
+
+    for (const row of rows) {
+      const stateName = row.state;
+      if (!stateName || stateName === 'Unknown') continue;
+
+      const stateCode = stateCodeMap[stateName] || stateName;
+      const existing = mergedMap.get(stateCode);
+
+      const chunkCount = parseInt(row.chunk_count) || 0;
+      const countyCount = parseInt(row.county_count) || 0;
+
+      if (existing) {
+        existing.chunks += chunkCount;
+        existing.counties += countyCount;
+      } else {
+        // Find the full state name for display
+        const displayName = Object.entries(stateCodeMap).find(([name, code]) =>
+          code === stateCode && name.length > 2
+        )?.[0] || stateName;
+
+        mergedMap.set(stateCode, {
+          chunks: chunkCount,
+          counties: countyCount,
+          displayName,
+        });
+      }
+    }
+
+    // Convert to array and sort by chunks
+    const coverage: StateCoverage[] = Array.from(mergedMap.entries())
+      .map(([stateCode, data]) => ({
+        state: data.displayName,
+        stateCode,
+        chunks: data.chunks,
+        counties: data.counties,
+      }))
+      .sort((a, b) => b.chunks - a.chunks);
+
+    return coverage;
+  } catch (error) {
+    logger.error({ error }, '[Counties] getProtocolCoverageByState failed');
+    throw new Error('Failed to fetch coverage data');
   }
-
-  // Convert to array and sort by chunks
-  const coverage: StateCoverage[] = Array.from(mergedMap.entries())
-    .map(([stateCode, data]) => ({
-      state: data.displayName,
-      stateCode,
-      chunks: data.chunks,
-      counties: data.counties,
-    }))
-    .sort((a, b) => b.chunks - a.chunks);
-
-  return coverage;
 }
 
 export interface AgencyInfo {
