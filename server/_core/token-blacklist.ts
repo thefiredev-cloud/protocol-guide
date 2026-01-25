@@ -99,7 +99,39 @@ export async function isTokenRevoked(userId: string): Promise<boolean> {
     redis.get(`${PERMANENT_REVOCATION_PREFIX}${userId}`)
   ]);
 
-  return tempRevoked !== null || permRevoked !== null;
+  const isRevoked = tempRevoked !== null || permRevoked !== null;
+
+  if (isRevoked) {
+    // Parse revocation records for logging
+    let tempRecord: RevocationRecord | null = null;
+    let permRecord: RevocationRecord | null = null;
+
+    try {
+      if (tempRevoked) {
+        tempRecord = typeof tempRevoked === 'string' ? JSON.parse(tempRevoked) : tempRevoked as RevocationRecord;
+      }
+      if (permRevoked) {
+        permRecord = typeof permRevoked === 'string' ? JSON.parse(permRevoked) : permRevoked as RevocationRecord;
+      }
+    } catch {
+      // Ignore parse errors, log raw data
+    }
+
+    logger.warn(
+      {
+        userId,
+        tempRevoked: !!tempRevoked,
+        permRevoked: !!permRevoked,
+        tempReason: tempRecord?.reason,
+        tempRevokedAt: tempRecord?.revokedAt ? new Date(tempRecord.revokedAt).toISOString() : null,
+        permReason: permRecord?.reason,
+        permRevokedAt: permRecord?.revokedAt ? new Date(permRecord.revokedAt).toISOString() : null,
+      },
+      '[TokenBlacklist] User token check: REVOKED'
+    );
+  }
+
+  return isRevoked;
 }
 
 /**
