@@ -109,7 +109,10 @@ const config: ExpoConfig = {
           NSPrivacyAccessedAPIType: "NSPrivacyAccessedAPICategoryUserDefaults",
           NSPrivacyAccessedAPITypeReasons: ["CA92.1"]  // App functionality
         }
-      ]
+      ],
+
+      // App Store Connect compliance - no non-exempt encryption used
+      ITSAppUsesNonExemptEncryption: false
     },
 
     // Associated domains for universal links
