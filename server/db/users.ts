@@ -121,23 +121,23 @@ export async function findOrCreateUserBySupabaseId(
   }
 
   try {
-    // First, try to find existing user by supabaseId
+    // First, try to find existing user by authId (Supabase auth.users.id)
     const existing = await db
       .select()
       .from(users)
-      .where(eq(users.supabaseId, supabaseId))
+      .where(eq(users.authId, supabaseId))
       .limit(1);
 
     if (existing.length > 0) {
       return existing[0];
     }
 
-    // Create new user with supabaseId as the openId (for backwards compatibility)
+    // Create new user with authId linked to Supabase
     const [newUser] = await db
       .insert(users)
       .values({
-        openId: supabaseId, // Use supabaseId as openId for new users
-        supabaseId,
+        authId: supabaseId,
+        openId: supabaseId, // Legacy compatibility
         email: metadata.email,
         name: metadata.name,
         tier: "free",
