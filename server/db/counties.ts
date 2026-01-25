@@ -68,14 +68,16 @@ export async function getProtocolCoverageByState(): Promise<StateCoverage[]> {
       'CA': 'CA', 'TX': 'TX', 'FL': 'FL', 'NY': 'NY', 'PA': 'PA', 'IL': 'IL', 'OH': 'OH', 'GA': 'GA',
     };
 
+    // Query manus_protocol_chunks which has state_code/state_name directly
     const results = await db.execute(sql`
       SELECT
-        c.state,
-        COUNT(pc.id) as chunk_count,
-        COUNT(DISTINCT c.id) as county_count
-      FROM protocol_chunks pc
-      JOIN counties c ON pc.county_id = c.id
-      GROUP BY c.state
+        COALESCE(state_name, state_code) as state,
+        state_code,
+        COUNT(id) as chunk_count,
+        COUNT(DISTINCT agency_id) as agency_count
+      FROM manus_protocol_chunks
+      WHERE state_code IS NOT NULL
+      GROUP BY state_name, state_code
       ORDER BY chunk_count DESC
     `);
 
