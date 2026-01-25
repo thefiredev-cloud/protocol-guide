@@ -403,7 +403,7 @@ jobs:
         run: echo "Production deployment completed successfully"
 
   deploy-railway:
-    name: Deploy to Railway
+    name: Deploy to Railway (Production)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [build, e2e-tests, visual-regression-tests]
