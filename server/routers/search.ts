@@ -5,6 +5,7 @@
  */
 
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { publicProcedure, publicRateLimitedProcedure, router } from "../_core/trpc";
 import { semanticSearchProtocols } from "../_core/embeddings";
 import { getAgencyByCountyIdOptimized } from "../db-agency-mapping";
