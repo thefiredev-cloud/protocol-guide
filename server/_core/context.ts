@@ -65,6 +65,7 @@ export async function createContext(opts: CreateExpressContextOptions): Promise<
 
         // Check if user's tokens have been revoked
         if (user && await isTokenRevoked(user.id.toString())) {
+          logger.info({ userId: user.id, email: user.email }, '[Context] User rejected: token revoked');
           user = null;
         }
       }
