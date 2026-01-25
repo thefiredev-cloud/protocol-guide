@@ -8,7 +8,8 @@
   "build": {
     "base": {
       "node": "20.18.0",
-      "pnpm": "9.12.0"
+      "pnpm": "9.12.0",
+      "channel": "base"
     },
     "development": {
       "extends": "base",
@@ -40,7 +41,8 @@
       },
       "android": {
         "buildType": "apk"
-      }
+      },
+      "channel": "development-device"
     },
     "preview": {
       "extends": "base",
@@ -64,7 +66,8 @@
       "ios": {
         "resourceClass": "m-medium",
         "buildConfiguration": "Release"
-      }
+      },
+      "channel": "preview-testflight"
     },
     "production": {
       "extends": "base",
