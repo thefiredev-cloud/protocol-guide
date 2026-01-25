@@ -152,14 +152,15 @@ export async function getAgenciesByState(state: string): Promise<AgencyInfo[]> {
   const db = await getDb();
 
   // state can be either state code (CA) or state name (California)
+  // Note: state_code is char(2) so we need TRIM to handle padding
   const results = await db.execute(sql`
     SELECT
       agency_id as id,
       agency_name as name,
-      COALESCE(state_name, state_code) as state,
+      COALESCE(state_name, TRIM(state_code)) as state,
       COUNT(id) as protocol_count
     FROM manus_protocol_chunks
-    WHERE state_code = ${state} OR state_name = ${state}
+    WHERE TRIM(state_code) = ${state} OR state_name = ${state}
     GROUP BY agency_id, agency_name, state_name, state_code
     ORDER BY protocol_count DESC, agency_name ASC
   `);
@@ -181,16 +182,17 @@ export async function getAgenciesByState(state: string): Promise<AgencyInfo[]> {
 export async function getAgenciesWithProtocols(state?: string): Promise<AgencyInfo[]> {
   const db = await getDb();
 
+  // Note: state_code is char(2) so we need TRIM to handle padding
   let query;
   if (state) {
     query = sql`
       SELECT
         agency_id as id,
         agency_name as name,
-        COALESCE(state_name, state_code) as state,
+        COALESCE(state_name, TRIM(state_code)) as state,
         COUNT(id) as protocol_count
       FROM manus_protocol_chunks
-      WHERE (state_code = ${state} OR state_name = ${state})
+      WHERE (TRIM(state_code) = ${state} OR state_name = ${state})
         AND agency_id IS NOT NULL
       GROUP BY agency_id, agency_name, state_name, state_code
       HAVING COUNT(id) > 0
@@ -201,7 +203,7 @@ export async function getAgenciesWithProtocols(state?: string): Promise<AgencyIn
       SELECT
         agency_id as id,
         agency_name as name,
-        COALESCE(state_name, state_code) as state,
+        COALESCE(state_name, TRIM(state_code)) as state,
         COUNT(id) as protocol_count
       FROM manus_protocol_chunks
       WHERE agency_id IS NOT NULL
