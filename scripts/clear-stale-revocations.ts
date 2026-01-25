@@ -11,10 +11,11 @@
  */
 
 import { Redis } from "@upstash/redis";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: path.join(process.cwd(), ".env"), override: true });
 
 const REVOCATION_PREFIX = 'revoked:user:';
 const PERMANENT_REVOCATION_PREFIX = 'revoked:permanent:';
