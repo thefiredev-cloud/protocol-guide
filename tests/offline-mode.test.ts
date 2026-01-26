@@ -3,37 +3,12 @@
  *
  * Critical path tests for EMS field usage - offline mode is essential
  * when paramedics are in areas with poor cellular connectivity.
- *
- * These tests verify:
- * - Protocols can be cached for offline access
- * - Cache operations work correctly (save, retrieve, search, delete)
- * - Tier-based access control for offline features
- * - Network status detection
- * - Cache size limits and cleanup
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-// Use vi.hoisted to declare mock storage before mocks are hoisted
-const { mockStorage, mockNetInfoListeners } = vi.hoisted(() => {
-  return {
-    mockStorage: {} as Record<string, string>,
-    mockNetInfoListeners: [] as ((state: { isConnected: boolean | null }) => void)[],
-  };
-});
-
-// Mock react-native before importing
-vi.mock("react-native", () => ({
-  Platform: {
-    OS: "web",
-    select: vi.fn((obj) => obj.web || obj.default),
-  },
-}));
-
-// Mock register-sw (service worker utilities)
-vi.mock("../lib/register-sw", () => ({
-  cacheProtocolInSW: vi.fn().mockResolvedValue(undefined),
-  queueOfflineSearch: vi.fn().mockResolvedValue(true),
-}));
+// Create storage at module level
+const mockStorage: Record<string, string> = {};
+const mockNetInfoListeners: ((state: { isConnected: boolean | null }) => void)[] = [];
 
 // Mock AsyncStorage
 vi.mock("@react-native-async-storage/async-storage", () => ({
@@ -54,12 +29,25 @@ vi.mock("@react-native-async-storage/async-storage", () => ({
   },
 }));
 
+// Mock react-native
+vi.mock("react-native", () => ({
+  Platform: {
+    OS: "web",
+    select: vi.fn((obj: Record<string, unknown>) => obj.web || obj.default),
+  },
+}));
+
+// Mock register-sw
+vi.mock("../lib/register-sw", () => ({
+  cacheProtocolInSW: vi.fn().mockResolvedValue(undefined),
+  queueOfflineSearch: vi.fn().mockResolvedValue(true),
+}));
+
 // Mock NetInfo
 vi.mock("@react-native-community/netinfo", () => ({
   default: {
     addEventListener: vi.fn((listener) => {
       mockNetInfoListeners.push(listener);
-      // Immediately call with current state
       listener({ isConnected: true });
       return () => {
         const index = mockNetInfoListeners.indexOf(listener);
@@ -75,23 +63,19 @@ import {
   OfflineCache,
   formatCacheSize,
   formatCacheTime,
-  type CachedProtocol,
 } from "../lib/offline-cache";
 
-// Helper to simulate network state change
-function simulateNetworkChange(isConnected: boolean) {
-  mockNetInfoListeners.forEach((listener) => listener({ isConnected }));
+// Helper to clear storage
+function clearStorage() {
+  for (const key of Object.keys(mockStorage)) {
+    delete mockStorage[key];
+  }
 }
 
-// Helper to clear mock storage
-function clearMockStorage() {
-  Object.keys(mockStorage).forEach((key) => delete mockStorage[key]);
-}
-
-// SKIPPING: AsyncStorage mock state isolation issues
-describe.skip("Offline Cache - Core Operations", () => {
+// Use sequential to avoid test isolation issues
+describe.sequential("Offline Cache - Core Operations", () => {
   beforeEach(async () => {
-    clearMockStorage();
+    clearStorage();
     vi.clearAllMocks();
   });
 
@@ -116,13 +100,11 @@ describe.skip("Offline Cache - Core Operations", () => {
         countyId: 1,
         countyName: "Los Angeles County",
       });
-      // ID should be generated from countyId + normalized query
       expect(protocols[0].id).toMatch(/^1_cardiac_arrest_protocol/);
       expect(protocols[0].timestamp).toBeDefined();
     });
 
     it("should update existing protocol when same query/county combination", async () => {
-      // Save initial protocol
       await OfflineCache.saveProtocol({
         query: "stroke protocol",
         response: "Original stroke guidance",
@@ -130,7 +112,6 @@ describe.skip("Offline Cache - Core Operations", () => {
         countyName: "LA County",
       });
 
-      // Save same query/county with updated content
       await OfflineCache.saveProtocol({
         query: "stroke protocol",
         response: "Updated stroke guidance with new FAST assessment",
@@ -183,8 +164,7 @@ describe.skip("Offline Cache - Core Operations", () => {
 
   describe("Protocol Retrieval", () => {
     beforeEach(async () => {
-      clearMockStorage();
-      // Pre-populate cache with test data
+      clearStorage();
       await OfflineCache.saveProtocol({
         query: "cardiac arrest adult",
         response: "Adult cardiac arrest: CPR 30:2...",
@@ -240,7 +220,7 @@ describe.skip("Offline Cache - Core Operations", () => {
 
   describe("Protocol Search", () => {
     beforeEach(async () => {
-      clearMockStorage();
+      clearStorage();
       await OfflineCache.saveProtocol({
         query: "cardiac arrest",
         response: "Begin CPR immediately. Attach AED. Epinephrine 1mg IV/IO...",
@@ -269,7 +249,7 @@ describe.skip("Offline Cache - Core Operations", () => {
 
     it("should search by response content", async () => {
       const results = await OfflineCache.searchCachedProtocols("epinephrine");
-      expect(results).toHaveLength(2); // Both cardiac arrest and anaphylaxis mention epinephrine
+      expect(results).toHaveLength(2);
     });
 
     it("should filter search by county ID", async () => {
@@ -364,7 +344,6 @@ describe.skip("Offline Cache - Core Operations", () => {
 
   describe("Cache Limits", () => {
     it("should respect maximum cache size limit of 50 items", async () => {
-      // Add 55 protocols
       for (let i = 0; i < 55; i++) {
         await OfflineCache.saveProtocol({
           query: `protocol ${i}`,
@@ -379,18 +358,16 @@ describe.skip("Offline Cache - Core Operations", () => {
     });
 
     it("should keep most recent protocols when trimming", async () => {
-      // Add 52 protocols
       for (let i = 0; i < 52; i++) {
         await OfflineCache.saveProtocol({
           query: `protocol number ${i}`,
           response: `response ${i}`,
-          countyId: i, // Different county IDs to avoid updates
+          countyId: i,
           countyName: `County ${i}`,
         });
       }
 
       const protocols = await OfflineCache.getAllProtocols();
-      // Most recent should be at the beginning
       expect(protocols[0].query).toBe("protocol number 51");
     });
   });
@@ -421,8 +398,7 @@ describe("Offline Cache - Utility Functions", () => {
     it("should format 'Just now' for recent timestamps", () => {
       const now = Date.now();
       expect(formatCacheTime(now)).toBe("Just now");
-      expect(formatCacheTime(now - 30000)).toBe("Just now"); // 30 seconds ago
-      // 59000ms is still under 60000 threshold
+      expect(formatCacheTime(now - 30000)).toBe("Just now");
       expect(formatCacheTime(now - 59000)).toBe("Just now");
     });
 
@@ -449,14 +425,12 @@ describe("Offline Cache - Utility Functions", () => {
   });
 });
 
-// SKIPPING: AsyncStorage mock state isolation issues
-describe.skip("Offline Cache - EMS Field Scenarios", () => {
+describe.sequential("Offline Cache - EMS Field Scenarios", () => {
   beforeEach(() => {
-    clearMockStorage();
+    clearStorage();
   });
 
   it("should allow quick access to recently viewed protocols", async () => {
-    // Simulate paramedic reviewing protocols before shift
     const commonProtocols = [
       { query: "cardiac arrest", response: "CPR protocol details..." },
       { query: "stroke", response: "FAST assessment..." },
@@ -474,11 +448,9 @@ describe.skip("Offline Cache - EMS Field Scenarios", () => {
       });
     }
 
-    // Quick retrieval in the field
     const recent = await OfflineCache.getRecentProtocols(5);
     expect(recent).toHaveLength(5);
 
-    // Search should work without network
     const cardiacResults = await OfflineCache.searchCachedProtocols("cardiac");
     expect(cardiacResults).toHaveLength(1);
   });
@@ -503,7 +475,6 @@ describe.skip("Offline Cache - EMS Field Scenarios", () => {
   });
 
   it("should support multi-county medic workflow", async () => {
-    // Paramedic works across multiple counties
     await OfflineCache.saveProtocol({
       query: "trauma",
       response: "County A trauma protocol",
@@ -517,7 +488,6 @@ describe.skip("Offline Cache - EMS Field Scenarios", () => {
       countyName: "County B",
     });
 
-    // Can filter by current jurisdiction
     const countyAProtocols = await OfflineCache.getProtocolsByCounty(1);
     const countyBProtocols = await OfflineCache.getProtocolsByCounty(2);
 

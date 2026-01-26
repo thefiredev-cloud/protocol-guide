@@ -1,49 +1,55 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, beforeAll } from "vitest";
 
-// Use vi.hoisted to declare mock storage before mocks are hoisted
-const { mockStorage } = vi.hoisted(() => {
+// Create storage at module level so it persists
+const mockStorage: Record<string, string> = {};
+
+// Mock AsyncStorage before anything else
+vi.mock("@react-native-async-storage/async-storage", () => {
   return {
-    mockStorage: {} as Record<string, string>,
+    default: {
+      getItem: vi.fn((key: string) => {
+        return Promise.resolve(mockStorage[key] || null);
+      }),
+      setItem: vi.fn((key: string, value: string) => {
+        mockStorage[key] = value;
+        return Promise.resolve();
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete mockStorage[key];
+        return Promise.resolve();
+      }),
+    },
   };
 });
 
-// Mock react-native (must be before importing offline-cache)
+// Mock react-native
 vi.mock("react-native", () => ({
   Platform: {
     OS: "web",
-    select: vi.fn((obj) => obj.web || obj.default),
+    select: vi.fn((obj: Record<string, unknown>) => obj.web || obj.default),
   },
 }));
 
-// Mock register-sw (service worker utilities)
+// Mock register-sw
 vi.mock("../lib/register-sw", () => ({
   cacheProtocolInSW: vi.fn().mockResolvedValue(undefined),
   queueOfflineSearch: vi.fn().mockResolvedValue(true),
 }));
 
-// Mock AsyncStorage
-vi.mock("@react-native-async-storage/async-storage", () => ({
-  default: {
-    getItem: vi.fn((key: string) => Promise.resolve(mockStorage[key] || null)),
-    setItem: vi.fn((key: string, value: string) => {
-      mockStorage[key] = value;
-      return Promise.resolve();
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete mockStorage[key];
-      return Promise.resolve();
-    }),
-  },
-}));
-
 // Import after mocking
-import { OfflineCache, formatCacheSize, formatCacheTime, CachedProtocol } from "../lib/offline-cache";
+import { OfflineCache, formatCacheSize, formatCacheTime } from "../lib/offline-cache";
 
-// Skip: AsyncStorage mock state isolation issues between tests
-describe.skip("Offline Cache Service", () => {
+// Helper to clear storage
+function clearStorage() {
+  for (const key of Object.keys(mockStorage)) {
+    delete mockStorage[key];
+  }
+}
+
+// Use sequential to avoid test isolation issues with shared mock storage
+describe.sequential("Offline Cache Service", () => {
   beforeEach(async () => {
-    // Clear mock storage before each test
-    Object.keys(mockStorage).forEach((key) => delete mockStorage[key]);
+    clearStorage();
     vi.clearAllMocks();
   });
 
