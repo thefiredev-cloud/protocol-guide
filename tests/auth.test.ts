@@ -92,13 +92,19 @@ function createAuthenticatedContext(userOverrides: Partial<AuthenticatedUser> = 
 function createUnauthenticatedContext() {
   type CookieCall = { name: string; options: Record<string, unknown> };
   const clearedCookies: CookieCall[] = [];
+  const csrfToken = "test-csrf-token-for-unauthenticated";
 
   const ctx: TrpcContext = {
     user: null,
     req: {
       protocol: "https",
       hostname: "localhost",
-      headers: {},
+      headers: {
+        "x-csrf-token": csrfToken,
+      },
+      cookies: {
+        csrf_token: csrfToken,
+      },
       socket: {
         remoteAddress: "127.0.0.1",
       },

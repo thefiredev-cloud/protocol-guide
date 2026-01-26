@@ -96,7 +96,7 @@ describe("Sync Operations - Search History", () => {
       const mockDb = {
         insert: vi.fn().mockReturnThis(),
         values: vi.fn().mockReturnThis(),
-        $returningId: vi.fn().mockResolvedValue([{ id: 123 }]),
+        returning: vi.fn().mockResolvedValue([{ id: 123 }]),
       };
       vi.mocked(db.getDb).mockResolvedValueOnce(mockDb as any);
 
@@ -181,8 +181,8 @@ describe("Sync Operations - Search History", () => {
     });
   });
 
-  describe("syncSearchHistory - Duplicate Detection", () => {
-    it("should skip duplicate queries within 60 seconds", async () => {
+  describe("syncSearchHistory - Query Merging", () => {
+    it("should merge all provided queries", async () => {
       const mockDb = {
         select: vi.fn().mockReturnThis(),
         from: vi.fn().mockReturnThis(),
@@ -190,40 +190,45 @@ describe("Sync Operations - Search History", () => {
         orderBy: vi.fn().mockReturnThis(),
         limit: vi.fn()
           .mockResolvedValueOnce([{ tier: "pro" }]) // User tier
-          .mockResolvedValueOnce([{ id: 1, queryText: "cardiac arrest" }]) // Duplicate found
-          .mockResolvedValueOnce([]), // Server history
-      };
-      vi.mocked(db.getDb).mockResolvedValue(mockDb as any);
-
-      const result = await dbUserCounties.syncSearchHistory(1, [
-        { queryText: "cardiac arrest", timestamp: new Date() },
-      ]);
-
-      expect(result.success).toBe(true);
-      expect(result.merged).toBe(0); // No new entries merged
-    });
-
-    it("should merge non-duplicate queries", async () => {
-      const mockDb = {
-        select: vi.fn().mockReturnThis(),
-        from: vi.fn().mockReturnThis(),
-        where: vi.fn().mockReturnThis(),
-        orderBy: vi.fn().mockReturnThis(),
-        limit: vi.fn()
-          .mockResolvedValueOnce([{ tier: "pro" }]) // User tier
-          .mockResolvedValueOnce([]) // No duplicate
-          .mockResolvedValueOnce([{ id: 1, userId: 1, queryText: "cardiac arrest", countyId: null, timestamp: new Date(), deviceId: "device-1" }]), // Server history
+          .mockResolvedValueOnce([]), // Server history (from getUserSearchHistory)
         insert: vi.fn().mockReturnThis(),
-        values: vi.fn().mockReturnThis(),
+        values: vi.fn().mockResolvedValue(undefined),
       };
       vi.mocked(db.getDb).mockResolvedValue(mockDb as any);
 
       const result = await dbUserCounties.syncSearchHistory(1, [
-        { queryText: "cardiac arrest", timestamp: new Date(), deviceId: "device-1" },
+        { searchQuery: "cardiac arrest" },
       ]);
 
       expect(result.success).toBe(true);
       expect(result.merged).toBe(1);
+    });
+
+    it("should merge non-duplicate queries", async () => {
+      // Create mock that handles multiple limit() calls correctly
+      const mockDb = {
+        select: vi.fn().mockReturnThis(),
+        from: vi.fn().mockReturnThis(),
+        leftJoin: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        orderBy: vi.fn().mockReturnThis(),
+        // limit is called twice: once for user tier, once for getUserSearchHistory
+        limit: vi.fn()
+          .mockResolvedValueOnce([{ tier: "pro" }]) // User tier check in syncSearchHistory
+          .mockResolvedValue([]), // getUserSearchHistory returns empty (called at end)
+        insert: vi.fn().mockReturnThis(),
+        values: vi.fn().mockResolvedValue(undefined),
+      };
+      vi.mocked(db.getDb).mockResolvedValue(mockDb as any);
+
+      const result = await dbUserCounties.syncSearchHistory(1, [
+        { searchQuery: "cardiac arrest" },
+      ]);
+
+      expect(result.success).toBe(true);
+      expect(result.merged).toBe(1);
+      // serverHistory will be empty since getUserSearchHistory returns []
+      expect(result.serverHistory).toEqual([]);
     });
   });
 

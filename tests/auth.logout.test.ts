@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { appRouter } from "../server/routers";
 import { COOKIE_NAME } from "../shared/const";
 import type { TrpcContext } from "../server/_core/context";
-import { createMockTraceContext } from "./setup";
+import { createMockTraceContext, createMockRequest } from "./setup";
 
 type CookieCall = {
   name: string;
@@ -37,11 +37,7 @@ function createAuthContext(): { ctx: TrpcContext; clearedCookies: CookieCall[] }
   
   const ctx: TrpcContext = {
     user,
-    req: {
-      protocol: "https",
-      hostname: "localhost",
-      headers: {},
-    } as TrpcContext["req"],
+    req: createMockRequest() as TrpcContext["req"],
     res: {
       clearCookie: (name: string, options: Record<string, unknown>) => {
         clearedCookies.push({ name, options });

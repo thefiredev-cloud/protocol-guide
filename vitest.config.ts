@@ -61,9 +61,9 @@ export default defineConfig({
       },
     },
 
-    // Mock modules
+    // Path aliases
     alias: {
-      "@/": path.resolve(__dirname, "./"),
+      "@": path.resolve(__dirname, "."),
     },
 
     // Reporter configuration

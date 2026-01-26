@@ -92,9 +92,25 @@ export function createMockTraceContext(overrides: Partial<{
   };
 }
 
+// Counter for generating unique IPs to avoid rate limit collisions in tests
+let testIpCounter = 0;
+
+/**
+ * Generate a unique IP address for each test to avoid rate limit conflicts
+ */
+function generateUniqueTestIp(): string {
+  testIpCounter++;
+  // Use the test counter to generate unique IPs in the 10.x.x.x range
+  const a = (testIpCounter >> 16) & 0xff;
+  const b = (testIpCounter >> 8) & 0xff;
+  const c = testIpCounter & 0xff;
+  return `10.${a}.${b}.${c}`;
+}
+
 /**
  * Create a mock Express-like request object for tRPC context
  * Includes all properties needed by middleware (CSRF, tracing, rate limiting)
+ * Uses unique IPs to avoid rate limit conflicts between tests
  */
 export function createMockRequest(overrides: Record<string, unknown> = {}) {
   const { headers: headersOverrides, cookies: cookiesOverrides, ...restOverrides } = overrides as {
@@ -104,6 +120,7 @@ export function createMockRequest(overrides: Record<string, unknown> = {}) {
   };
 
   const csrfToken = "test-csrf-token-12345";
+  const testIp = generateUniqueTestIp();
 
   return {
     protocol: "https",
@@ -111,7 +128,7 @@ export function createMockRequest(overrides: Record<string, unknown> = {}) {
     method: "POST",
     url: "/api/trpc",
     path: "/api/trpc",
-    ip: "127.0.0.1",
+    ip: testIp,
     headers: {
       authorization: "Bearer test_token",
       "user-agent": "vitest-test-agent",
@@ -124,7 +141,7 @@ export function createMockRequest(overrides: Record<string, unknown> = {}) {
       ...(cookiesOverrides || {}),
     },
     socket: {
-      remoteAddress: "127.0.0.1",
+      remoteAddress: testIp,
     },
     ...restOverrides,
   };

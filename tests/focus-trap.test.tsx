@@ -12,24 +12,32 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
+// Check if we have DOM environment (jsdom or browser)
+const hasDOMEnvironment = typeof document !== "undefined" && typeof window !== "undefined";
+
 // Try to import testing library, skip tests if not available
 let renderHook: typeof import("@testing-library/react").renderHook;
 let act: typeof import("@testing-library/react").act;
 let hasTestingLibrary = false;
 
-try {
-  const testingLib = await import("@testing-library/react");
-  renderHook = testingLib.renderHook;
-  act = testingLib.act;
-  hasTestingLibrary = true;
-} catch {
-  // @testing-library/react not installed - create dummy functions that won't be called
+if (hasDOMEnvironment) {
+  try {
+    const testingLib = await import("@testing-library/react");
+    renderHook = testingLib.renderHook;
+    act = testingLib.act;
+    hasTestingLibrary = true;
+  } catch {
+    // @testing-library/react not installed - create dummy functions that won't be called
+    renderHook = (() => ({ result: { current: {} }, rerender: () => {} })) as never;
+    act = ((fn: () => void) => fn()) as never;
+  }
+} else {
   renderHook = (() => ({ result: { current: {} }, rerender: () => {} })) as never;
   act = ((fn: () => void) => fn()) as never;
 }
 
-// Skip all tests if testing library not available
-const describeOrSkip = hasTestingLibrary ? describe : describe.skip;
+// Skip all tests if no DOM environment or testing library not available
+const describeOrSkip = hasDOMEnvironment && hasTestingLibrary ? describe : describe.skip;
 
 // Import after mocks
 import { useFocusTrap } from "@/lib/accessibility";
