@@ -1,0 +1,420 @@
+{
+  "catalogDate": "2026-01-25",
+  "cataloger": "Subagent LACoFD Training Catalog",
+  "summary": {
+    "totalSources": 2,
+    "totalVideos": 32,
+    "primaryFocus": "EMT Skills, Paramedic Training, EMS Protocols"
+  },
+  "sources": {
+    "vimeo": {
+      "showcase": {
+        "title": "LACoFD EMT Skills",
+        "url": "https://vimeo.com/showcase/8472799",
+        "publisher": "LACoFD Lifeguard Division",
+        "publisherUrl": "https://vimeo.com/lacolifeguards",
+        "uploadDate": "2021-05-15",
+        "videoCount": 13,
+        "division": "Lifeguard Division",
+        "description": "EMT-level skills training videos produced by LACoFD Lifeguard Division for internal training purposes"
+      }
+    },
+    "youtube": {
+      "channel": {
+        "name": "Los Angeles County Fire Department",
+        "handle": "@LosAngelesCountyFD",
+        "url": "https://www.youtube.com/@LosAngelesCountyFD",
+        "subscribers": "27.1K",
+        "totalVideos": 684,
+        "emsRelatedVideos": 19
+      },
+      "keyPlaylists": [
+        {
+          "name": "EMS Skills",
+          "videoCount": 2,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXW_vlnARd1mqqi3nB9pQYna"
+        },
+        {
+          "name": "Lifeguard Training",
+          "videoCount": 1,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXW8OWQXfbaKdznJekxQXYXv"
+        },
+        {
+          "name": "Recruit Training",
+          "videoCount": 11,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXUOYPU6GX4lzzg4h9TYFDpF"
+        },
+        {
+          "name": "MSA G1 - SCBA",
+          "videoCount": 10,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXVDEyX7Daxeu6dQGwgeYpjJ"
+        },
+        {
+          "name": "Fireground Survival",
+          "videoCount": 2,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXUjnACdpX36v5ySpJG5B7WI"
+        },
+        {
+          "name": "UL Training - Steve Kerber",
+          "videoCount": 12,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXXQU7n2jCUdcPg8z9UArmzP"
+        },
+        {
+          "name": "Regional Training Group - RTG",
+          "videoCount": 4,
+          "url": "https://www.youtube.com/playlist?list=PLkSF-_PP0nXV_cqklXbPCir5ou9qtrFub"
+        }
+      ]
+    }
+  },
+  "videos": {
+    "vimeo_emt_skills": [
+      {
+        "id": "549737402",
+        "title": "PATIENT ASSESSMENT",
+        "url": "https://vimeo.com/549737402",
+        "duration": "4:38",
+        "views": 1057,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Assessment",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Primary assessment", "Secondary assessment", "SAMPLE history", "OPQRST"]
+      },
+      {
+        "id": "549736983",
+        "title": "PENETRATION",
+        "url": "https://vimeo.com/549736983",
+        "duration": "1:23",
+        "views": 591,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Trauma",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Penetrating wound care", "Wound management", "Occlusive dressing"]
+      },
+      {
+        "id": "549735196",
+        "title": "OB (Obstetric Emergency)",
+        "url": "https://vimeo.com/549735196",
+        "duration": "5:30",
+        "views": 566,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "OB/GYN",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Field delivery", "Cord clamping", "Postpartum care"]
+      },
+      {
+        "id": "549734100",
+        "title": "NEONATE",
+        "url": "https://vimeo.com/549734100",
+        "duration": "3:14",
+        "views": 410,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Pediatric/Neonatal",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Neonatal resuscitation", "APGAR scoring", "Neonatal assessment"]
+      },
+      {
+        "id": "549733721",
+        "title": "NARCAN",
+        "url": "https://vimeo.com/549733721",
+        "duration": "1:08",
+        "views": 504,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Medications/Toxicology",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": ["Naloxone (Narcan)"],
+        "keyProcedures": ["Intranasal naloxone administration", "Opioid overdose recognition"],
+        "formularyNote": "EMT-level Narcan administration for suspected opioid overdose"
+      },
+      {
+        "id": "549732988",
+        "title": "KED (Kendrick Extrication Device)",
+        "url": "https://vimeo.com/549732988",
+        "duration": "3:01",
+        "views": 325,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Spinal Immobilization",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["KED application", "Seated patient extrication", "Spinal motion restriction"]
+      },
+      {
+        "id": "549732447",
+        "title": "GLUCOSE",
+        "url": "https://vimeo.com/549732447",
+        "duration": "2:22",
+        "views": 345,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Medications/Endocrine",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": ["Oral glucose"],
+        "keyProcedures": ["Blood glucose monitoring", "Oral glucose administration", "Hypoglycemia management"],
+        "formularyNote": "EMT-level oral glucose for conscious hypoglycemic patients"
+      },
+      {
+        "id": "549732013",
+        "title": "EPINEPHRINE",
+        "url": "https://vimeo.com/549732013",
+        "duration": "1:47",
+        "views": 398,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Medications/Allergic Reactions",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": ["Epinephrine (EpiPen/auto-injector)"],
+        "keyProcedures": ["Epinephrine auto-injector administration", "Anaphylaxis recognition"],
+        "formularyNote": "EMT-level epinephrine auto-injector for anaphylaxis"
+      },
+      {
+        "id": "549731436",
+        "title": "CPR",
+        "url": "https://vimeo.com/549731436",
+        "duration": "2:01",
+        "views": 449,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Cardiac Arrest",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["High-quality CPR", "Chest compression technique", "AED use"]
+      },
+      {
+        "id": "549730746",
+        "title": "C-COLLAR-CSM",
+        "url": "https://vimeo.com/549730746",
+        "duration": "3:17",
+        "views": 293,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Spinal Immobilization",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Cervical collar application", "CSM check (Circulation, Sensation, Movement)", "Manual inline stabilization"]
+      },
+      {
+        "id": "549729907",
+        "title": "BLEEDING",
+        "url": "https://vimeo.com/549729907",
+        "duration": "3:30",
+        "views": 332,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Trauma/Hemorrhage",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Direct pressure", "Tourniquet application", "Wound packing", "Hemorrhage control"]
+      },
+      {
+        "id": "549727372",
+        "title": "BACKBOARD",
+        "url": "https://vimeo.com/549727372",
+        "duration": "4:32",
+        "views": 255,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Spinal Immobilization",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["Long spine board application", "Log roll technique", "Patient securing"]
+      },
+      {
+        "id": "549726171",
+        "title": "AIRWAY-MANAGEMENT",
+        "url": "https://vimeo.com/549726171",
+        "duration": "4:01",
+        "views": 316,
+        "publisher": "LACoFD Lifeguard Division",
+        "uploadDate": "2021-05-15",
+        "category": "Airway",
+        "emtLevel": "EMT-Basic",
+        "medicationMentions": [],
+        "keyProcedures": ["OPA insertion", "NPA insertion", "Bag-valve-mask ventilation", "Suctioning"]
+      }
+    ],
+    "youtube_ems_training": [
+      {
+        "id": "fV73c54EwiI",
+        "title": "STAGES - Paramedic Intern Field Training",
+        "url": "https://www.youtube.com/watch?v=fV73c54EwiI",
+        "duration": "4:28",
+        "views": 5400,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2019,
+        "category": "Paramedic Training",
+        "emtLevel": "Paramedic",
+        "description": "Introduction to the LACoFD Paramedic Preceptor training program (STAGES system)",
+        "keyTopics": ["Paramedic internship", "Field training officer", "Preceptor program", "STAGES evaluation system"]
+      },
+      {
+        "id": "VWMhwNbuBmk",
+        "title": "Tactical EMS Training: Preview",
+        "url": "https://www.youtube.com/watch?v=VWMhwNbuBmk",
+        "duration": "1:25",
+        "views": 2400,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2019,
+        "category": "TEMS",
+        "emtLevel": "Paramedic",
+        "description": "Introduction to tactical EMS training produced by LACoFD Training Division",
+        "keyTopics": ["Tactical medicine", "Active shooter response", "Rescue task force"]
+      },
+      {
+        "id": "Ihk22nZzpFY",
+        "title": "Mass Casualty Incidents: Communications",
+        "url": "https://www.youtube.com/watch?v=Ihk22nZzpFY",
+        "duration": "4:50",
+        "views": 31000,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2019,
+        "category": "MCI",
+        "emtLevel": "All",
+        "description": "Communication Triangle for MCI operability. Produced by LACoFD Training Division",
+        "keyTopics": ["MCI communications", "Communication triangle", "ICS", "Triage communications"]
+      },
+      {
+        "id": "MZr5gm2EaBk",
+        "title": "Turnout Removal CPR",
+        "url": "https://www.youtube.com/watch?v=MZr5gm2EaBk",
+        "duration": "1:10",
+        "views": 13000,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2024,
+        "category": "Cardiac Arrest/Firefighter Rescue",
+        "emtLevel": "All",
+        "description": "Coordinated removal of turnout gear following sudden cardiac arrest of a firefighter",
+        "keyTopics": ["Firefighter cardiac arrest", "Turnout gear removal", "CPR on firefighters"]
+      },
+      {
+        "id": "Yw9aGA8v1mg",
+        "title": "EMT Skills - Bleeding Control",
+        "url": "https://www.youtube.com/watch?v=Yw9aGA8v1mg",
+        "duration": "8:51",
+        "views": 48000,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2019,
+        "category": "Trauma/Hemorrhage",
+        "emtLevel": "EMT-Basic",
+        "keyProcedures": ["Tourniquet application", "Wound packing", "Hemostatic agents"],
+        "equipmentMentions": ["CAT tourniquet", "Combat gauze"]
+      },
+      {
+        "id": "bNCIPL_FOOQ",
+        "title": "Incident Within an Incident",
+        "url": "https://www.youtube.com/watch?v=bNCIPL_FOOQ",
+        "duration": "7:05",
+        "views": 8900,
+        "publisher": "Los Angeles County Fire Department",
+        "uploadYear": 2019,
+        "category": "Scene Safety/EMS Operations",
+        "emtLevel": "All",
+        "description": "Managing secondary incidents and crew safety during EMS operations"
+      }
+    ],
+    "youtube_paramedic_pearls": [
+      {
+        "id": "vXYNSnPngEQ",
+        "title": "Paramedic Pearls: Trauma Team Activation",
+        "url": "https://www.youtube.com/watch?v=vXYNSnPngEQ",
+        "duration": "4:04",
+        "views": 1000,
+        "publisher": "Los Angeles County Fire Department",
+        "presenter": "Dr. Clayton Kazan (LACoFD Medical Director)",
+        "uploadYear": 2019,
+        "category": "Trauma",
+        "emtLevel": "Paramedic",
+        "description": "Importance of activating trauma team when delivering patient to trauma center",
+        "keyTopics": ["Trauma team activation", "Trauma center delivery", "Pre-arrival notification"]
+      },
+      {
+        "id": "lS0BMC2ozUc",
+        "title": "Paramedic Pearls: EKG Scoring System",
+        "url": "https://www.youtube.com/watch?v=lS0BMC2ozUc",
+        "duration": "7:00",
+        "views": 478,
+        "publisher": "Los Angeles County Fire Department",
+        "presenter": "Dr. Clayton Kazan (LACoFD Medical Director)",
+        "uploadYear": 2019,
+        "category": "Cardiac/STEMI",
+        "emtLevel": "Paramedic",
+        "description": "STEMI scoring system for ST-Elevation Myocardial Infarction",
+        "keyTopics": ["STEMI recognition", "EKG interpretation", "Cardiac scoring system", "Cath lab activation"]
+      },
+      {
+        "id": "YGaM6OOBcns",
+        "title": "Paramedic Pearls: ePCR",
+        "url": "https://www.youtube.com/watch?v=YGaM6OOBcns",
+        "duration": "5:20",
+        "views": 324,
+        "publisher": "Los Angeles County Fire Department",
+        "presenter": "Dr. Clayton Kazan (LACoFD Medical Director)",
+        "uploadYear": 2019,
+        "category": "Documentation",
+        "emtLevel": "All",
+        "description": "Tips for Electronic Patient Care Record documentation",
+        "keyTopics": ["ePCR documentation", "ImageTrend Elite", "Narrative documentation"]
+      },
+      {
+        "id": "zQHHhONZG4c",
+        "title": "Paramedic Pearls: Good Quality CPR",
+        "url": "https://www.youtube.com/watch?v=zQHHhONZG4c",
+        "duration": "5:39",
+        "views": 447,
+        "publisher": "Los Angeles County Fire Department",
+        "presenter": "Dr. Clayton Kazan (LACoFD Medical Director)",
+        "uploadYear": 2019,
+        "category": "Cardiac Arrest",
+        "emtLevel": "All",
+        "description": "Key points for ensuring good quality CPR",
+        "keyTopics": ["CPR quality metrics", "Compression depth", "Compression rate", "Minimal interruptions"]
+      },
+      {
+        "id": "p-bHMMdkIWg",
+        "title": "Paramedic Pearls: Rapid Atrial Fibrillation and SVT",
+        "url": "https://www.youtube.com/watch?v=p-bHMMdkIWg",
+        "duration": "4:16",
+        "views": 5100,
+        "publisher": "Los Angeles County Fire Department",
+        "presenter": "Dr. Clayton Kazan (LACoFD Medical Director)",
+        "uploadYear": 2019,
+        "category": "Cardiac/Dysrhythmia",
+        "emtLevel": "Paramedic",
+        "description": "Differentiating between Rapid AFib and SVT",
+        "keyTopics": ["Atrial fibrillation", "SVT", "Dysrhythmia recognition", "Treatment protocols"],
+        "medicationMentions": ["Adenosine", "Cardioversion"]
+      }
+    ]
+  },
+  "keyPersonnel": {
+    "medicalDirector": {
+      "name": "Dr. Clayton Kazan",
+      "role": "LACoFD Medical Director",
+      "videoSeries": "Paramedic Pearls",
+      "videoCount": 5
+    }
+  },
+  "equipment": {
+    "documented": [
+      "CAT Tourniquet",
+      "Combat Gauze",
+      "Kendrick Extrication Device (KED)",
+      "Long Spine Board",
+      "Cervical Collar",
+      "AED",
+      "BVM (Bag-Valve-Mask)",
+      "OPA/NPA",
+      "EpiPen/Auto-injector",
+      "Intranasal Naloxone device"
+    ]
+  }
+}

@@ -1,7 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
+import { cacheProtocolInSW, queueOfflineSearch } from "./register-sw";
 
 const CACHE_KEY = "protocol_cache";
+const CACHE_METADATA_KEY = "protocol_cache_metadata";
+const PENDING_SEARCHES_KEY = "protocol_pending_searches";
+const MAX_CACHED_ITEMS = 50; // Maximum number of cached protocol responses
+const MAX_PENDING_SEARCHES = 20; // Maximum pending offline searches
 
 /**
  * Calculate byte length of a string in a platform-safe way
@@ -29,8 +34,6 @@ function getByteLength(str: string): number {
   }
   return byteLength;
 }
-const CACHE_METADATA_KEY = "protocol_cache_metadata";
-const MAX_CACHED_ITEMS = 50; // Maximum number of cached protocol responses
 
 export type CachedProtocol = {
   id: string;
@@ -40,12 +43,26 @@ export type CachedProtocol = {
   countyId: number;
   countyName: string;
   timestamp: number;
+  // Additional fields for better offline experience
+  protocolTitle?: string;
+  protocolNumber?: string;
+  isFavorite?: boolean;
+};
+
+export type PendingSearch = {
+  id: string;
+  query: string;
+  stateFilter?: string;
+  agencyId?: number;
+  timestamp: number;
+  retryCount: number;
 };
 
 type CacheMetadata = {
   lastUpdated: number;
   itemCount: number;
   totalSize: number;
+  pendingSearchCount: number;
 };
 
 /**
@@ -79,14 +96,33 @@ export const OfflineCache = {
         // Add new entry at the beginning
         cache.unshift(newEntry);
         
-        // Trim cache if it exceeds max items
+        // Trim cache if it exceeds max items (keep favorites)
+        const favorites = cache.filter(p => p.isFavorite);
+        const nonFavorites = cache.filter(p => !p.isFavorite);
+        
         if (cache.length > MAX_CACHED_ITEMS) {
-          cache.pop();
+          // Keep all favorites + most recent non-favorites
+          const maxNonFavorites = MAX_CACHED_ITEMS - favorites.length;
+          const trimmedNonFavorites = nonFavorites.slice(0, maxNonFavorites);
+          cache.length = 0;
+          cache.push(...favorites, ...trimmedNonFavorites);
         }
       }
 
       await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(cache));
       await this.updateMetadata(cache);
+      
+      // Also cache in Service Worker for web PWA
+      if (Platform.OS === "web") {
+        cacheProtocolInSW({
+          id,
+          query: protocol.query,
+          content: protocol.response,
+          title: protocol.protocolTitle,
+          agencyId: protocol.countyId,
+          agencyName: protocol.countyName,
+        });
+      }
     } catch (error) {
       console.error("Error saving protocol to cache:", error);
     }
@@ -123,7 +159,8 @@ export const OfflineCache = {
     return cache.filter(p => {
       const matchesSearch = 
         p.query.toLowerCase().includes(searchLower) ||
-        p.response.toLowerCase().includes(searchLower);
+        p.response.toLowerCase().includes(searchLower) ||
+        (p.protocolTitle?.toLowerCase().includes(searchLower) ?? false);
       const matchesCounty = countyId ? p.countyId === countyId : true;
       return matchesSearch && matchesCounty;
     });
@@ -146,12 +183,41 @@ export const OfflineCache = {
   },
 
   /**
+   * Get favorite protocols
+   */
+  async getFavoriteProtocols(): Promise<CachedProtocol[]> {
+    const cache = await this.getAllProtocols();
+    return cache.filter(p => p.isFavorite);
+  },
+
+  /**
+   * Toggle favorite status for a protocol
+   */
+  async toggleFavorite(id: string): Promise<boolean> {
+    try {
+      const cache = await this.getAllProtocols();
+      const protocol = cache.find(p => p.id === id);
+      
+      if (protocol) {
+        protocol.isFavorite = !protocol.isFavorite;
+        await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+        return protocol.isFavorite;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      return false;
+    }
+  },
+
+  /**
    * Clear all cached protocols
    */
   async clearCache(): Promise<void> {
     try {
       await AsyncStorage.removeItem(CACHE_KEY);
       await AsyncStorage.removeItem(CACHE_METADATA_KEY);
+      await AsyncStorage.removeItem(PENDING_SEARCHES_KEY);
     } catch (error) {
       console.error("Error clearing protocol cache:", error);
     }
@@ -190,10 +256,13 @@ export const OfflineCache = {
   async updateMetadata(cache: CachedProtocol[]): Promise<void> {
     try {
       const cacheString = JSON.stringify(cache);
+      const pendingSearches = await this.getPendingSearches();
+      
       const metadata: CacheMetadata = {
         lastUpdated: Date.now(),
         itemCount: cache.length,
         totalSize: getByteLength(cacheString),
+        pendingSearchCount: pendingSearches.length,
       };
       await AsyncStorage.setItem(CACHE_METADATA_KEY, JSON.stringify(metadata));
     } catch (error) {
@@ -207,6 +276,117 @@ export const OfflineCache = {
   async hasCache(): Promise<boolean> {
     const cache = await this.getAllProtocols();
     return cache.length > 0;
+  },
+
+  // ============================================
+  // Pending Offline Searches
+  // ============================================
+
+  /**
+   * Queue a search to be executed when back online
+   */
+  async queueSearch(search: Omit<PendingSearch, "id" | "timestamp" | "retryCount">): Promise<void> {
+    try {
+      const pendingSearches = await this.getPendingSearches();
+      
+      // Check if this search already exists
+      const existingIndex = pendingSearches.findIndex(
+        s => s.query === search.query && s.agencyId === search.agencyId
+      );
+      
+      if (existingIndex >= 0) {
+        // Update timestamp
+        pendingSearches[existingIndex].timestamp = Date.now();
+      } else {
+        // Add new search
+        const newSearch: PendingSearch = {
+          ...search,
+          id: Date.now().toString() + Math.random().toString(36).slice(2, 9),
+          timestamp: Date.now(),
+          retryCount: 0,
+        };
+        
+        pendingSearches.unshift(newSearch);
+        
+        // Trim if too many pending searches
+        if (pendingSearches.length > MAX_PENDING_SEARCHES) {
+          pendingSearches.pop();
+        }
+      }
+      
+      await AsyncStorage.setItem(PENDING_SEARCHES_KEY, JSON.stringify(pendingSearches));
+      
+      // Also queue in Service Worker for background sync
+      if (Platform.OS === "web") {
+        queueOfflineSearch({
+          query: search.query,
+          stateFilter: search.stateFilter,
+          agencyId: search.agencyId,
+        });
+      }
+    } catch (error) {
+      console.error("Error queueing search:", error);
+    }
+  },
+
+  /**
+   * Get all pending searches
+   */
+  async getPendingSearches(): Promise<PendingSearch[]> {
+    try {
+      const data = await AsyncStorage.getItem(PENDING_SEARCHES_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.error("Error reading pending searches:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Remove a pending search (after it's been processed)
+   */
+  async removePendingSearch(id: string): Promise<void> {
+    try {
+      const pendingSearches = await this.getPendingSearches();
+      const filtered = pendingSearches.filter(s => s.id !== id);
+      await AsyncStorage.setItem(PENDING_SEARCHES_KEY, JSON.stringify(filtered));
+    } catch (error) {
+      console.error("Error removing pending search:", error);
+    }
+  },
+
+  /**
+   * Clear all pending searches
+   */
+  async clearPendingSearches(): Promise<void> {
+    try {
+      await AsyncStorage.removeItem(PENDING_SEARCHES_KEY);
+    } catch (error) {
+      console.error("Error clearing pending searches:", error);
+    }
+  },
+
+  /**
+   * Increment retry count for a pending search
+   */
+  async incrementRetryCount(id: string): Promise<void> {
+    try {
+      const pendingSearches = await this.getPendingSearches();
+      const search = pendingSearches.find(s => s.id === id);
+      
+      if (search) {
+        search.retryCount += 1;
+        
+        // Remove if too many retries
+        if (search.retryCount >= 3) {
+          await this.removePendingSearch(id);
+        } else {
+          await AsyncStorage.setItem(PENDING_SEARCHES_KEY, JSON.stringify(pendingSearches));
+        }
+      }
+    } catch (error) {
+      console.error("Error incrementing retry count:", error);
+    }
   },
 };
 

@@ -18,6 +18,7 @@ import {
   type OptimizedSearchOptions,
 } from "../_core/rag";
 import { validateTier, validateQueryLimit, validateSubscriptionActive, validateTierValue, getUserTierFeatures } from "../_core/tier-validation";
+import { logQuery, createQueryLogEntry } from "../_core/query-analytics";
 import * as db from "../db";
 import * as dbUserCounties from "../db-user-counties";
 
@@ -186,6 +187,46 @@ export const queryRouter = router({
 
         // Record latency for monitoring
         latencyMonitor.record('totalRetrieval', responseTimeMs);
+        
+        // Log query for analytics (async, non-blocking)
+        try {
+          const avgSimilarity = protocols.length > 0
+            ? protocols.reduce((sum, p) => sum + (p.similarity || 0), 0) / protocols.length
+            : 0;
+          const topSimilarity = protocols.length > 0
+            ? Math.max(...protocols.map(p => p.similarity || 0))
+            : 0;
+          
+          logQuery(createQueryLogEntry(
+            normalized,
+            {
+              agencyName: agencyName !== 'Unknown Agency' ? agencyName : null,
+              userTier,
+            },
+            {
+              resultCount: protocols.length,
+              topSimilarityScore: topSimilarity,
+              avgSimilarityScore: avgSimilarity,
+            },
+            {
+              totalLatencyMs: responseTimeMs,
+              embeddingLatencyMs: optimizedResult.metrics.embeddingGenerationMs || 0,
+              searchLatencyMs: optimizedResult.metrics.vectorSearchMs || 0,
+              rerankLatencyMs: optimizedResult.metrics.rerankingMs || 0,
+              llmLatencyMs: responseTimeMs - optimizedResult.metrics.totalRetrievalMs,
+              cacheHit: optimizedResult.metrics.cacheHit,
+              usedMultiQueryFusion: searchOptions.enableMultiQueryFusion || false,
+            },
+            {
+              modelUsed: claudeResponse.model.includes('sonnet') ? 'sonnet' : 'haiku',
+              inputTokens: claudeResponse.inputTokens,
+              outputTokens: claudeResponse.outputTokens,
+            }
+          ));
+        } catch (logError) {
+          // Don't fail the request if logging fails
+          console.warn('[Query] Failed to log query analytics:', logError);
+        }
 
         return {
           success: true,

@@ -6,11 +6,61 @@
  * - Advanced re-ranking with semantic signals
  * - Context-aware boosting based on agency/state
  * - Reciprocal Rank Fusion for multi-query result merging
+ * - Medical synonym awareness for better relevance
  */
 
 import type { NormalizedQuery } from '../ems-query-normalizer';
+import { MEDICAL_SYNONYMS, expandWithSynonyms } from '../ems-query-normalizer';
 import type { RetrievalResult } from './index';
 import { RAG_CONFIG } from './index';
+
+// ============================================================================
+// MEDICAL TERM SCORING HELPERS
+// ============================================================================
+
+/**
+ * Check if content contains any synonym of a medical term
+ */
+function containsMedicalTermOrSynonym(content: string, term: string): boolean {
+  const contentLower = content.toLowerCase();
+  
+  // Direct match
+  if (contentLower.includes(term.toLowerCase())) {
+    return true;
+  }
+  
+  // Check synonyms
+  const termSynonyms = MEDICAL_SYNONYMS[term.toLowerCase()];
+  if (termSynonyms) {
+    return termSynonyms.some(syn => contentLower.includes(syn));
+  }
+  
+  // Check if term is a synonym of something
+  for (const [baseTerm, synonyms] of Object.entries(MEDICAL_SYNONYMS)) {
+    if (synonyms.includes(term.toLowerCase())) {
+      if (contentLower.includes(baseTerm)) {
+        return true;
+      }
+      // Also check other synonyms of the same base term
+      return synonyms.some(syn => contentLower.includes(syn));
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * Count medical term matches (including synonyms) in content
+ */
+function countMedicalTermMatches(content: string, terms: string[]): number {
+  let count = 0;
+  for (const term of terms) {
+    if (containsMedicalTermOrSynonym(content, term)) {
+      count++;
+    }
+  }
+  return count;
+}
 
 // ============================================================================
 // RE-RANKING
@@ -102,7 +152,7 @@ export function rerankResults(
 
 /**
  * Enhanced re-ranking with additional semantic signals
- * Considers term frequency, position, and section relevance
+ * Considers term frequency, position, section relevance, and medical synonyms
  */
 export function advancedRerank(
   results: RetrievalResult[],
@@ -115,6 +165,9 @@ export function advancedRerank(
   const queryTerms = normalized.normalized.toLowerCase().split(/\s+/).filter(t => t.length > 2);
   const medications = normalized.extractedMedications;
   const conditions = normalized.extractedConditions;
+  
+  // Get expanded synonyms for the query
+  const synonymExpansions = expandWithSynonyms(normalized.normalized);
 
   const scored = results.map(result => {
     let score = (result.rerankedScore || result.similarity * 100);
@@ -122,6 +175,7 @@ export function advancedRerank(
     const contentLower = result.content.toLowerCase();
     const titleLower = result.protocolTitle.toLowerCase();
     const sectionLower = (result.section || '').toLowerCase();
+    const fullText = `${titleLower} ${sectionLower} ${contentLower}`;
 
     // Term frequency scoring - more matches = higher score
     let termMatches = 0;
@@ -133,6 +187,15 @@ export function advancedRerank(
       }
     }
     score += Math.min(termMatches * 2, 20); // Cap at 20 points
+    
+    // SYNONYM MATCHING - check for medical synonym matches
+    let synonymMatches = 0;
+    for (const synonym of synonymExpansions) {
+      if (fullText.includes(synonym.toLowerCase())) {
+        synonymMatches++;
+      }
+    }
+    score += Math.min(synonymMatches * 3, 15); // Up to 15 points for synonym matches
 
     // Position scoring - earlier mentions are more relevant
     for (const term of queryTerms) {
@@ -154,20 +217,34 @@ export function advancedRerank(
         score += 8;
       }
     }
+    
+    // Title synonym match
+    for (const synonym of synonymExpansions) {
+      if (titleLower.includes(synonym.toLowerCase())) {
+        score += 6;
+        break; // Only count once for title
+      }
+    }
 
-    // Medication name in title
+    // Medication name in title (with synonym support)
     for (const med of medications) {
-      if (titleLower.includes(med)) {
+      if (containsMedicalTermOrSynonym(titleLower, med)) {
         score += 12;
       }
     }
 
-    // Condition name in title
+    // Condition name in title (with synonym support)
     for (const condition of conditions) {
-      if (titleLower.includes(condition)) {
+      if (containsMedicalTermOrSynonym(titleLower, condition)) {
         score += 10;
       }
     }
+    
+    // Count medication/condition mentions in content (with synonyms)
+    const medMatchCount = countMedicalTermMatches(contentLower, medications);
+    const condMatchCount = countMedicalTermMatches(contentLower, conditions);
+    score += medMatchCount * 5; // 5 points per medication match
+    score += condMatchCount * 4; // 4 points per condition match
 
     // Protocol number match (for direct lookups)
     const protocolNumMatch = normalized.original.match(/\b(\d{3,4})\b/);
@@ -183,6 +260,14 @@ export function advancedRerank(
       if (/(?:adult|pediatric|peds?)\s*(?:dose|dosing)?/i.test(result.content)) {
         score += 8;
       }
+      // Bonus for route information
+      if (/\b(?:iv|im|io|sq|subq|sl|po|in|nebulizer|nasal|oral)\b/i.test(result.content)) {
+        score += 5;
+      }
+      // Bonus for max dose information
+      if (/\b(?:max|maximum)\s*(?:dose|dosage)?\s*:?\s*\d+/i.test(result.content)) {
+        score += 8;
+      }
     }
 
     // Procedure step presence for procedure queries
@@ -191,6 +276,14 @@ export function advancedRerank(
       if (stepCount > 2) {
         score += 10;
       }
+      // Bonus for equipment mentions
+      if (/\b(?:equipment|supplies|materials|needed|required)\b/i.test(result.content)) {
+        score += 5;
+      }
+      // Bonus for indication mentions
+      if (/\b(?:indication|when to|perform when)\b/i.test(result.content)) {
+        score += 5;
+      }
     }
 
     // Contraindication presence for safety queries
@@ -198,12 +291,34 @@ export function advancedRerank(
       if (/contraindicated?|caution|warning|avoid|do not/i.test(result.content)) {
         score += 12;
       }
+      // Bonus for allergy/interaction mentions
+      if (/\b(?:allergy|allergic|interaction|precaution)\b/i.test(result.content)) {
+        score += 6;
+      }
     }
 
     // Emergent content boost
     if (normalized.isEmergent) {
-      if (/immediate|stat|emergency|critical/i.test(result.content)) {
+      if (/immediate|stat|emergency|critical|life.?threat/i.test(result.content)) {
         score += 8;
+      }
+    }
+    
+    // Assessment criteria boost
+    if (normalized.intent === 'assessment_criteria') {
+      if (/\b(?:criteria|indication|assessment|sign|symptom|evaluate)\b/i.test(result.content)) {
+        score += 8;
+      }
+      // Bonus for scoring systems
+      if (/\b(?:gcs|nihss|cincinnati|fast|apgar|score|scale)\b/i.test(result.content)) {
+        score += 10;
+      }
+    }
+    
+    // Pediatric-specific boost
+    if (normalized.intent === 'pediatric_specific') {
+      if (/\b(?:pediatric|peds?|child|infant|neonate|weight.?based|kg|broselow)\b/i.test(result.content)) {
+        score += 12;
       }
     }
 

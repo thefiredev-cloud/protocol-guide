@@ -258,59 +258,83 @@ export type QueryIntent =
 
 /**
  * Intent classification patterns
+ * IMPORTANT: Order matters - more specific intents come first
+ * Pediatric and contraindication checks take priority over general medication queries
  */
-const INTENT_PATTERNS: { intent: QueryIntent; patterns: RegExp[] }[] = [
+const INTENT_PATTERNS: { intent: QueryIntent; patterns: RegExp[]; priority: number }[] = [
+  // Highest priority - safety critical checks
   {
-    intent: 'medication_dosing',
+    intent: 'contraindication_check',
+    priority: 100,
     patterns: [
-      /\b(?:dose|dosage|dosing|how much|mg|mcg|units?)\b/i,
-      /\b(?:give|administer|push|drip|infusion)\b/i,
-      /\bmax(?:imum)?\s*dose\b/i,
+      /\b(?:contraindication|contraindicated|can't give|don't give|cannot give)\b/i,
+      /\b(?:can\s+(?:i|you|we)\s+give.*(?:with|if|when))\b/i, // "can I give X with Y"
+      /\b(?:safe to give|okay to give|ok to give)\b/i,
+      /\b(?:interaction|drug interaction|med interaction)\b/i,
+      /\b(?:avoid|caution|warning|precaution)\s+(?:with|when|if|for)\b/i, // More specific
+      /\bpatient\s+(?:has\s+)?(?:allergy|allergic)\s+to\b/i, // Allergy TO something
+      /\b(?:with|taking|on)\s+(?:viagra|cialis|nitrate|pde5|levitra|sildenafil)\b/i, // Common interaction queries
     ],
   },
+  // Pediatric-specific (higher priority than general medication dosing)
+  {
+    intent: 'pediatric_specific',
+    priority: 90,
+    patterns: [
+      /\b(?:peds?|pediatric|child|children)\s+(?:dose|dosing|dosage|protocol|treatment)\b/i,
+      /\b(?:infant|neonate|newborn|baby)\s+(?:dose|dosing|protocol|treatment)\b/i,
+      /\b(?:broselow|weight.based|kg.based|kilogram)\b/i,
+      /\b(?:pediatric|peds?|child)\s+(?:mg|mcg|ml)(?:\/kg)?\b/i,
+      /\b(?:dose|dosing)\s+(?:for|in)\s+(?:peds?|pediatric|child|children|infant)\b/i,
+    ],
+  },
+  // Differential diagnosis
+  {
+    intent: 'differential_diagnosis',
+    priority: 80,
+    patterns: [
+      /\b(?:differential|ddx|versus|vs\.?|compare|difference)\b/i,
+      /\b(?:rule out|r\/o|could be|might be)\b/i,
+      /\b(?:\w+)\s+(?:vs\.?|versus|or)\s+(?:\w+)\b/i, // "X vs Y" patterns
+    ],
+  },
+  // Protocol lookup
+  {
+    intent: 'protocol_lookup',
+    priority: 75,
+    patterns: [
+      /\b(?:protocol|policy|ref|reference)\s*(?:#|number|no\.?)?\s*\d+\b/i,
+      /^\d{3,4}$/,
+    ],
+  },
+  // Procedure steps
   {
     intent: 'procedure_steps',
+    priority: 70,
     patterns: [
       /\b(?:how to|steps|procedure|perform|technique)\b/i,
       /\b(?:intubate|intubation|defibrillate|cardiovert)\b/i,
       /\b(?:needle|cric|chest tube|io|iv)\s*(?:access|placement|insertion)\b/i,
     ],
   },
+  // Assessment criteria
   {
     intent: 'assessment_criteria',
+    priority: 60,
     patterns: [
       /\b(?:criteria|indications?|when to|signs?|symptoms?)\b/i,
       /\b(?:assess|assessment|evaluate|diagnosis)\b/i,
-      /\b(?:gcs|nihss|cincinnati|fast|apgar)\b/i,
+      /\b(?:gcs|nihss|cincinnati|fast|apgar|score|scale)\b/i,
     ],
   },
+  // Medication dosing (most general - lower priority)
   {
-    intent: 'differential_diagnosis',
+    intent: 'medication_dosing',
+    priority: 50,
     patterns: [
-      /\b(?:differential|ddx|versus|vs|compare|difference)\b/i,
-      /\b(?:rule out|r\/o|could be|might be)\b/i,
-    ],
-  },
-  {
-    intent: 'contraindication_check',
-    patterns: [
-      /\b(?:contraindication|contraindicated|can't give|don't give)\b/i,
-      /\b(?:avoid|caution|warning|precaution)\b/i,
-      /\b(?:allergy|allergic|reaction)\b/i,
-    ],
-  },
-  {
-    intent: 'pediatric_specific',
-    patterns: [
-      /\b(?:peds?|pediatric|child|infant|neonate|newborn|baby)\b/i,
-      /\b(?:broselow|weight.based|kg|kilogram)\b/i,
-    ],
-  },
-  {
-    intent: 'protocol_lookup',
-    patterns: [
-      /\b(?:protocol|policy|ref|reference)\s*(?:#|number|no\.?)?\s*\d+\b/i,
-      /^\d{3,4}$/,
+      /\b(?:dose|dosage|dosing|how much|mg|mcg|units?)\b/i,
+      /\b(?:give|administer|push|drip|infusion)\b/i,
+      /\bmax(?:imum)?\s*dose\b/i,
     ],
   },
 ];
@@ -400,9 +424,13 @@ export function normalizeEmsQuery(query: string): NormalizedQuery {
 
 /**
  * Classify query intent for routing
+ * Uses priority-based matching - higher priority intents take precedence
  */
 function classifyIntent(query: string): QueryIntent {
-  for (const { intent, patterns } of INTENT_PATTERNS) {
+  // Sort by priority (highest first) and find all matches
+  const sortedPatterns = [...INTENT_PATTERNS].sort((a, b) => b.priority - a.priority);
+  
+  for (const { intent, patterns } of sortedPatterns) {
     for (const pattern of patterns) {
       if (pattern.test(query)) {
         return intent;
@@ -514,16 +542,146 @@ function escapeRegex(str: string): string {
 }
 
 // ============================================================================
+// MEDICAL TERMINOLOGY SYNONYMS
+// ============================================================================
+
+/**
+ * Comprehensive medical terminology synonyms for query expansion
+ * Organized by category for better recall on semantic search
+ */
+export const MEDICAL_SYNONYMS: Record<string, string[]> = {
+  // Cardiac Conditions
+  'cardiac arrest': ['code', 'asystole', 'vfib', 'vtach', 'pea', 'pulseless', 'flatline', 'full arrest'],
+  'heart attack': ['myocardial infarction', 'mi', 'stemi', 'nstemi', 'acs', 'acute coronary syndrome'],
+  'chest pain': ['angina', 'cardiac chest pain', 'acs', 'acute coronary syndrome', 'substernal chest pain'],
+  'atrial fibrillation': ['afib', 'a-fib', 'irregular heartbeat', 'irregularly irregular'],
+  'bradycardia': ['slow heart rate', 'low heart rate', 'symptomatic bradycardia'],
+  'tachycardia': ['fast heart rate', 'rapid heart rate', 'svt', 'supraventricular tachycardia'],
+  'ventricular fibrillation': ['vfib', 'v-fib', 'vf', 'shockable rhythm'],
+  'ventricular tachycardia': ['vtach', 'v-tach', 'vt', 'wide complex tachycardia'],
+  'pulseless electrical activity': ['pea', 'electrical activity without pulse'],
+  'congestive heart failure': ['chf', 'heart failure', 'pulmonary edema', 'flash pulmonary edema'],
+  
+  // Respiratory Conditions
+  'shortness of breath': ['dyspnea', 'sob', 'difficulty breathing', 'respiratory distress', 'labored breathing'],
+  'asthma': ['bronchospasm', 'reactive airway', 'wheezing', 'asthma exacerbation', 'asthma attack'],
+  'copd': ['chronic obstructive pulmonary disease', 'emphysema', 'chronic bronchitis', 'copd exacerbation'],
+  'pulmonary embolism': ['pe', 'blood clot in lung', 'pulmonary embolus'],
+  'pneumothorax': ['collapsed lung', 'tension pneumo', 'pneumo', 'ptx'],
+  'respiratory arrest': ['apnea', 'not breathing', 'respiratory failure', 'agonal breathing'],
+  
+  // Neurological Conditions
+  'stroke': ['cva', 'cerebrovascular accident', 'brain attack', 'ischemic stroke', 'hemorrhagic stroke'],
+  'seizure': ['convulsion', 'sz', 'fits', 'epileptic seizure', 'grand mal', 'tonic clonic'],
+  'status epilepticus': ['continuous seizure', 'prolonged seizure', 'refractory seizure'],
+  'altered mental status': ['ams', 'confusion', 'disorientation', 'altered loc', 'decreased loc'],
+  'syncope': ['fainting', 'passed out', 'loss of consciousness', 'fainted', 'syncopal episode'],
+  'traumatic brain injury': ['tbi', 'head injury', 'head trauma', 'concussion', 'closed head injury'],
+  
+  // Metabolic & Endocrine
+  'hypoglycemia': ['low blood sugar', 'low glucose', 'insulin shock', 'hypoglycemic episode'],
+  'hyperglycemia': ['high blood sugar', 'high glucose', 'diabetic emergency'],
+  'diabetic ketoacidosis': ['dka', 'diabetic coma', 'ketoacidosis'],
+  'hyperthermia': ['heat stroke', 'heat exhaustion', 'overheating', 'heat emergency'],
+  'hypothermia': ['cold exposure', 'freezing', 'cold emergency', 'accidental hypothermia'],
+  
+  // Allergic & Immunologic
+  'anaphylaxis': ['anaphylactic shock', 'severe allergic reaction', 'anaphylactic reaction', 'allergic emergency'],
+  'allergic reaction': ['allergy', 'hives', 'urticaria', 'angioedema', 'mild allergic'],
+  
+  // Trauma
+  'hemorrhage': ['bleeding', 'blood loss', 'hemorrhaging', 'exsanguination', 'massive bleeding'],
+  'shock': ['hypoperfusion', 'circulatory shock', 'hypovolemic shock', 'cardiogenic shock'],
+  'fracture': ['broken bone', 'fx', 'bone break', 'orthopedic injury'],
+  'burns': ['thermal injury', 'burn injury', 'chemical burn', 'electrical burn'],
+  
+  // Obstetric
+  'labor': ['childbirth', 'delivery', 'contractions', 'active labor', 'imminent delivery'],
+  'postpartum hemorrhage': ['pph', 'postpartum bleeding', 'uterine bleeding after delivery'],
+  'eclampsia': ['pregnancy seizure', 'toxemia', 'preeclampsia with seizure'],
+  
+  // Toxicology
+  'overdose': ['od', 'drug overdose', 'poisoning', 'toxic ingestion', 'intoxication'],
+  'opioid overdose': ['narcotic overdose', 'heroin overdose', 'fentanyl overdose', 'opioid toxicity'],
+  'alcohol intoxication': ['etoh', 'drunk', 'alcohol poisoning', 'intoxicated'],
+  
+  // Airway & Procedures
+  'intubation': ['eti', 'endotracheal intubation', 'tube placement', 'definitive airway'],
+  'rapid sequence intubation': ['rsi', 'rapid sequence induction', 'drug-assisted intubation'],
+  'supraglottic airway': ['sga', 'king airway', 'igel', 'lma', 'laryngeal mask'],
+  'cricothyrotomy': ['cric', 'surgical airway', 'emergency airway', 'cricothyroidotomy'],
+  'needle decompression': ['needle thoracostomy', 'chest decompression', 'needle chest'],
+  'cardioversion': ['synchronized cardioversion', 'electrical cardioversion', 'sync cardiovert'],
+  'defibrillation': ['defib', 'shock', 'defibrillate', 'unsynchronized shock'],
+  'transcutaneous pacing': ['tcp', 'external pacing', 'pacing', 'pacer'],
+  
+  // Medications (common queries)
+  'epinephrine': ['epi', 'adrenaline', 'epipen'],
+  'nitroglycerin': ['nitro', 'ntg', 'nitrostat'],
+  'naloxone': ['narcan', 'opioid reversal', 'opioid antagonist'],
+  'aspirin': ['asa', 'acetylsalicylic acid'],
+  'albuterol': ['ventolin', 'proventil', 'bronchodilator'],
+  'diphenhydramine': ['benadryl', 'antihistamine'],
+  'midazolam': ['versed', 'benzodiazepine', 'benzo'],
+  'fentanyl': ['sublimaze', 'opioid analgesic'],
+  'ketamine': ['ketalar', 'dissociative'],
+  'amiodarone': ['cordarone', 'antiarrhythmic'],
+  'adenosine': ['adenocard', 'svt drug'],
+  'atropine': ['anticholinergic', 'vagolytic'],
+  'calcium chloride': ['calcium', 'cacl2'],
+  'sodium bicarbonate': ['bicarb', 'nahco3'],
+  'magnesium sulfate': ['mag', 'magnesium'],
+  'dextrose': ['d50', 'd10', 'd25', 'glucose'],
+  
+  // Patient populations
+  'pediatric': ['peds', 'child', 'children', 'infant', 'baby', 'kid'],
+  'neonate': ['newborn', 'neonatal', 'newly born', 'just born'],
+  'geriatric': ['elderly', 'older adult', 'senior', 'aged'],
+  'pregnant': ['pregnancy', 'obstetric', 'gravid', 'prenatal'],
+};
+
+/**
+ * Expand query with medical synonyms for better recall
+ */
+export function expandWithSynonyms(query: string): string[] {
+  const queryLower = query.toLowerCase();
+  const expansions: string[] = [];
+  
+  for (const [term, synonyms] of Object.entries(MEDICAL_SYNONYMS)) {
+    // Check if query contains the base term
+    if (queryLower.includes(term)) {
+      // Add top 3 most relevant synonyms
+      expansions.push(...synonyms.slice(0, 3));
+    }
+    // Check if query contains any synonym
+    for (const synonym of synonyms) {
+      if (queryLower.includes(synonym) && !expansions.includes(term)) {
+        expansions.push(term);
+        // Also add a couple related synonyms
+        expansions.push(...synonyms.filter(s => s !== synonym).slice(0, 2));
+        break;
+      }
+    }
+  }
+  
+  return [...new Set(expansions)];
+}
+
+// ============================================================================
 // QUERY ENHANCEMENT FOR RETRIEVAL
 // ============================================================================
 
 /**
  * Generate enhanced query variations for better retrieval
  * Creates semantic variations to improve recall
+ * Enhanced with medical synonym expansion
  */
 export function generateQueryVariations(query: string): string[] {
   const normalized = normalizeEmsQuery(query);
   const variations: string[] = [normalized.normalized];
+  
+  // Get synonym expansions
+  const synonymExpansions = expandWithSynonyms(normalized.normalized);
 
   // Add condition-focused variation
   if (normalized.extractedConditions.length > 0) {
@@ -534,21 +692,48 @@ export function generateQueryVariations(query: string): string[] {
   if (normalized.extractedMedications.length > 0) {
     variations.push(`${normalized.extractedMedications.join(' ')} dosage indication route`);
   }
+  
+  // Add synonym-expanded variation if we have expansions
+  if (synonymExpansions.length > 0) {
+    // Create a query that includes the original terms plus key synonyms
+    const synonymQuery = `${normalized.normalized} ${synonymExpansions.slice(0, 4).join(' ')}`;
+    variations.push(synonymQuery);
+  }
 
   // Add intent-specific enhancement
   switch (normalized.intent) {
     case 'medication_dosing':
-      variations.push(`${normalized.normalized} dose mg route administration`);
+      variations.push(`${normalized.normalized} dose mg route administration adult pediatric`);
+      // Add medication name with dosing context
+      if (normalized.extractedMedications.length > 0) {
+        variations.push(`${normalized.extractedMedications[0]} dose indication contraindication`);
+      }
       break;
     case 'procedure_steps':
-      variations.push(`${normalized.normalized} steps procedure technique how to`);
+      variations.push(`${normalized.normalized} steps procedure technique how to perform`);
+      // Add procedural variations
+      variations.push(`${normalized.normalized} indications equipment setup`);
       break;
     case 'pediatric_specific':
-      variations.push(`${normalized.normalized} pediatric child weight based kg`);
+      variations.push(`${normalized.normalized} pediatric child weight based kg dosing`);
+      variations.push(`${normalized.normalized} peds infant neonate`);
       break;
     case 'contraindication_check':
       variations.push(`${normalized.normalized} contraindication caution warning avoid`);
+      variations.push(`${normalized.normalized} precaution allergy interaction`);
       break;
+    case 'assessment_criteria':
+      variations.push(`${normalized.normalized} criteria assessment signs symptoms`);
+      variations.push(`${normalized.normalized} indications when to`);
+      break;
+    case 'differential_diagnosis':
+      variations.push(`${normalized.normalized} differential diagnosis causes etiology`);
+      break;
+  }
+  
+  // For emergent queries, add urgency-related terms
+  if (normalized.isEmergent) {
+    variations.push(`${normalized.normalized} immediate critical emergency stat`);
   }
 
   return Array.from(new Set(variations)); // Deduplicate

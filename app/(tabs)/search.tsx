@@ -9,7 +9,7 @@ import {
   Keyboard,
   AccessibilityInfo,
 } from "react-native";
-import { SkeletonProtocolCard } from "@/components/ui/Skeleton";
+import { SearchLoadingSkeleton, SearchSuggestionsSkeleton } from "@/components/search/SearchLoadingSkeleton";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -561,12 +561,11 @@ export default function SearchScreen() {
       {/* Results */}
       {isSearching ? (
         <View className="flex-1">
-          <Text className="text-sm text-muted mb-3">Searching protocols...</Text>
-          <View style={{ gap: 12 }}>
-            <SkeletonProtocolCard />
-            <SkeletonProtocolCard />
-            <SkeletonProtocolCard />
-          </View>
+          <SearchLoadingSkeleton
+            count={3}
+            message="Searching protocols..."
+            showResultsCount={false}
+          />
         </View>
       ) : hasSearched && searchResults.length === 0 && !searchError ? (
         <View className="flex-1 items-center justify-center px-8">

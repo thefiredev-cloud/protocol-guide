@@ -1,5 +1,5 @@
 import "@/global.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useMemo, useState } from "react";
@@ -22,6 +22,7 @@ import { registerServiceWorker } from "@/lib/register-sw";
 import { ErrorBoundary, NavigationErrorBoundary } from "@/components/ErrorBoundary";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { usePushNotifications } from "@/hooks/use-push-notifications";
+import { createOptimizedQueryClient } from "@/lib/query-client";
 
 // Wrapper component to initialize push notifications inside provider context
 function PushNotificationInitializer({ children }: { children: React.ReactNode }) {
@@ -50,20 +51,9 @@ export default function RootLayout() {
     }
   }, []);
 
-  // Create clients once and reuse them
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            // Disable automatic refetching on window focus for mobile
-            refetchOnWindowFocus: false,
-            // Retry failed requests once
-            retry: 1,
-          },
-        },
-      }),
-  );
+  // Create optimized query client for EMS field use
+  // Features: aggressive caching, smart retries, offline-first
+  const [queryClient] = useState(() => createOptimizedQueryClient());
   const [trpcClient] = useState(() => createTRPCClient());
 
   // Ensure minimum padding for top and bottom on mobile

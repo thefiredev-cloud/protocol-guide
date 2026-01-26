@@ -125,42 +125,48 @@ export function DisclaimerConsentModal({ visible, onAcknowledged }: DisclaimerCo
           {/* Key Points */}
           <View className="mb-4">
             <Text className="text-base font-semibold text-foreground mb-2">
-              Key Points:
+              By using Protocol Guide, you understand and agree:
             </Text>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">Reference Only:</Text> Information is for clinical decision support, not medical advice
+                <Text className="font-bold">Reference Only:</Text> This is a clinical decision support tool, NOT medical advice or patient care direction
               </Text>
             </BulletPoint>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">Local Protocols:</Text> YOUR LOCAL PROTOCOLS ALWAYS TAKE PRECEDENCE
+                <Text className="font-bold">Local Protocols First:</Text> YOUR LOCAL PROTOCOLS ALWAYS TAKE PRECEDENCE over any information in this app
               </Text>
             </BulletPoint>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">Professional Judgment:</Text> You are responsible for independent clinical decisions
+                <Text className="font-bold">Your Responsibility:</Text> YOU are solely responsible for your clinical decisions and patient care outcomes
               </Text>
             </BulletPoint>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">Verify Everything:</Text> Always verify medication dosages and treatment parameters
+                <Text className="font-bold">Verify Everything:</Text> Always verify medication dosages, contraindications, and treatment parameters against your protocols
               </Text>
             </BulletPoint>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">Medical Control:</Text> Contact medical direction when required by your protocols
+                <Text className="font-bold">AI Limitations:</Text> AI-generated responses may contain errors and must be verified against official protocol documents
               </Text>
             </BulletPoint>
 
             <BulletPoint>
               <Text className="text-sm text-foreground">
-                <Text className="font-bold">No Warranty:</Text> Information provided &quot;as is&quot; without warranty of accuracy
+                <Text className="font-bold">No Warranty:</Text> Information is provided &quot;as is&quot; without warranty of accuracy, completeness, or timeliness
+              </Text>
+            </BulletPoint>
+
+            <BulletPoint>
+              <Text className="text-sm text-foreground">
+                <Text className="font-bold">No Liability:</Text> Protocol Guide and Apex AI LLC accept no liability for clinical decisions or patient outcomes
               </Text>
             </BulletPoint>
           </View>
@@ -206,7 +212,7 @@ export function DisclaimerConsentModal({ visible, onAcknowledged }: DisclaimerCo
               )}
             </View>
             <Text className="text-sm text-foreground flex-1" style={{ lineHeight: 20 }}>
-              I have read and agree to the Medical Disclaimer. I understand that Protocol Guide is a reference tool only and does not replace professional medical judgment, training, or local protocols.
+              I am a trained EMS professional. I have read and agree to the Medical Disclaimer. I understand that Protocol Guide is a reference tool only, that I am solely responsible for my clinical decisions and patient outcomes, and that my local protocols always take precedence.
             </Text>
           </Pressable>
 

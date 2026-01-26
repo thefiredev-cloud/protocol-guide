@@ -28,15 +28,17 @@ export const RAG_CONFIG = {
   },
 
   // Similarity thresholds (tiered by intent)
+  // Lowered thresholds for better recall - re-ranking handles precision
   similarity: {
     // High precision for medication queries (safety critical)
-    medication: 0.45,
+    // Lowered from 0.45 to allow more candidates for re-ranking
+    medication: 0.38,
     // Standard threshold for procedures
-    procedure: 0.40,
+    procedure: 0.35,
     // Lower threshold for general queries (better recall)
-    general: 0.35,
+    general: 0.30,
     // Minimum acceptable (below this = no results)
-    minimum: 0.25,
+    minimum: 0.20,
   },
 
   // Result limits
