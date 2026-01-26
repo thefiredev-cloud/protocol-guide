@@ -1,12 +1,19 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import type { Agency, StateCoverage } from "@/types/search.types";
 
-export function useFilterState() {
-  const [selectedState, setSelectedState] = useState<string | null>(null);
+interface UseFilterStateOptions {
+  initialState?: string | null;
+  initialAgencyId?: number | null;
+}
+
+export function useFilterState(options: UseFilterStateOptions = {}) {
+  const { initialState = null, initialAgencyId = null } = options;
+  const [selectedState, setSelectedState] = useState<string | null>(initialState);
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
   const [showStateDropdown, setShowStateDropdown] = useState(false);
   const [showAgencyDropdown, setShowAgencyDropdown] = useState(false);
+  const initialAgencyIdRef = useRef(initialAgencyId);
 
   const [statesData, setStatesData] = useState<StateCoverage[]>([]);
   const [statesLoading, setStatesLoading] = useState(true);
@@ -50,9 +57,18 @@ export function useFilterState() {
         }))
         .sort((a: Agency, b: Agency) => (b.protocolCount ?? 0) - (a.protocolCount ?? 0));
       setAgenciesData(agencies);
+      
+      // Set initial agency from route params if provided
+      if (initialAgencyIdRef.current && !selectedAgency) {
+        const matchingAgency = agencies.find(a => a.id === initialAgencyIdRef.current);
+        if (matchingAgency) {
+          setSelectedAgency(matchingAgency);
+          initialAgencyIdRef.current = null; // Clear so it doesn't re-trigger
+        }
+      }
     }
     setAgenciesLoading(agenciesQueryLoading);
-  }, [selectedState, agenciesResult, agenciesQueryLoading]);
+  }, [selectedState, agenciesResult, agenciesQueryLoading, selectedAgency]);
 
   // Reset agency when state changes
   useEffect(() => {

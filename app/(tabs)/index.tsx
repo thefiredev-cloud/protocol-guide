@@ -12,6 +12,7 @@ import {
   VoiceErrorBoundary,
   SearchResultsErrorBoundary,
 } from "@/components/ErrorBoundary";
+import { useLocalSearchParams } from "expo-router";
 
 // Extracted hooks
 import { useVoiceSearch } from "@/hooks/use-voice-search";
@@ -32,6 +33,12 @@ import type { Message } from "@/types/search.types";
 
 export default function HomeScreen() {
   const flatListRef = useRef<FlatList>(null);
+  
+  // Read route params from navigation (e.g., from coverage page)
+  const { stateFilter, agencyId } = useLocalSearchParams<{ 
+    stateFilter?: string; 
+    agencyId?: string; 
+  }>();
 
   // Disclaimer management
   const {
@@ -40,7 +47,7 @@ export default function HomeScreen() {
     checkDisclaimerBeforeAction,
   } = useDisclaimer();
 
-  // Filter state management
+  // Filter state management with initial values from route params
   const {
     selectedState,
     setSelectedState,
@@ -56,7 +63,10 @@ export default function HomeScreen() {
     agenciesLoading,
     coverageError,
     handleClearFilters,
-  } = useFilterState();
+  } = useFilterState({
+    initialState: stateFilter || null,
+    initialAgencyId: agencyId ? parseInt(agencyId, 10) : null,
+  });
 
   // Voice search management
   const { voiceError, handleVoiceError, clearVoiceError } = useVoiceSearch();
