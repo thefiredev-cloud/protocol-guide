@@ -4,7 +4,7 @@
 import "./load-env.js";
 import { drizzle } from "drizzle-orm/mysql2";
 import { protocolChunks, counties } from "../drizzle/schema";
-import { eq, like, or } from "drizzle-orm";
+import { eq, like, or, and } from "drizzle-orm";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -158,19 +158,28 @@ async function main() {
     // Find or create county entry
     let countyId: number | null = null;
     
-    // Try to find existing county for this region
+    // Try to find existing county for this region - MUST match both name AND state
+    const regionKeyword = source.regionName.split(" ")[0];
     const existingCounties = await db.select()
       .from(counties)
       .where(
-        or(
-          like(counties.name, `%${source.regionName.split(" ")[0]}%`),
-          eq(counties.state, source.state)
+        and(
+          eq(counties.state, source.state),
+          like(counties.name, `%${regionKeyword}%`)
         )
       )
       .limit(1);
     
     if (existingCounties.length > 0) {
       countyId = existingCounties[0].id;
+    } else {
+      // Create a new county entry for this region instead of falling back to wrong county
+      console.log(`  Creating new county entry for: ${source.regionName}, ${source.state}`);
+      const result = await db.insert(counties).values({
+        name: source.regionName,
+        state: source.state,
+      });
+      countyId = Number(result.insertId);
     }
     
     // Chunk the content
@@ -184,8 +193,12 @@ async function main() {
       const chunk = chunks[i];
       const section = detectSection(chunk);
       
-      // Use a default countyId of 1 if not found, or skip if countyId is null
-      const finalCountyId = countyId || 1;
+      // countyId should always be set by this point (either found or created)
+      if (!countyId) {
+        console.error(`  ERROR: No countyId for ${source.regionName} - skipping chunk`);
+        continue;
+      }
+      const finalCountyId = countyId;
       
       await db.insert(protocolChunks).values({
         countyId: finalCountyId,

@@ -23,6 +23,7 @@ import {
   setSearchCacheHeaders,
 } from "../_core/search-cache";
 import { validateSearchLimit } from "../_core/tier-validation";
+import { toStateCode } from "../lib/state-codes";
 import * as db from "../db";
 
 // Search result types
@@ -133,7 +134,11 @@ export const searchRouter = router({
         }
         console.log(`[Search] Mapped MySQL county ${input.countyId} -> Supabase agency ${agencyId}`);
       } else if (input.stateFilter) {
-        stateCode = input.stateFilter;
+        // Convert state name (e.g., "California") to 2-letter code (e.g., "CA")
+        stateCode = toStateCode(input.stateFilter);
+        if (!stateCode) {
+          console.warn(`[Search] Invalid state filter: "${input.stateFilter}"`);
+        }
       }
 
       // Step 4: Determine optimization options based on query type
