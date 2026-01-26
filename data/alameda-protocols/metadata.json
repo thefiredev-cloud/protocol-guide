@@ -1,0 +1,26 @@
+{
+  "agency_name": "Alameda County EMS Agency",
+  "state_code": "CA",
+  "downloaded_at": "2026-01-25T16:17:00Z",
+  "files": [
+    {
+      "filename": "ALCO_FM_2024_Field_Manual.pdf",
+      "original_url": "https://ems.acgov.org/ems-assets/docs/Clinical/Field%20Protocols/2024%20FM/ALCO_FM_2024%20-%20Final%20Book.pdf",
+      "description": "Alameda County EMS Field Manual 2024",
+      "size_bytes": 4283328,
+      "size_mb": 4.08,
+      "document_type": "field_protocols",
+      "year": 2024
+    },
+    {
+      "filename": "ALCO_CCP_2020_Policy_Guidelines.pdf",
+      "original_url": "https://ems.acgov.org/ems-assets/docs/Clinical/Field%20Protocols/2020%20ALCO%20EMS%20CCP%20Policy%20Guidelines.pdf",
+      "description": "Alameda County EMS CCP Policy Guidelines 2020",
+      "size_bytes": 1262147,
+      "size_mb": 1.2,
+      "document_type": "ccp_guidelines",
+      "year": 2020
+    }
+  ],
+  "total_size_mb": 5.28
+}

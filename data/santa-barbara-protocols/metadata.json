@@ -1,0 +1,16 @@
+{
+  "agency_name": "Santa Barbara County EMS Agency",
+  "state_code": "CA",
+  "source_url": "https://www.countyofsb.org/2085/Medical-Control-Field-Policies-Treatment",
+  "downloaded_at": "2026-01-26T00:17:40Z",
+  "files": [
+    {
+      "filename": "santa-barbara-compiled-manual.pdf",
+      "source_url": "https://content.civicplus.com/api/assets/ca-santabarbaracounty/b44bf3b4-c0f2-4495-bb36-78bc560fe346/policy-533-compiled-manual-2",
+      "type": "compiled_manual",
+      "size_bytes": 3255685,
+      "description": "Complete compiled manual containing all Medical Control, Field Policies & Treatment Protocols"
+    }
+  ],
+  "notes": "Individual protocol page (countyofsb.org/2085) uses JavaScript rendering - compiled manual PDF contains full protocol set"
+}

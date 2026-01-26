@@ -1,0 +1,70 @@
+{
+  "agency_name": "San Francisco EMS Agency",
+  "agency_short_name": "SF EMSA",
+  "state_code": "CA",
+  "county": "San Francisco",
+  "source_urls": [
+    "https://www.sf.gov/departments--department-emergency-management--emergency-medical-services-agency",
+    "https://media.api.sf.gov/documents/"
+  ],
+  "download_date": "2026-01-25",
+  "total_files": 60,
+  "total_size_mb": 38.64,
+  "notes": "Downloaded via Google search of sf.gov media API. Original sfdph.org URLs now redirect to sf.gov. Includes policies, protocols, procedures, and administrative documents.",
+  "document_types": {
+    "protocols": [
+      "EMSA-Protocol-1.01-Patient-Assessment-Primary-Survey",
+      "EMSA-Protocol-1.02-Patient-Assessment-Secondary-Survey",
+      "EMSA-Protocol-2.02-Allergic-Reaction",
+      "EMSA-Protocol-2.03-Altered-Mental-Status",
+      "EMSA-Protocol-2.04-Cardiac-Arrest",
+      "EMSA-Protocol-2.08-Dysrhythmia-Tachycardia",
+      "EMSA-Protocol-2.09-Pain-Control",
+      "EMSA-Protocol-2.10-Poisoning-and-Overdose",
+      "EMSA-Protocol-2.12-Pulmonary-Edema",
+      "EMSA-Protocol-2.13-Adult-Seizure",
+      "EMSA-Protocol-2.15-Suspected-Sepsis",
+      "EMSA-Protocol-2.16-Shock",
+      "EMSA-Protocol-3.04-Hazardous-Materials",
+      "EMSA-Protocol-4.05-Extremity-Trauma-Bleeding-Control",
+      "EMSA-Protocol-6.01-Agitated-Violent-Patient",
+      "EMSA-Protocol-7.07-CPAP",
+      "EMSA-Protocol-7.08-Pulse-Oximetry",
+      "EMSA-Protocol-8.02-Pediatric-Altered-Mental-Status",
+      "EMSA-Protocol-8.08-Pediatric-Poisoning-Overdose",
+      "EMSA-Protocol-11.01-Austere-Care",
+      "EMSA-Protocol-11.05-Blast-Special-Circumstances",
+      "EMSA-Protocol-14-Droperidol",
+      "EMSA-Protocol-14.I-Olanzapine"
+    ],
+    "policies": [
+      "EMSA-Policy-2000-Prehospital-Personnel-Standards",
+      "EMSA-Policy-2050-Paramedic-Accreditation",
+      "EMSA-Policy-2051-Preceptors-For-Paramedic-Interns",
+      "EMSA-Policy-4000.1-Ambulance-Turnaround-Time",
+      "EMSA-Policy-4001-Vehicle-Equipment-Supply-List",
+      "EMSA-Policy-4040-Patient-Consent-Refusal",
+      "EMSA-Policy-4042-Language-Access",
+      "EMSA-Policy-4049-Discontinuing-Resuscitative-Effort",
+      "EMSA-Policy-4050-Death-Pronouncement",
+      "EMSA-Policy-4051-DNR-POLST",
+      "EMSA-Policy-5000-Destination",
+      "EMSA-Policy-5001-Trauma-Triage-Criteria",
+      "EMSA-Policy-5030-Interfacility-Transfers",
+      "EMSA-Policy-7010-EMS-At-Special-Events",
+      "EMSA-Policy-Section13-Community-Paramedicine"
+    ],
+    "references": [
+      "EMSA-Reference-14-Droperidol"
+    ],
+    "administrative": [
+      "San-Francisco-County-2024-EMS-Post-Plan",
+      "EMSAC-Policy-Protocol-Summary",
+      "EMSA-Policies-And-Protocols-Live",
+      "EMSA-EMSAC-Agenda",
+      "EMSA-Minutes-Roster",
+      "EMS_Presentation",
+      "EMSA_Health_Commission_Update"
+    ]
+  }
+}

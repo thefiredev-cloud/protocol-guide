@@ -1,0 +1,10 @@
+{
+  "agency_name": "Solano County EMS Agency",
+  "state_code": "CA",
+  "source_type": "web_portal",
+  "source_url": "https://portal.acidremap.com/sites/MedicAmbulanceSolanoCounty/",
+  "county_website": "https://www.solanocounty.gov/government/health-social-services-hss/emergency-medical-services-agency/ems-protocols-special-procedures-memos",
+  "last_updated": "2026-01-05",
+  "scraped_at": "2026-01-25",
+  "notes": "Protocols hosted on ACID Remap portal (JavaScript SPA). Content scraped using Playwright."
+}

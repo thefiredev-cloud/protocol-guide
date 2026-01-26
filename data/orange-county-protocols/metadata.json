@@ -1,0 +1,50 @@
+{
+  "agency_name": "Orange County EMS Agency",
+  "state_code": "CA",
+  "county": "Orange County",
+  "source_urls": [
+    "https://ochealthinfo.com/providers-partners/emergency-medical-services/ems-policies-procedures-standing-orders/ems-policies",
+    "https://ochealthinfo.com/providers-partners/emergency-medical-services/ems-policies-procedures-standing-orders/ems-standing"
+  ],
+  "download_date": "2026-01-25",
+  "total_documents": 237,
+  "total_size_mb": 158.33,
+  "categories": {
+    "policies": {
+      "description": "EMS Policies covering administration, medical control, personnel, training, facilities, transportation, communications, and disaster response",
+      "sections": [
+        "010.00-099.99: Authority/Administration",
+        "100.00-199.99: Emergency Medical Care Committee and Subcommittees",
+        "200.00-299.99: OCEMS Approved System Service Providers",
+        "300.00-399.99: Medical Control",
+        "400.00-499.99: Personnel Certification/Licensing",
+        "500.00-599.99: Training Programs",
+        "600.00-699.99: Medical Facilities",
+        "700.00-799.99: Medical Transportation Certification/Licensing & Ambulance Regulations",
+        "800.00-899.99: Communications",
+        "900.00-999.99: Disaster Response"
+      ]
+    },
+    "standing_orders": {
+      "description": "Clinical standing orders for ALS, BLS, First Responder, and Fire Service ARN",
+      "sections": [
+        "General ALS Standing Orders",
+        "Cardiac - ALS Standing Orders",
+        "Environmental - ALS Standing Orders",
+        "Medical - ALS Standing Orders",
+        "OB - ALS Standing Orders",
+        "Pediatrics - ALS Standing Orders",
+        "Special Deployment - ALS Standing Orders",
+        "Trauma - ALS Standing Orders",
+        "BLS Standing Orders",
+        "First Responder Standing Orders",
+        "Fire Service ARN Standing Orders"
+      ]
+    }
+  },
+  "notes": [
+    "EMS Procedures page returned 404 - may have been merged into policies",
+    "Includes both current and upcoming versions of some protocols",
+    "Some protocols have multiple attachments"
+  ]
+}

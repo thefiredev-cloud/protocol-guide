@@ -1,0 +1,49 @@
+{
+  "agency_name": "Sacramento County EMS Agency",
+  "state_code": "CA",
+  "source_url": "https://dhs.saccounty.gov/PUB/EMS/Pages/Policy%20Pages/Policies.aspx",
+  "download_date": "2026-01-25",
+  "total_files": 139,
+  "categories": {
+    "2000": {
+      "name": "EMS System",
+      "description": "Document management, committees, oversight, scope of practice, dispatch, hospital designations",
+      "count": 43
+    },
+    "4000": {
+      "name": "Accreditation/Certification Program Approval",
+      "description": "EMT/EMR/Paramedic/MICN certification, training programs, continuing education",
+      "count": 19
+    },
+    "5000": {
+      "name": "Transportation/Patient Destination",
+      "description": "Transfer of care, destinations, trauma triage, interfacility transfers, alternate destinations",
+      "count": 17
+    },
+    "8000": {
+      "name": "Adult Treatment Policies",
+      "description": "Clinical treatment protocols for adult patients",
+      "count": 28
+    },
+    "8800": {
+      "name": "Skills",
+      "description": "Procedural skills - vascular access, airway management, pacing, etc.",
+      "count": 10
+    },
+    "9000": {
+      "name": "Pediatric Treatment Policies",
+      "description": "Clinical treatment protocols for pediatric patients",
+      "count": 21
+    },
+    "other": {
+      "name": "Reference Guides",
+      "description": "Drug reference guide and other supporting materials",
+      "count": 1
+    }
+  },
+  "notes": [
+    "Protocols effective as of January 1, 2026",
+    "Updates pending for May 1, 2026",
+    "Includes flowchart supplements for select pediatric protocols"
+  ]
+}

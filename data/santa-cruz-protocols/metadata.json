@@ -1,0 +1,20 @@
+{
+  "agency_name": "Santa Cruz County EMS",
+  "state_code": "CA",
+  "county": "Santa Cruz",
+  "downloaded_at": "2026-01-25T16:17:00-08:00",
+  "sources": [
+    {
+      "filename": "Santa_Cruz_County_EMS_Policies_and_Procedures.pdf",
+      "original_url": "https://www.santacruzhealth.org/Portals/7/Pdfs/EMS/PP/Santa%20Cruz%20County%20EMS%20Policies%20and%20Procedures.pdf",
+      "document_type": "policies_and_procedures",
+      "size_bytes": 6249945
+    },
+    {
+      "filename": "Santa_Cruz_EMS_Manual.pdf",
+      "original_url": "https://www.santacruzhealth.org/Portals/7/Pdfs/EMS/Misc/Santa%20Cruz%20EMS%20Manual%20.pdf",
+      "document_type": "ems_manual",
+      "size_bytes": 5026036
+    }
+  ]
+}
