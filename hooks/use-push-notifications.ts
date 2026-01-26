@@ -36,19 +36,18 @@ export function usePushNotifications() {
         const platform = Platform.OS === 'ios' ? 'ios' : 'android';
         savePushToken.mutate({ token, platform: platform as 'ios' | 'android' });
         tokenRegisteredRef.current = true;
-        console.log('[Push] Token registered with backend');
       }
     });
 
     notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log('[Push] Received:', notification);
+      () => {
+        // Handle notification received
       }
     );
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        console.log('[Push] Tapped:', response);
+      () => {
+        // Handle notification tap
       }
     );
 

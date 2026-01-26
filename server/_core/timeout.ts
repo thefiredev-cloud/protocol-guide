@@ -59,8 +59,13 @@ export function createTimeoutMiddleware(config: TimeoutConfig = {}) {
     }, timeout);
 
     // Clear timeout on response finish
-    const originalEnd = res.end;
-    res.end = function (this: Response, ...args: any[]): Response {
+    const originalEnd = res.end.bind(res);
+    res.end = function (
+      this: Response,
+      chunk?: any,
+      encoding?: BufferEncoding | (() => void),
+      cb?: () => void
+    ): Response {
       clearTimeout(timeoutId);
 
       if (!timedOut) {
@@ -76,7 +81,7 @@ export function createTimeoutMiddleware(config: TimeoutConfig = {}) {
         }
       }
 
-      return originalEnd.apply(this, args);
+      return originalEnd(chunk, encoding as BufferEncoding, cb);
     };
 
     next();

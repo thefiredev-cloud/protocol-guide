@@ -1,7 +1,7 @@
 import dns from 'dns';
 
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import helmet from "helmet";
 import { createServer } from "http";
 import net from "net";
@@ -133,14 +133,14 @@ async function startServer() {
         scriptSrc: [
           "'self'",
           // SECURITY: Use nonce-based CSP instead of 'unsafe-inline' - prevents XSS attacks
-          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+          (_req: Request, res: Response) => `'nonce-${(res.locals as { cspNonce: string }).cspNonce}'`,
           ENV.isProduction ? "" : "'unsafe-eval'", // Only in development for HMR
         ].filter(Boolean),
         styleSrc: [
           "'self'",
           "'unsafe-inline'", // Required for NativeWind/React Native Web dynamic inline styles
           // Nonce kept for future <style> tag usage
-          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+          (_req: Request, res: Response) => `'nonce-${(res.locals as { cspNonce: string }).cspNonce}'`,
         ],
         // SECURITY: Restrict image sources to specific trusted domains only
         imgSrc: [
@@ -193,18 +193,8 @@ async function startServer() {
       policy: "strict-origin-when-cross-origin",
     },
     // Permissions-Policy - control browser features (replaces Feature-Policy)
-    permissionsPolicy: {
-      features: {
-        camera: ["'none'"],
-        microphone: ["'none'"],
-        geolocation: ["'self'"],
-        payment: ["'none'"],
-        usb: ["'none'"],
-        magnetometer: ["'none'"],
-        gyroscope: ["'none'"],
-        accelerometer: ["'none'"],
-      },
-    },
+    // Note: helmet's permissionsPolicy option has limited type support; using custom header instead
+    crossOriginResourcePolicy: { policy: "same-origin" },
     // X-Powered-By - hide Express framework (already done by helmet by default)
     hidePoweredBy: true,
     // Expect-CT - Certificate Transparency (deprecated but still useful)

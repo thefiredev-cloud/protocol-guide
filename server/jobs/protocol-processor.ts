@@ -299,7 +299,7 @@ async function generateEmbeddings(
       throw new Error(`Voyage AI error: ${response.status} ${error}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as { data: Array<{ embedding: number[] }> };
 
     // Map embeddings back to chunks
     for (let j = 0; j < batch.length; j++) {

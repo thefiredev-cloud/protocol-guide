@@ -124,7 +124,6 @@ export function useAuth(options?: UseAuthOptions) {
   }, []);
 
   const fetchUser = useCallback(async () => {
-    console.log("[useAuth] fetchUser called");
     try {
       setLoading(true);
       setError(null);
@@ -132,7 +131,6 @@ export function useAuth(options?: UseAuthOptions) {
       // Check for E2E mock session first (browser only)
       const e2eMockUser = getE2EMockUser();
       if (e2eMockUser) {
-        console.log("[useAuth] E2E mock session found:", e2eMockUser.email);
         const mockSession = createE2EMockSession();
         setSession(mockSession);
         setUser(e2eMockUser);
@@ -144,11 +142,9 @@ export function useAuth(options?: UseAuthOptions) {
       const cachedSession = await getCachedSession();
 
       if (cachedSession) {
-        console.log("[useAuth] Session found:", cachedSession.user?.email);
         setSession(cachedSession);
         setUser(mapSupabaseUser(cachedSession.user));
       } else {
-        console.log("[useAuth] No session");
         setSession(null);
         setUser(null);
       }
@@ -164,7 +160,6 @@ export function useAuth(options?: UseAuthOptions) {
   }, [mapSupabaseUser]);
 
   const logout = useCallback(async () => {
-    console.log("[useAuth] logout called");
     try {
       setLoading(true);
       await supabaseSignOut();
@@ -202,8 +197,6 @@ export function useAuth(options?: UseAuthOptions) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
-        console.log("[useAuth] Auth state changed:", event);
-
         if (newSession) {
           setSession(newSession);
           setUser(mapSupabaseUser(newSession.user));
@@ -222,14 +215,12 @@ export function useAuth(options?: UseAuthOptions) {
     // Start session monitor for automatic refresh
     const stopMonitor = startSessionMonitor(
       (refreshedSession) => {
-        console.log("[useAuth] Session refreshed automatically");
         setSession(refreshedSession);
         setUser(mapSupabaseUser(refreshedSession.user));
         // Update token cache when session is refreshed
         tokenCache.updateCache(refreshedSession);
       },
       () => {
-        console.log("[useAuth] Session expired, logging out");
         setSession(null);
         setUser(null);
         clearTokenCache();
