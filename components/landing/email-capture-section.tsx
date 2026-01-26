@@ -26,6 +26,7 @@ import Animated, {
   FadeInDown,
   interpolate,
 } from "react-native-reanimated";
+import { trpc } from "@/lib/trpc";
 
 const COLORS = {
   bgDark: "#0F172A",
@@ -390,12 +391,30 @@ export function EmailCaptureSection() {
 
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const sectionProgress = useSharedValue(0);
+
+  // tRPC mutation for waitlist signup
+  const waitlistMutation = trpc.contact.subscribeWaitlist.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        setSubmitted(true);
+        setSubmitError(null);
+      } else {
+        setSubmitError(data.error || "Failed to subscribe. Please try again.");
+      }
+    },
+    onError: (error) => {
+      console.error("Waitlist subscription failed:", error);
+      setSubmitError("Failed to subscribe. Please try again.");
+    },
+  });
+
+  const isLoading = waitlistMutation.isPending;
 
   useEffect(() => {
     if (Platform.OS === "web" && typeof window !== "undefined") {
@@ -435,22 +454,16 @@ export function EmailCaptureSection() {
   const isValidEmail = validationState === "valid";
   const showError = showValidation && validationState === "invalid" && email.length > 0;
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = useCallback(() => {
     setShowValidation(true);
+    setSubmitError(null);
     if (!isValidEmail) return;
 
-    setIsLoading(true);
-    try {
-      // Simulate API call - replace with actual backend submission
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Email submitted:", email);
-      setSubmitted(true);
-    } catch (error) {
-      console.error("Submission failed:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, isValidEmail]);
+    waitlistMutation.mutate({
+      email: email.trim(),
+      source: "landing_page",
+    });
+  }, [email, isValidEmail, waitlistMutation]);
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -500,6 +513,7 @@ export function EmailCaptureSection() {
                 )}
 
                 {showError && <ValidationError message="Please enter a valid email address" />}
+                {submitError && <ValidationError message={submitError} />}
               </View>
 
               <SubmitButton onPress={handleSubmit} isLoading={isLoading} disabled={!email} />

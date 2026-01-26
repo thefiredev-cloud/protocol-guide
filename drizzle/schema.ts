@@ -457,6 +457,24 @@ export const dripEmailsSent = pgTable("drip_emails_sent", {
 export type DripEmailSent = typeof dripEmailsSent.$inferSelect;
 export type InsertDripEmailSent = typeof dripEmailsSent.$inferInsert;
 
+// ========================================
+// Waitlist Signups
+// ========================================
+
+export const waitlistSignups = pgTable("waitlist_signups", {
+	id: serial("id").primaryKey(),
+	email: varchar("email", { length: 320 }).notNull(),
+	source: varchar("source", { length: 100 }).default('landing_page'),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+},
+(table) => [
+	index("waitlist_signups_email_idx").on(table.email),
+	index("waitlist_signups_created_idx").on(table.createdAt),
+]);
+
+export type WaitlistSignup = typeof waitlistSignups.$inferSelect;
+export type InsertWaitlistSignup = typeof waitlistSignups.$inferInsert;
+
 // Re-export shared types for convenience
 export type {
   ContactStatus,

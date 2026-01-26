@@ -90,6 +90,8 @@ export {
   getAllContactSubmissionsPaginated,
   updateContactSubmissionStatus,
   getContactSubmissionById,
+  createWaitlistSignup,
+  getWaitlistSignupByEmail,
 } from "./feedback";
 
 // Admin operations

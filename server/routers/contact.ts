@@ -1,6 +1,6 @@
 /**
  * Contact Router
- * Handles public contact form submissions
+ * Handles public contact form submissions and waitlist signups
  */
 
 import { z } from "zod";
@@ -25,6 +25,33 @@ export const contactRouter = router({
       } catch (error) {
         console.error("Failed to submit contact form:", error);
         return { success: false, error: "Failed to submit. Please try again." };
+      }
+    }),
+
+  subscribeWaitlist: strictPublicRateLimitedProcedure
+    .input(z.object({
+      email: z.string().email("Please enter a valid email address").max(320),
+      source: z.string().max(100).optional().default("landing_page"),
+    }))
+    .mutation(async ({ input }) => {
+      try {
+        const result = await db.createWaitlistSignup({
+          email: input.email,
+          source: input.source,
+        });
+
+        return {
+          success: true,
+          alreadySubscribed: result.alreadyExists,
+          error: null,
+        };
+      } catch (error) {
+        console.error("Failed to subscribe to waitlist:", error);
+        return {
+          success: false,
+          alreadySubscribed: false,
+          error: "Failed to subscribe. Please try again.",
+        };
       }
     }),
 });

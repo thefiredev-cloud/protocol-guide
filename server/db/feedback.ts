@@ -4,7 +4,7 @@
  */
 
 import { eq, sql, desc } from "drizzle-orm";
-import { feedback, contactSubmissions, type InsertFeedback, type InsertContactSubmission } from "../../drizzle/schema";
+import { feedback, contactSubmissions, waitlistSignups, type InsertFeedback, type InsertContactSubmission, type InsertWaitlistSignup } from "../../drizzle/schema";
 import { getDb } from "./connection";
 
 // ============ Feedback Functions ============
@@ -172,5 +172,42 @@ export async function getContactSubmissionById(submissionId: number) {
   if (!db) return undefined;
 
   const result = await db.select().from(contactSubmissions).where(eq(contactSubmissions.id, submissionId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// ============ Waitlist Signup Functions ============
+
+export async function createWaitlistSignup(data: InsertWaitlistSignup) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Check if email already exists
+  const existing = await db.select({ id: waitlistSignups.id })
+    .from(waitlistSignups)
+    .where(eq(waitlistSignups.email, data.email.toLowerCase()))
+    .limit(1);
+
+  if (existing.length > 0) {
+    // Email already signed up - return existing id but don't error
+    return { id: existing[0].id, alreadyExists: true };
+  }
+
+  const [result] = await db.insert(waitlistSignups).values({
+    ...data,
+    email: data.email.toLowerCase(),
+  }).returning({ id: waitlistSignups.id });
+
+  return { id: result.id, alreadyExists: false };
+}
+
+export async function getWaitlistSignupByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select()
+    .from(waitlistSignups)
+    .where(eq(waitlistSignups.email, email.toLowerCase()))
+    .limit(1);
+
   return result.length > 0 ? result[0] : undefined;
 }
