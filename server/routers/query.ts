@@ -259,14 +259,34 @@ export const queryRouter = router({
   history: protectedProcedure
     .input(z.object({ limit: z.number().min(1).max(100).default(50) }))
     .query(async ({ ctx, input }) => {
-      return db.getUserQueries(ctx.user.id, input.limit);
+      try {
+        const history = await db.getUserQueries(ctx.user.id, input.limit);
+        return history ?? [];
+      } catch (error) {
+        console.error('[Query] history error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch query history',
+          cause: error,
+        });
+      }
     }),
 
   // Search history for cloud sync (Pro feature)
   searchHistory: protectedProcedure
     .input(z.object({ limit: z.number().min(1).max(100).default(50) }))
     .query(async ({ ctx, input }) => {
-      return dbUserCounties.getUserSearchHistory(ctx.user.id, input.limit);
+      try {
+        const history = await dbUserCounties.getUserSearchHistory(ctx.user.id, input.limit);
+        return history ?? [];
+      } catch (error) {
+        console.error('[Query] searchHistory error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch search history',
+          cause: error,
+        });
+      }
     }),
 
   // Sync local search history to cloud (Pro feature)
@@ -280,42 +300,71 @@ export const queryRouter = router({
       })),
     }))
     .mutation(async ({ ctx, input }) => {
-      // Validate user has Pro tier or higher
-      await validateTier(ctx, "pro");
+      try {
+        // Validate user has Pro tier or higher
+        await validateTier(ctx, "pro");
 
-      const result = await dbUserCounties.syncSearchHistory(
-        ctx.user.id,
-        input.localQueries.map((q) => ({
-          searchQuery: q.queryText,
-          countyId: q.countyId,
-        }))
-      );
+        const result = await dbUserCounties.syncSearchHistory(
+          ctx.user.id,
+          input.localQueries.map((q) => ({
+            searchQuery: q.queryText,
+            countyId: q.countyId,
+          }))
+        );
 
-      return {
-        success: result.success,
-        merged: result.merged,
-        serverHistory: result.serverHistory,
-      };
+        return {
+          success: result.success,
+          merged: result.merged,
+          serverHistory: result.serverHistory,
+        };
+      } catch (error) {
+        if (error instanceof TRPCError) throw error;
+        console.error('[Query] syncHistory error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to sync search history',
+          cause: error,
+        });
+      }
     }),
 
   // Clear search history
   clearHistory: protectedProcedure.mutation(async ({ ctx }) => {
-    const result = await dbUserCounties.clearSearchHistory(ctx.user.id);
-    return result;
+    try {
+      const result = await dbUserCounties.clearSearchHistory(ctx.user.id);
+      return result;
+    } catch (error) {
+      console.error('[Query] clearHistory error:', error);
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to clear search history',
+        cause: error,
+      });
+    }
   }),
 
   // Delete single history entry
   deleteHistoryEntry: protectedProcedure
     .input(z.object({ entryId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const result = await dbUserCounties.deleteSearchHistoryEntry(ctx.user.id, input.entryId);
-      if (!result.success) {
+      try {
+        const result = await dbUserCounties.deleteSearchHistoryEntry(ctx.user.id, input.entryId);
+        if (!result.success) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: result.error || "Entry not found",
+          });
+        }
+        return { success: true };
+      } catch (error) {
+        if (error instanceof TRPCError) throw error;
+        console.error('[Query] deleteHistoryEntry error:', error);
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: result.error || "Entry not found",
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to delete history entry',
+          cause: error,
         });
       }
-      return { success: true };
     }),
 });
 

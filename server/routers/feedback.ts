@@ -4,6 +4,7 @@
  */
 
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../_core/trpc";
 import * as db from "../db";
 
@@ -28,13 +29,23 @@ export const feedbackRouter = router({
         });
         return { success: true, error: null };
       } catch (error) {
-        console.error("Failed to submit feedback:", error);
+        console.error("[Feedback] submit error:", error);
         return { success: false, error: "Failed to submit feedback" };
       }
     }),
 
   myFeedback: protectedProcedure.query(async ({ ctx }) => {
-    return db.getUserFeedback(ctx.user.id);
+    try {
+      const feedback = await db.getUserFeedback(ctx.user.id);
+      return feedback ?? [];
+    } catch (error) {
+      console.error("[Feedback] myFeedback error:", error);
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to fetch feedback',
+        cause: error,
+      });
+    }
   }),
 });
 

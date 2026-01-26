@@ -4,6 +4,7 @@
  */
 
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { rateLimitedProcedure, router } from "../_core/trpc";
 import { transcribeAudio } from "../_core/voiceTranscription";
 import { storagePut } from "../storage";
@@ -33,25 +34,34 @@ export const voiceRouter = router({
       language: z.string().optional(),
     }))
     .mutation(async ({ input }) => {
-      const result = await transcribeAudio({
-        audioUrl: input.audioUrl,
-        language: input.language,
-        prompt: "Transcribe the EMS professional's voice query about medical protocols",
-      });
+      try {
+        const result = await transcribeAudio({
+          audioUrl: input.audioUrl,
+          language: input.language,
+          prompt: "Transcribe the EMS professional's voice query about medical protocols",
+        });
 
-      if ('error' in result) {
+        if ('error' in result) {
+          return {
+            success: false,
+            error: result.error,
+            text: null,
+          };
+        }
+
+        return {
+          success: true,
+          error: null,
+          text: result.text,
+        };
+      } catch (error) {
+        console.error('[Voice] transcribe error:', error);
         return {
           success: false,
-          error: result.error,
+          error: 'Voice transcription failed. Please try again.',
           text: null,
         };
       }
-
-      return {
-        success: true,
-        error: null,
-        text: result.text,
-      };
     }),
 
   uploadAudio: rateLimitedProcedure
@@ -61,15 +71,24 @@ export const voiceRouter = router({
       mimeType: z.string(),
     }))
     .mutation(async ({ ctx, input }) => {
-      const timestamp = Date.now();
-      const extension = input.mimeType.split('/')[1] || 'webm';
-      const key = `voice/${ctx.user.id}/${timestamp}.${extension}`;
+      try {
+        const timestamp = Date.now();
+        const extension = input.mimeType.split('/')[1] || 'webm';
+        const key = `voice/${ctx.user.id}/${timestamp}.${extension}`;
 
-      // Decode base64 to buffer
-      const buffer = Buffer.from(input.audioBase64, 'base64');
+        // Decode base64 to buffer
+        const buffer = Buffer.from(input.audioBase64, 'base64');
 
-      const { url } = await storagePut(key, buffer, input.mimeType);
-      return { url };
+        const { url } = await storagePut(key, buffer, input.mimeType);
+        return { url };
+      } catch (error) {
+        console.error('[Voice] uploadAudio error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to upload audio file',
+          cause: error,
+        });
+      }
     }),
 });
 

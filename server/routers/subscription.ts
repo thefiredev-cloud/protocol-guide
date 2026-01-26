@@ -4,6 +4,7 @@
  */
 
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getUserTierInfo } from "../_core/tier-validation";
 import * as db from "../db";
@@ -18,19 +19,24 @@ export const subscriptionRouter = router({
       cancelUrl: z.string().url(),
     }))
     .mutation(async ({ ctx, input }) => {
-      const result = await stripe.createCheckoutSession({
-        userId: ctx.user.id,
-        userEmail: ctx.user.email || "",
-        plan: input.plan,
-        successUrl: input.successUrl,
-        cancelUrl: input.cancelUrl,
-      });
+      try {
+        const result = await stripe.createCheckoutSession({
+          userId: ctx.user.id,
+          userEmail: ctx.user.email || "",
+          plan: input.plan,
+          successUrl: input.successUrl,
+          cancelUrl: input.cancelUrl,
+        });
 
-      if ('error' in result) {
-        return { success: false, error: result.error, url: null };
+        if ('error' in result) {
+          return { success: false, error: result.error, url: null };
+        }
+
+        return { success: true, error: null, url: result.url };
+      } catch (error) {
+        console.error('[Subscription] createCheckout error:', error);
+        return { success: false, error: 'Failed to create checkout session', url: null };
       }
-
-      return { success: true, error: null, url: result.url };
     }),
 
   // Create customer portal session for managing subscription
@@ -39,26 +45,40 @@ export const subscriptionRouter = router({
       returnUrl: z.string().url(),
     }))
     .mutation(async ({ ctx, input }) => {
-      if (!ctx.user.stripeCustomerId) {
-        return { success: false, error: "No subscription found", url: null };
+      try {
+        if (!ctx.user.stripeCustomerId) {
+          return { success: false, error: "No subscription found", url: null };
+        }
+
+        const result = await stripe.createCustomerPortalSession({
+          stripeCustomerId: ctx.user.stripeCustomerId,
+          returnUrl: input.returnUrl,
+        });
+
+        if ('error' in result) {
+          return { success: false, error: result.error, url: null };
+        }
+
+        return { success: true, error: null, url: result.url };
+      } catch (error) {
+        console.error('[Subscription] createPortal error:', error);
+        return { success: false, error: 'Failed to create portal session', url: null };
       }
-
-      const result = await stripe.createCustomerPortalSession({
-        stripeCustomerId: ctx.user.stripeCustomerId,
-        returnUrl: input.returnUrl,
-      });
-
-      if ('error' in result) {
-        return { success: false, error: result.error, url: null };
-      }
-
-      return { success: true, error: null, url: result.url };
     }),
 
   // Get current subscription status with tier features
   status: protectedProcedure.query(async ({ ctx }) => {
-    const tierInfo = await getUserTierInfo(ctx.user.id);
-    return tierInfo;
+    try {
+      const tierInfo = await getUserTierInfo(ctx.user.id);
+      return tierInfo;
+    } catch (error) {
+      console.error('[Subscription] status error:', error);
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to fetch subscription status',
+        cause: error,
+      });
+    }
   }),
 
   // Create department/agency checkout session
