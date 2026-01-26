@@ -33,3 +33,10 @@ export type Agency = {
   state: string;
   protocolCount?: number;
 };
+
+export type StateCoverage = {
+  state: string;
+  stateCode: string;
+  counties: number;
+  chunks: number;
+};

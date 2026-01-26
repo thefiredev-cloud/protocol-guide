@@ -19,10 +19,11 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Dashboard", icon: "house.fill", path: "/admin" },
+  { label: "Analytics", icon: "chart.bar.fill", path: "/admin/analytics" },
   { label: "Protocols", icon: "doc.text.fill", path: "/admin/protocols" },
   { label: "Team", icon: "person.2.fill", path: "/admin/team" },
+  { label: "Users", icon: "person.3.fill", path: "/admin/users" },
   { label: "Settings", icon: "gearshape.fill", path: "/admin/settings" },
-  { label: "Analytics", icon: "chart.bar.fill", path: "/admin/analytics" },
 ];
 
 export default function AdminLayout() {
