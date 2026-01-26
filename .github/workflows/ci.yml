@@ -92,8 +92,11 @@ jobs:
       - name: Build server
         run: pnpm build
 
+      - name: Clear metro cache
+        run: rm -rf node_modules/.cache node_modules/react-native-css-interop/.cache
+
       - name: Build web export
-        run: npx expo export --platform web
+        run: npx expo export --platform web --clear
         env:
           # Provide dummy env vars for build (actual secrets in Netlify)
           EXPO_PUBLIC_APP_ID: "build-test"
