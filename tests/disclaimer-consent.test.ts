@@ -7,7 +7,7 @@
  * - Modal appears on first login
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { createMockUser } from "./setup";
 
 // Constants for storage keys
@@ -34,7 +34,6 @@ class TestStorage {
     this.data.clear();
   }
 
-  // For testing purposes
   size(): number {
     return this.data.size;
   }
@@ -86,29 +85,32 @@ function createTestContext() {
   };
 }
 
-describe.skip("Disclaimer Consent", () => {
+describe("Disclaimer Consent", () => {
 
   describe("First-time User Flow", () => {
     it("should not allow search without disclaimer acknowledgment", async () => {
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const ctx = createTestContext();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(false);
 
-      const result = await performSearch("cardiac arrest");
+      const result = await ctx.performSearch("cardiac arrest");
       expect(result.error).toBe("You must acknowledge the medical disclaimer before searching");
       expect(result.results).toBeUndefined();
     });
 
     it("should show disclaimer modal on first login", async () => {
+      const ctx = createTestContext();
       const user = createMockUser({ id: 1 });
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
 
       expect(hasConsent).toBe(false);
       expect(user.id).toBe(1);
     });
 
     it("should not show disclaimer modal if already acknowledged", async () => {
-      await acknowledgeDisclaimer();
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
 
       expect(hasConsent).toBe(true);
     });
@@ -116,11 +118,12 @@ describe.skip("Disclaimer Consent", () => {
 
   describe("Acknowledgment Storage", () => {
     it("should store acknowledgment timestamp when user accepts", async () => {
+      const ctx = createTestContext();
       const beforeTime = new Date();
 
-      await acknowledgeDisclaimer();
+      await ctx.acknowledgeDisclaimer();
 
-      const timestamp = await getDisclaimerTimestamp();
+      const timestamp = await ctx.getDisclaimerTimestamp();
       expect(timestamp).toBeTruthy();
 
       const storedTime = new Date(timestamp!);
@@ -129,23 +132,25 @@ describe.skip("Disclaimer Consent", () => {
     });
 
     it("should persist acknowledgment across app restarts", async () => {
-      await acknowledgeDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
 
       // Verify it's stored
-      let hasConsent = await hasAcknowledgedDisclaimer();
+      let hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(true);
 
       // Simulate app restart by checking storage again
-      hasConsent = await hasAcknowledgedDisclaimer();
+      hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(true);
     });
 
     it("should store both acknowledgment flag and timestamp", async () => {
-      await acknowledgeDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
 
       // Verify both were stored
-      const flag = await storage.getItem(CONSENT_KEY);
-      const timestamp = await storage.getItem(CONSENT_TIMESTAMP_KEY);
+      const flag = await ctx.storage.getItem(CONSENT_KEY);
+      const timestamp = await ctx.storage.getItem(CONSENT_TIMESTAMP_KEY);
 
       expect(flag).toBe("true");
       expect(timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
@@ -154,27 +159,30 @@ describe.skip("Disclaimer Consent", () => {
 
   describe("Search Functionality", () => {
     it("should allow search after disclaimer acknowledgment", async () => {
-      await acknowledgeDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
 
-      const result = await performSearch("cardiac arrest");
+      const result = await ctx.performSearch("cardiac arrest");
       expect(result.error).toBeUndefined();
       expect(result.results).toBeDefined();
       expect(result.results).toHaveLength(1);
     });
 
     it("should block search attempts without acknowledgment", async () => {
-      const result = await performSearch("epinephrine dose");
+      const ctx = createTestContext();
+      const result = await ctx.performSearch("epinephrine dose");
 
       expect(result.error).toBeTruthy();
       expect(result.results).toBeUndefined();
     });
 
     it("should maintain search access after acknowledgment", async () => {
-      await acknowledgeDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
 
       // Perform multiple searches
-      const result1 = await performSearch("cardiac arrest");
-      const result2 = await performSearch("stroke protocol");
+      const result1 = await ctx.performSearch("cardiac arrest");
+      const result2 = await ctx.performSearch("stroke protocol");
 
       expect(result1.results).toBeDefined();
       expect(result2.results).toBeDefined();
@@ -183,29 +191,32 @@ describe.skip("Disclaimer Consent", () => {
 
   describe("Consent Revocation", () => {
     it("should allow clearing consent", async () => {
-      await acknowledgeDisclaimer();
-      expect(await hasAcknowledgedDisclaimer()).toBe(true);
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
+      expect(await ctx.hasAcknowledgedDisclaimer()).toBe(true);
 
-      await clearDisclaimerConsent();
-      expect(await hasAcknowledgedDisclaimer()).toBe(false);
+      await ctx.clearDisclaimerConsent();
+      expect(await ctx.hasAcknowledgedDisclaimer()).toBe(false);
     });
 
     it("should block search after consent revocation", async () => {
-      await acknowledgeDisclaimer();
-      const result1 = await performSearch("test");
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
+      const result1 = await ctx.performSearch("test");
       expect(result1.results).toBeDefined();
 
-      await clearDisclaimerConsent();
-      const result2 = await performSearch("test");
+      await ctx.clearDisclaimerConsent();
+      const result2 = await ctx.performSearch("test");
       expect(result2.error).toBeTruthy();
     });
 
     it("should remove both flag and timestamp on clear", async () => {
-      await acknowledgeDisclaimer();
-      await clearDisclaimerConsent();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
+      await ctx.clearDisclaimerConsent();
 
-      const flag = await storage.getItem(CONSENT_KEY);
-      const timestamp = await storage.getItem(CONSENT_TIMESTAMP_KEY);
+      const flag = await ctx.storage.getItem(CONSENT_KEY);
+      const timestamp = await ctx.storage.getItem(CONSENT_TIMESTAMP_KEY);
 
       expect(flag).toBeNull();
       expect(timestamp).toBeNull();
@@ -214,38 +225,42 @@ describe.skip("Disclaimer Consent", () => {
 
   describe("Edge Cases", () => {
     it("should handle corrupted storage data gracefully", async () => {
-      await storage.setItem(CONSENT_KEY, "invalid");
+      const ctx = createTestContext();
+      await ctx.storage.setItem(CONSENT_KEY, "invalid");
 
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(false);
     });
 
     it("should handle missing timestamp gracefully", async () => {
-      await storage.setItem(CONSENT_KEY, "true");
+      const ctx = createTestContext();
+      await ctx.storage.setItem(CONSENT_KEY, "true");
       // Don't set timestamp
 
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(true);
 
-      const timestamp = await getDisclaimerTimestamp();
+      const timestamp = await ctx.getDisclaimerTimestamp();
       expect(timestamp).toBeNull();
     });
 
     it("should handle rapid acknowledgment attempts", async () => {
+      const ctx = createTestContext();
       // Acknowledge multiple times quickly
       await Promise.all([
-        acknowledgeDisclaimer(),
-        acknowledgeDisclaimer(),
-        acknowledgeDisclaimer(),
+        ctx.acknowledgeDisclaimer(),
+        ctx.acknowledgeDisclaimer(),
+        ctx.acknowledgeDisclaimer(),
       ]);
 
-      const hasConsent = await hasAcknowledgedDisclaimer();
+      const hasConsent = await ctx.hasAcknowledgedDisclaimer();
       expect(hasConsent).toBe(true);
     });
 
     it("should validate timestamp format", async () => {
-      await acknowledgeDisclaimer();
-      const timestamp = await getDisclaimerTimestamp();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
+      const timestamp = await ctx.getDisclaimerTimestamp();
 
       expect(timestamp).toBeTruthy();
       expect(() => new Date(timestamp!)).not.toThrow();
@@ -257,26 +272,27 @@ describe.skip("Disclaimer Consent", () => {
 
   describe("Multi-user Support", () => {
     it("should track consent per user session", async () => {
+      const ctx = createTestContext();
       const user1 = createMockUser({ id: 1 });
       const user2 = createMockUser({ id: 2 });
 
       // User 1 acknowledges
-      await acknowledgeDisclaimer();
-      expect(await hasAcknowledgedDisclaimer()).toBe(true);
+      await ctx.acknowledgeDisclaimer();
+      expect(await ctx.hasAcknowledgedDisclaimer()).toBe(true);
 
       // In a real implementation, this would switch user context
-      // For now, we just verify the logic works
       expect(user1.id).not.toBe(user2.id);
     });
   });
 
   describe("Analytics & Tracking", () => {
     it("should record when disclaimer was acknowledged", async () => {
+      const ctx = createTestContext();
       const beforeAcknowledgment = new Date();
 
-      await acknowledgeDisclaimer();
+      await ctx.acknowledgeDisclaimer();
 
-      const timestamp = await getDisclaimerTimestamp();
+      const timestamp = await ctx.getDisclaimerTimestamp();
       const acknowledgedAt = new Date(timestamp!);
 
       expect(acknowledgedAt).toBeInstanceOf(Date);
@@ -284,14 +300,15 @@ describe.skip("Disclaimer Consent", () => {
     });
 
     it("should track acknowledgment age", async () => {
-      await acknowledgeDisclaimer();
+      const ctx = createTestContext();
+      await ctx.acknowledgeDisclaimer();
 
-      const timestamp = await getDisclaimerTimestamp();
+      const timestamp = await ctx.getDisclaimerTimestamp();
       const acknowledgedAt = new Date(timestamp!);
       const ageInMs = Date.now() - acknowledgedAt.getTime();
 
       expect(ageInMs).toBeGreaterThanOrEqual(0);
-      expect(ageInMs).toBeLessThan(1000); // Should be less than 1 second old
+      expect(ageInMs).toBeLessThan(1000);
     });
   });
 });
