@@ -10,18 +10,18 @@ import {
 } from "react-native";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
-import { getApiBaseUrl } from "@/constants/oauth";
 import { useRouter } from "expo-router";
 import Animated, { FadeIn, FadeOut, SlideInRight } from "react-native-reanimated";
 import { SkeletonListItem } from "@/components/ui/Skeleton";
 import { useFocusTrap } from "@/lib/accessibility";
+import { trpc } from "@/lib/trpc";
 
-// Agency data from the Rust API
+// Agency data from tRPC
 interface Agency {
   id: number;
   name: string;
   state: string;
-  protocol_count: number;
+  protocolCount: number;
 }
 
 interface StateDetailViewProps {
@@ -41,9 +41,6 @@ export function StateDetailView({
   onClose,
   visible,
 }: StateDetailViewProps) {
-  const [agencies, setAgencies] = useState<Agency[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const colors = useColors();
   const router = useRouter();
 
@@ -54,41 +51,24 @@ export function StateDetailView({
     allowEscapeClose: true,
   });
 
-  useEffect(() => {
-    if (visible && stateName) {
-      fetchAgencies();
-    }
-  }, [visible, stateName]);
+  // Use tRPC to fetch agencies by state
+  const { data: agenciesData, isLoading, error: queryError, refetch } = trpc.search.agenciesByState.useQuery(
+    { state: stateName },
+    { enabled: visible && !!stateName }
+  );
 
-  async function fetchAgencies() {
-    setIsLoading(true);
-    setError(null);
+  // Transform and sort agencies
+  const agencies: Agency[] = (agenciesData ?? [])
+    .filter((a: { protocolCount: number }) => a.protocolCount > 0)
+    .sort((a: { protocolCount: number }, b: { protocolCount: number }) => b.protocolCount - a.protocolCount)
+    .map((a: { id: number; name: string; state: string; protocolCount: number }) => ({
+      id: a.id,
+      name: a.name,
+      state: a.state,
+      protocolCount: a.protocolCount,
+    }));
 
-    try {
-      const baseUrl = getApiBaseUrl();
-      const response = await fetch(
-        `${baseUrl}/api/counties/by-state?state=${encodeURIComponent(stateName)}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch agencies: ${response.status}`);
-      }
-
-      const data: Agency[] = await response.json();
-      
-      // Sort by protocol count descending, filter out agencies with 0 protocols
-      const sortedAgencies = data
-        .filter((a) => a.protocol_count > 0)
-        .sort((a, b) => b.protocol_count - a.protocol_count);
-
-      setAgencies(sortedAgencies);
-    } catch (err) {
-      console.error("Error fetching agencies:", err);
-      setError(err instanceof Error ? err.message : "Failed to load agencies");
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const error = queryError?.message || null;
 
   const navigateToSearch = (agencyId?: number) => {
     onClose();
@@ -132,7 +112,7 @@ export function StateDetailView({
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <IconSymbol name="paperplane.fill" size={12} color={colors.muted} />
               <Text style={{ fontSize: 13, color: colors.muted, marginLeft: 4 }}>
-                {item.protocol_count.toLocaleString()} protocols
+                {item.protocolCount.toLocaleString()} protocols
               </Text>
             </View>
           </View>
@@ -257,7 +237,7 @@ export function StateDetailView({
                 {error}
               </Text>
               <TouchableOpacity
-                onPress={fetchAgencies}
+                onPress={() => refetch()}
                 style={{
                   marginTop: 16,
                   paddingHorizontal: 20,
