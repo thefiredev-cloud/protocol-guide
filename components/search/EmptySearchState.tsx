@@ -53,7 +53,7 @@ export function EmptySearchState({ onSelectSearch }: EmptySearchStateProps) {
             <IconSymbol name="wifi.slash" size={18} color={colors.warning} />
             <View style={styles.offlineBannerText}>
               <Text style={[styles.offlineBannerTitle, { color: colors.foreground }]}>
-                You're Offline
+                You&apos;re Offline
               </Text>
               <Text style={[styles.offlineBannerSubtitle, { color: colors.muted }]}>
                 Showing cached protocols • New searches will sync when online
@@ -224,7 +224,7 @@ export function EmptySearchState({ onSelectSearch }: EmptySearchStateProps) {
         >
           <IconSymbol name="lightbulb.fill" size={14} color={colors.primary} />
           <Text style={[styles.helpText, { color: colors.muted }]}>
-            Tip: Use natural language like "dose for pediatric asthma"
+            Tip: Use natural language like &quot;dose for pediatric asthma&quot;
           </Text>
         </Animated.View>
       </View>

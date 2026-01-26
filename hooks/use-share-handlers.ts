@@ -21,8 +21,19 @@ interface ShareTemplates {
   shareUrl?: string;
 }
 
+// Specific event types matching the tRPC schema
+type ReferralEventType =
+  | "referral_code_generated"
+  | "referral_code_shared"
+  | "referral_code_copied"
+  | "share_button_tapped"
+  | "shift_share_shown"
+  | "shift_share_accepted"
+  | "shift_share_dismissed"
+  | "social_share_completed";
+
 interface TrackEventParams {
-  eventType: string;
+  eventType: ReferralEventType;
   metadata?: Record<string, unknown>;
 }
 

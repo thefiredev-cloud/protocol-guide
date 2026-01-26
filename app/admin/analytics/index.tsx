@@ -456,7 +456,7 @@ function ProtocolsTab({ protocolData, colors }: { protocolData: any; colors: Ret
             <Text style={[styles.alertTitle, { color: colors.error }]}>Stale Protocols Alert</Text>
           </View>
           <Text style={[styles.alertDescription, { color: colors.foreground }]}>
-            The following protocols haven't been updated in over a year:
+            The following protocols haven&apos;t been updated in over a year:
           </Text>
           {protocolData.staleProtocols.slice(0, 5).map((p: any) => (
             <View key={p.id} style={[styles.alertItem, { borderTopColor: colors.error + "20" }]}>

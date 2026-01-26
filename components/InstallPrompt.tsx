@@ -243,7 +243,7 @@ export function InstallPrompt() {
               </View>
               <View style={styles.stepContent}>
                 <Text style={[styles.stepTitle, { color: colors.foreground }]}>
-                  Scroll and tap "Add to Home Screen"
+                  Scroll and tap &quot;Add to Home Screen&quot;
                 </Text>
                 <Text style={[styles.stepDescription, { color: colors.muted }]}>
                   You may need to scroll down in the share menu
@@ -257,7 +257,7 @@ export function InstallPrompt() {
               </View>
               <View style={styles.stepContent}>
                 <Text style={[styles.stepTitle, { color: colors.foreground }]}>
-                  Tap "Add"
+                  Tap &quot;Add&quot;
                 </Text>
                 <Text style={[styles.stepDescription, { color: colors.muted }]}>
                   Protocol Guide will appear on your home screen

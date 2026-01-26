@@ -48,7 +48,7 @@ export function useFilterState() {
           state: a.state,
           protocolCount: a.protocolCount,
         }))
-        .sort((a: Agency, b: Agency) => b.protocolCount - a.protocolCount);
+        .sort((a: Agency, b: Agency) => (b.protocolCount ?? 0) - (a.protocolCount ?? 0));
       setAgenciesData(agencies);
     }
     setAgenciesLoading(agenciesQueryLoading);

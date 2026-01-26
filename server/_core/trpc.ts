@@ -299,13 +299,14 @@ const enforceRateLimit = t.middleware(async (opts) => {
   const usage = await getUserUsage(ctx.user.id);
 
   // Calculate rate limit info for headers
+  const usageCount = usage.count ?? 0;
   const rateLimitInfo: RateLimitInfo = {
     limit: usage.limit,
-    remaining: Math.max(0, usage.limit - usage.count),
+    remaining: Math.max(0, usage.limit - usageCount),
     resetTime: getNextMidnightUTC(),
     daily: {
       limit: usage.limit === -1 ? "unlimited" : usage.limit,
-      remaining: usage.limit === -1 ? "unlimited" : Math.max(0, usage.limit - usage.count),
+      remaining: usage.limit === -1 ? "unlimited" : Math.max(0, usage.limit - usageCount),
       resetTime: getNextMidnightUTC(),
     },
   };
@@ -313,7 +314,7 @@ const enforceRateLimit = t.middleware(async (opts) => {
   // Always set rate limit headers (even for successful requests)
   setRateLimitHeaders(ctx.res, rateLimitInfo);
 
-  if (usage.count >= usage.limit && usage.limit !== -1) {
+  if (usageCount >= usage.limit && usage.limit !== -1) {
     // Set Retry-After header when rate limited
     const retryAfter = Math.ceil((getNextMidnightUTC() - Date.now()) / 1000);
     ctx.res.setHeader(RATE_LIMIT_HEADERS.RETRY_AFTER, retryAfter);

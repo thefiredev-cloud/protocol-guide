@@ -83,7 +83,7 @@ export function OfflineBanner({ showPendingCount = true, onPress }: OfflineBanne
         <IconSymbol name="wifi.slash" size={16} color="#1F2937" />
       </Animated.View>
       <Text style={styles.text}>
-        You're offline
+        You&apos;re offline
         {pendingCount > 0 && ` • ${pendingCount} pending`}
       </Text>
       <Text style={styles.subtext}>Using cached protocols</Text>

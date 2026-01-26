@@ -78,12 +78,15 @@ export async function getDb() {
     try {
       const poolConfig = getPoolConfig();
 
-      _pool = new Pool({
+      // Create pool config with IPv4 enforcement
+      // Note: 'family' is passed through to net.connect() by pg for DNS resolution
+      // Railway containers don't support IPv6 egress, so we force IPv4
+      const poolOptions = {
         connectionString: process.env.DATABASE_URL,
         ...poolConfig,
-        // Force IPv4 - Railway containers don't support IPv6 egress
         family: 4,
-      });
+      };
+      _pool = new Pool(poolOptions as ConstructorParameters<typeof Pool>[0]);
 
       // Test connection on pool creation
       let client: PoolClient | null = null;

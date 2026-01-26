@@ -438,17 +438,17 @@ export default function ProfileScreen() {
                   style={[
                     styles.progressFill,
                     {
-                      backgroundColor: usage.count >= usage.limit ? colors.error : colors.primary,
-                      width: `${Math.min((usage.count / usage.limit) * 100, 100)}%`,
+                      backgroundColor: (usage.count ?? 0) >= usage.limit ? colors.error : colors.primary,
+                      width: `${Math.min(((usage.count ?? 0) / usage.limit) * 100, 100)}%`,
                     },
                   ]}
                 />
               </View>
             </View>
             <Text style={[styles.usageText, { color: colors.muted }]}>
-              {usage.count} of {usage.limit} queries used today
+              {usage.count ?? 0} of {usage.limit} queries used today
             </Text>
-            {usage.count >= usage.limit && (
+            {(usage.count ?? 0) >= usage.limit && (
               <View style={[styles.limitWarning, { backgroundColor: colors.error + "15" }]}>
                 <Text style={[styles.limitWarningText, { color: colors.error }]}>
                   Daily limit reached. Upgrade to Pro for unlimited queries.

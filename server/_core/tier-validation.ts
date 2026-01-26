@@ -115,7 +115,7 @@ export async function validateTier(
  */
 export async function validateSubscriptionActive(user: {
   id: number;
-  tier: string;
+  tier: string | null;
   subscriptionStatus: string | null;
   subscriptionEndDate: Date | string | null;
 }): Promise<void> {

@@ -35,7 +35,7 @@ export async function incrementUserQueryCount(userId: number) {
   }
 
   // Increment count
-  const newCount = user.queryCountToday + 1;
+  const newCount = (user.queryCountToday ?? 0) + 1;
   await db.update(users).set({ queryCountToday: newCount }).where(eq(users.id, userId));
   return newCount;
 }
@@ -58,13 +58,14 @@ export async function getUserUsage(userId: number) {
   };
 
   const today = new Date().toISOString().split('T')[0];
-  const count = user.lastQueryDate === today ? user.queryCountToday : 0;
-  const tierConfig = TIER_CONFIG[user.tier];
+  const count = user.lastQueryDate === today ? (user.queryCountToday ?? 0) : 0;
+  const userTier = (user.tier ?? 'free') as keyof typeof TIER_CONFIG;
+  const tierConfig = TIER_CONFIG[userTier];
 
   return {
     count,
     limit: tierConfig.dailyQueryLimit,
-    tier: user.tier,
+    tier: userTier,
     features: tierConfig,
   };
 }
