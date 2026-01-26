@@ -418,8 +418,6 @@ export const SkeletonProfileHeader = memo(function SkeletonProfileHeader({
   style?: ViewStyle;
   testID?: string;
 }) {
-  const colors = useColors();
-
   return (
     <View
       style={[

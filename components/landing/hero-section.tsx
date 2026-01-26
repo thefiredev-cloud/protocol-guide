@@ -124,7 +124,6 @@ export function HeroSection({ onGetStarted, onSignIn }: HeroSectionProps) {
   // Three-tier responsive breakpoints
   const isMobile = width < 640;
   const isTablet = width >= 640 && width < 1024;
-  const isDesktop = width >= 1024;
   const showMobileMenu = width < 768; // Keep hamburger menu threshold for nav
 
   // Animation values for staggered entrance

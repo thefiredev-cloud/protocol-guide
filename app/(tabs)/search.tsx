@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Keyboard,
-  AccessibilityInfo,
 } from "react-native";
-import { SearchLoadingSkeleton, SearchSuggestionsSkeleton } from "@/components/search/SearchLoadingSkeleton";
+import { SearchLoadingSkeleton } from "@/components/search/SearchLoadingSkeleton";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";

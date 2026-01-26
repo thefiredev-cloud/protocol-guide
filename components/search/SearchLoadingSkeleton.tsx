@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { View, Text } from "react-native";
-import { SkeletonProtocolCard, Skeleton } from "@/components/ui/Skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { useColors } from "@/hooks/use-colors";
 import { spacing, radii } from "@/lib/design-tokens";
 
@@ -160,8 +160,6 @@ const SearchResultCardSkeleton = memo(function SearchResultCardSkeleton({
  * Use when space is limited or for inline loading states
  */
 export const SearchLoadingIndicator = memo(function SearchLoadingIndicator() {
-  const colors = useColors();
-
   return (
     <View
       style={{

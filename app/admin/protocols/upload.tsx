@@ -3,7 +3,7 @@
  * Upload and process new protocol PDFs
  */
 
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Platform } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { useState } from "react";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -11,7 +11,6 @@ import { uriToBase64 } from "@/lib/blob-utils";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useRouter } from "expo-router";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
 
 export default function UploadProtocolScreen() {
   const colors = useColors();

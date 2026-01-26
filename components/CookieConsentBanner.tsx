@@ -53,6 +53,7 @@ export function CookieConsentBanner({ onConsentUpdate }: CookieConsentBannerProp
   // Check existing consent on mount
   useEffect(() => {
     checkExistingConsent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Animate in when visible
@@ -65,6 +66,7 @@ export function CookieConsentBanner({ onConsentUpdate }: CookieConsentBannerProp
         friction: 8,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   const checkExistingConsent = async () => {

@@ -11,7 +11,7 @@
 
 import type { NormalizedQuery } from '../ems-query-normalizer';
 import { MEDICAL_SYNONYMS, expandWithSynonyms } from '../ems-query-normalizer';
-import type { RetrievalResult } from './index';
+import type { RetrievalResult } from './types';
 import { RAG_CONFIG } from './config';
 
 // ============================================================================

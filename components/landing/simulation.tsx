@@ -365,11 +365,6 @@ export function ComparisonCard({ label, value, description, variant }: Compariso
     }
   };
 
-  const shadowOpacity = elevationAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.1, 0.25],
-  });
-
   return (
     <Pressable
       onHoverIn={handleHoverIn}

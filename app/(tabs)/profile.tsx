@@ -9,7 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useRouter } from "expo-router";
 import * as Haptics from "@/lib/haptics";
 import { useState } from "react";
-import { useFavorites, FavoriteProtocol } from "@/hooks/use-favorites";
+import { useFavorites } from "@/hooks/use-favorites";
 import { signInWithGoogle, signInWithApple } from "@/lib/supabase";
 import { GoogleLogo, AppleLogo } from "@/components/icons";
 import { Modal } from "@/components/ui/Modal";
@@ -53,7 +53,7 @@ export default function ProfileScreen() {
   const isProfileLoading = usageLoading || subscriptionLoading || queriesLoading;
   const hasProfileError = usageError || subscriptionError || queriesError;
   
-  const { cachedProtocols, cacheSize, clearCache, itemCount } = useOfflineCache();
+  const { cacheSize, clearCache, itemCount } = useOfflineCache();
   const { favorites, removeFavorite } = useFavorites();
   
   const createPortalMutation = trpc.subscription.createPortal.useMutation();
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
           message: result.error || "Failed to open billing portal",
         });
       }
-    } catch (error) {
+    } catch {
       setErrorModal({
         visible: true,
         title: "Billing Portal Error",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Platform, TouchableOpacity, Linking } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import Animated, { 
   FadeIn, 

@@ -15,9 +15,10 @@ import type {
   RagMetrics, 
   OptimizedSearchParams, 
   OptimizedSearchResult 
-} from './index';
+} from './types';
 import { RAG_CONFIG } from './config';
-import { queryCache, latencyMonitor } from './index';
+import { queryCache } from './cache';
+import { latencyMonitor } from './latency';
 import { rerankResults, advancedRerank, applyContextBoost, reciprocalRankFusion } from './scoring';
 import { selectModel, selectSimilarityThreshold, selectResultLimit } from './model-selection';
 

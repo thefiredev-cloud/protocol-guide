@@ -109,7 +109,7 @@ export default function FeedbackScreen() {
       } else {
         showModal("Error", result.error || "Failed to submit feedback. Please try again.");
       }
-    } catch (error) {
+    } catch {
       showModal("Error", "Failed to submit feedback. Please try again.");
     } finally {
       setIsSubmitting(false);

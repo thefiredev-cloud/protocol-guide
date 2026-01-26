@@ -174,6 +174,7 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
       -1,
       false
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stopPulseAnimation = useCallback(() => {
@@ -181,6 +182,7 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
     cancelAnimation(pulseOpacity);
     pulseScale.value = 1;
     pulseOpacity.value = 1;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Apply medical terminology corrections
@@ -198,11 +200,6 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
 
     return corrected;
   }, []);
-
-  // Convert audio to base64 for API (cross-platform)
-  const audioToBase64 = async (uri: string): Promise<string> => {
-    return uriToBase64(uri);
-  };
 
   // Get MIME type based on platform
   const getMimeType = (): string => {
@@ -225,7 +222,7 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
           )
         );
       } else {
-        audioBase64 = await audioToBase64(audioUri);
+        audioBase64 = await uriToBase64(audioUri);
       }
 
       // Step 2: Upload audio to server storage
@@ -394,6 +391,7 @@ export function VoiceInput({ onTranscription, onError, disabled = false }: Voice
       stopRecording();
     }
     // Ignore presses during processing or complete states
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled]);
 
   const formatDuration = (seconds: number): string => {

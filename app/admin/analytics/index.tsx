@@ -10,9 +10,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -37,7 +36,6 @@ interface ChartProps {
 function BarChart({ data, height = 120, color, showLabels = true, valueKey = "count" }: ChartProps) {
   const colors = useColors();
   const maxValue = Math.max(...data.map((d) => Number(d[valueKey]) || 0), 1);
-  const width = Dimensions.get("window").width - 340; // Account for sidebar
 
   return (
     <View style={[styles.chartContainer, { height }]}>

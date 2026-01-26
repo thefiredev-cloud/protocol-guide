@@ -115,7 +115,8 @@ export function VoiceSearchModal({
       stopPulseAnimation(animationValues);
       resetState();
     }
-  }, [visible, cleanupRecording, resetState, setErrorType, animationValues]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible, cleanupRecording, resetState, setErrorType]);
 
   return (
     <Modal

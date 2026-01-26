@@ -4,9 +4,7 @@ import { SkeletonCard, Skeleton } from "@/components/ui/Skeleton";
 import { ScreenContainer } from "@/components/screen-container";
 import { useRouter } from "expo-router";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { useColors } from "@/hooks/use-colors";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { getApiBaseUrl } from "@/constants/oauth";
 import { trpc } from "@/lib/trpc";
 import { StateDetailView } from "@/components/state-detail-view";
 
@@ -65,30 +63,6 @@ const STATE_POSITIONS: Record<string, { x: number; y: number; width: number; hei
   DC: { x: 78, y: 22, width: 2, height: 2 },
 };
 
-// State name to code mapping
-const STATE_CODE_MAP: Record<string, string> = {
-  'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
-  'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
-  'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
-  'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-  'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
-  'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-  'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
-  'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-  'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
-  'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY',
-  'District of Columbia': 'DC',
-  // Also handle if state codes are already in the data
-  'AL': 'AL', 'AK': 'AK', 'AZ': 'AZ', 'AR': 'AR', 'CA': 'CA', 'CO': 'CO', 'CT': 'CT',
-  'DE': 'DE', 'FL': 'FL', 'GA': 'GA', 'HI': 'HI', 'ID': 'ID', 'IL': 'IL', 'IN': 'IN',
-  'IA': 'IA', 'KS': 'KS', 'KY': 'KY', 'LA': 'LA', 'ME': 'ME', 'MD': 'MD', 'MA': 'MA',
-  'MI': 'MI', 'MN': 'MN', 'MS': 'MS', 'MO': 'MO', 'MT': 'MT', 'NE': 'NE', 'NV': 'NV',
-  'NH': 'NH', 'NJ': 'NJ', 'NM': 'NM', 'NY': 'NY', 'NC': 'NC', 'ND': 'ND', 'OH': 'OH',
-  'OK': 'OK', 'OR': 'OR', 'PA': 'PA', 'RI': 'RI', 'SC': 'SC', 'SD': 'SD', 'TN': 'TN',
-  'TX': 'TX', 'UT': 'UT', 'VT': 'VT', 'VA': 'VA', 'WA': 'WA', 'WV': 'WV', 'WI': 'WI',
-  'WY': 'WY', 'DC': 'DC',
-};
-
 // Beautiful gradient colors based on coverage
 function getCoverageColor(chunks: number): { bg: string; border: string; text: string } {
   if (chunks === 0) return { bg: "#F1F5F9", border: "#CBD5E1", text: "#64748B" };
@@ -109,19 +83,6 @@ function getCoverageLevel(chunks: number): string {
   if (chunks < 2000) return "Good";
   if (chunks < 4000) return "Very Good";
   return "Excellent";
-}
-
-// API response types from Rust server
-interface RustStateData {
-  state: string;
-  agency_count: number;
-  protocol_count: number;
-}
-
-interface RustStats {
-  total_protocols: number;
-  total_counties: number;
-  states_covered: number;
 }
 
 // Internal state coverage type
@@ -146,7 +107,6 @@ export default function CoverageScreen() {
   const [error, setError] = useState<string | null>(null);
   const [showStateDetail, setShowStateDetail] = useState(false);
   const router = useRouter();
-  const colors = useColors();
   
   // Use tRPC to fetch coverage data
   const { data: coverageResult, isLoading: coverageLoading, error: coverageError } = trpc.search.coverageByState.useQuery();

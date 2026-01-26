@@ -21,7 +21,6 @@ import {
   Platform,
   StyleSheet,
   useWindowDimensions,
-  Animated,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import * as Haptics from "expo-haptics";
@@ -56,9 +55,7 @@ export function DoseWeightCalculator({
   compact = false,
 }: DoseWeightCalculatorProps) {
   const colors = useColors();
-  const { width } = useWindowDimensions();
-  // Consistent with landing page breakpoints (640px mobile threshold)
-  const isMobile = width < 640;
+  useWindowDimensions(); // Used for responsive layout updates
 
   // State
   const [weight, setWeight] = useState(initialWeight);

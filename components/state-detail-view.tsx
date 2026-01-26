@@ -1,17 +1,13 @@
-import { useState, useEffect } from "react";
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   Modal,
-  Pressable,
 } from "react-native";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { useRouter } from "expo-router";
-import Animated, { FadeIn, FadeOut, SlideInRight } from "react-native-reanimated";
 import { SkeletonListItem } from "@/components/ui/Skeleton";
 import { useFocusTrap } from "@/lib/accessibility";
 import { trpc } from "@/lib/trpc";

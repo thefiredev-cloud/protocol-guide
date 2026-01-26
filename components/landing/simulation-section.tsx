@@ -11,7 +11,6 @@ import {
   Text,
   Animated,
   Easing,
-  Platform,
   useWindowDimensions,
 } from "react-native";
 import { SimulationTimer } from "./simulation/simulation-timer";
@@ -20,12 +19,11 @@ import {
   PulsingButton,
   CelebrationEffect,
   ComparisonCard,
-  COLORS,
   MANUAL_SEARCH_TIME,
   PROTOCOL_GUIDE_TIME,
   MAX_TIME,
-  SimulationState,
 } from "./simulation";
+import type { SimulationState } from "./simulation";
 import { styles } from "./simulation/simulation-section-styles";
 
 export function SimulationSection() {

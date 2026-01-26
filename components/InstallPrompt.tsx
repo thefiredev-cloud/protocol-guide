@@ -7,8 +7,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { View, Text, Pressable, Platform, StyleSheet, Image } from 'react-native';
 import Animated, { 
-  FadeIn, 
-  FadeOut, 
   SlideInDown, 
   SlideOutDown 
 } from 'react-native-reanimated';

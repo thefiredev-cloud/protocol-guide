@@ -17,7 +17,7 @@ import { useAppContext } from "@/lib/app-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "@/lib/haptics";
 import { ProFeatureLock, ProBadge } from "@/components/pro-feature-lock";
-import { SkeletonHistoryList, Skeleton } from "@/components/ui/Skeleton";
+import { SkeletonHistoryList } from "@/components/ui/Skeleton";
 
 type FilterOption = "all" | "today" | "week" | "month";
 
@@ -26,7 +26,7 @@ export default function HistoryScreen() {
   const colors = useColors();
   const router = useRouter();
   const { cachedProtocols, removeFromCache, isLoading: cacheLoading } = useOfflineCache();
-  const { hasOfflineAccess, tier } = useOfflineAccess();
+  const { tier } = useOfflineAccess();
   const { addMessage } = useAppContext();
 
   const [searchQuery, setSearchQuery] = useState("");

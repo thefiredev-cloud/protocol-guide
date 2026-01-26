@@ -407,7 +407,6 @@ export function FeaturesSection() {
   // Three-tier responsive breakpoints
   const isMobile = width < 640;
   const isTablet = width >= 640 && width < 1024;
-  const isDesktop = width >= 1024;
 
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<View>(null);

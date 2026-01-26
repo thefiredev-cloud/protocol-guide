@@ -40,12 +40,6 @@ export default function AdminDashboard() {
 
   const agency = agencies?.[0];
 
-  // Calculate week-over-week trend (mock for now)
-  const calculateTrend = (current: number, previous: number) => {
-    if (previous === 0) return current > 0 ? 100 : 0;
-    return Math.round(((current - previous) / previous) * 100);
-  };
-
   if (agenciesLoading) {
     return (
       <View style={[styles.container, styles.loadingContainer, { backgroundColor: colors.background }]}>

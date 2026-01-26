@@ -36,7 +36,6 @@ import Animated, {
   cancelAnimation,
 } from "react-native-reanimated";
 import {
-  createButtonA11y,
   announceForAccessibility,
   MEDICAL_A11Y_LABELS,
 } from "@/lib/accessibility";
@@ -296,6 +295,7 @@ export function VoiceSearchButton({
       setRecordingState("idle");
       setStatusText("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startPulseAnimation, onError]);
 
   const stopRecording = useCallback(async () => {
