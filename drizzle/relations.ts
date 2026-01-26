@@ -45,18 +45,11 @@ import {
 // =============================================================================
 
 export const usersRelations = relations(users, ({ one, many }) => ({
-  // User has one selected county
-  selectedCounty: one(counties, {
-    fields: [users.selectedCountyId],
-    references: [counties.id],
-    relationName: "userSelectedCounty",
-  }),
-
-  // User has one home county
-  homeCounty: one(counties, {
-    fields: [users.homeCountyId],
-    references: [counties.id],
-    relationName: "userHomeCounty",
+  // User has one selected agency
+  selectedAgency: one(agencies, {
+    fields: [users.selectedAgencyId],
+    references: [agencies.id],
+    relationName: "userSelectedAgency",
   }),
 
   // User has many bookmarks
