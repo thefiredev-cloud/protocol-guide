@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
-import { getApiBaseUrl } from "@/constants/oauth";
 import { addRecentSearch } from "@/components/recent-searches";
 import { extractKeySteps } from "@/utils/protocol-helpers";
 import * as Haptics from "@/lib/haptics";
@@ -195,22 +194,17 @@ export function useProtocolSearch({
         const best = results.results[0];
         const content = best.fullContent || best.content || "";
 
-        // Call LLM for ultra-concise summary
-        const apiUrl = getApiBaseUrl();
-        const response = await fetch(`${apiUrl}/api/summarize`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        // Call LLM for ultra-concise summary via tRPC
+        let summaryText = "";
+        try {
+          const summaryResult = await trpcUtils.search.summarize.fetch({
             query: text,
             content: content.substring(0, 6000),
             protocolTitle: best.protocolTitle,
-          }),
-        });
-
-        let summaryText = "";
-        if (response.ok) {
-          const data = await response.json();
-          summaryText = data.summary || "";
+          });
+          summaryText = summaryResult.summary || "";
+        } catch (summaryError) {
+          console.warn("[Search] Summary generation failed:", summaryError);
         }
 
         // Fallback: extract key info if LLM fails

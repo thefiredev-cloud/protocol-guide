@@ -37,13 +37,15 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 
   console.log(`[Stripe Webhook] Received event: ${event.type} (ID: ${(event as any).id})`);
 
+  const eventId = (event as any).id;
+  let dbInstance: Awaited<ReturnType<typeof db.getDb>> = null;
+
   try {
     // Idempotency check: prevent processing duplicate events
-    const eventId = (event as any).id;
     if (eventId) {
-      const dbInstance = await db.getDb();
+      dbInstance = await db.getDb();
       if (dbInstance) {
-        // Check if event already processed
+        // Check if event already processed successfully
         const existingEvent = await dbInstance.query.stripeWebhookEvents.findFirst({
           where: eq(stripeWebhookEvents.eventId, eventId),
         });
@@ -52,18 +54,10 @@ export async function handleStripeWebhook(req: Request, res: Response) {
           console.log(`[Stripe Webhook] Event ${eventId} already processed at ${existingEvent.processedAt}, skipping`);
           return res.status(200).json({ received: true, skipped: true, reason: "Already processed" });
         }
-
-        // Mark event as processed BEFORE handling to prevent race conditions
-        await dbInstance.insert(stripeWebhookEvents).values({
-          eventId,
-          eventType: event.type,
-          payload: event.data.object,
-        });
-        console.log(`[Stripe Webhook] Marked event ${eventId} as processed`);
       }
     }
 
-    // Process the event
+    // Process the event FIRST, then mark as processed on success
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
@@ -116,6 +110,24 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 
       default:
         console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
+    }
+
+    // Mark event as processed AFTER successful handling
+    // This ensures failed events will be retried by Stripe
+    if (eventId && dbInstance) {
+      try {
+        await dbInstance.insert(stripeWebhookEvents).values({
+          eventId,
+          eventType: event.type,
+          payload: event.data.object,
+        });
+        console.log(`[Stripe Webhook] Marked event ${eventId} as processed`);
+      } catch (insertError: any) {
+        // Ignore duplicate key errors (race condition with concurrent requests)
+        if (insertError?.code !== '23505') {
+          console.warn(`[Stripe Webhook] Failed to mark event ${eventId} as processed:`, insertError);
+        }
+      }
     }
 
     return res.status(200).json({ received: true });

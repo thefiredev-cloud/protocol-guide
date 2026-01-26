@@ -507,6 +507,85 @@ export const searchRouter = router({
         });
       }
     }),
+
+  // Summarize protocol content for field medics
+  // Rate limited to prevent abuse of Claude API
+  summarize: publicRateLimitedProcedure
+    .input(z.object({
+      query: z.string().min(1).max(500),
+      content: z.string().min(1).max(10000),
+      protocolTitle: z.string().optional(),
+    }))
+    .query(async ({ input }) => {
+      try {
+        const { invokeClaudeSimple } = await import("../_core/claude");
+
+        // Ultra-concise prompt - optimized for field use
+        const prompt = `You are an EMS protocol summarizer. Output MUST fit on one phone screen.
+
+RULES:
+- MAX 5 lines total
+- Each line: action + dose + route (if applicable)
+- Use abbreviations: IV, IO, IM, SQ, PO, mg, mcg, mL
+- No explanations, no headers, no bullets
+- Start with most critical action
+- Include specific numbers (doses, joules, rates)
+
+QUERY: ${input.query}
+PROTOCOL: ${input.protocolTitle || "Unknown"}
+
+CONTENT:
+${input.content.substring(0, 4000)}
+
+OUTPUT (5 lines max, numbered):`;
+
+        const response = await invokeClaudeSimple({
+          query: prompt,
+          userTier: 'free', // Summarization always uses Haiku for speed
+          systemPrompt: 'You are an EMS protocol summarizer. Be extremely concise.',
+        });
+
+        const summary = response.content;
+
+        // Clean up the summary - ensure it's truly concise
+        const cleanSummary = cleanupSummary(summary);
+
+        return { summary: cleanSummary };
+      } catch (error) {
+        console.error('[Search] summarize error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to generate summary',
+          cause: error,
+        });
+      }
+    }),
 });
+
+/**
+ * Clean up LLM output to ensure ultra-concise format
+ */
+function cleanupSummary(text: string): string {
+  if (!text) return "";
+
+  // Split into lines and clean
+  const lines = text
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l.length > 0)
+    .slice(0, 5); // Max 5 lines
+
+  // Remove any markdown or extra formatting
+  const cleaned = lines.map(line => {
+    return line
+      .replace(/^\*\*|\*\*$/g, '') // Remove bold markers
+      .replace(/^[-•]\s*/, '')     // Remove bullets
+      .replace(/^\d+\.\s*/, '')    // Remove existing numbers
+      .trim();
+  });
+
+  // Re-number
+  return cleaned.map((line, i) => `${i + 1}. ${line}`).join('\n');
+}
 
 export type SearchRouter = typeof searchRouter;
