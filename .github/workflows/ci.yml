@@ -92,8 +92,11 @@ jobs:
       - name: Build server
         run: pnpm build
 
-      - name: Clear metro cache
-        run: rm -rf node_modules/.cache node_modules/react-native-css-interop/.cache
+      - name: Prepare metro cache
+        run: |
+          mkdir -p node_modules/react-native-css-interop/.cache
+          touch node_modules/react-native-css-interop/.cache/web.css
+          npx expo prebuild --platform web --no-install || true
 
       - name: Build web export
         run: npx expo export --platform web --clear
