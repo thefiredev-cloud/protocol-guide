@@ -22,6 +22,7 @@ import { createSearchLimiter, createAiLimiter, createPublicLimiter } from "./rat
 import { healthHandler, readyHandler, liveHandler } from "./health";
 import { initResilientRedis, initResilientDb, ServiceRegistry } from "./resilience";
 import { cookieMiddleware } from "./cookie-middleware";
+import { initSentry, captureException, sentryErrorHandler } from "./sentry";
 dns.setDefaultResultOrder('ipv4first');
 
 // CORS whitelist - only allow these origins
@@ -60,6 +61,24 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
+  // Initialize Sentry error tracking first (before anything else can fail)
+  await initSentry();
+
+  // Set up global unhandled error handlers
+  process.on('uncaughtException', (error: Error) => {
+    logger.error({ error: error.message, stack: error.stack }, 'Uncaught exception');
+    captureException(error);
+    // Give Sentry time to send the error before crashing
+    setTimeout(() => process.exit(1), 1000);
+  });
+
+  process.on('unhandledRejection', (reason: unknown) => {
+    const error = reason instanceof Error ? reason : new Error(String(reason));
+    logger.error({ error: error.message, stack: error.stack }, 'Unhandled promise rejection');
+    captureException(error);
+    // Don't exit for unhandled rejections, just log them
+  });
+
   // Validate required environment variables
   const envCheck = validateEnv();
   if (!envCheck.valid) {
@@ -290,6 +309,10 @@ async function startServer() {
       createContext,
     }),
   );
+
+  // Sentry error handler - MUST be registered LAST to catch all errors
+  // Captures unhandled errors and sends to Sentry before responding
+  app.use(sentryErrorHandler);
 
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);
