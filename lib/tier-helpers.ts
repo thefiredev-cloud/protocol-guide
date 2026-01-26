@@ -1,9 +1,22 @@
 /**
  * Client-Side Tier Validation Helpers
- * DO NOT use for security - always validate on server
- * Use only for UI/UX (showing/hiding features, displaying upgrade prompts)
+ *
+ * Utilities for checking user subscription tiers and feature access on the client.
+ *
+ * ⚠️ SECURITY WARNING: These helpers are for UI/UX purposes ONLY.
+ * Never rely on client-side validation for security-critical operations.
+ * Always validate tier access on the server using `server/_core/tier-validation.ts`.
+ *
+ * Common use cases:
+ * - Show/hide features in the UI based on tier
+ * - Display upgrade prompts
+ * - Show subscription status badges
+ * - Format dates and status text
+ *
+ * @module lib/tier-helpers
  */
 
+/** User subscription tier levels */
 export type SubscriptionTier = "free" | "pro" | "enterprise";
 
 export interface TierFeatures {

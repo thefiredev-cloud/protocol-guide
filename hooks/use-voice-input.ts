@@ -1,10 +1,42 @@
+/**
+ * useVoiceInput Hook - Voice Recording and Transcription
+ *
+ * Provides voice input functionality for hands-free protocol search.
+ * Implements a proper state machine to handle recording lifecycle and
+ * prevent race conditions during async operations.
+ *
+ * State machine transitions:
+ * ```
+ * idle → recording → processing → complete → idle
+ *            ↓           ↓
+ *          idle        idle (on error)
+ * ```
+ *
+ * @module hooks/use-voice-input
+ *
+ * @example
+ * ```tsx
+ * function VoiceSearchButton() {
+ *   const { isRecording, isProcessing, toggleRecording, error } = useVoiceInput(
+ *     (text) => handleSearch(text)
+ *   );
+ *
+ *   return (
+ *     <TouchableOpacity onPress={toggleRecording} disabled={isProcessing}>
+ *       {isRecording ? <StopIcon /> : <MicIcon />}
+ *     </TouchableOpacity>
+ *   );
+ * }
+ * ```
+ */
+
 import { useState, useRef, useCallback } from "react";
 import { Platform, Alert } from "react-native";
 import { useAudioRecorder, AudioModule, RecordingPresets } from "@/lib/audio";
 import * as FileSystem from "expo-file-system/legacy";
 import { trpc } from "@/lib/trpc";
 
-// Proper state machine states
+/** Recording state machine states */
 type RecordingState = "idle" | "recording" | "processing" | "complete";
 
 // Valid state transitions

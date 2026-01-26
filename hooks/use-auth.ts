@@ -1,7 +1,29 @@
 /**
- * useAuth Hook - Supabase Auth integration with token refresh
- * FIXED: Uses token cache to prevent race conditions
- * Supports E2E test mocking via localStorage
+ * useAuth Hook - Supabase Auth Integration
+ *
+ * Provides authentication state and methods for the Protocol Guide app.
+ * Handles Supabase auth with automatic token refresh, session monitoring,
+ * and E2E test mocking support.
+ *
+ * Key features:
+ * - Automatic session refresh before token expiration
+ * - Token cache to prevent race conditions on concurrent requests
+ * - E2E test mocking via localStorage injection
+ * - Full TypeScript support with proper User type mapping
+ *
+ * @module hooks/use-auth
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const { user, isAuthenticated, loading, logout } = useAuth();
+ *
+ *   if (loading) return <Spinner />;
+ *   if (!isAuthenticated) return <LoginButton />;
+ *
+ *   return <Text>Welcome, {user?.name}</Text>;
+ * }
+ * ```
  */
 
 import { supabase, signOut as supabaseSignOut } from "@/lib/supabase";

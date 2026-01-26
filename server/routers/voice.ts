@@ -1,6 +1,16 @@
 /**
  * Voice Router
- * Handles voice transcription for protocol queries
+ *
+ * Handles voice recording upload and transcription for hands-free protocol search.
+ * Enables EMS professionals to search protocols using voice commands while
+ * keeping their hands free for patient care.
+ *
+ * Security features:
+ * - URL allowlist prevents SSRF attacks via transcription endpoint
+ * - Rate limiting prevents abuse of OpenAI transcription API
+ * - File size limits (10MB) prevent resource exhaustion
+ *
+ * @module server/routers/voice
  */
 
 import { z } from "zod";
@@ -9,7 +19,10 @@ import { rateLimitedProcedure, router } from "../_core/trpc";
 import { transcribeAudio } from "../_core/voiceTranscription";
 import { storagePut } from "../storage";
 
-// Allowlist for audio URLs - only accept uploads from our storage
+/**
+ * Allowlist patterns for audio URLs - prevents SSRF attacks
+ * Only accepts uploads from our trusted storage domains
+ */
 const ALLOWED_URL_PATTERNS = [
   /^https:\/\/storage\.protocol-guide\.com\//,
   /^https:\/\/[a-z0-9-]+\.supabase\.co\/storage\//,
@@ -26,6 +39,18 @@ function isAllowedUrl(url: string): boolean {
 }
 
 export const voiceRouter = router({
+  /**
+   * Transcribe audio to text using OpenAI Whisper
+   *
+   * Converts recorded voice audio to text for protocol search queries.
+   * Optimized with EMS-specific prompt to improve medical term recognition.
+   *
+   * @param audioUrl - URL of uploaded audio file (must be from allowed domain)
+   * @param language - Optional language code (default: "en")
+   * @returns Object with success status and transcribed text
+   *
+   * @security Audio URL is validated against allowlist to prevent SSRF
+   */
   transcribe: rateLimitedProcedure
     .input(z.object({
       audioUrl: z.string().url().refine(isAllowedUrl, {
@@ -64,6 +89,19 @@ export const voiceRouter = router({
       }
     }),
 
+  /**
+   * Upload recorded audio for transcription
+   *
+   * Accepts base64-encoded audio from the client and stores it in
+   * cloud storage for transcription. Files are stored per-user with
+   * timestamp-based naming for deduplication.
+   *
+   * @param audioBase64 - Base64-encoded audio data (max 10MB)
+   * @param mimeType - Audio MIME type (e.g., "audio/m4a", "audio/webm")
+   * @returns Object with storage URL for transcription
+   *
+   * @security Rate limited to prevent storage abuse
+   */
   uploadAudio: rateLimitedProcedure
     .input(z.object({
       // Max 10MB base64 (actual file ~7.5MB after encoding overhead)

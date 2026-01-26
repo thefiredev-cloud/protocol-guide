@@ -1,12 +1,34 @@
+/**
+ * Offline Cache Service for EMS Protocols
+ *
+ * Provides persistent local storage for protocol data to enable offline access
+ * in the field. Uses AsyncStorage for React Native and coordinates with
+ * Service Worker for web PWA offline support.
+ *
+ * Features:
+ * - Cache recently viewed protocols for offline access
+ * - Queue searches for automatic retry when back online
+ * - Favorite protocols are protected from cache eviction
+ * - Automatic cache size management (LRU eviction)
+ * - Cross-platform support (iOS, Android, Web)
+ *
+ * @module lib/offline-cache
+ */
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { cacheProtocolInSW, queueOfflineSearch } from "./register-sw";
 
+/** Storage key for cached protocol data */
 const CACHE_KEY = "protocol_cache";
+/** Storage key for cache metadata (size, count, last updated) */
 const CACHE_METADATA_KEY = "protocol_cache_metadata";
+/** Storage key for pending offline searches */
 const PENDING_SEARCHES_KEY = "protocol_pending_searches";
-const MAX_CACHED_ITEMS = 50; // Maximum number of cached protocol responses
-const MAX_PENDING_SEARCHES = 20; // Maximum pending offline searches
+/** Maximum number of cached protocol responses (favorites exempt) */
+const MAX_CACHED_ITEMS = 50;
+/** Maximum number of pending searches to queue */
+const MAX_PENDING_SEARCHES = 20;
 
 /**
  * Calculate byte length of a string in a platform-safe way

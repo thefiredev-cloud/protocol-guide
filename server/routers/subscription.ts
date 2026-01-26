@@ -1,6 +1,11 @@
 /**
  * Subscription Router
- * Handles Stripe subscription and payment operations
+ *
+ * Handles Stripe subscription and payment operations for Protocol Guide.
+ * Supports individual user subscriptions (Pro tier) and department/agency
+ * subscriptions with seat-based pricing.
+ *
+ * @module server/routers/subscription
  */
 
 import { z } from "zod";
@@ -11,7 +16,24 @@ import * as db from "../db";
 import * as stripe from "../stripe";
 
 export const subscriptionRouter = router({
-  // Create checkout session for subscription
+  /**
+   * Create a Stripe Checkout session for individual subscription
+   *
+   * Creates a checkout URL for the user to complete their Pro subscription.
+   * Supports both monthly ($4.99) and annual ($39/year) billing cycles.
+   *
+   * @param plan - Billing interval ("monthly" or "annual")
+   * @param successUrl - URL to redirect after successful payment
+   * @param cancelUrl - URL to redirect if user cancels
+   * @returns Object with success status and checkout URL
+   *
+   * @example
+   * const { url } = await trpc.subscription.createCheckout.mutate({
+   *   plan: "annual",
+   *   successUrl: "https://protocol-guide.com/success",
+   *   cancelUrl: "https://protocol-guide.com/pricing",
+   * });
+   */
   createCheckout: protectedProcedure
     .input(z.object({
       plan: z.enum(["monthly", "annual"]),
@@ -39,7 +61,18 @@ export const subscriptionRouter = router({
       }
     }),
 
-  // Create customer portal session for managing subscription
+  /**
+   * Create a Stripe Customer Portal session
+   *
+   * Generates a URL for users to manage their subscription, including:
+   * - View billing history
+   * - Update payment method
+   * - Cancel subscription
+   * - Switch between monthly/annual billing
+   *
+   * @param returnUrl - URL to redirect after portal session ends
+   * @returns Object with success status and portal URL
+   */
   createPortal: protectedProcedure
     .input(z.object({
       returnUrl: z.string().url(),
@@ -66,7 +99,17 @@ export const subscriptionRouter = router({
       }
     }),
 
-  // Get current subscription status with tier features
+  /**
+   * Get current subscription status and tier features
+   *
+   * Returns comprehensive information about the user's subscription including:
+   * - Current tier (free/pro/enterprise)
+   * - Feature limits (queries/day, search results, etc.)
+   * - Subscription status (active, canceled, past_due)
+   * - Expiration date if applicable
+   *
+   * @returns UserTierInfo object with tier details and features
+   */
   status: protectedProcedure.query(async ({ ctx }) => {
     try {
       const tierInfo = await getUserTierInfo(ctx.user.id);

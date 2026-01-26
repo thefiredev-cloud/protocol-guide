@@ -1,3 +1,13 @@
+/**
+ * useProtocolSearch Hook
+ *
+ * Manages protocol search state and operations with full offline support.
+ * Handles the complete search flow including online searches, offline caching,
+ * LLM summarization, and automatic retry of failed searches.
+ *
+ * @module hooks/use-protocol-search
+ */
+
 import { useState, useCallback, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { addRecentSearch } from "@/components/recent-searches";
@@ -8,12 +18,44 @@ import { useNetworkStatus } from "@/hooks/use-offline-cache";
 import { PerfTimer, recordSearchLatency, recordCacheResult, recordOfflineFallback } from "@/lib/performance";
 import type { Message, Agency } from "@/types/search.types";
 
+/**
+ * Configuration options for the protocol search hook
+ */
 interface UseProtocolSearchOptions {
+  /** Currently selected state filter (e.g., "California") */
   selectedState: string | null;
+  /** Currently selected EMS agency for agency-specific search */
   selectedAgency: Agency | null;
+  /** Function that checks and prompts for medical disclaimer acknowledgment */
   checkDisclaimerBeforeAction: () => boolean;
 }
 
+/**
+ * Custom hook for protocol search functionality
+ *
+ * Features:
+ * - Semantic search using Voyage AI embeddings + pgvector
+ * - AI-powered summarization via Claude
+ * - Offline support with local caching
+ * - Automatic retry queue for failed searches
+ * - Performance monitoring and analytics
+ * - Haptic feedback for mobile devices
+ *
+ * @param options - Configuration options
+ * @returns Object with messages, loading state, search handler, and network status
+ *
+ * @example
+ * ```tsx
+ * const { messages, isLoading, handleSendMessage, isOnline } = useProtocolSearch({
+ *   selectedState: "California",
+ *   selectedAgency: null,
+ *   checkDisclaimerBeforeAction: () => hasAcknowledgedDisclaimer,
+ * });
+ *
+ * // Trigger a search
+ * handleSendMessage("epinephrine dose for anaphylaxis");
+ * ```
+ */
 export function useProtocolSearch({
   selectedState,
   selectedAgency,

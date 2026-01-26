@@ -101,37 +101,60 @@ Save frequently-used protocols and track your search history
 ## Getting Started
 
 ### Prerequisites
-- Node.js 20+
-- pnpm (recommended) or npm
+- **Node.js 20+** - [Download](https://nodejs.org/)
+- **pnpm 9+** - Install via `npm install -g pnpm`
+- **PostgreSQL** - For local development (or use Supabase hosted)
 
-### Installation
+### Quick Start
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/thefiredev-cloud/Protocol-Guide.git
-cd "Protocol Guide Manus"
+cd Protocol-Guide
 
-# Install dependencies
+# 2. Install dependencies
 pnpm install
 
-# Set up environment variables (see .env.example)
+# 3. Set up environment variables
 cp .env.example .env.local
+# Edit .env.local with your API keys (see Environment Variables below)
 
-# Run database migrations
+# 4. Run database migrations
 pnpm db:push
 
-# Start development server
+# 5. Start development server
 pnpm dev
+# Server: http://localhost:3001
+# Web app: http://localhost:8081
 ```
 
 ### Environment Variables
 
-See `CLAUDE.md` for the complete list of required environment variables:
-- `ANTHROPIC_API_KEY` - Claude API access
-- `VOYAGE_API_KEY` - Voyage AI embeddings
-- `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` - Database
-- `STRIPE_SECRET_KEY` - Payment processing
-- `DATABASE_URL` - PostgreSQL connection string
+Create a `.env.local` file with these required variables:
+
+```bash
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/protocol_guide
+
+# Supabase (Auth + Vector Search)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
+# AI/ML
+ANTHROPIC_API_KEY=sk-ant-api03-...  # Claude API
+VOYAGE_API_KEY=voyage-...             # Voyage AI embeddings
+
+# Payments (optional for development)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Caching (optional)
+UPSTASH_REDIS_REST_URL=https://...
+UPSTASH_REDIS_REST_TOKEN=...
+```
+
+See `CLAUDE.md` for the complete environment configuration guide.
 
 ---
 
@@ -167,23 +190,38 @@ hooks/                      # Custom React Hooks
 
 ## Development
 
-### Common Commands
+### Available Scripts
 
-```bash
-# Development
-pnpm dev               # Start Expo web dev server
-pnpm start             # Start production server
-
-# Database
-pnpm db:push           # Generate + apply migrations
-
-# Testing
-pnpm test              # Run tests
-
-# Code Quality
-pnpm check             # TypeScript type checking
-pnpm lint              # ESLint
-```
+| Script | Description |
+|--------|-------------|
+| **Development** | |
+| `pnpm dev` | Start both server (3001) and web client (8081) |
+| `pnpm dev:server` | Start backend server only |
+| `pnpm dev:metro` | Start Expo web client only |
+| **Building** | |
+| `pnpm build` | Build server bundle |
+| `pnpm build:web` | Build PWA for deployment |
+| `pnpm start` | Start production server |
+| **Database** | |
+| `pnpm db:push` | Generate and apply migrations |
+| `pnpm docker:up` | Start local database with Docker |
+| `pnpm docker:down` | Stop local database |
+| **Testing** | |
+| `pnpm test` | Run unit tests (Vitest) |
+| `pnpm test:watch` | Run tests in watch mode |
+| `pnpm test:coverage` | Run tests with coverage report |
+| `pnpm test:integration` | Run integration tests |
+| `pnpm test:e2e` | Run E2E tests (Playwright) |
+| `pnpm test:e2e:ui` | Run E2E tests with UI |
+| `pnpm test:all` | Run all tests |
+| **Code Quality** | |
+| `pnpm check` | TypeScript type checking |
+| `pnpm lint` | ESLint |
+| `pnpm format` | Format with Prettier |
+| **Performance** | |
+| `pnpm bench` | Run benchmarks |
+| `pnpm bench:report` | Generate benchmark report |
+| `pnpm analyze` | Analyze bundle size |
 
 ### Code Standards
 
@@ -191,6 +229,8 @@ pnpm lint              # ESLint
 - **TypeScript**: Explicit types everywhere
 - **Context7 MCP**: Always fetch latest docs before implementation
 - **LLM-Optimized**: Clear function names, single responsibility, comprehensive comments
+
+For more details, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 
@@ -248,12 +288,18 @@ Pro complex → Sonnet 4.5 (~$0.002-0.004/query)
 
 ## Contributing
 
-We welcome contributions! Please see our contributing guidelines and code of conduct.
+We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for:
 
+- Code style guide
+- Testing requirements
+- Pull request process
+- Commit message conventions
+
+Quick start:
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+3. Run tests (`pnpm test:all`)
+4. Commit using [Conventional Commits](https://www.conventionalcommits.org/) (`feat: add amazing feature`)
 5. Open a Pull Request
 
 ---
