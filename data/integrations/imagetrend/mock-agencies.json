@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-01-25",
+  "agencies": [
+    {
+      "imagetrend_id": "la-county-fd",
+      "name": "Los Angeles County Fire Department",
+      "state": "CA",
+      "protocol_set": "la-county",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": true,
+        "export_api": true,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": false
+      },
+      "nemsis_agency_id": "CA-LA-FD-001",
+      "tier": "professional"
+    },
+    {
+      "imagetrend_id": "orange-county-ems",
+      "name": "Orange County EMS Agency",
+      "state": "CA",
+      "protocol_set": "orange-county",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": true,
+        "export_api": false,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": true
+      },
+      "nemsis_agency_id": "CA-OR-EMS-001",
+      "tier": "professional"
+    },
+    {
+      "imagetrend_id": "san-diego-ems",
+      "name": "San Diego County EMS",
+      "state": "CA",
+      "protocol_set": "san-diego",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": true,
+        "export_api": false,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": false
+      },
+      "nemsis_agency_id": "CA-SD-EMS-001",
+      "tier": "starter"
+    },
+    {
+      "imagetrend_id": "demo-agency",
+      "name": "Demo Agency (Testing)",
+      "state": "CA",
+      "protocol_set": "la-county",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": true,
+        "export_api": true,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": true
+      },
+      "nemsis_agency_id": "DEMO-001",
+      "tier": "enterprise",
+      "notes": "For testing and demo purposes only"
+    },
+    {
+      "imagetrend_id": "riverside-fd",
+      "name": "Riverside County Fire Department",
+      "state": "CA",
+      "protocol_set": "riverside",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": false,
+        "export_api": false,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": false
+      },
+      "nemsis_agency_id": "CA-RV-FD-001",
+      "tier": "starter"
+    },
+    {
+      "imagetrend_id": "ventura-county-ems",
+      "name": "Ventura County EMS Agency",
+      "state": "CA",
+      "protocol_set": "ventura",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": true,
+        "export_api": false,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": false
+      },
+      "nemsis_agency_id": "CA-VN-EMS-001",
+      "tier": "professional"
+    },
+    {
+      "imagetrend_id": "kern-county-fd",
+      "name": "Kern County Fire Department",
+      "state": "CA",
+      "protocol_set": "kern",
+      "protocol_version": "2024",
+      "integration_enabled": true,
+      "features": {
+        "deep_link": true,
+        "suggest_api": false,
+        "export_api": false,
+        "pediatric_protocols": true,
+        "als_protocols": true,
+        "bls_protocols": true,
+        "critical_care": false
+      },
+      "nemsis_agency_id": "CA-KN-FD-001",
+      "tier": "starter"
+    },
+    {
+      "imagetrend_id": "disabled-agency",
+      "name": "Disabled Integration Agency",
+      "state": "CA",
+      "protocol_set": "la-county",
+      "protocol_version": "2024",
+      "integration_enabled": false,
+      "features": {
+        "deep_link": false,
+        "suggest_api": false,
+        "export_api": false
+      },
+      "nemsis_agency_id": "CA-XX-001",
+      "tier": "starter",
+      "notes": "Integration not configured - for testing error handling"
+    }
+  ]
+}

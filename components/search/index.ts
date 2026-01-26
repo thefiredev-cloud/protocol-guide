@@ -7,3 +7,10 @@ export { SearchHeader } from "./SearchHeader";
 export { StateModal } from "./StateModal";
 export { SummaryCard } from "./SummaryCard";
 export { VoiceErrorBanner } from "./VoiceErrorBanner";
+
+// Loading skeletons
+export {
+  SearchLoadingSkeleton,
+  SearchLoadingIndicator,
+  SearchSuggestionsSkeleton,
+} from "./SearchLoadingSkeleton";

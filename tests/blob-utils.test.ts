@@ -3,7 +3,7 @@
  * Tests cross-platform blob handling utilities
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock Platform for testing
 vi.mock('react-native', () => ({
@@ -14,10 +14,10 @@ vi.mock('react-native', () => ({
 
 describe('Blob Utils (Web)', () => {
   // Dynamically import to ensure mocks are applied
-  let blobUtils: typeof import('@/lib/blob-utils.web');
+  let blobUtils: typeof import('../lib/blob-utils.web');
 
   beforeEach(async () => {
-    blobUtils = await import('@/lib/blob-utils.web');
+    blobUtils = await import('../lib/blob-utils.web');
   });
 
   describe('isFileReaderSupported', () => {
@@ -92,10 +92,10 @@ describe('Blob Utils (Web)', () => {
 });
 
 describe('Blob Utils (Native)', () => {
-  let blobUtils: typeof import('@/lib/blob-utils.native');
+  let blobUtils: typeof import('../lib/blob-utils.native');
 
   beforeEach(async () => {
-    blobUtils = await import('@/lib/blob-utils.native');
+    blobUtils = await import('../lib/blob-utils.native');
   });
 
   describe('isFileReaderSupported', () => {
@@ -156,8 +156,8 @@ describe('Blob Utils (Native)', () => {
 
 describe('Cross-platform behavior', () => {
   it('should export consistent API across platforms', async () => {
-    const webUtils = await import('@/lib/blob-utils.web');
-    const nativeUtils = await import('@/lib/blob-utils.native');
+    const webUtils = await import('../lib/blob-utils.web');
+    const nativeUtils = await import('../lib/blob-utils.native');
 
     // Common functions that exist on both platforms
     expect(typeof webUtils.uriToBase64).toBe('function');

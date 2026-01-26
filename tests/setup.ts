@@ -4,18 +4,41 @@
  */
 import { beforeAll, afterAll, vi } from "vitest";
 
-// Load environment variables
-import "../scripts/load-env.js";
+// Try to load environment variables, but don't fail if file doesn't exist
+try {
+  await import("../scripts/load-env.js");
+} catch {
+  // Ignore - we'll use test defaults
+}
 
-// Set test environment variables if not present
+// Set ALL required environment variables for testing
+// These override any real values to ensure test isolation
 const testEnvDefaults: Record<string, string> = {
   NODE_ENV: "test",
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "sk_test_placeholder",
-  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || "whsec_test_placeholder",
-  STRIPE_PRO_MONTHLY_PRICE_ID: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || "price_test_monthly",
-  STRIPE_PRO_ANNUAL_PRICE_ID: process.env.STRIPE_PRO_ANNUAL_PRICE_ID || "price_test_annual",
-  SUPABASE_URL: process.env.SUPABASE_URL || "https://test.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "test_service_role_key",
+  // Database
+  DATABASE_URL: "postgresql://test:test@localhost:5432/test_db",
+  // Auth
+  JWT_SECRET: "test-jwt-secret-for-unit-tests-only-32chars",
+  NEXT_AUTH_SECRET: "test-next-auth-secret-for-tests-32",
+  // Stripe
+  STRIPE_SECRET_KEY: "sk_test_placeholder_12345678901234567890",
+  STRIPE_WEBHOOK_SECRET: "whsec_test_placeholder_12345678901234",
+  STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder_1234567890123456",
+  STRIPE_PRO_MONTHLY_PRICE_ID: "price_test_monthly_123456789012",
+  STRIPE_PRO_ANNUAL_PRICE_ID: "price_test_annual_1234567890123",
+  // Supabase
+  SUPABASE_URL: "https://test-project.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test-anon-key",
+  SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test-service-role",
+  // Anthropic
+  ANTHROPIC_API_KEY: "sk-ant-api-test-placeholder-key-12345",
+  // URLs
+  APP_URL: "http://localhost:8081",
+  SERVER_URL: "http://localhost:3000",
+  // Optional but often needed
+  RESEND_API_KEY: "",
+  UPSTASH_REDIS_REST_URL: "",
+  UPSTASH_REDIS_REST_TOKEN: "",
 };
 
 for (const [key, value] of Object.entries(testEnvDefaults)) {

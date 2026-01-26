@@ -1,0 +1,236 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-01-25",
+  "scenarios": [
+    {
+      "id": "DEMO-001",
+      "name": "Adult Cardiac Chest Pain",
+      "description": "62-year-old male with sudden onset chest pain radiating to left arm",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "chest pain radiating to left arm",
+        "user_age": 62,
+        "impression": "I21.4",
+        "return_url": "demo://incident/DEMO-001"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1210", "1211"],
+        "medications": ["Aspirin", "Nitroglycerin"]
+      },
+      "vitals": {
+        "sbp": 145,
+        "dbp": 90,
+        "hr": 88,
+        "spo2": 96
+      }
+    },
+    {
+      "id": "DEMO-002",
+      "name": "Pediatric Respiratory Distress",
+      "description": "4-year-old female with acute respiratory distress and wheezing",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "respiratory distress wheezing",
+        "user_age": 4,
+        "impression": "J45.901",
+        "return_url": "demo://incident/DEMO-002"
+      },
+      "expected": {
+        "age_category": "pediatric",
+        "top_protocols": ["1220-P"],
+        "medications": ["Albuterol", "Epinephrine"]
+      },
+      "vitals": {
+        "rr": 32,
+        "hr": 120,
+        "spo2": 88
+      }
+    },
+    {
+      "id": "DEMO-003",
+      "name": "Opioid Overdose",
+      "description": "28-year-old male unresponsive with pinpoint pupils and respiratory depression",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "overdose unresponsive pinpoint pupils",
+        "user_age": 28,
+        "impression": "T40.1X1A",
+        "return_url": "demo://incident/DEMO-003"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1280"],
+        "medications": ["Naloxone"]
+      },
+      "vitals": {
+        "rr": 4,
+        "hr": 50,
+        "spo2": 75
+      }
+    },
+    {
+      "id": "DEMO-004",
+      "name": "Cardiac Arrest - VFib",
+      "description": "70-year-old male in cardiac arrest with ventricular fibrillation",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "cardiac arrest vfib",
+        "user_age": 70,
+        "impression": "I46.2",
+        "return_url": "demo://incident/DEMO-004"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1230"],
+        "medications": ["Epinephrine", "Amiodarone"]
+      },
+      "vitals": {
+        "pulse": "absent",
+        "rhythm": "vfib"
+      }
+    },
+    {
+      "id": "DEMO-005",
+      "name": "Acute Stroke",
+      "description": "55-year-old female with sudden right-sided weakness and facial droop",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "stroke facial droop weakness",
+        "user_age": 55,
+        "impression": "I63.9",
+        "return_url": "demo://incident/DEMO-005"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1260"],
+        "medications": []
+      },
+      "vitals": {
+        "sbp": 180,
+        "dbp": 100,
+        "hr": 82,
+        "gcs": 14
+      },
+      "timing": {
+        "last_known_well": "45 minutes ago"
+      }
+    },
+    {
+      "id": "DEMO-006",
+      "name": "Anaphylaxis",
+      "description": "35-year-old male with bee sting anaphylaxis",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "anaphylaxis bee sting hypotension",
+        "user_age": 35,
+        "impression": "T63.441A",
+        "return_url": "demo://incident/DEMO-006"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1270"],
+        "medications": ["Epinephrine", "Diphenhydramine"]
+      },
+      "vitals": {
+        "sbp": 85,
+        "dbp": 50,
+        "hr": 110,
+        "spo2": 92
+      }
+    },
+    {
+      "id": "DEMO-007",
+      "name": "Hypoglycemia",
+      "description": "45-year-old diabetic found confused with blood glucose 38",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "hypoglycemia low blood sugar confused",
+        "user_age": 45,
+        "impression": "E11.641",
+        "return_url": "demo://incident/DEMO-007"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1203"],
+        "medications": ["Dextrose", "Glucagon"]
+      },
+      "vitals": {
+        "glucose": 38,
+        "hr": 95,
+        "gcs": 12
+      }
+    },
+    {
+      "id": "DEMO-008",
+      "name": "Pediatric Seizure",
+      "description": "8-year-old male with prolonged tonic-clonic seizure",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "seizure pediatric febrile",
+        "user_age": 8,
+        "impression": "R56.00",
+        "return_url": "demo://incident/DEMO-008"
+      },
+      "expected": {
+        "age_category": "pediatric",
+        "top_protocols": ["1227-P"],
+        "medications": ["Midazolam"]
+      },
+      "vitals": {
+        "temp": 102.5,
+        "hr": 140,
+        "gcs": "seizing"
+      }
+    },
+    {
+      "id": "DEMO-009",
+      "name": "Blunt Trauma - MVC",
+      "description": "30-year-old restrained driver in MVC with chest and abdominal pain",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "trauma MVC chest abdominal pain",
+        "user_age": 30,
+        "impression": "S00-T14",
+        "return_url": "demo://incident/DEMO-009"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1240"],
+        "medications": ["Fentanyl"]
+      },
+      "vitals": {
+        "sbp": 110,
+        "hr": 100,
+        "gcs": 14,
+        "spo2": 98
+      },
+      "mechanism": {
+        "type": "MVC",
+        "speed": "moderate",
+        "restraint": true
+      }
+    },
+    {
+      "id": "DEMO-010",
+      "name": "Behavioral Emergency",
+      "description": "22-year-old male with acute agitation and paranoia",
+      "params": {
+        "agency_id": "la-county-fd",
+        "search_term": "behavioral agitation psychiatric",
+        "user_age": 22,
+        "impression": "F20.9",
+        "return_url": "demo://incident/DEMO-010"
+      },
+      "expected": {
+        "age_category": "adult",
+        "top_protocols": ["1209"],
+        "medications": ["Midazolam", "Ketamine"]
+      },
+      "history": {
+        "psychiatric": "Schizophrenia",
+        "medication_compliance": false
+      }
+    }
+  ]
+}

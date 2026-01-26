@@ -38,18 +38,16 @@ export async function sendMessageToSW(message: { type: string; data?: unknown })
     return null;
   }
 
-  return new Promise((resolve, reject) => {
+  const controller = navigator.serviceWorker.controller;
+
+  return new Promise((resolve) => {
     const messageChannel = new MessageChannel();
     
     messageChannel.port1.onmessage = (event) => {
       resolve(event.data);
     };
-    
-    messageChannel.port1.onerror = (error) => {
-      reject(error);
-    };
 
-    navigator.serviceWorker.controller.postMessage(message, [messageChannel.port2]);
+    controller.postMessage(message, [messageChannel.port2]);
     
     // Timeout after 5 seconds
     setTimeout(() => {
@@ -278,7 +276,6 @@ function showUpdateNotification(onUpdate: () => void): void {
       icon: '/icon-192.png',
       badge: '/icon-192.png',
       tag: 'pwa-update',
-      renotify: false,
       requireInteraction: false,
     });
   }

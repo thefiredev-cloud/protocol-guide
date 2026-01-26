@@ -7,6 +7,7 @@
  * - staff: Member management
  * - protocols: Protocol upload and workflow
  * - versions: Version control
+ * - analytics: Usage analytics and reporting
  */
 
 import { router } from "../../_core/trpc";
@@ -14,6 +15,7 @@ import { agencyProcedures } from "./agency";
 import { staffProcedures } from "./staff";
 import { protocolProcedures } from "./protocols";
 import { versionProcedures } from "./versions";
+import { analyticsProcedures } from "./analytics";
 
 export const agencyAdminRouter = router({
   // Agency management
@@ -38,4 +40,11 @@ export const agencyAdminRouter = router({
   // Version control
   listVersions: versionProcedures.listVersions,
   createVersion: versionProcedures.createVersion,
+
+  // Analytics
+  getSearchAnalytics: analyticsProcedures.getSearchAnalytics,
+  getProtocolAnalytics: analyticsProcedures.getProtocolAnalytics,
+  getUserAnalytics: analyticsProcedures.getUserAnalytics,
+  getErrorAnalytics: analyticsProcedures.getErrorAnalytics,
+  exportAnalytics: analyticsProcedures.exportAnalytics,
 });
