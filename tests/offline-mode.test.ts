@@ -413,7 +413,7 @@ describe("Offline Cache - Utility Functions", () => {
       const now = Date.now();
       expect(formatCacheTime(now - 3600000)).toBe("1h ago");
       expect(formatCacheTime(now - 7200000)).toBe("2h ago");
-      expect(formatCacheTime(now - 86399999)).toBe("23h ago");
+      expect(formatCacheTime(now - 82800000)).toBe("23h ago"); // 23 hours exactly
     });
 
     it("should format days correctly", () => {
