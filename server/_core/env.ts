@@ -35,38 +35,48 @@ const envSchema = z.object({
   // ===========================================
   // AI SERVICES (Required)
   // ===========================================
-  ANTHROPIC_API_KEY: z
-    .string()
-    .min(1, 'ANTHROPIC_API_KEY is required')
-    .startsWith('sk-ant-', 'ANTHROPIC_API_KEY must start with "sk-ant-"')
-    .describe('Anthropic Claude API key - Get from: https://console.anthropic.com/'),
+  ANTHROPIC_API_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'ANTHROPIC_API_KEY is required')
+    : z
+        .string()
+        .min(1, 'ANTHROPIC_API_KEY is required')
+        .startsWith('sk-ant-', 'ANTHROPIC_API_KEY must start with "sk-ant-"')
+        .describe('Anthropic Claude API key - Get from: https://console.anthropic.com/'),
 
-  VOYAGE_API_KEY: z
-    .string()
-    .min(1, 'VOYAGE_API_KEY is required')
-    .startsWith('pa-', 'VOYAGE_API_KEY must start with "pa-"')
-    .describe('Voyage AI API key for embeddings - Get from: https://www.voyageai.com/'),
+  VOYAGE_API_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'VOYAGE_API_KEY is required')
+    : z
+        .string()
+        .min(1, 'VOYAGE_API_KEY is required')
+        .startsWith('pa-', 'VOYAGE_API_KEY must start with "pa-"')
+        .describe('Voyage AI API key for embeddings - Get from: https://www.voyageai.com/'),
 
   // ===========================================
   // DATABASE - SUPABASE (Required)
   // ===========================================
-  SUPABASE_URL: z
-    .string()
-    .url('SUPABASE_URL must be a valid URL')
-    .startsWith('https://', 'SUPABASE_URL must use HTTPS')
-    .describe('Supabase project URL - Get from: Supabase Dashboard > Settings > API'),
+  SUPABASE_URL: process.env.NODE_ENV === 'test'
+    ? z.string().url('SUPABASE_URL must be a valid URL')
+    : z
+        .string()
+        .url('SUPABASE_URL must be a valid URL')
+        .startsWith('https://', 'SUPABASE_URL must use HTTPS')
+        .describe('Supabase project URL - Get from: Supabase Dashboard > Settings > API'),
 
-  SUPABASE_ANON_KEY: z
-    .string()
-    .min(1, 'SUPABASE_ANON_KEY is required')
-    .startsWith('eyJ', 'SUPABASE_ANON_KEY must be a valid JWT')
-    .describe('Supabase anonymous key for client-side access'),
+  SUPABASE_ANON_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'SUPABASE_ANON_KEY is required')
+    : z
+        .string()
+        .min(1, 'SUPABASE_ANON_KEY is required')
+        .startsWith('eyJ', 'SUPABASE_ANON_KEY must be a valid JWT')
+        .describe('Supabase anonymous key for client-side access'),
 
-  SUPABASE_SERVICE_ROLE_KEY: z
-    .string()
-    .min(1, 'SUPABASE_SERVICE_ROLE_KEY is required')
-    .startsWith('eyJ', 'SUPABASE_SERVICE_ROLE_KEY must be a valid JWT')
-    .describe('Supabase service role key for server-side access (KEEP SECRET!)'),
+  SUPABASE_SERVICE_ROLE_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'SUPABASE_SERVICE_ROLE_KEY is required')
+    : z
+        .string()
+        .min(1, 'SUPABASE_SERVICE_ROLE_KEY is required')
+        .startsWith('eyJ', 'SUPABASE_SERVICE_ROLE_KEY must be a valid JWT')
+        .describe('Supabase service role key for server-side access (KEEP SECRET!)'),
 
   DATABASE_URL: z
     .string()
@@ -80,23 +90,29 @@ const envSchema = z.object({
   // ===========================================
   // STRIPE PAYMENTS (Required for Pro tier)
   // ===========================================
-  STRIPE_SECRET_KEY: z
-    .string()
-    .min(1, 'STRIPE_SECRET_KEY is required')
-    .regex(/^sk_(test|live)_/, 'STRIPE_SECRET_KEY must start with "sk_test_" or "sk_live_"')
-    .describe('Stripe secret key - Get from: https://dashboard.stripe.com/apikeys'),
+  STRIPE_SECRET_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'STRIPE_SECRET_KEY is required')
+    : z
+        .string()
+        .min(1, 'STRIPE_SECRET_KEY is required')
+        .regex(/^sk_(test|live)_/, 'STRIPE_SECRET_KEY must start with "sk_test_" or "sk_live_"')
+        .describe('Stripe secret key - Get from: https://dashboard.stripe.com/apikeys'),
 
-  STRIPE_PUBLISHABLE_KEY: z
-    .string()
-    .min(1, 'STRIPE_PUBLISHABLE_KEY is required')
-    .regex(/^pk_(test|live)_/, 'STRIPE_PUBLISHABLE_KEY must start with "pk_test_" or "pk_live_"')
-    .describe('Stripe publishable key'),
+  STRIPE_PUBLISHABLE_KEY: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'STRIPE_PUBLISHABLE_KEY is required')
+    : z
+        .string()
+        .min(1, 'STRIPE_PUBLISHABLE_KEY is required')
+        .regex(/^pk_(test|live)_/, 'STRIPE_PUBLISHABLE_KEY must start with "pk_test_" or "pk_live_"')
+        .describe('Stripe publishable key'),
 
-  STRIPE_WEBHOOK_SECRET: z
-    .string()
-    .min(1, 'STRIPE_WEBHOOK_SECRET is required')
-    .startsWith('whsec_', 'STRIPE_WEBHOOK_SECRET must start with "whsec_"')
-    .describe('Stripe webhook signing secret - Get from: Stripe Dashboard > Webhooks'),
+  STRIPE_WEBHOOK_SECRET: process.env.NODE_ENV === 'test'
+    ? z.string().min(1, 'STRIPE_WEBHOOK_SECRET is required')
+    : z
+        .string()
+        .min(1, 'STRIPE_WEBHOOK_SECRET is required')
+        .startsWith('whsec_', 'STRIPE_WEBHOOK_SECRET must start with "whsec_"')
+        .describe('Stripe webhook signing secret - Get from: Stripe Dashboard > Webhooks'),
 
   // Individual Pro subscription price IDs
   STRIPE_PRO_MONTHLY_PRICE_ID: z
