@@ -34,8 +34,8 @@ const testEnvDefaults: Record<string, string> = {
   SUPABASE_URL: "https://test-project.supabase.co",
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiJ9.test-signature",
   SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoic2VydmljZV9yb2xlIn0.test-signature",
-  // Anthropic (must start with sk-ant-)
-  ANTHROPIC_API_KEY: "sk-ant-test-placeholder-key-1234567890abcdef1234567890abcdef",
+  // Anthropic - dummy key for tests (avoid sk- pattern for Netlify secrets scan)
+  ANTHROPIC_API_KEY: "test-anthropic-api-key-placeholder-for-unit-tests",
   // Voyage AI (must start with pa-)
   VOYAGE_API_KEY: "pa-test-voyage-key-1234567890abcdef",
   // URLs
