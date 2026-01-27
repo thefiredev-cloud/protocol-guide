@@ -6,14 +6,14 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Platform, View, ActivityIndicator } from "react-native";
 import { useColors } from "@/hooks/use-colors";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthContext } from "@/lib/auth-context";
 
 export default function TabLayout() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const bottomPadding = Platform.OS === "web" ? 12 : Math.max(insets.bottom, 8);
   const tabBarHeight = 52 + bottomPadding;
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuthContext();
   const router = useRouter();
   const hasRedirected = useRef(false);
 
@@ -22,6 +22,7 @@ export default function TabLayout() {
     (window.location.search.includes("e2e=true") || process.env.NODE_ENV === "test");
 
   // Redirect to landing if not authenticated (imperative to avoid render loops)
+  // Only redirect once per mount - do NOT reset hasRedirected to prevent loops
   useEffect(() => {
     if (!isE2ETest && !loading && !isAuthenticated && !hasRedirected.current) {
       hasRedirected.current = true;
@@ -29,15 +30,8 @@ export default function TabLayout() {
     }
   }, [loading, isAuthenticated, router, isE2ETest]);
 
-  // Reset redirect flag when authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      hasRedirected.current = false;
-    }
-  }, [isAuthenticated]);
-
-  // Show loading while checking auth or redirecting (unless E2E test)
-  if (!isE2ETest && (loading || (!isAuthenticated && !hasRedirected.current))) {
+  // Show loading spinner while auth state is being determined
+  if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -45,7 +39,7 @@ export default function TabLayout() {
     );
   }
 
-  // If not authenticated and already redirected, show loading (navigation in progress)
+  // If not authenticated, show loading while redirect happens (unless E2E test)
   if (!isE2ETest && !isAuthenticated) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>

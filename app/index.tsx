@@ -15,7 +15,7 @@ import { View, ScrollView, ActivityIndicator } from "react-native";
 import { router, Redirect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthContext } from "@/lib/auth-context";
 import { ScreenContainer } from "@/components/screen-container";
 // Hero section loaded eagerly - it's above the fold
 import { HeroSection } from "@/components/landing/hero-section";
@@ -37,7 +37,7 @@ function SectionPlaceholder() {
 }
 
 export default function LandingPage() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuthContext();
 
   const handleSignIn = () => {
     router.push("/login");
