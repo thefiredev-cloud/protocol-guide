@@ -407,13 +407,45 @@ export const searchRouter = router({
           console.warn('[Search:Agency] Cache read error, continuing with fresh search:', cacheError);
         }
 
-        // Get agency details (OPTIMIZED - single query)
-        const agency = await getAgencyByCountyIdOptimized(input.agencyId);
-        const supabaseAgencyId = agency?.id || null;
-        const agencyName = agency?.name || null;
-        const stateCode = agency?.state_code || null;
+        // NOTE: input.agencyId is already a Supabase agency ID (from agenciesWithProtocols)
+        // No MySQL mapping needed - use directly
+        const supabaseAgencyId = input.agencyId;
+        
+        // Fetch agency details from Supabase directly if needed for context boosting
+        let agencyName: string | null = null;
+        let stateCode: string | null = null;
+        
+        try {
+          // Quick lookup for agency metadata (for context boosting)
+          const agencyInfo = await db.getAgenciesWithProtocols();
+          const matchedAgency = agencyInfo.find(a => a.id === input.agencyId);
+          if (matchedAgency) {
+            agencyName = matchedAgency.name;
+            // Convert state name to code for filtering
+            const stateCodeMap: Record<string, string> = {
+              'California': 'CA', 'Texas': 'TX', 'Florida': 'FL', 'New York': 'NY',
+              'Illinois': 'IL', 'Pennsylvania': 'PA', 'Ohio': 'OH', 'Georgia': 'GA',
+              'North Carolina': 'NC', 'Michigan': 'MI', 'New Jersey': 'NJ', 'Virginia': 'VA',
+              'Washington': 'WA', 'Arizona': 'AZ', 'Massachusetts': 'MA', 'Tennessee': 'TN',
+              'Indiana': 'IN', 'Missouri': 'MO', 'Maryland': 'MD', 'Wisconsin': 'WI',
+              'Colorado': 'CO', 'Minnesota': 'MN', 'South Carolina': 'SC', 'Alabama': 'AL',
+              'Louisiana': 'LA', 'Kentucky': 'KY', 'Oregon': 'OR', 'Oklahoma': 'OK',
+              'Connecticut': 'CT', 'Utah': 'UT', 'Iowa': 'IA', 'Nevada': 'NV',
+              'Arkansas': 'AR', 'Mississippi': 'MS', 'Kansas': 'KS', 'New Mexico': 'NM',
+              'Nebraska': 'NE', 'Idaho': 'ID', 'West Virginia': 'WV', 'Hawaii': 'HI',
+              'New Hampshire': 'NH', 'Maine': 'ME', 'Montana': 'MT', 'Rhode Island': 'RI',
+              'Delaware': 'DE', 'South Dakota': 'SD', 'North Dakota': 'ND', 'Alaska': 'AK',
+              'Vermont': 'VT', 'Wyoming': 'WY',
+            };
+            stateCode = matchedAgency.state.length === 2 
+              ? matchedAgency.state 
+              : stateCodeMap[matchedAgency.state] || matchedAgency.state.slice(0, 2).toUpperCase();
+          }
+        } catch (e) {
+          console.warn('[Search:Agency] Failed to fetch agency metadata:', e);
+        }
 
-        console.log(`[Search:Agency] MySQL ${input.agencyId} -> Supabase ${supabaseAgencyId}`);
+        console.log(`[Search:Agency] Using Supabase agency ID directly: ${supabaseAgencyId} (${agencyName || 'unknown'})`);
 
         // Step 3: Determine optimization options based on query type
         const isMedicationQuery = normalized.intent === 'medication_dosing' ||
