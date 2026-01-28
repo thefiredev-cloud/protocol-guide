@@ -293,12 +293,17 @@ async function checkRedis(): Promise<ServiceHealth> {
 
     if (health.redis) {
       ServiceRegistry.markHealthy('redis');
-      // Upstash REST-based Redis typically has 150-300ms latency (HTTP overhead)
-      // Use 300ms threshold for REST-based, would use 100ms for TCP-based
+      // Upstash REST-based Redis typically has 150-400ms latency (HTTP overhead)
+      // This is expected for HTTP-based Redis - NOT a performance issue
+      // TCP-based Redis (Railway native, local) would have 1-10ms latency
+      const isHttpRedis = (process.env.REDIS_URL || process.env.UPSTASH_REDIS_REST_URL || '').includes('upstash');
+      const healthyThreshold = isHttpRedis ? 500 : 50; // 500ms for HTTP, 50ms for TCP
+      const degradedThreshold = isHttpRedis ? 1000 : 200;
+      
       return {
-        status: latency < 300 ? 'healthy' : 'degraded',
+        status: latency < healthyThreshold ? 'healthy' : (latency < degradedThreshold ? 'degraded' : 'unhealthy'),
         latencyMs: latency,
-        message: latency >= 300 ? 'High latency detected' : undefined,
+        message: latency >= healthyThreshold ? `${isHttpRedis ? 'HTTP-based' : 'TCP-based'} Redis latency: ${latency}ms` : undefined,
         lastChecked: now,
       };
     }
