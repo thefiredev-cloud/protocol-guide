@@ -58,21 +58,20 @@ async function validateImageTrendAgency(
 
   try {
     // Look up agency in manus_agencies table
-    const { data, error } = await supabase
+    // Use maybeSingle() to handle case where multiple agencies match
+    const { data: agencies, error } = await supabase
       .from("manus_agencies")
       .select("id, name, integration_partner")
       .or(`name.ilike.%${agencyId}%,id.eq.${agencyId}`)
-      .limit(1)
-      .single();
+      .eq("integration_partner", "imagetrend")
+      .limit(1);
 
+    const data = agencies?.[0];
     if (error || !data) {
       return { valid: false, error: "Agency not found" };
     }
 
-    if (data.integration_partner !== "imagetrend") {
-      return { valid: false, error: "Agency not configured for ImageTrend" };
-    }
-
+    // Agency found and already filtered by integration_partner = 'imagetrend'
     return { valid: true, agencyName: data.name };
   } catch (err) {
     // Safe error logging: only log error type and request ID, not full error which may contain query data
