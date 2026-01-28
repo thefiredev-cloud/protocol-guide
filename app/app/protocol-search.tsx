@@ -90,12 +90,12 @@ export default function ProtocolSearchScreen() {
     <TouchableOpacity
       onPress={() => setSelectedProtocol(item)}
       style={{
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.surface,
         borderRadius: 12,
         padding: 16,
         marginBottom: 12,
         borderWidth: 1,
-        borderColor: selectedProtocol?.id === item.id ? colors.tint : colors.border,
+        borderColor: selectedProtocol?.id === item.id ? colors.primary : colors.border,
       }}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -116,7 +116,7 @@ export default function ProtocolSearchScreen() {
           }} numberOfLines={2}>
             {item.protocolTitle}
           </Text>
-          <Text style={{ fontSize: 12, color: colors.secondaryText }}>
+          <Text style={{ fontSize: 12, color: colors.muted }}>
             {item.section}
           </Text>
         </View>
@@ -152,7 +152,7 @@ export default function ProtocolSearchScreen() {
               style={{
                 padding: 8,
                 marginRight: 12,
-                backgroundColor: colors.cardBackground,
+                backgroundColor: colors.surface,
                 borderRadius: 8,
               }}
             >
@@ -169,14 +169,14 @@ export default function ProtocolSearchScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View style={{ 
-              backgroundColor: colors.cardBackground, 
+              backgroundColor: colors.surface, 
               borderRadius: 12, 
               padding: 16,
               marginBottom: 16,
             }}>
               <Text style={{ 
                 fontSize: 14, 
-                color: colors.secondaryText, 
+                color: colors.muted, 
                 marginBottom: 8,
               }}>
                 {selectedProtocol.protocolNumber} • {selectedProtocol.section}
@@ -199,7 +199,7 @@ export default function ProtocolSearchScreen() {
             <TouchableOpacity
               onPress={handleReturnToImageTrend}
               style={{
-                backgroundColor: colors.tint,
+                backgroundColor: colors.primary,
                 padding: 16,
                 borderRadius: 12,
                 alignItems: "center",
@@ -225,12 +225,12 @@ export default function ProtocolSearchScreen() {
             Protocol Guide
           </Text>
           {params.source === "imagetrend" && (
-            <Text style={{ fontSize: 14, color: colors.secondaryText }}>
+            <Text style={{ fontSize: 14, color: colors.muted }}>
               Powered by ImageTrend Integration
             </Text>
           )}
           {params.agency && (
-            <Text style={{ fontSize: 14, color: colors.tint, marginTop: 4 }}>
+            <Text style={{ fontSize: 14, color: colors.primary, marginTop: 4 }}>
               Agency: {params.agency}
             </Text>
           )}
@@ -239,7 +239,7 @@ export default function ProtocolSearchScreen() {
         {/* Search Input */}
         <View style={{
           flexDirection: "row",
-          backgroundColor: colors.cardBackground,
+          backgroundColor: colors.surface,
           borderRadius: 12,
           paddingHorizontal: 12,
           paddingVertical: 8,
@@ -247,12 +247,12 @@ export default function ProtocolSearchScreen() {
           borderWidth: 1,
           borderColor: colors.border,
         }}>
-          <IconSymbol name="magnifyingglass" size={20} color={colors.secondaryText} />
+          <IconSymbol name="magnifyingglass" size={20} color={colors.muted} />
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholder="Search protocols (e.g., 'chest pain', 'cardiac arrest')"
-            placeholderTextColor={colors.secondaryText}
+            placeholderTextColor={colors.muted}
             onSubmitEditing={handleSearch}
             returnKeyType="search"
             style={{
@@ -264,7 +264,7 @@ export default function ProtocolSearchScreen() {
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <IconSymbol name="xmark.circle.fill" size={20} color={colors.secondaryText} />
+              <IconSymbol name="xmark.circle.fill" size={20} color={colors.muted} />
             </TouchableOpacity>
           )}
         </View>
@@ -274,7 +274,7 @@ export default function ProtocolSearchScreen() {
           onPress={handleSearch}
           disabled={isSearching || !searchQuery.trim()}
           style={{
-            backgroundColor: searchQuery.trim() ? colors.tint : colors.border,
+            backgroundColor: searchQuery.trim() ? colors.primary : colors.border,
             padding: 14,
             borderRadius: 12,
             alignItems: "center",
@@ -307,9 +307,9 @@ export default function ProtocolSearchScreen() {
             padding: 24, 
             alignItems: "center",
           }}>
-            <IconSymbol name="doc.text.magnifyingglass" size={48} color={colors.secondaryText} />
+            <IconSymbol name="doc.text.magnifyingglass" size={48} color={colors.muted} />
             <Text style={{ 
-              color: colors.secondaryText, 
+              color: colors.muted, 
               marginTop: 12, 
               textAlign: "center",
               fontSize: 16,
