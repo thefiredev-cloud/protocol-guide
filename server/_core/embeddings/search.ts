@@ -255,7 +255,7 @@ export async function semanticSearchProtocolsEnhanced(params: {
   if (protocolNumber) {
     const { data: exactMatches } = await supabase
       .from('manus_protocol_chunks')
-      .select('id, agency_id, protocol_number, protocol_title, section, content, image_urls')
+      .select('id, agency_id, protocol_number, protocol_title, section, content, image_urls, state_code')
       .or(`protocol_number.ilike.%${protocolNumber}%,protocol_title.ilike.%${protocolNumber}%`)
       .limit(5);
 
@@ -264,6 +264,7 @@ export async function semanticSearchProtocolsEnhanced(params: {
         ...r,
         similarity: 1.0,
         source_level: 'agency' as const,
+        state_code: r.state_code ?? null,
       }));
     }
   }
