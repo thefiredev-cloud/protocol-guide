@@ -314,7 +314,7 @@ export default function ProtocolSearchScreen() {
               textAlign: "center",
               fontSize: 16,
             }}>
-              No protocols found for "{searchQuery}"
+              No protocols found for &quot;{searchQuery}&quot;
             </Text>
           </Animated.View>
         )}
@@ -332,3 +332,5 @@ export default function ProtocolSearchScreen() {
     </SafeAreaView>
   );
 }
+
+
