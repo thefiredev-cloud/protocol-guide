@@ -157,76 +157,110 @@ export default function SearchScreen() {
 
   const renderSearchResult = ({ item, index }: { item: SearchResult; index: number }) => (
     <Animated.View
-      entering={FadeIn.delay(index * 50).duration(200)}
+      entering={FadeIn.delay(index * 40).duration(250)}
     >
       <TouchableOpacity
         onPress={() => setSelectedProtocol(item)}
-        activeOpacity={0.7}
+        activeOpacity={0.8}
         style={{
           backgroundColor: colors.surface,
-          borderRadius: 12,
-          padding: 16,
-          marginBottom: 12,
-          borderLeftWidth: 4,
-          borderLeftColor: getScoreColor(item.relevanceScore, colors),
+          borderRadius: 16,
+          padding: 20,
+          marginBottom: 16,
+          borderWidth: 1,
+          borderColor: colors.border,
+          // Subtle shadow for depth
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 8,
+          elevation: 3,
         }}
         accessible={true}
         accessibilityRole="button"
         accessibilityLabel={`Protocol: ${item.protocolTitle}. Relevance: ${getScoreLabel(item.relevanceScore)}. ${item.protocolNumber && item.protocolNumber !== "N/A" ? `Number ${item.protocolNumber}.` : ""}`}
         accessibilityHint="Double tap to view full protocol details"
       >
-        <View className="flex-row items-start justify-between mb-2">
-          <View className="flex-1 mr-2">
-            <Text className="text-base font-semibold text-foreground" numberOfLines={2}>
+        {/* Top row: Title and relevance badge */}
+        <View className="flex-row items-start justify-between mb-3">
+          <View className="flex-1 mr-3">
+            <Text 
+              className="text-base font-bold text-foreground" 
+              numberOfLines={2}
+              style={{ fontSize: 17, lineHeight: 24, letterSpacing: -0.3 }}
+            >
               {item.protocolTitle}
             </Text>
-            {item.protocolNumber && item.protocolNumber !== "N/A" && (
-              <Text className="text-xs text-muted mt-1">
-                Protocol #{item.protocolNumber}
-              </Text>
-            )}
           </View>
           <View
-            className="px-2 py-1 rounded-full"
-            style={{ backgroundColor: getScoreColor(item.relevanceScore, colors) + "20" }}
+            className="px-3 py-1.5 rounded-lg"
+            style={{ 
+              backgroundColor: getScoreColor(item.relevanceScore, colors) + "18",
+              borderWidth: 1,
+              borderColor: getScoreColor(item.relevanceScore, colors) + "30",
+            }}
           >
             <Text
-              className="text-xs font-medium"
-              style={{ color: getScoreColor(item.relevanceScore, colors) }}
+              className="text-xs font-bold"
+              style={{ color: getScoreColor(item.relevanceScore, colors), letterSpacing: 0.3 }}
             >
               {getScoreLabel(item.relevanceScore)}
             </Text>
           </View>
         </View>
 
-        {item.section && (
-          <View className="flex-row items-center mb-2">
-            <IconSymbol name="doc.text.fill" size={14} color={colors.muted} />
-            <Text className="text-xs text-muted ml-1">{item.section}</Text>
-          </View>
-        )}
+        {/* Meta row: Protocol # and Section */}
+        <View className="flex-row items-center mb-3 flex-wrap gap-2">
+          {item.protocolNumber && item.protocolNumber !== "N/A" && (
+            <View 
+              className="flex-row items-center px-2.5 py-1 rounded-md"
+              style={{ backgroundColor: `${colors.primary}12` }}
+            >
+              <Text className="text-xs font-semibold" style={{ color: colors.primary }}>
+                #{item.protocolNumber}
+              </Text>
+            </View>
+          )}
+          {item.section && (
+            <View className="flex-row items-center">
+              <IconSymbol name="doc.text.fill" size={13} color={colors.muted} />
+              <Text className="text-xs text-muted ml-1 font-medium">{item.section}</Text>
+            </View>
+          )}
+        </View>
 
-        <Text className="text-sm text-muted" numberOfLines={3}>
+        {/* Content preview */}
+        <Text 
+          className="text-muted" 
+          numberOfLines={3}
+          style={{ fontSize: 14, lineHeight: 21, marginBottom: 12 }}
+        >
           {item.content}
         </Text>
 
-        {/* Protocol Currency Info */}
-        <View className="flex-row items-center mt-3 flex-wrap gap-2">
+        {/* Footer: Date and CTA */}
+        <View 
+          className="flex-row items-center justify-between pt-3"
+          style={{ borderTopWidth: 1, borderTopColor: `${colors.border}80` }}
+        >
           {(item.protocolEffectiveDate || item.protocolYear || item.lastVerifiedAt) && (
             <View
-              className="flex-row items-center px-2 py-1 rounded-full"
-              style={{ backgroundColor: getDateColor(item.protocolYear, item.lastVerifiedAt, colors) + "15" }}
+              className="flex-row items-center px-2.5 py-1.5 rounded-md"
+              style={{ backgroundColor: getDateColor(item.protocolYear, item.lastVerifiedAt, colors) + "12" }}
             >
               <IconSymbol name="clock.fill" size={12} color={getDateColor(item.protocolYear, item.lastVerifiedAt, colors)} />
               <Text
-                className="text-xs ml-1"
+                className="text-xs ml-1.5 font-semibold"
                 style={{ color: getDateColor(item.protocolYear, item.lastVerifiedAt, colors) }}
               >
                 {formatProtocolDate(item.protocolEffectiveDate, item.protocolYear, item.lastVerifiedAt)}
               </Text>
             </View>
           )}
-          <Text className="text-xs text-primary">Tap to view full protocol →</Text>
+          <View className="flex-row items-center">
+            <Text className="text-xs font-semibold text-primary">View Protocol</Text>
+            <IconSymbol name="chevron.right" size={14} color={colors.primary} style={{ marginLeft: 4 }} />
+          </View>
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -387,19 +421,25 @@ export default function SearchScreen() {
 
       {/* Search Input */}
       <View
-        className="flex-row items-center rounded-xl px-4 mb-4"
-        style={{ backgroundColor: colors.surface, height: 52 }}
+        className="flex-row items-center rounded-2xl px-5 mb-4"
+        style={{ 
+          backgroundColor: colors.surface, 
+          height: 56,
+          borderWidth: 1,
+          borderColor: colors.border,
+        }}
         accessible={false}
         importantForAccessibility="no-hide-descendants"
       >
-        <IconSymbol name="magnifyingglass" size={20} color={colors.muted} />
+        <IconSymbol name="magnifyingglass" size={22} color={colors.muted} />
         <TextInput
           ref={inputRef}
           value={query}
           onChangeText={setQuery}
           placeholder="e.g., pediatric asthma treatment"
           placeholderTextColor={colors.muted}
-          className="flex-1 ml-3 text-base text-foreground"
+          className="flex-1 ml-3 text-foreground"
+          style={{ fontSize: 16 }}
           returnKeyType="search"
           onSubmitEditing={handleSearch}
           autoCapitalize="none"
@@ -413,10 +453,11 @@ export default function SearchScreen() {
         {query.length > 0 && (
           <TouchableOpacity
             onPress={handleClear}
-            className="p-2"
+            className="p-3"
+            style={{ minWidth: 44, minHeight: 44, justifyContent: 'center', alignItems: 'center' }}
             {...createButtonA11y(MEDICAL_A11Y_LABELS.search.clear, "Clears the search input field")}
           >
-            <IconSymbol name="xmark" size={18} color={colors.muted} />
+            <IconSymbol name="xmark.circle.fill" size={20} color={colors.muted} />
           </TouchableOpacity>
         )}
         <VoiceSearchButtonInline
@@ -521,10 +562,18 @@ export default function SearchScreen() {
       <TouchableOpacity
         onPress={handleSearch}
         disabled={!query.trim() || isSearching}
-        className="rounded-xl py-3 mb-4 items-center"
+        className="rounded-2xl mb-4 items-center justify-center flex-row"
         style={{
           backgroundColor: query.trim() ? colors.primary : colors.muted,
-          opacity: query.trim() ? 1 : 0.5,
+          opacity: query.trim() ? 1 : 0.4,
+          height: 56,
+          gap: 8,
+          // Shadow for primary CTA
+          shadowColor: colors.primary,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: query.trim() ? 0.3 : 0,
+          shadowRadius: 12,
+          elevation: query.trim() ? 6 : 0,
         }}
         {...createButtonA11y(
           MEDICAL_A11Y_LABELS.search.button,
@@ -539,9 +588,15 @@ export default function SearchScreen() {
         {isSearching ? (
           <ActivityIndicator color={colors.background} accessibilityLabel="Searching" />
         ) : (
-          <Text className="text-base font-semibold text-background">
-            Search Protocols
-          </Text>
+          <>
+            <IconSymbol name="magnifyingglass" size={18} color={colors.background} />
+            <Text 
+              className="font-bold text-background"
+              style={{ fontSize: 17, letterSpacing: 0.3 }}
+            >
+              Search Protocols
+            </Text>
+          </>
         )}
       </TouchableOpacity>
 
@@ -585,9 +640,20 @@ export default function SearchScreen() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
             ListHeaderComponent={
-              <Text className="text-sm text-muted mb-3">
-                Found {searchResults.length} matching protocols
-              </Text>
+              <View 
+                className="flex-row items-center mb-4 pb-3"
+                style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}
+              >
+                <View 
+                  className="flex-row items-center px-3 py-1.5 rounded-lg"
+                  style={{ backgroundColor: `${colors.success}15` }}
+                >
+                  <IconSymbol name="checkmark.circle.fill" size={14} color={colors.success} />
+                  <Text className="text-sm font-semibold ml-1.5" style={{ color: colors.success }}>
+                    {searchResults.length} protocols found
+                  </Text>
+                </View>
+              </View>
             }
             ListFooterComponent={
               <View className="mt-2 mb-4">
@@ -599,10 +665,13 @@ export default function SearchScreen() {
       ) : (
         <View className="flex-1">
           {/* Example Searches */}
-          <Text className="text-sm font-semibold text-foreground mb-3">
-            Try searching for:
+          <Text 
+            className="font-bold text-foreground mb-4"
+            style={{ fontSize: 15, letterSpacing: 0.5, textTransform: 'uppercase' }}
+          >
+            Quick Searches
           </Text>
-          <View className="flex-row flex-wrap gap-2">
+          <View className="flex-row flex-wrap gap-3">
             {[
               "cardiac arrest",
               "pediatric asthma",
@@ -620,51 +689,83 @@ export default function SearchScreen() {
                   // Direct call instead of setTimeout to avoid memory leak
                   requestAnimationFrame(() => handleSearch());
                 }}
-                className="px-3 py-2 rounded-full"
-                style={{ backgroundColor: colors.surface }}
+                className="px-4 py-3 rounded-xl"
+                style={{ 
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  minHeight: 48,
+                  justifyContent: 'center',
+                }}
               >
-                <Text className="text-sm text-foreground">{example}</Text>
+                <Text className="text-sm font-semibold text-foreground">{example}</Text>
               </TouchableOpacity>
             ))}
           </View>
 
           {/* Stats */}
           <View 
-            className="mt-6 p-4 rounded-xl"
-            style={{ backgroundColor: colors.surface }}
+            className="mt-8 p-5 rounded-2xl"
+            style={{ 
+              backgroundColor: colors.surface,
+              borderWidth: 1,
+              borderColor: colors.border,
+            }}
           >
-            <Text className="text-sm font-semibold text-foreground mb-2">
+            <Text 
+              className="font-bold text-foreground mb-4"
+              style={{ fontSize: 13, letterSpacing: 0.5, textTransform: 'uppercase' }}
+            >
               Database Coverage
             </Text>
-            <View className="flex-row justify-between">
-              <View>
-                <Text className="text-2xl font-bold text-primary">
+            <View className="flex-row justify-around">
+              <View className="items-center">
+                <Text 
+                  className="font-bold text-primary"
+                  style={{ fontSize: 32, letterSpacing: -1 }}
+                >
                   {statsQuery.data?.totalProtocols?.toLocaleString() || "34,630"}
                 </Text>
-                <Text className="text-xs text-muted">Protocol chunks</Text>
+                <Text className="text-xs text-muted font-medium mt-1">Protocol Chunks</Text>
               </View>
-              <View>
-                <Text className="text-2xl font-bold text-primary">
+              <View 
+                style={{ width: 1, backgroundColor: colors.border, marginHorizontal: 16 }} 
+              />
+              <View className="items-center">
+                <Text 
+                  className="font-bold text-primary"
+                  style={{ fontSize: 32, letterSpacing: -1 }}
+                >
                   {statsQuery.data?.totalCounties?.toLocaleString() || "2,582"}
                 </Text>
-                <Text className="text-xs text-muted">EMS agencies</Text>
+                <Text className="text-xs text-muted font-medium mt-1">EMS Agencies</Text>
               </View>
             </View>
           </View>
 
           {/* Search Tips */}
           <View 
-            className="mt-4 p-4 rounded-xl"
-            style={{ backgroundColor: colors.primary + "10" }}
+            className="mt-4 p-5 rounded-2xl"
+            style={{ 
+              backgroundColor: `${colors.primary}08`,
+              borderWidth: 1,
+              borderColor: `${colors.primary}20`,
+            }}
           >
-            <Text className="text-sm font-semibold text-foreground mb-2">
-              Search Tips
-            </Text>
-            <Text className="text-xs text-muted leading-5">
+            <View className="flex-row items-center mb-3">
+              <IconSymbol name="lightbulb.fill" size={16} color={colors.primary} />
+              <Text 
+                className="font-bold ml-2"
+                style={{ color: colors.primary, fontSize: 13, letterSpacing: 0.3, textTransform: 'uppercase' }}
+              >
+                Search Tips
+              </Text>
+            </View>
+            <Text className="text-muted leading-6" style={{ fontSize: 14 }}>
               • Use natural language: {'"how to treat pediatric asthma"'}{"\n"}
-              • Include condition names: {'"STEMI"'}, {'"anaphylaxis"'}, {'"seizure"'}{"\n"}
-              • Specify patient type: {'"pediatric"'}, {'"geriatric"'}, {'"pregnant"'}{"\n"}
-              • Search by medication: {'"epinephrine"'}, {'"naloxone"'}, {'"albuterol"'}
+              • Include condition names: {'"STEMI"'}, {'"anaphylaxis"'}{"\n"}
+              • Specify patient type: {'"pediatric"'}, {'"geriatric"'}{"\n"}
+              • Search by medication: {'"epinephrine"'}, {'"naloxone"'}
             </Text>
           </View>
         </View>

@@ -28,6 +28,12 @@ export default function ToolsLayout() {
           title: 'Post-ROSC Bundle Checklist',
         }}
       />
+      <Stack.Screen 
+        name="arrest-timer" 
+        options={{
+          title: 'Cardiac Arrest Timer',
+        }}
+      />
     </Stack>
   );
 }
