@@ -159,12 +159,7 @@ function VitalInput({
   onChange: (value: number | null) => void;
   colors: ReturnType<typeof useColors>;
 }) {
-  const target = VITAL_TARGETS[vitalKey];
-  if (!target) return null;
-  
-  const status = getVitalStatus(value, target);
-  const statusColor = STATUS_COLORS[status];
-  
+  // Define hooks before any conditional returns (React hooks rules)
   const handleChange = useCallback((text: string) => {
     if (text === '') {
       onChange(null);
@@ -175,6 +170,12 @@ function VitalInput({
       onChange(num);
     }
   }, [onChange]);
+
+  const target = VITAL_TARGETS[vitalKey];
+  if (!target) return null;
+  
+  const status = getVitalStatus(value, target);
+  const statusColor = STATUS_COLORS[status];
   
   return (
     <View style={[styles.vitalInputContainer, { borderColor: statusColor }]}>

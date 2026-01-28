@@ -14,9 +14,8 @@
  * - Protocol search linking
  */
 
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams , useRouter } from 'expo-router';
 import { Platform, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
 import { ScreenContainer } from '@/components/screen-container';
 import { PediatricDosingCalculator } from '@/components/pediatric-dosing-calculator';
 import { ErrorBoundary } from '@/components/ErrorBoundary';

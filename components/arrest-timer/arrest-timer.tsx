@@ -406,7 +406,7 @@ export function ArrestTimer() {
             activeOpacity={0.8}
           >
             <IconSymbol name="magnifyingglass" size={24} color={colors.primary} />
-            <Text style={[styles.quickActionText, { color: colors.foreground }]}>H's & T's</Text>
+            <Text style={[styles.quickActionText, { color: colors.foreground }]}>H&apos;s &amp; T&apos;s</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -592,7 +592,7 @@ export function ArrestTimer() {
               Reversible Causes
             </Text>
             
-            <Text style={[styles.hstsSection, { color: colors.error }]}>H's</Text>
+            <Text style={[styles.hstsSection, { color: colors.error }]}>H&apos;s</Text>
             {REVERSIBLE_CAUSES.hs.map((item) => (
               <View key={item.id} style={styles.hstsItem}>
                 <Text style={[styles.hstsLabel, { color: colors.foreground }]}>
@@ -604,7 +604,7 @@ export function ArrestTimer() {
               </View>
             ))}
             
-            <Text style={[styles.hstsSection, { color: colors.error, marginTop: spacing.lg }]}>T's</Text>
+            <Text style={[styles.hstsSection, { color: colors.error, marginTop: spacing.lg }]}>T&apos;s</Text>
             {REVERSIBLE_CAUSES.ts.map((item) => (
               <View key={item.id} style={styles.hstsItem}>
                 <Text style={[styles.hstsLabel, { color: colors.foreground }]}>

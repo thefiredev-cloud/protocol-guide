@@ -126,11 +126,11 @@ export interface MedicationGuardrail {
   /** Warning threshold (percentage of max) */
   warningThreshold: number;
   /** Additional validation rules */
-  customRules?: Array<{
+  customRules?: {
     condition: string;
     action: 'warn' | 'block';
     message: string;
-  }>;
+  }[];
 }
 
 export interface DrugInteraction {

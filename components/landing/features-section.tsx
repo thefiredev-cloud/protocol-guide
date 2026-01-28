@@ -418,8 +418,8 @@ export const FeaturesSection = memo(function FeaturesSection() {
               alignSelf: "center",
             }}
           >
-            Not another app built by devs who've never run a call.{"\n"}
-            This one's different.
+            Not another app built by devs who&apos;ve never run a call.{"\n"}
+            This one&apos;s different.
           </Text>
         </Animated.View>
 

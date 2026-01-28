@@ -422,12 +422,12 @@ export function runGuardrailChecks(
   currentMedications: string[] = [],
   conditions: string[] = []
 ): GuardrailCheckResult {
-  const alerts: Array<{
+  const alerts: {
     level: AlertLevel;
     type: 'contraindication' | 'interaction' | 'weight' | 'dose';
     message: string;
     recommendation?: string;
-  }> = [];
+  }[] = [];
 
   let canAdminister = true;
 
@@ -509,7 +509,7 @@ export function runGuardrailChecks(
 /**
  * Get all available conditions for the conditions selector
  */
-export function getAvailableConditions(): Array<{ id: string; label: string; category: string }> {
+export function getAvailableConditions(): { id: string; label: string; category: string }[] {
   return [
     // Cardiovascular
     { id: 'hypotension', label: 'Hypotension', category: 'Cardiovascular' },
@@ -538,7 +538,7 @@ export function getAvailableConditions(): Array<{ id: string; label: string; cat
 /**
  * Get available medication classes for interaction checking
  */
-export function getAvailableMedicationClasses(): Array<{ id: string; label: string; examples: string }> {
+export function getAvailableMedicationClasses(): { id: string; label: string; examples: string }[] {
   return [
     { id: 'beta-blocker', label: 'Beta-Blocker', examples: 'metoprolol, atenolol, propranolol' },
     { id: 'calcium-channel-blocker', label: 'Calcium Channel Blocker', examples: 'diltiazem, verapamil, amlodipine' },
